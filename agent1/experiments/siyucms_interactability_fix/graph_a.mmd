@@ -1,0 +1,76 @@
+flowchart LR
+  n_state_1dfce63e7b24fa90["资质荣誉四-资质荣誉_SIYUCMS"]
+  n_state_2d79e8b35dd077d3["钢笔-精选产品_SIYUCMS"]
+  n_state_3b9ef5c1f62b139f["铅笔盒-精选产品_SIYUCMS"]
+  n_state_646207b81abbde58["SIYUCMS 官网"]
+  n_state_872dd0063180edb5["SIYUCMS 官网"]
+  n_state_8dc7e5befe1e7a13["联系我们_SIYUCMS"]
+  n_state_c97b3a3f0970b40e["资质荣誉_SIYUCMS"]
+  n_state_d1e91412a1a3076a["资料下载_SIYUCMS"]
+  n_state_f302eecbb7ff895e["资质荣誉六-资质荣誉_SIYUCMS"]
+  n_action_tr_5836215baa9114109157{"Previous [observed]"}
+  n_action_tr_5027f534e11a36f1fa8b{"Next [replay_validated]"}
+  n_action_tr_fd2c166e875d14647dcd{"首 页 [observed]"}
+  n_action_tr_e8ac8df95eb06aa0f570{"铅笔盒 [observed]"}
+  n_action_tr_f51a3cf3a25fe8bc14da{"钢笔 [observed]"}
+  n_action_tr_2dfd0396596bceda18fd{"资质荣誉四 [replay_validated]"}
+  n_action_tr_142b3e8ae803d8720e14{"资质荣誉六 [replay_validated]"}
+  n_action_tr_a1bb371c5bb0143d7ece{"资质荣誉五 [observed]"}
+  n_action_tr_e777005b9e0f6266cf0e{"资质荣誉 [observed]"}
+  n_action_tr_bad8c20efe4c369b9ba0{"资料下载 [observed]"}
+  n_action_tr_112e58decdd77cc45ef9{"联系我们 [replay_validated]"}
+  n_action_tr_b3641953c8f1a0e3d8f9{"笔记本 [observed]"}
+  n_action_tr_354adfc168099c0f41f2{"立即下载 [replay_validated]"}
+  n_action_tr_48fa4e47857dfb370809{"立即下载 [replay_validated]"}
+  n_action_tr_e1047fc09578aef25456{"立即下载 [observed]"}
+  n_action_tr_c75bd81283d2a2b688bb{"盒子 [failed]"}
+  n_state_646207b81abbde58 -->|observed| n_action_tr_5836215baa9114109157
+  n_action_tr_5836215baa9114109157 -->|observed| n_state_872dd0063180edb5
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_5027f534e11a36f1fa8b
+  n_action_tr_5027f534e11a36f1fa8b -->|replay_validated| n_state_872dd0063180edb5
+  n_state_646207b81abbde58 -->|observed| n_action_tr_fd2c166e875d14647dcd
+  n_action_tr_fd2c166e875d14647dcd -->|observed| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|observed| n_action_tr_e8ac8df95eb06aa0f570
+  n_action_tr_e8ac8df95eb06aa0f570 -->|observed| n_state_3b9ef5c1f62b139f
+  n_state_646207b81abbde58 -->|observed| n_action_tr_f51a3cf3a25fe8bc14da
+  n_action_tr_f51a3cf3a25fe8bc14da -->|observed| n_state_2d79e8b35dd077d3
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_2dfd0396596bceda18fd
+  n_action_tr_2dfd0396596bceda18fd -->|replay_validated| n_state_1dfce63e7b24fa90
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_142b3e8ae803d8720e14
+  n_action_tr_142b3e8ae803d8720e14 -->|replay_validated| n_state_f302eecbb7ff895e
+  n_state_646207b81abbde58 -->|observed| n_action_tr_a1bb371c5bb0143d7ece
+  n_action_tr_a1bb371c5bb0143d7ece -->|observed| n_state_1dfce63e7b24fa90
+  n_state_646207b81abbde58 -->|observed| n_action_tr_e777005b9e0f6266cf0e
+  n_action_tr_e777005b9e0f6266cf0e -->|observed| n_state_c97b3a3f0970b40e
+  n_state_646207b81abbde58 -->|observed| n_action_tr_bad8c20efe4c369b9ba0
+  n_action_tr_bad8c20efe4c369b9ba0 -->|observed| n_state_d1e91412a1a3076a
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_112e58decdd77cc45ef9
+  n_action_tr_112e58decdd77cc45ef9 -->|replay_validated| n_state_8dc7e5befe1e7a13
+  n_state_646207b81abbde58 -->|observed| n_action_tr_b3641953c8f1a0e3d8f9
+  n_action_tr_b3641953c8f1a0e3d8f9 -->|observed| n_state_3b9ef5c1f62b139f
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_354adfc168099c0f41f2
+  n_action_tr_354adfc168099c0f41f2 -->|replay_validated| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_48fa4e47857dfb370809
+  n_action_tr_48fa4e47857dfb370809 -->|replay_validated| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|observed| n_action_tr_e1047fc09578aef25456
+  n_action_tr_e1047fc09578aef25456 -->|observed| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|failed| n_action_tr_c75bd81283d2a2b688bb
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  class n_action_tr_5836215baa9114109157 observed;
+  class n_action_tr_5027f534e11a36f1fa8b replay_validated;
+  class n_action_tr_fd2c166e875d14647dcd observed;
+  class n_action_tr_e8ac8df95eb06aa0f570 observed;
+  class n_action_tr_f51a3cf3a25fe8bc14da observed;
+  class n_action_tr_2dfd0396596bceda18fd replay_validated;
+  class n_action_tr_142b3e8ae803d8720e14 replay_validated;
+  class n_action_tr_a1bb371c5bb0143d7ece observed;
+  class n_action_tr_e777005b9e0f6266cf0e observed;
+  class n_action_tr_bad8c20efe4c369b9ba0 observed;
+  class n_action_tr_112e58decdd77cc45ef9 replay_validated;
+  class n_action_tr_b3641953c8f1a0e3d8f9 observed;
+  class n_action_tr_354adfc168099c0f41f2 replay_validated;
+  class n_action_tr_48fa4e47857dfb370809 replay_validated;
+  class n_action_tr_e1047fc09578aef25456 observed;
+  class n_action_tr_c75bd81283d2a2b688bb failed;

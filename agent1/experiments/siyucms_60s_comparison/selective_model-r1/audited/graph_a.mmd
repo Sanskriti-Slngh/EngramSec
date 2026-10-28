@@ -1,0 +1,57 @@
+flowchart LR
+  n_state_1dfce63e7b24fa90["资质荣誉五-资质荣誉_SIYUCMS"]
+  n_state_3b1a81503de1f7f3["一支笔-精选产品_SIYUCMS"]
+  n_state_3b9ef5c1f62b139f["笔记本-精选产品_SIYUCMS"]
+  n_state_646207b81abbde58["SIYUCMS 官网"]
+  n_state_e39267d85da7660e["php整型就是整数-公司新闻_SIYUCMS"]
+  n_state_f302eecbb7ff895e["资质荣誉六-资质荣誉_SIYUCMS"]
+  n_action_tr_3ac3b5a5e7a393cc72bc{"unnamed button [failed]"}
+  n_action_tr_99f724ab105dd935fcad{"Next [replay_validated]"}
+  n_action_tr_029ce9fa7656b2bb6d72{"Previous [replay_validated]"}
+  n_action_tr_ba62e8b045672dc67a5c{"unnamed link [replay_validated]"}
+  n_action_tr_0b695df5ae49be66e865{"php整型就是整数 [replay_validated]"}
+  n_action_tr_d1e83cc57fd3abe97318{"一支笔 [replay_validated]"}
+  n_action_tr_ec5cac62dc992bda270c{"查看详细 [replay_validated]"}
+  n_action_tr_654e2f877cb3338c601f{"unnamed link [replay_validated]"}
+  n_action_tr_b68c3c57bcc22f3fd3de{"资质荣誉五 [replay_validated]"}
+  n_action_tr_4372e5f2c4d8d7d36620{"unnamed link [replay_validated]"}
+  n_action_tr_c0afac8c7abe265c309f{"查看详细 [replay_validated]"}
+  n_action_tr_ae7e02a579bc822e6a2e{"立即下载 [replay_validated]"}
+  n_state_646207b81abbde58 -->|failed| n_action_tr_3ac3b5a5e7a393cc72bc
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_99f724ab105dd935fcad
+  n_action_tr_99f724ab105dd935fcad -->|replay_validated| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_029ce9fa7656b2bb6d72
+  n_action_tr_029ce9fa7656b2bb6d72 -->|replay_validated| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_ba62e8b045672dc67a5c
+  n_action_tr_ba62e8b045672dc67a5c -->|replay_validated| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_0b695df5ae49be66e865
+  n_action_tr_0b695df5ae49be66e865 -->|replay_validated| n_state_e39267d85da7660e
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_d1e83cc57fd3abe97318
+  n_action_tr_d1e83cc57fd3abe97318 -->|replay_validated| n_state_3b1a81503de1f7f3
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_ec5cac62dc992bda270c
+  n_action_tr_ec5cac62dc992bda270c -->|replay_validated| n_state_f302eecbb7ff895e
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_654e2f877cb3338c601f
+  n_action_tr_654e2f877cb3338c601f -->|replay_validated| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_b68c3c57bcc22f3fd3de
+  n_action_tr_b68c3c57bcc22f3fd3de -->|replay_validated| n_state_1dfce63e7b24fa90
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_4372e5f2c4d8d7d36620
+  n_action_tr_4372e5f2c4d8d7d36620 -->|replay_validated| n_state_3b9ef5c1f62b139f
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_c0afac8c7abe265c309f
+  n_action_tr_c0afac8c7abe265c309f -->|replay_validated| n_state_e39267d85da7660e
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_ae7e02a579bc822e6a2e
+  n_action_tr_ae7e02a579bc822e6a2e -->|replay_validated| n_state_646207b81abbde58
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  class n_action_tr_3ac3b5a5e7a393cc72bc failed;
+  class n_action_tr_99f724ab105dd935fcad replay_validated;
+  class n_action_tr_029ce9fa7656b2bb6d72 replay_validated;
+  class n_action_tr_ba62e8b045672dc67a5c replay_validated;
+  class n_action_tr_0b695df5ae49be66e865 replay_validated;
+  class n_action_tr_d1e83cc57fd3abe97318 replay_validated;
+  class n_action_tr_ec5cac62dc992bda270c replay_validated;
+  class n_action_tr_654e2f877cb3338c601f replay_validated;
+  class n_action_tr_b68c3c57bcc22f3fd3de replay_validated;
+  class n_action_tr_4372e5f2c4d8d7d36620 replay_validated;
+  class n_action_tr_c0afac8c7abe265c309f replay_validated;
+  class n_action_tr_ae7e02a579bc822e6a2e replay_validated;

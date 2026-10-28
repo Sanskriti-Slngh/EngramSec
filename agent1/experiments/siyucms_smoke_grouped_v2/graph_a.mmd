@@ -1,0 +1,59 @@
+flowchart LR
+  n_state_1dfce63e7b24fa90["资质荣誉四-资质荣誉_SIYUCMS"]
+  n_state_2d79e8b35dd077d3["钢笔-精选产品_SIYUCMS"]
+  n_state_3b9ef5c1f62b139f["铅笔盒-精选产品_SIYUCMS"]
+  n_state_646207b81abbde58["SIYUCMS 官网"]
+  n_state_8dc7e5befe1e7a13["联系我们_SIYUCMS"]
+  n_state_c97b3a3f0970b40e["资质荣誉_SIYUCMS"]
+  n_state_d1e91412a1a3076a["资料下载_SIYUCMS"]
+  n_state_f302eecbb7ff895e["资质荣誉六-资质荣誉_SIYUCMS"]
+  n_action_tr_fa61bfb2172494c797ee{"unnamed button [failed]"}
+  n_action_tr_ad033f810471dc163ed1{"Previous [replay_validated]"}
+  n_action_tr_29f28ff619f8823a7d19{"Next [replay_validated]"}
+  n_action_tr_396477ce22e5d68fa92b{"首 页 [replay_validated]"}
+  n_action_tr_5c1201768f8347542db6{"铅笔盒 [replay_validated]"}
+  n_action_tr_b94bdd35abf753251d1f{"钢笔 [replay_validated]"}
+  n_action_tr_5afc2a70e01e1a113467{"资质荣誉四 [replay_validated]"}
+  n_action_tr_a89362c808f7ec8bb5f8{"资质荣誉六 [replay_validated]"}
+  n_action_tr_c17bd416c7ff8d44823e{"资质荣誉五 [replay_validated]"}
+  n_action_tr_7c4cfd0bfdb9f3229dc4{"资质荣誉 [replay_validated]"}
+  n_action_tr_3e35efe4b515f42debde{"资料下载 [replay_validated]"}
+  n_action_tr_d52363f5fe40819e4b16{"联系我们 [replay_validated]"}
+  n_state_646207b81abbde58 -->|failed| n_action_tr_fa61bfb2172494c797ee
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_ad033f810471dc163ed1
+  n_action_tr_ad033f810471dc163ed1 -->|replay_validated| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_29f28ff619f8823a7d19
+  n_action_tr_29f28ff619f8823a7d19 -->|replay_validated| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_396477ce22e5d68fa92b
+  n_action_tr_396477ce22e5d68fa92b -->|replay_validated| n_state_646207b81abbde58
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_5c1201768f8347542db6
+  n_action_tr_5c1201768f8347542db6 -->|replay_validated| n_state_3b9ef5c1f62b139f
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_b94bdd35abf753251d1f
+  n_action_tr_b94bdd35abf753251d1f -->|replay_validated| n_state_2d79e8b35dd077d3
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_5afc2a70e01e1a113467
+  n_action_tr_5afc2a70e01e1a113467 -->|replay_validated| n_state_1dfce63e7b24fa90
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_a89362c808f7ec8bb5f8
+  n_action_tr_a89362c808f7ec8bb5f8 -->|replay_validated| n_state_f302eecbb7ff895e
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_c17bd416c7ff8d44823e
+  n_action_tr_c17bd416c7ff8d44823e -->|replay_validated| n_state_1dfce63e7b24fa90
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_7c4cfd0bfdb9f3229dc4
+  n_action_tr_7c4cfd0bfdb9f3229dc4 -->|replay_validated| n_state_c97b3a3f0970b40e
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_3e35efe4b515f42debde
+  n_action_tr_3e35efe4b515f42debde -->|replay_validated| n_state_d1e91412a1a3076a
+  n_state_646207b81abbde58 -->|replay_validated| n_action_tr_d52363f5fe40819e4b16
+  n_action_tr_d52363f5fe40819e4b16 -->|replay_validated| n_state_8dc7e5befe1e7a13
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  class n_action_tr_fa61bfb2172494c797ee failed;
+  class n_action_tr_ad033f810471dc163ed1 replay_validated;
+  class n_action_tr_29f28ff619f8823a7d19 replay_validated;
+  class n_action_tr_396477ce22e5d68fa92b replay_validated;
+  class n_action_tr_5c1201768f8347542db6 replay_validated;
+  class n_action_tr_b94bdd35abf753251d1f replay_validated;
+  class n_action_tr_5afc2a70e01e1a113467 replay_validated;
+  class n_action_tr_a89362c808f7ec8bb5f8 replay_validated;
+  class n_action_tr_c17bd416c7ff8d44823e replay_validated;
+  class n_action_tr_7c4cfd0bfdb9f3229dc4 replay_validated;
+  class n_action_tr_3e35efe4b515f42debde replay_validated;
+  class n_action_tr_d52363f5fe40819e4b16 replay_validated;

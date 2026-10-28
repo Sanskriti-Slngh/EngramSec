@@ -1,0 +1,168 @@
+{
+  "advertised_unexecuted": 2043,
+  "browser_actions": 46,
+  "distinct_validated_feature_workflows": 3,
+  "elapsed_seconds": 56.192,
+  "grouped_states": 6,
+  "incorrect_state_merges": 0,
+  "model_calls": 2,
+  "model_input_tokens": 4100,
+  "model_output_tokens": 188,
+  "monetary_cost_usd": 0.0,
+  "navigation_requests": 24,
+  "network_events_recorded": 6,
+  "progress": [
+    {
+      "browser_actions": 2,
+      "elapsed_seconds": 9.44,
+      "transitions_observed": 0,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 4,
+      "elapsed_seconds": 12.453,
+      "transitions_observed": 1,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 6,
+      "elapsed_seconds": 15.125,
+      "transitions_observed": 2,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 8,
+      "elapsed_seconds": 16.613,
+      "transitions_observed": 3,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 10,
+      "elapsed_seconds": 20.04,
+      "transitions_observed": 4,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 12,
+      "elapsed_seconds": 24.507,
+      "transitions_observed": 5,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 14,
+      "elapsed_seconds": 26.887,
+      "transitions_observed": 6,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 16,
+      "elapsed_seconds": 29.676,
+      "transitions_observed": 7,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 18,
+      "elapsed_seconds": 32.858,
+      "transitions_observed": 8,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 20,
+      "elapsed_seconds": 36.066,
+      "transitions_observed": 9,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 22,
+      "elapsed_seconds": 39.325,
+      "transitions_observed": 10,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 24,
+      "elapsed_seconds": 42.136,
+      "transitions_observed": 11,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 26,
+      "elapsed_seconds": 43.309,
+      "transitions_observed": 11,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 28,
+      "elapsed_seconds": 44.725,
+      "transitions_observed": 11,
+      "validated_workflows": 1
+    },
+    {
+      "browser_actions": 30,
+      "elapsed_seconds": 46.109,
+      "transitions_observed": 11,
+      "validated_workflows": 2
+    },
+    {
+      "browser_actions": 32,
+      "elapsed_seconds": 47.318,
+      "transitions_observed": 11,
+      "validated_workflows": 2
+    },
+    {
+      "browser_actions": 34,
+      "elapsed_seconds": 48.476,
+      "transitions_observed": 11,
+      "validated_workflows": 2
+    },
+    {
+      "browser_actions": 36,
+      "elapsed_seconds": 49.605,
+      "transitions_observed": 11,
+      "validated_workflows": 2
+    },
+    {
+      "browser_actions": 38,
+      "elapsed_seconds": 50.956,
+      "transitions_observed": 11,
+      "validated_workflows": 3
+    },
+    {
+      "browser_actions": 40,
+      "elapsed_seconds": 52.113,
+      "transitions_observed": 11,
+      "validated_workflows": 3
+    },
+    {
+      "browser_actions": 42,
+      "elapsed_seconds": 53.441,
+      "transitions_observed": 11,
+      "validated_workflows": 3
+    },
+    {
+      "browser_actions": 44,
+      "elapsed_seconds": 54.759,
+      "transitions_observed": 11,
+      "validated_workflows": 3
+    },
+    {
+      "browser_actions": 46,
+      "elapsed_seconds": 56.115,
+      "transitions_observed": 11,
+      "validated_workflows": 3
+    },
+    {
+      "browser_actions": 46,
+      "elapsed_seconds": 56.192,
+      "transitions_observed": 11,
+      "validated_workflows": 3
+    }
+  ],
+  "raw_states": 7,
+  "redundant_states": 1,
+  "replay_success_denominator": 11,
+  "replay_success_numerator": 11,
+  "transitions_attempted": 12,
+  "transitions_failed": 1,
+  "transitions_observed": 11,
+  "unsupported_connections": 0
+}

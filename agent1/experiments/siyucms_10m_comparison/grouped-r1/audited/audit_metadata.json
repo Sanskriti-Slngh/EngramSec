@@ -1,0 +1,9 @@
+{
+  "audited_at": "2026-10-28T12:38:09.354504+00:00",
+  "audited_validated_workflows": 16,
+  "feature_identity": "links: kind+normalized target route; non-links: action/form shape plus observable outcome; source states retained as evidence but excluded from identity; volatile carousel controls excluded",
+  "original_reported_validated_workflows": 43,
+  "raw_evidence_changed": false,
+  "schema_version": "agent1-derived-audit-1.0",
+  "source_run": "agent1/experiments/siyucms_10m_comparison/grouped-r1/run.json"
+}
