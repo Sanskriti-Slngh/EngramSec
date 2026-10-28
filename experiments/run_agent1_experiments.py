@@ -137,7 +137,11 @@ def main() -> int:
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     with (args.out / "summary.csv").open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0]) if rows else ["name"])
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=list(rows[0]) if rows else ["name"],
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(rows)
     print(json.dumps({"runs": len(rows), "output": str(args.out.resolve())}, sort_keys=True))
