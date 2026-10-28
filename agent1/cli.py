@@ -24,6 +24,8 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument("--provider", choices=("none", "ollama", "groq", "openai"), default="none")
     parser.add_argument("--model")
+    parser.add_argument("--model-forms", action="store_true")
+    parser.add_argument("--max-form-retries", type=int, default=1, choices=(0, 1, 2))
     parser.add_argument("--headed", action="store_true")
     parser.add_argument("--allow-post-forms", action="store_true")
     parser.add_argument("--context-label", default="anonymous")
@@ -86,6 +88,8 @@ def main(argv: list[str] | None = None) -> int:
             context_label=args.context_label,
             model_provider=args.provider,
             model_name=args.model,
+            model_form_assistance=args.model_forms,
+            max_form_retries=args.max_form_retries,
             paid_calls_enabled=False,
         )
     else:
@@ -97,11 +101,20 @@ def main(argv: list[str] | None = None) -> int:
             {
                 "run_id": artifact.run_id,
                 "output_dir": str(config.output_dir.resolve()),
-                "validated_workflows": artifact.metrics.distinct_validated_feature_workflows,
-                "replay": [
-                    artifact.metrics.replay_success_numerator,
-                    artifact.metrics.replay_success_denominator,
-                ],
+                "navigation_categories_replay_validated": (
+                    artifact.metrics.navigation_categories_replay_validated
+                ),
+                "functional_workflows_verified": artifact.metrics.functional_workflows_verified,
+                "functional_validation_failures": artifact.metrics.functional_validation_failures,
+                "replay": {
+                    "attempts": artifact.metrics.replay_attempts,
+                    "navigation_successes": artifact.metrics.replay_navigation_successes,
+                    "failures": artifact.metrics.replay_failures,
+                    "untested_paths": artifact.metrics.replay_untested_paths,
+                },
+                "graph_connections_missing_evidence": (
+                    artifact.metrics.graph_connections_missing_evidence
+                ),
                 "cost_usd": artifact.metrics.monetary_cost_usd,
             },
             sort_keys=True,

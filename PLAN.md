@@ -34,3 +34,12 @@ Stop after a working tested pipeline and report, six hours, a usage/cost limit, 
 ## Final status
 
 Implementation, fixture/browser tests, matched short runs, one matched 10-minute ablation, the Crawlee baseline, evidence audit, and the handoff report are complete. The six-hour boundary was reached while final verification was being recorded; no further long experiment was started.
+
+## Interactive-validation milestone (2026-10-28)
+
+- Reclassify the historical 16 as replay-validated navigation categories, not completed functions.
+- Reproduce validation gaps with a black-box fixture application and separate evaluator ground truth before changing the mapper.
+- Add cosmetic-normalized content and explicit outcome evidence, replay observations, per-path validation, and graph-connection completeness checks.
+- Verify deterministic form constraints and a complete prerequisite/action sequence before enabling bounded model form assistance.
+- Compare deterministic form filling with a capable local free model, preserve failed attempts, and keep paid calls disabled.
+- Apply the corrected mapper to anonymous SiyuCMS without claiming functional coverage unavailable under its account/reset conditions.

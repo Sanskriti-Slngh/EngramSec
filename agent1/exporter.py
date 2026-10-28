@@ -48,6 +48,12 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
                 "network": [item.model_dump(mode="json") for item in transition.network],
                 "error": transition.error,
                 "run_id": transition.run_id,
+                "result_observation_id": transition.result_observation_id,
+                "outcome_signals": (
+                    [item.model_dump(mode="json") for item in observations[transition.result_observation_id].outcome_signals]
+                    if transition.result_observation_id in observations
+                    else []
+                ),
             }
         )
         evidence_edges.append(
@@ -80,6 +86,9 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
                 "status": feature.status,
                 "evidence_transition_ids": feature.evidence_transition_ids,
                 "replay_ids": feature.replay_ids,
+                "validated_transition_ids": feature.validated_transition_ids,
+                "failed_transition_ids": feature.failed_transition_ids,
+                "untested_transition_ids": feature.untested_transition_ids,
             }
         )
         for source_group in feature.source_group_signatures or [feature.source_group_signature]:
@@ -101,6 +110,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
                 }
             )
     advertised = []
+    advertised_nodes = []
     attempted = {
         (transition.source_observation_id, transition.action.control_id)
         for transition in artifact.transitions
@@ -108,16 +118,52 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
     for item in artifact.advertisements:
         if (item.source_observation_id, item.control.id) in attempted:
             continue
+        advertised_id = f"advertised_{item.source_observation_id}_{item.control.id}"
         advertised.append(
             {
+                "id": advertised_id,
                 "source_observation_id": item.source_observation_id,
                 "source_group_signature": item.source_group_signature,
                 "control": item.control.model_dump(mode="json"),
                 "status": EvidenceStatus.ADVERTISED,
+                "test_status": EvidenceStatus.NOT_TESTED,
+            }
+        )
+        advertised_nodes.append(
+            {
+                "id": advertised_id,
+                "type": "advertised_action",
+                "label": item.control.label,
+                "kind": item.control.kind,
+                "status": EvidenceStatus.ADVERTISED,
+                "test_status": EvidenceStatus.NOT_TESTED,
+            }
+        )
+        evidence_edges.append(
+            {
+                "source": f"state_{item.source_group_signature}",
+                "target": advertised_id,
+                "type": "offers_untested",
+                "status": EvidenceStatus.NOT_TESTED,
+                "source_observation_id": item.source_observation_id,
+            }
+        )
+    workflow_nodes = []
+    workflow_edges = []
+    for workflow in artifact.functional_workflows:
+        workflow_nodes.append(workflow.model_dump(mode="json") | {"type": "functional_workflow"})
+        workflow_edges.append(
+            {
+                "source": workflow.id,
+                "target": f"action_{workflow.transition_id}",
+                "type": "validated_from_path_instance",
+                "status": workflow.status,
+                "evidence_transition_id": workflow.transition_id,
+                "replay_id": workflow.replay_id,
             }
         )
     return {
-        "schema_version": "graph-a-1.0",
+        "schema_version": "graph-a-1.1",
         "run": {
             "run_id": artifact.run_id,
             "code_revision": artifact.code_revision,
@@ -130,10 +176,15 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
             "features": feature_nodes,
             "states": state_nodes,
             "actions_evidence": action_nodes,
+            "functional_workflows": workflow_nodes,
+            "advertised_actions": advertised_nodes,
         },
-        "edges": evidence_edges + feature_edges,
+        "edges": evidence_edges + feature_edges + workflow_edges,
         "advertised_unexecuted": advertised,
         "replays": [item.model_dump(mode="json") for item in artifact.replays],
+        "connection_evidence": [
+            item.model_dump(mode="json") for item in artifact.connection_evidence
+        ],
         "notes": artifact.notes,
     }
 
@@ -148,8 +199,31 @@ def mermaid(graph: dict[str, Any]) -> str:
         label = (action["label"] or action["kind"]).replace('"', "'")[:60]
         status = str(action["status"])
         lines.append(f'  {_slug(action["id"])}{{"{label} [{status}]"}}')
+    for workflow in graph["nodes"].get("functional_workflows", []):
+        label = f"{workflow['action_label']} [{workflow['status']}]".replace('"', "'")[:80]
+        lines.append(f'  {_slug(workflow["id"])}(("{label}"))')
+    executed_labels = {
+        (item.get("label") or item.get("kind") or "").strip()
+        for item in graph["nodes"].get("actions_evidence", [])
+    }
+    shown_advertised = []
+    shown_labels: set[str] = set()
+    for item in graph["nodes"].get("advertised_actions", []):
+        label = (item.get("label") or item.get("kind") or "").strip()
+        if label in executed_labels or label in shown_labels:
+            continue
+        shown_advertised.append(item)
+        shown_labels.add(label)
+        if len(shown_advertised) >= 100:
+            break
+    shown_advertised_ids = {item["id"] for item in shown_advertised}
+    for advertised in shown_advertised:
+        label = (advertised["label"] or advertised["kind"]).replace('"', "'")[:60]
+        lines.append(f'  {_slug(advertised["id"])}["{label} [not tested]"]')
     for edge in graph["edges"]:
-        if edge["type"] not in {"offers_or_executes", "results_in"}:
+        if edge["type"] not in {"offers_or_executes", "results_in", "validated_from_path_instance", "offers_untested"}:
+            continue
+        if edge["type"] == "offers_untested" and edge["target"] not in shown_advertised_ids:
             continue
         source = _slug(edge["source"])
         target = _slug(edge["target"])
@@ -160,12 +234,23 @@ def mermaid(graph: dict[str, Any]) -> str:
             "  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;",
             "  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;",
             "  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;",
+            "  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;",
+            "  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;",
+            "  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;",
+            "  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;",
+            "  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;",
         ]
     )
     for action in graph["nodes"]["actions_evidence"]:
         status = str(action["status"])
         if status in {"replay_validated", "observed", "failed"}:
             lines.append(f"  class {_slug(action['id'])} {status};")
+    for workflow in graph["nodes"].get("functional_workflows", []):
+        status = str(workflow["status"])
+        if status in {"functional_verified", "validation_failure", "not_tested", "navigation_only", "unresolved", "failed"}:
+            lines.append(f"  class {_slug(workflow['id'])} {status};")
+    for advertised in shown_advertised:
+        lines.append(f"  class {_slug(advertised['id'])} not_tested;")
     return "\n".join(lines) + "\n"
 
 
@@ -182,18 +267,31 @@ def report_markdown(artifact: RunArtifact) -> str:
         f"- Target: `{artifact.config.get('start_url')}`",
         f"- Elapsed: {metrics.elapsed_seconds:.3f} seconds",
         f"- Browser actions (including setup/replay): {metrics.browser_actions}",
-        f"- Validated feature workflows: {len(validated)}",
-        f"- Replay success: {metrics.replay_success_numerator}/{metrics.replay_success_denominator}",
-        f"- Unsupported connections: {metrics.unsupported_connections}",
+        f"- Replay-validated navigation categories: {metrics.navigation_categories_replay_validated}",
+        f"- Verified functional workflows: {metrics.functional_workflows_verified}",
+        f"- Reproduced validation failures: {metrics.functional_validation_failures}",
+        f"- Functional outcomes unresolved/untested/failed: {metrics.functional_unresolved}",
+        f"- Replay navigation success: {metrics.replay_navigation_successes}/{metrics.replay_attempts}",
+        f"- Replay failures / untested paths: {metrics.replay_failures}/{metrics.replay_untested_paths}",
+        f"- Graph connections with complete evidence: {metrics.graph_connections_complete}/{metrics.graph_connections_total}",
+        f"- Graph connections missing evidence: {metrics.graph_connections_missing_evidence}",
         f"- Incorrect state merges found by audit: {metrics.incorrect_state_merges}",
         f"- Redundant raw states: {metrics.redundant_states}",
         f"- Model calls / cost: {metrics.model_calls} / ${metrics.monetary_cost_usd:.6f}",
         "",
-        "## Replay-validated workflows",
+        "## Fully replay-validated navigation categories",
         "",
     ]
     if validated:
         lines.extend(f"- `{feature.id}` — {feature.description}" for feature in validated)
+    else:
+        lines.append("- None.")
+    lines.extend(["", "## Functional path-instance outcomes", ""])
+    if artifact.functional_workflows:
+        lines.extend(
+            f"- `{item.id}` — {item.action_label}: `{item.status}` (path length {item.path_length})"
+            for item in artifact.functional_workflows
+        )
     else:
         lines.append("- None.")
     lines.extend(["", "## Observed but not replay-validated", ""])

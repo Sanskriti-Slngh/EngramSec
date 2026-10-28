@@ -5,7 +5,7 @@ import json
 import re
 from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
 
-from .schema import Control, FormObservation
+from .schema import Control, FormObservation, OutcomeSignal
 
 
 SENSITIVE_QUERY_KEYS = re.compile(r"token|secret|password|passwd|auth|session|key|code", re.I)
@@ -14,6 +14,13 @@ INSTANCE_TOKEN = re.compile(
     re.I,
 )
 WHITESPACE = re.compile(r"\s+")
+COSMETIC_TIMESTAMP = re.compile(
+    r"\b(?:20\d{2}[-/]\d{1,2}[-/]\d{1,2}(?:[T ]\d{1,2}:\d{2}(?::\d{2})?Z?)?|"
+    r"\d{1,2}:\d{2}(?::\d{2})?\s*(?:am|pm)?|"
+    r"\d+\.\d{3,}s|"
+    r"(?:updated|generated|last\s+seen)\s+(?:at|on)\s+[^\n]{1,40})\b",
+    re.I,
+)
 VOLATILE_CONTROL = re.compile(r"^(unnamed (button|link)|previous|next|prev|carousel)$", re.I)
 
 
@@ -28,6 +35,20 @@ def compact_text(value: str, limit: int = 160) -> str:
 
 def normalize_instance_text(value: str) -> str:
     return INSTANCE_TOKEN.sub("{instance}", compact_text(value).lower())
+
+
+def normalize_meaningful_text(value: str) -> str:
+    """Normalize visible workflow content while suppressing common clock noise."""
+
+    return compact_text(COSMETIC_TIMESTAMP.sub("{time}", value).lower(), 8_000)
+
+
+def content_fingerprint(value: str) -> str:
+    return digest(normalize_meaningful_text(value))
+
+
+def outcome_signature(signals: list[OutcomeSignal]) -> list[str]:
+    return sorted(f"{item.kind}:{item.fingerprint}" for item in signals)
 
 
 def sanitize_url(raw: str, base: str | None = None) -> str:
@@ -121,6 +142,7 @@ def signatures(
     controls: list[Control],
     forms: list[FormObservation],
     session_context: str,
+    meaningful_text: str = "",
 ) -> tuple[str, str, str]:
     pattern = route_pattern(url)
     form_shapes = [
@@ -132,6 +154,7 @@ def signatures(
         for form in forms
     ]
     control_shapes = sorted(control.signature for control in controls if control.safe)
+    content = content_fingerprint(meaningful_text)
     grouped_control_shapes = sorted(
         group_control_signature(control)
         for control in controls
@@ -144,6 +167,7 @@ def signatures(
             "controls": control_shapes,
             "forms": form_shapes,
             "session": session_context,
+            "content": content,
         }
     )
     group = digest(
@@ -152,6 +176,7 @@ def signatures(
             "controls": grouped_control_shapes,
             "forms": form_shapes,
             "session": session_context,
+            "content": content,
         }
     )
     return raw, group, pattern

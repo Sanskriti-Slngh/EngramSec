@@ -16,7 +16,13 @@ from agent1.schema import (
     Observation,
     utc_now,
 )
-from agent1.state import control_signature, feature_action_signature, feature_key, signatures
+from agent1.state import (
+    content_fingerprint,
+    control_signature,
+    feature_action_signature,
+    feature_key,
+    signatures,
+)
 
 
 def control(label: str = "Open", target: str = "http://127.0.0.1:8000/item/1") -> Control:
@@ -191,3 +197,19 @@ def test_form_feature_identity_includes_field_shape() -> None:
         update={"fields": [FormField(name="query", input_type="search", required=True)]}
     )
     assert feature_action_signature(item) != feature_action_signature(other)
+
+
+def test_content_fingerprint_ignores_runtime_duration_but_not_result_content() -> None:
+    assert content_fingerprint("Result Alpha 0.301827s") == content_fingerprint(
+        "Result Alpha 0.182605s"
+    )
+    assert content_fingerprint("Result Alpha") != content_fingerprint("Result Beta")
+
+
+def test_model_form_values_are_limited_to_observed_field_ids() -> None:
+    proposal = DecisionProvider.validate_form(
+        {"values": {"fld_current": "ordinary", "fld_invented": "ignored"}},
+        {"fld_current"},
+    )
+    assert proposal.values == {"fld_current": "ordinary"}
+    assert proposal.rejected_field_ids == ["fld_invented"]

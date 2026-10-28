@@ -13,6 +13,11 @@ python3.12 -m venv .venv
 
 Optional model keys belong only in the ignored repository-root `.env`; use `.env.example` as the template. The loader supports `GROQ_API_KEY` and `OPENAI_API_KEY` without printing them. OpenAI paid calls are intentionally disabled even when the key exists.
 
+Agent 1 now separates navigation replay from functional verification. A path is
+functionally verified only when a fresh-context replay reproduces an explicit,
+observed success/result signal. Reproducible validation errors remain evidence
+but are never counted as successful completion.
+
 ## Run
 
 Short model-free smoke run:
@@ -33,6 +38,23 @@ Selective local-model run:
   --policy selective_model --provider ollama --model qwen2.5:0.5b \
   --seconds 600 --max-transitions 200 --max-browser-actions 800
 ```
+
+Bounded local-model assistance for ordinary form values and one feedback-based
+correction (control ranking remains deterministic):
+
+```bash
+.venv/bin/python -m agent1.cli map \
+  --url http://127.0.0.1:51707/ \
+  --out agent1/outputs/siyucms-model-forms \
+  --policy grouped --provider ollama --model llama3.2:latest \
+  --model-forms --max-form-retries 1 \
+  --seconds 600 --max-transitions 200 --max-browser-actions 800
+```
+
+Model proposals may reference only observed non-sensitive field IDs. Actual
+values stay in the ignored decision cache; run artifacts contain protected
+references, observed feedback, and every executed attempt. POST remains disabled
+unless `--allow-post-forms` is explicitly supplied for an isolated target.
 
 POST forms are skipped by default. Enable `--allow-post-forms` only for a disposable fixture or when the configured target workflow is explicitly safe to mutate.
 
@@ -83,7 +105,11 @@ Statuses mean:
 
 - `advertised`: a control was visible but not executed.
 - `observed`: the browser executed it and captured a resulting observation.
-- `replay_validated`: a fresh context replayed the full path and matched group, route, and title checks.
+- `replay_validated`: a fresh context replayed the full path and matched group, route, normalized title, cosmetic-normalized content, and outcome-signal checks.
+- `functional_verified`: the exact path instance also reproduced an explicit success/result outcome and content fingerprint.
+- `validation_failure`: replay reproduced an observed error outcome; this is reproducible behavior, not successful completion.
+- `navigation_only`: replay established navigation but no functional completion signal.
+- `not_tested`: an advertised path instance was not replayed within budget.
 - `failed`: execution, return, or replay failed.
 - `unresolved`: reserved for connections that cannot yet be attempted.
 
@@ -95,3 +121,18 @@ PYTHONPATH=engramsec_v0 .venv/bin/python -m pytest engramsec_v0/tests -q
 ```
 
 The Agent 1 integration tests include a state-changing fixture whose private outcome requires a cookie set by a preceding form submission. Replay must reproduce that prerequisite; restoring cookies alone is never used as proof.
+
+Independent validation fixtures and matched free-model comparison:
+
+```bash
+.venv/bin/python experiments/run_validation_fixtures.py \
+  --out agent1/experiments/validation-reproduction --seconds 12 --max-transitions 8
+
+.venv/bin/python experiments/run_model_form_comparison.py \
+  --out agent1/experiments/model-form-reproduction \
+  --model llama3.2:latest --seconds 30
+```
+
+Fixture application behavior lives in `tests/fixtures/interactive_app.py`; its
+ground truth is separately defined in `tests/fixtures/ground_truth.py`. The
+mapper package imports neither file.

@@ -22,12 +22,17 @@ from .schema import (
     Control,
     EvidenceStatus,
     Feature,
+    FormAttempt,
+    FunctionalStatus,
+    FunctionalWorkflow,
+    ConnectionEvidence,
     FormField,
     FormObservation,
     FrontierItem,
     InputReference,
     NetworkEvent,
     Observation,
+    OutcomeSignal,
     ReplayResult,
     RunArtifact,
     RunConfig,
@@ -43,6 +48,8 @@ from .state import (
     feature_key,
     group_control_signature,
     normalize_instance_text,
+    content_fingerprint,
+    outcome_signature,
     same_origin,
     sanitize_url,
     signatures,
@@ -88,12 +95,28 @@ EXTRACT_SCRIPT = r"""
     }
     return parts.join(' > ');
   };
-  const fieldFor = (el) => ({
-    name: el.getAttribute('name') || el.id || '',
-    input_type: (el.getAttribute('type') || el.tagName || 'text').toLowerCase(),
-    label: labelFor(el),
-    required: !!el.required
-  });
+  const fieldFor = (el) => {
+    const describedIds = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+    const description = describedIds.map(id => document.getElementById(id)?.innerText || '').join(' ');
+    return {
+      name: el.getAttribute('name') || el.id || '',
+      input_type: (el.getAttribute('type') || el.tagName || 'text').toLowerCase(),
+      label: labelFor(el),
+      required: !!el.required,
+      css_path: cssPath(el),
+      placeholder: el.getAttribute('placeholder') || '',
+      pattern: el.getAttribute('pattern') || '',
+      min_length: typeof el.minLength === 'number' && el.minLength >= 0 ? el.minLength : null,
+      max_length: typeof el.maxLength === 'number' && el.maxLength >= 0 ? el.maxLength : null,
+      min_value: el.getAttribute('min'),
+      max_value: el.getAttribute('max'),
+      step: el.getAttribute('step'),
+      description: description.replace(/\s+/g, ' ').trim(),
+      options: el.tagName.toLowerCase() === 'select' ? Array.from(el.options).map(option => ({
+        value: option.value || '', label: (option.innerText || '').replace(/\s+/g, ' ').trim()
+      })) : []
+    };
+  };
   const forms = Array.from(document.forms).map((form, index) => ({
     index,
     method: (form.method || 'GET').toUpperCase(),
@@ -119,7 +142,46 @@ EXTRACT_SCRIPT = r"""
       fields: form ? form.fields : []
     };
   });
-  return { controls, forms, body_text: document.body ? document.body.innerText : '' };
+  const main = document.querySelector('main,[role=main]') || document.body;
+  const meaningful = main ? main.cloneNode(true) : null;
+  if (meaningful) meaningful.querySelectorAll(
+    'script,style,noscript,template,nav,header,footer,time,[data-volatile],.timestamp,' +
+    '#think_page_trace,#think_page_trace_open,#sfWebDebug,#debug-toolbar,[data-debug-toolbar],.carousel,.swiper,.slick,.owl-carousel,' +
+    '[class*="carousel"],[class*="swiper"],[data-ride="carousel"]'
+  ).forEach(el => el.remove());
+  if (meaningful) meaningful.querySelectorAll(
+    'i[class*="eye"],i[class*="view"],[aria-label*="view count" i],[title*="view count" i]'
+  ).forEach(icon => (icon.closest('span,small,div') || icon).remove());
+  const signalElements = Array.from(document.querySelectorAll(
+    '[data-outcome],[role=alert],[role=status],[aria-live]:not([aria-live=off]),.success,.error,.alert,.notice,.message'
+  ));
+  const outcomes = [];
+  const seen = new Set();
+  for (const el of signalElements) {
+    const text = (el.innerText || '').replace(/\s+/g, ' ').trim();
+    if (!text) continue;
+    const declared = (el.getAttribute('data-outcome') || '').toLowerCase();
+    const role = (el.getAttribute('role') || '').toLowerCase();
+    const classes = String(el.className || '').toLowerCase();
+    let kind = declared;
+    if (!['success','validation_error','result','status','setup'].includes(kind)) {
+      if (role === 'alert' || /(?:^|\s)(?:error|danger|invalid)(?:\s|$)/.test(classes)) kind = 'validation_error';
+      else if (/(?:^|\s)success(?:\s|$)/.test(classes)) kind = 'success';
+      else if (role === 'status') kind = 'status';
+      else kind = 'unknown';
+    }
+    const key = `${kind}:${text}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    outcomes.push({kind, text, source: declared ? 'data-outcome' : (role ? `role:${role}` : 'class-or-live')});
+  }
+  return {
+    controls,
+    forms,
+    body_text: document.body ? document.body.innerText : '',
+    meaningful_text: meaningful ? meaningful.innerText : '',
+    outcomes
+  };
 }
 """
 
@@ -215,13 +277,23 @@ class BrowserSession:
         for item in extracted["forms"]:
             item = dict(item)
             item["action"] = sanitize_url(item.get("action") or self.page.url, self.page.url)
+            fields = []
+            for field_index, raw_field in enumerate(item.get("fields", [])):
+                raw_field = dict(raw_field)
+                raw_field["id"] = "fld_" + digest(
+                    [current_url, item["index"], raw_field.get("css_path"), raw_field.get("name"), field_index],
+                    18,
+                )
+                fields.append(raw_field)
+            item["fields"] = fields
             forms.append(FormObservation.model_validate(item))
         controls: list[Control] = []
         for raw in extracted["controls"]:
             target = sanitize_url(raw["target"], self.page.url) if raw.get("target") else None
             label = compact_text(raw.get("label", ""), 160)
             method = (raw.get("method") or "").upper() or None
-            fields = [FormField.model_validate(field) for field in raw.get("fields", [])]
+            form_index = raw.get("form_index")
+            fields = forms[form_index].fields if form_index is not None and form_index < len(forms) else []
             unsafe_reason = self._unsafe_reason(label, target, method, fields)
             signature = control_signature(raw["kind"], raw["role"], label, target, method)
             control_id = "ctl_" + digest([current_url, raw["css_path"], signature], 18)
@@ -242,12 +314,23 @@ class BrowserSession:
                 )
             )
         title = compact_text(self.page.title(), 200)
+        meaningful_text = compact_text(extracted.get("meaningful_text", ""), 8_000)
+        outcome_signals = [
+            OutcomeSignal(
+                kind=item["kind"],
+                text_excerpt=compact_text(item.get("text", ""), 240),
+                fingerprint=digest([item["kind"], compact_text(item.get("text", "").lower(), 1_000)]),
+                source=compact_text(item.get("source", "unknown"), 80),
+            )
+            for item in extracted.get("outcomes", [])
+        ]
         raw_sig, group_sig, pattern = signatures(
             url=current_url,
             title=title,
             controls=controls,
             forms=forms,
             session_context=self.config.context_label,
+            meaningful_text=meaningful_text,
         )
         observation_id = "obs_" + digest([sequence, current_url, raw_sig, time.time_ns()], 20)
         body_text = compact_text(extracted.get("body_text", ""), 2_000)
@@ -257,6 +340,9 @@ class BrowserSession:
             url=current_url,
             title=title,
             text_excerpt=body_text,
+            meaningful_text=meaningful_text,
+            content_fingerprint=content_fingerprint(meaningful_text),
+            outcome_signals=outcome_signals,
             controls=controls,
             forms=forms,
             state_signature=raw_sig,
@@ -314,14 +400,24 @@ class BrowserSession:
         ]
         return candidates[0] if len(candidates) == 1 else None
 
-    def execute(self, control: Control) -> tuple[list[InputReference], list[NetworkEvent], list[dict[str, str]], int]:
+    def execute(
+        self,
+        control: Control,
+        input_values: dict[str, str] | None = None,
+        input_plan_ref: str | None = None,
+    ) -> tuple[list[InputReference], list[NetworkEvent], list[dict[str, str]], int]:
         assert self.page and self.network
         self.network.drain()
         self.dialogs = []
         input_refs: list[InputReference] = []
         action_count = 0
         if control.kind == "form_submit" and control.form_index is not None:
-            refs, fills = self._fill_form(control.form_index)
+            refs, fills = self._fill_form(
+                control.form_index,
+                control.fields,
+                input_values=input_values or {},
+                input_plan_ref=input_plan_ref,
+            )
             input_refs.extend(refs)
             action_count += fills
         locator = self.page.locator(control.css_path).first
@@ -339,17 +435,25 @@ class BrowserSession:
             raise RuntimeError("action left the configured origin")
         return input_refs, self.network.drain(), list(self.dialogs), action_count
 
-    def _fill_form(self, form_index: int) -> tuple[list[InputReference], int]:
+    def _fill_form(
+        self,
+        form_index: int,
+        observed_fields: list[FormField],
+        input_values: dict[str, str],
+        input_plan_ref: str | None,
+    ) -> tuple[list[InputReference], int]:
         assert self.page
         form = self.page.locator("form").nth(form_index)
         fields = form.locator("input,select,textarea")
         refs: list[InputReference] = []
         actions = 0
+        specs_by_name = {item.name: item for item in observed_fields}
         for index in range(fields.count()):
             field = fields.nth(index)
             name = field.get_attribute("name") or field.get_attribute("id") or f"field_{index}"
             tag = field.evaluate("el => el.tagName.toLowerCase()")
             kind = (field.get_attribute("type") or tag or "text").lower()
+            spec = specs_by_name.get(name)
             if kind in {"hidden", "submit", "button", "reset", "password", "file", "image"}:
                 continue
             if kind in {"checkbox", "radio"}:
@@ -368,7 +472,11 @@ class BrowserSession:
                 field.select_option(selected, timeout=self.config.action_timeout_ms)
                 value_ref = "generated:select:first_nonempty"
             else:
-                value, value_ref = self._generated_value(kind, name)
+                if spec and spec.id in input_values:
+                    value = input_values[spec.id]
+                    value_ref = f"model-cache:{input_plan_ref or 'memory'}:{spec.id}"
+                else:
+                    value, value_ref = self._generated_value(kind, name, spec)
                 field.fill(value, timeout=self.config.action_timeout_ms)
             refs.append(
                 InputReference(
@@ -382,8 +490,16 @@ class BrowserSession:
         return refs, actions
 
     @staticmethod
-    def _generated_value(kind: str, name: str) -> tuple[str, str]:
+    def _generated_value(
+        kind: str, name: str, spec: FormField | None = None
+    ) -> tuple[str, str]:
         lowered = name.lower()
+        if spec and spec.placeholder:
+            placeholder = spec.placeholder.strip()
+            if placeholder and (
+                not spec.pattern or re.fullmatch(spec.pattern, placeholder) is not None
+            ):
+                return placeholder[: max(1, spec.max_length or 200)], "generated:observed_placeholder"
         if kind == "email" or "email" in lowered:
             return "agent1@example.test", "generated:email"
         if kind in {"number", "range"}:
@@ -606,19 +722,74 @@ class Explorer:
                 current_control = session.find_current(source, item.action)
                 if current_control is None:
                     raise RuntimeError("registered control was not present in the current observation")
-                input_refs, network, dialogs, action_count = session.execute(current_control)
+                descriptors: list[ActionDescriptor] = []
+                form_attempts: list[FormAttempt] = []
+                descriptor = BrowserSession.descriptor(current_control)
+                plan_values, plan_ref = self._propose_form_plan(source, descriptor, [])
+                descriptor.input_plan_ref = plan_ref
+                descriptors.append(descriptor)
+                input_refs, network, dialogs, action_count = session.execute(
+                    current_control, plan_values, plan_ref
+                )
                 self.artifact.metrics.browser_actions += action_count
                 result = session.observe(self._next_sequence())
-                workflow_path = list(item.path) + [BrowserSession.descriptor(current_control)]
+                if current_control.kind == "form_submit":
+                    form_attempts.append(
+                        FormAttempt(
+                            attempt_index=0,
+                            input_references=input_refs,
+                            outcome_signals=result.outcome_signals,
+                            status=self._classify_result(current_control.kind, result),
+                            input_plan_ref=plan_ref,
+                        )
+                    )
+                retry_count = 0
+                while (
+                    current_control.kind == "form_submit"
+                    and self.config.model_form_assistance
+                    and retry_count < self.config.max_form_retries
+                    and any(item.kind == "validation_error" for item in result.outcome_signals)
+                ):
+                    retry_control = session.find_current(result, descriptor)
+                    if retry_control is None:
+                        break
+                    retry_descriptor = BrowserSession.descriptor(retry_control)
+                    retry_values, retry_ref = self._propose_form_plan(
+                        result, retry_descriptor, result.outcome_signals
+                    )
+                    if not retry_values or retry_ref == plan_ref:
+                        break
+                    retry_descriptor.input_plan_ref = retry_ref
+                    descriptors.append(retry_descriptor)
+                    retry_refs, retry_network, retry_dialogs, retry_actions = session.execute(
+                        retry_control, retry_values, retry_ref
+                    )
+                    self.artifact.metrics.browser_actions += retry_actions
+                    input_refs.extend(retry_refs)
+                    network.extend(retry_network)
+                    dialogs.extend(retry_dialogs)
+                    result = session.observe(self._next_sequence())
+                    retry_count += 1
+                    form_attempts.append(
+                        FormAttempt(
+                            attempt_index=retry_count,
+                            input_references=retry_refs,
+                            outcome_signals=result.outcome_signals,
+                            status=self._classify_result(retry_control.kind, result),
+                            input_plan_ref=retry_ref,
+                        )
+                    )
+                workflow_path = list(item.path) + descriptors
                 self._record_observation(result, workflow_path)
                 transition = Transition(
                     id="tr_" + digest([self.run_id, source.id, current_control.id, result.id], 20),
                     source_observation_id=source.id,
                     source_state_signature=source.state_signature,
                     source_group_signature=source.group_signature,
-                    action=BrowserSession.descriptor(current_control),
+                    action=descriptors[0],
                     workflow_path=workflow_path,
                     input_references=input_refs,
+                    form_attempts=form_attempts,
                     result_observation_id=result.id,
                     result_state_signature=result.state_signature,
                     result_group_signature=result.group_signature,
@@ -651,13 +822,47 @@ class Explorer:
                 self.artifact.metrics.transitions_failed += 1
                 self._record_progress()
 
+    def _propose_form_plan(
+        self,
+        observation: Observation,
+        descriptor: ActionDescriptor,
+        feedback: list[OutcomeSignal],
+    ) -> tuple[dict[str, str], str | None]:
+        if not self.config.model_form_assistance or descriptor.kind != "form_submit":
+            return {}, None
+        try:
+            proposal = self.provider.propose_form(observation, descriptor, feedback)
+            if not proposal.cached:
+                self.artifact.metrics.model_calls += 1
+                self.artifact.metrics.model_input_tokens += proposal.input_tokens
+                self.artifact.metrics.model_output_tokens += proposal.output_tokens
+                self.artifact.metrics.monetary_cost_usd += proposal.cost_usd
+            if not proposal.values:
+                self.artifact.notes.append(
+                    f"Model form proposal for {descriptor.control_id} supplied no valid current field IDs; "
+                    f"rejected IDs: {len(proposal.rejected_field_ids)}."
+                )
+            return proposal.values, proposal.plan_ref or None
+        except Exception as exc:
+            self.artifact.metrics.model_calls += 1
+            self.artifact.metrics.model_failures += 1
+            if isinstance(exc, ModelProviderError):
+                self.artifact.metrics.model_input_tokens += exc.input_tokens
+                self.artifact.metrics.model_output_tokens += exc.output_tokens
+            self.artifact.notes.append(
+                f"Model form proposal failed for {descriptor.control_id}: {type(exc).__name__}; "
+                "deterministic values used."
+            )
+            return {}, None
+
     def _restore(self, session: BrowserSession, path: list[ActionDescriptor]) -> Observation:
         observation = session.observe(self._next_sequence())
         for descriptor in path:
             control = session.find_current(observation, descriptor)
             if control is None:
                 raise RuntimeError(f"return-path control missing: {descriptor.signature}")
-            _, _, _, count = session.execute(control)
+            plan = self.provider.resolve_form_plan(descriptor.input_plan_ref)
+            _, _, _, count = session.execute(control, plan, descriptor.input_plan_ref)
             self.artifact.metrics.browser_actions += count
             observation = session.observe(self._next_sequence())
         return observation
@@ -694,7 +899,8 @@ class Explorer:
                     control = session.find_current(observation, descriptor)
                     if control is None:
                         raise RuntimeError(f"replay control missing: {descriptor.signature}")
-                    _, _, _, count = session.execute(control)
+                    plan = self.provider.resolve_form_plan(descriptor.input_plan_ref)
+                    _, _, _, count = session.execute(control, plan, descriptor.input_plan_ref)
                     browser_actions += count
                     observation = session.observe(self._next_sequence())
                 expected_observation = self._observation_by_id(transition.result_observation_id)
@@ -705,17 +911,31 @@ class Explorer:
                     "title": bool(expected_observation)
                     and normalize_instance_text(observation.title)
                     == normalize_instance_text(expected_observation.title),
+                    "content_fingerprint": bool(expected_observation)
+                    and observation.content_fingerprint == expected_observation.content_fingerprint,
+                    "outcome_signals": bool(expected_observation)
+                    and outcome_signature(observation.outcome_signals)
+                    == outcome_signature(expected_observation.outcome_signals),
                 }
                 status = (
                     EvidenceStatus.REPLAY_VALIDATED if all(checks.values()) else EvidenceStatus.FAILED
                 )
                 error = None if status == EvidenceStatus.REPLAY_VALIDATED else "outcome checks did not match"
                 actual_group = observation.group_signature
+                self.artifact.replay_observations.append(observation)
+                actual_observation_id = observation.id
+                functional_status = (
+                    self._classify_functional_outcome(transition)
+                    if status == EvidenceStatus.REPLAY_VALIDATED
+                    else FunctionalStatus.FAILED
+                )
         except Exception as exc:
             checks = {}
             status = EvidenceStatus.FAILED
             error = f"{type(exc).__name__}: {compact_text(str(exc), 300)}"
             actual_group = None
+            actual_observation_id = None
+            functional_status = FunctionalStatus.FAILED
         self.artifact.metrics.browser_actions += browser_actions
         return ReplayResult(
             id=replay_id,
@@ -724,12 +944,31 @@ class Explorer:
             status=status,
             expected_group_signature=transition.result_group_signature or "",
             actual_group_signature=actual_group,
+            actual_observation_id=actual_observation_id,
             outcome_checks=checks,
+            functional_status=functional_status,
             browser_actions=browser_actions,
             error=error,
             started_at=started_at,
             ended_at=utc_now(),
         )
+
+    def _classify_functional_outcome(self, transition: Transition) -> FunctionalStatus:
+        result = self._observation_by_id(transition.result_observation_id)
+        if not result:
+            return FunctionalStatus.UNRESOLVED
+        return self._classify_result(transition.action.kind, result)
+
+    @staticmethod
+    def _classify_result(action_kind: str, result: Observation) -> FunctionalStatus:
+        kinds = {item.kind for item in result.outcome_signals}
+        if "validation_error" in kinds:
+            return FunctionalStatus.VALIDATION_FAILURE
+        if kinds & {"success", "result"}:
+            return FunctionalStatus.VERIFIED
+        if action_kind == "link":
+            return FunctionalStatus.NAVIGATION_ONLY
+        return FunctionalStatus.UNRESOLVED
 
     def _observation_by_id(self, observation_id: str | None) -> Observation | None:
         if not observation_id:
@@ -793,12 +1032,32 @@ class Explorer:
                 for transition in transitions
                 for replay in replays_by_transition.get(transition.id, [])
             ]
-            validated = any(
-                replay.status == EvidenceStatus.REPLAY_VALIDATED
+            validated_transition_ids = sorted(
+                transition.id
                 for transition in transitions
-                for replay in replays_by_transition.get(transition.id, [])
+                if any(
+                    replay.status == EvidenceStatus.REPLAY_VALIDATED
+                    for replay in replays_by_transition.get(transition.id, [])
+                )
             )
-            status = EvidenceStatus.REPLAY_VALIDATED if validated else EvidenceStatus.OBSERVED
+            failed_transition_ids = sorted(
+                transition.id
+                for transition in transitions
+                if any(
+                    replay.status == EvidenceStatus.FAILED
+                    for replay in replays_by_transition.get(transition.id, [])
+                )
+            )
+            tested = set(validated_transition_ids) | set(failed_transition_ids)
+            untested_transition_ids = sorted(
+                transition.id for transition in transitions if transition.id not in tested
+            )
+            if failed_transition_ids:
+                status = EvidenceStatus.FAILED
+            elif validated_transition_ids and len(validated_transition_ids) == len(transitions):
+                status = EvidenceStatus.REPLAY_VALIDATED
+            else:
+                status = EvidenceStatus.OBSERVED
             label = first.action.label or first.action.kind
             description = f"{compact_text(label, 80)} leads to {compact_text(target_description, 100)}"
             if target and first.action.kind == "link":
@@ -825,9 +1084,112 @@ class Explorer:
                     evidence_transition_ids=[transition.id for transition in transitions],
                     replay_ids=replay_ids,
                     status=status,
+                    validated_transition_ids=validated_transition_ids,
+                    failed_transition_ids=failed_transition_ids,
+                    untested_transition_ids=untested_transition_ids,
                 )
             )
         return features
+
+    def _build_functional_workflows(self) -> list[FunctionalWorkflow]:
+        replays_by_transition = {item.transition_id: item for item in self.artifact.replays}
+        workflows: list[FunctionalWorkflow] = []
+        for transition in self.artifact.transitions:
+            if not transition.result_observation_id:
+                continue
+            replay = replays_by_transition.get(transition.id)
+            result = self._observation_by_id(transition.result_observation_id)
+            workflows.append(
+                FunctionalWorkflow(
+                    id="workflow_" + digest([transition.id, replay.id if replay else "untested"], 18),
+                    transition_id=transition.id,
+                    replay_id=replay.id if replay else None,
+                    path_length=len(transition.workflow_path),
+                    action_label=transition.action.label,
+                    status=replay.functional_status if replay else FunctionalStatus.NOT_TESTED,
+                    outcome_signal_fingerprints=(
+                        outcome_signature(result.outcome_signals) if result else []
+                    ),
+                    source_observation_id=transition.source_observation_id,
+                    result_observation_id=transition.result_observation_id,
+                )
+            )
+        return workflows
+
+    def _audit_connection_evidence(self) -> list[ConnectionEvidence]:
+        observations = {item.id: item for item in self.artifact.observations}
+        transitions = {item.id: item for item in self.artifact.transitions}
+        results: list[ConnectionEvidence] = []
+        for advertisement in self.artifact.advertisements:
+            source = observations.get(advertisement.source_observation_id)
+            present = bool(source) and any(
+                item.id == advertisement.control.id and item.signature == advertisement.control.signature
+                for item in source.controls
+            )
+            results.append(
+                ConnectionEvidence(
+                    id="conn_" + digest(["advertised", advertisement.source_observation_id, advertisement.control.id]),
+                    claim_type="advertised_control",
+                    subject_id=advertisement.control.id,
+                    complete=present,
+                    evidence_ids=[advertisement.source_observation_id] if present else [],
+                    missing=[] if present else ["source observation containing the advertised control"],
+                )
+            )
+        for transition in self.artifact.transitions:
+            source = observations.get(transition.source_observation_id)
+            action_present = bool(source) and any(
+                item.id == transition.action.control_id or item.signature == transition.action.signature
+                for item in source.controls
+            )
+            results.append(
+                ConnectionEvidence(
+                    id="conn_" + digest(["source_action", transition.id]),
+                    claim_type="source_action",
+                    subject_id=transition.id,
+                    complete=action_present,
+                    evidence_ids=[transition.source_observation_id] if action_present else [],
+                    missing=[] if action_present else ["registered action in source observation"],
+                )
+            )
+            if transition.result_observation_id:
+                result = observations.get(transition.result_observation_id)
+                result_complete = bool(result) and result.state_signature == transition.result_state_signature
+                results.append(
+                    ConnectionEvidence(
+                        id="conn_" + digest(["action_result", transition.id]),
+                        claim_type="action_result",
+                        subject_id=transition.id,
+                        complete=result_complete,
+                        evidence_ids=[transition.result_observation_id] if result_complete else [],
+                        missing=[] if result_complete else ["matching result observation"],
+                    )
+                )
+        for replay in self.artifact.replays:
+            transition = transitions.get(replay.transition_id)
+            replay_observation = next(
+                (item for item in self.artifact.replay_observations if item.id == replay.actual_observation_id),
+                None,
+            )
+            complete = bool(transition and replay.outcome_checks and replay_observation)
+            missing = []
+            if not transition:
+                missing.append("referenced transition")
+            if not replay.outcome_checks:
+                missing.append("observable outcome checks")
+            if not replay_observation:
+                missing.append("raw replay observation")
+            results.append(
+                ConnectionEvidence(
+                    id="conn_" + digest(["replay", replay.id]),
+                    claim_type="replay",
+                    subject_id=replay.id,
+                    complete=complete,
+                    evidence_ids=[item for item in [replay.transition_id, replay.actual_observation_id] if item],
+                    missing=missing,
+                )
+            )
+        return results
 
     def _audit_incorrect_merges(self) -> int:
         observations = {item.id: item for item in self.artifact.observations}
@@ -859,6 +1221,8 @@ class Explorer:
     def _finalize(self) -> None:
         self.artifact.ended_at = utc_now()
         self.artifact.features = self._build_features()
+        self.artifact.functional_workflows = self._build_functional_workflows()
+        self.artifact.connection_evidence = self._audit_connection_evidence()
         distinct_raw = {item.state_signature for item in self.artifact.observations}
         distinct_groups = {item.group_signature for item in self.artifact.observations}
         validated = [
@@ -874,6 +1238,7 @@ class Explorer:
         self.artifact.metrics.redundant_states = max(0, len(distinct_raw) - len(distinct_groups))
         self.artifact.metrics.incorrect_state_merges = self._audit_incorrect_merges()
         self.artifact.metrics.distinct_validated_feature_workflows = len(validated)
+        self.artifact.metrics.navigation_categories_replay_validated = len(validated)
         self.artifact.metrics.advertised_unexecuted = sum(
             (advertisement.source_observation_id, advertisement.control.id) not in executed
             for advertisement in self.artifact.advertisements
@@ -881,8 +1246,42 @@ class Explorer:
         self.artifact.metrics.unsupported_connections = sum(
             replay.status == EvidenceStatus.FAILED for replay in self.artifact.replays
         )
+        self.artifact.metrics.replay_attempts = len(self.artifact.replays)
+        self.artifact.metrics.replay_navigation_successes = sum(
+            replay.status == EvidenceStatus.REPLAY_VALIDATED for replay in self.artifact.replays
+        )
+        self.artifact.metrics.replay_failures = sum(
+            replay.status == EvidenceStatus.FAILED for replay in self.artifact.replays
+        )
+        replayed_transitions = {item.transition_id for item in self.artifact.replays}
+        self.artifact.metrics.replay_untested_paths = sum(
+            bool(item.result_observation_id) and item.id not in replayed_transitions
+            for item in self.artifact.transitions
+        )
+        self.artifact.metrics.functional_workflows_verified = sum(
+            item.status == FunctionalStatus.VERIFIED for item in self.artifact.functional_workflows
+        )
+        self.artifact.metrics.functional_validation_failures = sum(
+            item.status == FunctionalStatus.VALIDATION_FAILURE
+            for item in self.artifact.functional_workflows
+        )
+        self.artifact.metrics.functional_unresolved = sum(
+            item.status in {FunctionalStatus.UNRESOLVED, FunctionalStatus.NOT_TESTED, FunctionalStatus.FAILED}
+            for item in self.artifact.functional_workflows
+        )
+        self.artifact.metrics.graph_connections_total = len(self.artifact.connection_evidence)
+        self.artifact.metrics.graph_connections_complete = sum(
+            item.complete for item in self.artifact.connection_evidence
+        )
+        self.artifact.metrics.graph_connections_missing_evidence = sum(
+            not item.complete for item in self.artifact.connection_evidence
+        )
         self.artifact.metrics.network_events_recorded = sum(
             len(transition.network) for transition in self.artifact.transitions
+        )
+        self.artifact.notes.append(
+            "unsupported_connections is retained only as a backwards-compatible failed-replay alias; "
+            "use replay_failures and graph_connections_missing_evidence for distinct claims."
         )
         self._record_progress(validated_override=len(validated))
 

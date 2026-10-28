@@ -40,6 +40,8 @@ def main() -> int:
     artifact.features = explorer._build_features()
     validated = [item for item in artifact.features if item.status == EvidenceStatus.REPLAY_VALIDATED]
     artifact.metrics.distinct_validated_feature_workflows = len(validated)
+    artifact.metrics.navigation_categories_replay_validated = len(validated)
+    artifact.metrics.functional_workflows_verified = 0
     artifact.metrics.incorrect_state_merges = explorer._audit_incorrect_merges()
     artifact.notes.append(
         "Post-run feature-identity audit: repeated site-wide links were collapsed across source states; "
@@ -52,6 +54,8 @@ def main() -> int:
         "source_run": str(args.run_json),
         "original_reported_validated_workflows": original_count,
         "audited_validated_workflows": len(validated),
+        "audited_navigation_categories": len(validated),
+        "verified_functional_workflows": 0,
         "raw_evidence_changed": False,
         "feature_identity": (
             "links: kind+normalized target route; non-links: action/form shape plus observable outcome; "

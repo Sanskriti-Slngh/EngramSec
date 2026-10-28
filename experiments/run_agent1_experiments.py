@@ -111,9 +111,22 @@ def main() -> int:
             rows.append(
                 {
                     "name": name,
-                    "validated_workflows": metrics["distinct_validated_feature_workflows"],
-                    "replay_success": f"{metrics['replay_success_numerator']}/{metrics['replay_success_denominator']}",
-                    "unsupported_connections": metrics["unsupported_connections"],
+                    "navigation_categories_replay_validated": metrics[
+                        "navigation_categories_replay_validated"
+                    ],
+                    "functional_workflows_verified": metrics["functional_workflows_verified"],
+                    "functional_validation_failures": metrics["functional_validation_failures"],
+                    "functional_unresolved": metrics["functional_unresolved"],
+                    "replay_navigation_success": (
+                        f"{metrics['replay_navigation_successes']}/{metrics['replay_attempts']}"
+                    ),
+                    "replay_failures": metrics["replay_failures"],
+                    "replay_untested_paths": metrics["replay_untested_paths"],
+                    "graph_connections_complete": metrics["graph_connections_complete"],
+                    "graph_connections_total": metrics["graph_connections_total"],
+                    "graph_connections_missing_evidence": metrics[
+                        "graph_connections_missing_evidence"
+                    ],
                     "incorrect_state_merges": metrics["incorrect_state_merges"],
                     "redundant_states": metrics["redundant_states"],
                     "raw_states": metrics["raw_states"],

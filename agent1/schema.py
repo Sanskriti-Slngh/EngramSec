@@ -18,6 +18,16 @@ class EvidenceStatus(StrEnum):
     REPLAY_VALIDATED = "replay_validated"
     FAILED = "failed"
     UNRESOLVED = "unresolved"
+    NOT_TESTED = "not_tested"
+
+
+class FunctionalStatus(StrEnum):
+    VERIFIED = "functional_verified"
+    VALIDATION_FAILURE = "validation_failure"
+    NAVIGATION_ONLY = "navigation_only"
+    UNRESOLVED = "unresolved"
+    NOT_TESTED = "not_tested"
+    FAILED = "failed"
 
 
 class RunConfig(BaseModel):
@@ -41,6 +51,8 @@ class RunConfig(BaseModel):
     run_id: str | None = None
     resume_from: Path | None = None
     focus_query: str | None = None
+    model_form_assistance: bool = False
+    max_form_retries: int = Field(default=1, ge=0, le=2)
 
 
 class InputReference(BaseModel):
@@ -51,10 +63,28 @@ class InputReference(BaseModel):
 
 
 class FormField(BaseModel):
+    id: str = ""
     name: str
     input_type: str
     label: str = ""
     required: bool = False
+    css_path: str = ""
+    placeholder: str = ""
+    pattern: str = ""
+    min_length: int | None = None
+    max_length: int | None = None
+    min_value: str | None = None
+    max_value: str | None = None
+    step: str | None = None
+    description: str = ""
+    options: list[dict[str, str]] = Field(default_factory=list)
+
+
+class OutcomeSignal(BaseModel):
+    kind: Literal["success", "validation_error", "result", "status", "setup", "unknown"]
+    text_excerpt: str
+    fingerprint: str
+    source: str
 
 
 class FormObservation(BaseModel):
@@ -87,6 +117,9 @@ class Observation(BaseModel):
     url: str
     title: str
     text_excerpt: str
+    meaningful_text: str = ""
+    content_fingerprint: str = ""
+    outcome_signals: list[OutcomeSignal] = Field(default_factory=list)
     controls: list[Control]
     forms: list[FormObservation]
     state_signature: str
@@ -115,6 +148,15 @@ class ActionDescriptor(BaseModel):
     form_index: int | None = None
     fields: list[FormField] = Field(default_factory=list)
     signature: str
+    input_plan_ref: str | None = None
+
+
+class FormAttempt(BaseModel):
+    attempt_index: int
+    input_references: list[InputReference] = Field(default_factory=list)
+    outcome_signals: list[OutcomeSignal] = Field(default_factory=list)
+    status: FunctionalStatus
+    input_plan_ref: str | None = None
 
 
 class Transition(BaseModel):
@@ -125,6 +167,7 @@ class Transition(BaseModel):
     action: ActionDescriptor
     workflow_path: list[ActionDescriptor] = Field(default_factory=list)
     input_references: list[InputReference] = Field(default_factory=list)
+    form_attempts: list[FormAttempt] = Field(default_factory=list)
     result_observation_id: str | None = None
     result_state_signature: str | None = None
     result_group_signature: str | None = None
@@ -166,7 +209,9 @@ class ReplayResult(BaseModel):
     status: EvidenceStatus
     expected_group_signature: str
     actual_group_signature: str | None = None
+    actual_observation_id: str | None = None
     outcome_checks: dict[str, bool] = Field(default_factory=dict)
+    functional_status: FunctionalStatus = FunctionalStatus.NOT_TESTED
     browser_actions: int = 0
     error: str | None = None
     started_at: str = Field(default_factory=utc_now)
@@ -184,6 +229,30 @@ class Feature(BaseModel):
     evidence_transition_ids: list[str]
     replay_ids: list[str] = Field(default_factory=list)
     status: EvidenceStatus
+    validated_transition_ids: list[str] = Field(default_factory=list)
+    failed_transition_ids: list[str] = Field(default_factory=list)
+    untested_transition_ids: list[str] = Field(default_factory=list)
+
+
+class FunctionalWorkflow(BaseModel):
+    id: str
+    transition_id: str
+    replay_id: str | None = None
+    path_length: int
+    action_label: str
+    status: FunctionalStatus
+    outcome_signal_fingerprints: list[str] = Field(default_factory=list)
+    source_observation_id: str
+    result_observation_id: str | None = None
+
+
+class ConnectionEvidence(BaseModel):
+    id: str
+    claim_type: Literal["advertised_control", "source_action", "action_result", "replay"]
+    subject_id: str
+    complete: bool
+    evidence_ids: list[str] = Field(default_factory=list)
+    missing: list[str] = Field(default_factory=list)
 
 
 class FrontierItem(BaseModel):
@@ -212,6 +281,17 @@ class RunMetrics(BaseModel):
     replay_success_numerator: int = 0
     replay_success_denominator: int = 0
     unsupported_connections: int = 0
+    replay_attempts: int = 0
+    replay_navigation_successes: int = 0
+    replay_failures: int = 0
+    replay_untested_paths: int = 0
+    navigation_categories_replay_validated: int = 0
+    functional_workflows_verified: int = 0
+    functional_validation_failures: int = 0
+    functional_unresolved: int = 0
+    graph_connections_total: int = 0
+    graph_connections_complete: int = 0
+    graph_connections_missing_evidence: int = 0
     model_calls: int = 0
     model_failures: int = 0
     model_input_tokens: int = 0
@@ -221,7 +301,7 @@ class RunMetrics(BaseModel):
 
 
 class RunArtifact(BaseModel):
-    schema_version: str = "1.0"
+    schema_version: str = "1.1"
     run_id: str
     code_revision: str
     config: dict[str, Any]
@@ -231,7 +311,10 @@ class RunArtifact(BaseModel):
     advertisements: list[Advertisement] = Field(default_factory=list)
     transitions: list[Transition] = Field(default_factory=list)
     replays: list[ReplayResult] = Field(default_factory=list)
+    replay_observations: list[Observation] = Field(default_factory=list)
     features: list[Feature] = Field(default_factory=list)
+    functional_workflows: list[FunctionalWorkflow] = Field(default_factory=list)
+    connection_evidence: list[ConnectionEvidence] = Field(default_factory=list)
     state_groups: dict[str, list[str]] = Field(default_factory=dict)
     return_paths: dict[str, list[ActionDescriptor]] = Field(default_factory=dict)
     metrics: RunMetrics = Field(default_factory=RunMetrics)
