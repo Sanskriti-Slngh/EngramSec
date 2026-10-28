@@ -1,0 +1,336 @@
+{
+  "advertised_unexecuted": 429,
+  "browser_actions": 142,
+  "distinct_validated_feature_workflows": 3,
+  "elapsed_seconds": 11.596,
+  "functional_unresolved": 20,
+  "functional_validation_failures": 0,
+  "functional_workflows_verified": 0,
+  "graph_connections_complete": 538,
+  "graph_connections_missing_evidence": 0,
+  "graph_connections_total": 538,
+  "grouped_states": 9,
+  "incorrect_state_merges": 0,
+  "model_calls": 0,
+  "model_failures": 0,
+  "model_input_tokens": 0,
+  "model_output_tokens": 0,
+  "monetary_cost_usd": 0.0,
+  "navigation_categories_replay_validated": 3,
+  "navigation_requests": 50,
+  "network_events_recorded": 27,
+  "progress": [
+    {
+      "browser_actions": 4,
+      "elapsed_seconds": 1.046,
+      "transitions_observed": 1,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 6,
+      "elapsed_seconds": 1.194,
+      "transitions_observed": 2,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 8,
+      "elapsed_seconds": 1.336,
+      "transitions_observed": 3,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 10,
+      "elapsed_seconds": 1.479,
+      "transitions_observed": 4,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 12,
+      "elapsed_seconds": 1.635,
+      "transitions_observed": 5,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 14,
+      "elapsed_seconds": 1.787,
+      "transitions_observed": 6,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 16,
+      "elapsed_seconds": 1.939,
+      "transitions_observed": 7,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 20,
+      "elapsed_seconds": 2.17,
+      "transitions_observed": 8,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 24,
+      "elapsed_seconds": 2.453,
+      "transitions_observed": 9,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 27,
+      "elapsed_seconds": 2.669,
+      "transitions_observed": 10,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 30,
+      "elapsed_seconds": 2.889,
+      "transitions_observed": 11,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 33,
+      "elapsed_seconds": 3.103,
+      "transitions_observed": 12,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 36,
+      "elapsed_seconds": 3.325,
+      "transitions_observed": 13,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 39,
+      "elapsed_seconds": 3.536,
+      "transitions_observed": 14,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 42,
+      "elapsed_seconds": 3.76,
+      "transitions_observed": 15,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 45,
+      "elapsed_seconds": 3.99,
+      "transitions_observed": 16,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 48,
+      "elapsed_seconds": 4.211,
+      "transitions_observed": 17,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 51,
+      "elapsed_seconds": 4.432,
+      "transitions_observed": 18,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 55,
+      "elapsed_seconds": 4.698,
+      "transitions_observed": 19,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 58,
+      "elapsed_seconds": 4.931,
+      "transitions_observed": 20,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 61,
+      "elapsed_seconds": 5.162,
+      "transitions_observed": 21,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 65,
+      "elapsed_seconds": 5.422,
+      "transitions_observed": 22,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 68,
+      "elapsed_seconds": 5.673,
+      "transitions_observed": 23,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 71,
+      "elapsed_seconds": 5.901,
+      "transitions_observed": 24,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 74,
+      "elapsed_seconds": 6.209,
+      "transitions_observed": 25,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 77,
+      "elapsed_seconds": 6.445,
+      "transitions_observed": 26,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 80,
+      "elapsed_seconds": 6.684,
+      "transitions_observed": 27,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 83,
+      "elapsed_seconds": 6.916,
+      "transitions_observed": 28,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 86,
+      "elapsed_seconds": 7.265,
+      "transitions_observed": 29,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 89,
+      "elapsed_seconds": 7.492,
+      "transitions_observed": 30,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 91,
+      "elapsed_seconds": 7.645,
+      "transitions_observed": 30,
+      "validated_workflows": 1
+    },
+    {
+      "browser_actions": 93,
+      "elapsed_seconds": 7.808,
+      "transitions_observed": 30,
+      "validated_workflows": 2
+    },
+    {
+      "browser_actions": 96,
+      "elapsed_seconds": 7.998,
+      "transitions_observed": 30,
+      "validated_workflows": 3
+    },
+    {
+      "browser_actions": 98,
+      "elapsed_seconds": 8.154,
+      "transitions_observed": 30,
+      "validated_workflows": 4
+    },
+    {
+      "browser_actions": 100,
+      "elapsed_seconds": 8.314,
+      "transitions_observed": 30,
+      "validated_workflows": 4
+    },
+    {
+      "browser_actions": 102,
+      "elapsed_seconds": 8.488,
+      "transitions_observed": 30,
+      "validated_workflows": 4
+    },
+    {
+      "browser_actions": 104,
+      "elapsed_seconds": 8.655,
+      "transitions_observed": 30,
+      "validated_workflows": 4
+    },
+    {
+      "browser_actions": 107,
+      "elapsed_seconds": 8.882,
+      "transitions_observed": 30,
+      "validated_workflows": 5
+    },
+    {
+      "browser_actions": 111,
+      "elapsed_seconds": 9.152,
+      "transitions_observed": 30,
+      "validated_workflows": 5
+    },
+    {
+      "browser_actions": 115,
+      "elapsed_seconds": 9.395,
+      "transitions_observed": 30,
+      "validated_workflows": 5
+    },
+    {
+      "browser_actions": 118,
+      "elapsed_seconds": 9.622,
+      "transitions_observed": 30,
+      "validated_workflows": 5
+    },
+    {
+      "browser_actions": 121,
+      "elapsed_seconds": 9.906,
+      "transitions_observed": 30,
+      "validated_workflows": 5
+    },
+    {
+      "browser_actions": 124,
+      "elapsed_seconds": 10.147,
+      "transitions_observed": 30,
+      "validated_workflows": 6
+    },
+    {
+      "browser_actions": 127,
+      "elapsed_seconds": 10.376,
+      "transitions_observed": 30,
+      "validated_workflows": 6
+    },
+    {
+      "browser_actions": 130,
+      "elapsed_seconds": 10.609,
+      "transitions_observed": 30,
+      "validated_workflows": 6
+    },
+    {
+      "browser_actions": 133,
+      "elapsed_seconds": 10.84,
+      "transitions_observed": 30,
+      "validated_workflows": 6
+    },
+    {
+      "browser_actions": 136,
+      "elapsed_seconds": 11.083,
+      "transitions_observed": 30,
+      "validated_workflows": 6
+    },
+    {
+      "browser_actions": 139,
+      "elapsed_seconds": 11.316,
+      "transitions_observed": 30,
+      "validated_workflows": 6
+    },
+    {
+      "browser_actions": 142,
+      "elapsed_seconds": 11.552,
+      "transitions_observed": 30,
+      "validated_workflows": 6
+    },
+    {
+      "browser_actions": 142,
+      "elapsed_seconds": 11.596,
+      "transitions_observed": 30,
+      "validated_workflows": 3
+    }
+  ],
+  "raw_states": 9,
+  "redundant_states": 0,
+  "replay_attempts": 19,
+  "replay_failures": 0,
+  "replay_navigation_successes": 19,
+  "replay_success_denominator": 19,
+  "replay_success_numerator": 19,
+  "replay_untested_paths": 11,
+  "transitions_attempted": 30,
+  "transitions_failed": 0,
+  "transitions_observed": 30,
+  "unsupported_connections": 0
+}

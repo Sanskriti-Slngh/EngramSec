@@ -136,6 +136,7 @@ def signatures(
     controls: list[Control],
     forms: list[FormObservation],
     session_context: str,
+    session_markers: dict[str, list[str]] | None = None,
     meaningful_text: str = "",
 ) -> tuple[str, str, str]:
     pattern = route_pattern(url)
@@ -161,6 +162,7 @@ def signatures(
             "controls": control_shapes,
             "forms": form_shapes,
             "session": session_context,
+            "session_markers": session_markers or {},
             "content": content,
         }
     )
@@ -170,6 +172,7 @@ def signatures(
             "controls": grouped_control_shapes,
             "forms": form_shapes,
             "session": session_context,
+            "session_markers": session_markers or {},
             "content": content,
         }
     )

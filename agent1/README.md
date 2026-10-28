@@ -31,7 +31,7 @@ Short model-free smoke run:
 .venv/bin/python -m agent1.cli map \
   --url http://127.0.0.1:51707/ \
   --out agent1/outputs/siyucms-smoke \
-  --policy grouped --seconds 60 --max-transitions 20 --max-browser-actions 80
+  --policy coverage --seconds 60 --max-transitions 20 --max-browser-actions 80
 ```
 
 Focused paired-query GET-search verification (values are configurable and exact
@@ -115,6 +115,16 @@ Runs are sequential with one worker. Each attempted transition and replay starts
 - `run.json`: complete compact artifact, including observations and saved return paths.
 - `trace.jsonl`: one transition per line; protected values are references, not credentials.
 - `checkpoint.json`: resumable frontier and evidence.
+
+The deterministic `coverage` policy prioritizes globally novel observed control shapes while charging a small restoration-depth cost. `grouped` remains the historical type/shallow-path baseline. Graph A request evidence records method, sanitized URL, status, resource type, parameter names, and body encoding without request values. State nodes expose cookie and storage *names* only; values are never exported.
+
+Independent local coverage evaluation:
+
+```bash
+.venv/bin/python experiments/run_coverage_lab.py \
+  --out agent1/experiments/coverage-lab --policy coverage \
+  --seconds 60 --max-transitions 30 --max-browser-actions 140
+```
 - `metrics.json` and `report.md`: measured results, including failures and unvalidated paths.
 
 Statuses mean:

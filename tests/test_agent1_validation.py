@@ -130,3 +130,27 @@ def test_implicit_id_marked_toggle_is_observed() -> None:
     toggle = next(item for item in controls if item["label"] == "toggle search")
     assert toggle["kind"] == "button"
     assert toggle["role"] == "button"
+
+
+def test_semantic_controls_are_observed_but_disabled_and_hidden_are_not() -> None:
+    html = """<main>
+      <div role="tab" tabindex="0">Analytics</div>
+      <details><summary>Advanced settings</summary><p>Hidden body</p></details>
+      <span tabindex="0" data-action="navigate">Help center</span>
+      <span tabindex="-1">Programmatic focus only</span>
+      <input tabindex="0" name="ordinary-field" value="Not an action">
+      <button disabled>Disabled action</button>
+      <button style="display:none">Hidden action</button>
+    </main>"""
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.set_content(html)
+        controls = page.evaluate(EXTRACT_SCRIPT)["controls"]
+        browser.close()
+
+    labels = {item["label"] for item in controls}
+    assert {"Analytics", "Advanced settings", "Help center"}.issubset(labels)
+    assert labels.isdisjoint({
+        "Programmatic focus only", "Not an action", "Disabled action", "Hidden action"
+    })

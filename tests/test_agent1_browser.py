@@ -113,6 +113,15 @@ def test_live_pipeline_records_and_replays_prerequisite_paths(
         for transition in artifact.transitions
     )
     assert all(reference.protected for transition in artifact.transitions for reference in transition.input_references)
+    member_observations = [
+        item for item in artifact.observations
+        if "fixture_session" in item.session_markers.get("cookie_names", [])
+    ]
+    assert member_observations
+    assert all(set(item.session_markers) == {
+        "cookie_names", "local_storage_keys", "session_storage_keys"
+    } for item in member_observations)
+    assert all("ready" not in json.dumps(item.session_markers) for item in member_observations)
     assert (output / "graph_a.json").exists()
     graph = json.loads((output / "graph_a.json").read_text(encoding="utf-8"))
     assert graph["nodes"]["features"]

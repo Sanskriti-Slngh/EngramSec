@@ -33,7 +33,7 @@ class FunctionalStatus(StrEnum):
 class RunConfig(BaseModel):
     start_url: str
     output_dir: Path
-    policy: Literal["exact", "grouped", "selective_model", "model_all"] = "grouped"
+    policy: Literal["exact", "grouped", "coverage", "selective_model", "model_all"] = "grouped"
     max_seconds: float = Field(default=60.0, gt=0)
     max_transitions: int = Field(default=20, ge=1)
     max_browser_actions: int = Field(default=80, ge=1)
@@ -141,6 +141,7 @@ class Observation(BaseModel):
     state_signature: str
     group_signature: str
     session_context: str
+    session_markers: dict[str, list[str]] = Field(default_factory=dict)
     route_pattern: str
     instance_facts: dict[str, Any] = Field(default_factory=dict)
 
@@ -151,6 +152,8 @@ class NetworkEvent(BaseModel):
     status: int | None = None
     resource_type: str | None = None
     failure: str | None = None
+    parameter_names: list[str] = Field(default_factory=list)
+    body_encoding: str | None = None
 
 
 class ActionDescriptor(BaseModel):

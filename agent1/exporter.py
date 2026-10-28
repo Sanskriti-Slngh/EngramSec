@@ -26,6 +26,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
                 "route_pattern": representative.route_pattern if representative else "",
                 "title": representative.title if representative else "",
                 "session_context": representative.session_context if representative else "",
+                "session_markers": representative.session_markers if representative else {},
                 "observation_ids": member_ids,
                 "raw_state_signatures": sorted({item.state_signature for item in members}),
                 "return_path_length": len(artifact.return_paths.get(group, [])),

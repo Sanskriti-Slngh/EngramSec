@@ -9,6 +9,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin, urlsplit
+from urllib.parse import parse_qsl
 
 from playwright.sync_api import Browser, BrowserContext, Page, TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
@@ -133,8 +134,16 @@ EXTRACT_SCRIPT = r"""
     submit_labels: Array.from(form.querySelectorAll('button,input[type=submit],input[type=button]')).map(labelFor).filter(Boolean)
   }));
   const selector = 'a[href],button,input[type=submit],input[type=button],[role=button],' +
+    '[role=tab],[role=menuitem],summary,[data-action],[tabindex]:not([tabindex="-1"]),' +
     '[onclick],[aria-controls],[data-toggle],[data-target],[id^="toggle-"]';
-  const controls = Array.from(document.querySelectorAll(selector)).filter(visible).map((el) => {
+  const controls = Array.from(document.querySelectorAll(selector)).filter(el => {
+    const tag = el.tagName.toLowerCase();
+    const inputType = (el.getAttribute('type') || '').toLowerCase();
+    const passiveField = tag === 'textarea' || tag === 'select' ||
+      (tag === 'input' && !['submit', 'button', 'image'].includes(inputType));
+    return visible(el) && !passiveField && !el.disabled &&
+      el.getAttribute('aria-disabled') !== 'true';
+  }).map((el) => {
     const tag = el.tagName.toLowerCase();
     const role = el.getAttribute('role') || (tag === 'a' ? 'link' : 'button');
     const formIndex = el.form ? Array.from(document.forms).indexOf(el.form) : null;
@@ -204,24 +213,34 @@ class NetworkRecorder:
         request = response.request
         if request.resource_type not in {"document", "xhr", "fetch"}:
             return
+        parameter_names, body_encoding = request_structure(
+            request.method, request.url, request.headers, request.post_data
+        )
         self.events.append(
             NetworkEvent(
                 method=request.method,
                 url=sanitize_url(request.url),
                 status=response.status,
                 resource_type=request.resource_type,
+                parameter_names=parameter_names,
+                body_encoding=body_encoding,
             )
         )
 
     def _failed(self, request: Any) -> None:
         if request.resource_type not in {"document", "xhr", "fetch"}:
             return
+        parameter_names, body_encoding = request_structure(
+            request.method, request.url, request.headers, request.post_data
+        )
         self.events.append(
             NetworkEvent(
                 method=request.method,
                 url=sanitize_url(request.url),
                 resource_type=request.resource_type,
                 failure=compact_text(str(request.failure or "request failed"), 200),
+                parameter_names=parameter_names,
+                body_encoding=body_encoding,
             )
         )
 
@@ -229,6 +248,34 @@ class NetworkRecorder:
         current = self.events
         self.events = []
         return current
+
+
+def request_structure(
+    method: str, url: str, headers: dict[str, str] | None, post_data: str | None
+) -> tuple[list[str], str | None]:
+    """Return input names and encoding without retaining request values."""
+
+    names = {key for key, _ in parse_qsl(urlsplit(url).query, keep_blank_values=True)}
+    content_type = (headers or {}).get("content-type", "").lower()
+    body_encoding = None
+    if post_data and method.upper() not in {"GET", "HEAD"}:
+        if "application/x-www-form-urlencoded" in content_type:
+            names.update(key for key, _ in parse_qsl(post_data, keep_blank_values=True))
+            body_encoding = "form"
+        elif "application/json" in content_type:
+            try:
+                payload = json.loads(post_data)
+                if isinstance(payload, dict):
+                    names.update(str(key) for key in payload)
+                body_encoding = "json"
+            except (TypeError, ValueError):
+                body_encoding = "json-invalid"
+        elif "multipart/form-data" in content_type:
+            names.update(re.findall(r'name="([^"\r\n]+)"', post_data))
+            body_encoding = "multipart"
+        else:
+            body_encoding = "opaque"
+    return sorted(compact_text(name, 120) for name in names if name), body_encoding
 
 
 class BrowserSession:
@@ -330,6 +377,7 @@ class BrowserSession:
                 )
             )
         title = compact_text(self.page.title(), 200)
+        session_markers = self._session_markers()
         meaningful_text = compact_text(extracted.get("meaningful_text", ""), 8_000)
         outcome_signals = [
             OutcomeSignal(
@@ -346,6 +394,7 @@ class BrowserSession:
             controls=controls,
             forms=forms,
             session_context=self.config.context_label,
+            session_markers=session_markers,
             meaningful_text=meaningful_text,
         )
         observation_id = "obs_" + digest([sequence, current_url, raw_sig, time.time_ns()], 20)
@@ -364,6 +413,7 @@ class BrowserSession:
             state_signature=raw_sig,
             group_signature=group_sig,
             session_context=self.config.context_label,
+            session_markers=session_markers,
             route_pattern=pattern,
             instance_facts={
                 "form_count": len(forms),
@@ -371,6 +421,24 @@ class BrowserSession:
                 "all_control_count": len(controls),
             },
         )
+
+    def _session_markers(self) -> dict[str, list[str]]:
+        assert self.page and self.context
+        cookies = self.context.cookies([self.page.url])
+        storage = self.page.evaluate(
+            "() => ({local: Object.keys(localStorage), session: Object.keys(sessionStorage)})"
+        )
+        return {
+            "cookie_names": sorted(
+                {compact_text(item.get("name", ""), 120) for item in cookies if item.get("name")}
+            ),
+            "local_storage_keys": sorted(
+                {compact_text(item, 120) for item in storage.get("local", []) if item}
+            ),
+            "session_storage_keys": sorted(
+                {compact_text(item, 120) for item in storage.get("session", []) if item}
+            ),
+        }
 
     def _unsafe_reason(
         self,
@@ -540,6 +608,7 @@ class Explorer:
         self.sequence = 0
         self.frontier: list[FrontierItem] = []
         self.tried: set[str] = set()
+        self._seen_control_shapes: set[str] = set()
         self.provider: DecisionProvider = build_provider(
             config.model_provider,
             config.model_name,
@@ -687,6 +756,14 @@ class Explorer:
                 continue
             self.tried.add(tried_key)
             kind_score = {"form_submit": 3.0, "button": 2.0, "link": 1.0}[control.kind]
+            globally_novel = control.signature not in self._seen_control_shapes
+            self._seen_control_shapes.add(control.signature)
+            if self.config.policy == "coverage":
+                # Event-flow novelty: branch on a newly observed control before
+                # repeating shared chrome. A small depth cost accounts for the
+                # browser actions required to restore an archived path.
+                kind_score += 12.0 if globally_novel else 0.0
+                kind_score -= 0.20 * len(path)
             if self.config.search_probe_primary and (
                 is_get_search_action(control)
                 or SEARCH_SEMANTICS.search(f"{control.label} {control.target or ''}")
@@ -706,6 +783,14 @@ class Explorer:
                     priority=kind_score - rank / max(1, len(order)),
                 )
             )
+        self._sort_frontier()
+
+    def _sort_frontier(self) -> None:
+        if self.config.policy == "coverage":
+            self.frontier.sort(
+                key=lambda item: (-item.priority, len(item.path), item.action.signature)
+            )
+            return
         self.frontier.sort(
             key=lambda item: (
                 item.priority < 10.0,
@@ -1688,6 +1773,9 @@ class Explorer:
         self.run_id = self.artifact.run_id
         self.frontier = checkpoint.frontier
         self.tried = set(checkpoint.tried)
+        self._seen_control_shapes = {
+            key.rsplit(":", 1)[-1] for key in self.tried if ":" in key
+        }
         self._observation_ids = {observation.id for observation in self.artifact.observations}
         self.sequence = max((observation.sequence for observation in self.artifact.observations), default=0)
         self.prior_elapsed = self.artifact.metrics.elapsed_seconds
@@ -1698,7 +1786,7 @@ class Explorer:
             for item in self.frontier:
                 if query in f"{item.action.label} {item.action.target or ''}".lower():
                     item.priority += 10.0
-            self.frontier.sort(key=lambda item: (len(item.path), -item.priority, item.action.signature))
+            self._sort_frontier()
             self.artifact.notes.append(
                 f"Frontier prioritized for the requested focus: {self.config.focus_query[:100]}."
             )

@@ -1,80 +1,88 @@
-# Agent 1 paired-search false-positive challenge
+# Agent 1 reachable-surface coverage milestone
 
 Date: 2026-10-28
 
-## Outcome
+Frozen development base: `6082c6d`
 
-The generic paired-search verifier was tested against four independent black-box websites with evaluator truth kept in a separate module. The unchanged verifier produced one false positive and one false negative. A general before/after link-target rule reduced the measured errors to zero on these four cases without using target-specific selectors, paths, result regions, or literal query matching.
+External API/model cost: **$0.00**; model calls: **0**
 
-This is a focused regression result, not proof that arbitrary search interfaces are correctly understood.
+## What was proved
 
-## Independent cases and unchanged baseline
+Agent 1 now finds generic semantic controls (`role=tab`, `<summary>`, enabled keyboard/data-action launchers), prioritizes globally novel observed control shapes, records request parameter *names* and body encoding without values, and separates browser contexts using cookie/storage marker names without values. These changes remain in the existing observation, frontier, checkpoint, replay, and Graph A pipeline.
 
-The mapper accessed each fixture only through Chromium. Evaluator truth was applied after each saved run.
+An evaluator maintained separately from the mapper scored frozen Graph A files against independent application ground truth. Blocked and outside-origin surfaces were excluded from ordinary recall denominators and remained visible as separate categories.
 
-- Functional literal results: `functional_verified` — correct.
-- Echo-only broken search: `unresolved` — correct.
-- Broken search with permanent Alpha/Beta sidebar links: `functional_verified` — **false positive**.
-- Functional search with “Operations handbook” and “Deployment manual” results: `unresolved` — **false negative** because titles did not contain the probes.
+## Development evaluation and ablations
 
-Baseline totals: **1 false positive, 1 false negative**, 64 browser actions, 5.057 seconds, and $0 external cost.
+All Coverage Lab runs used 30 transitions, 140 configured browser actions, one worker, the same reset/start conditions, and the same ground truth. The action counter can overshoot by the final multi-action path; observed totals are reported.
 
-## General fix
+| Frozen configuration | Areas | Controls | Requests | Replayed area paths | Replay | Surfaces/action |
+|---|---:|---:|---:|---:|---:|---:|
+| `6082c6d` grouped baseline | 6/10 | 11/17 | 6/10 | 5/10 | 19/19 | 0.162 |
+| Iteration 1: semantic controls, grouped | 6/10 | 15/17 | 4/10 | 6/10 | 21/21 | 0.175 |
+| Iteration 2: + coverage frontier | 10/10 | 17/17 | 9/10 | 7/10 | 17/17 | 0.257 |
+| Iteration 3 clean-revision repeat: + request/context evidence | 10/10 | 17/17 | 10/10 | 8/10 | 17/17 | 0.264 |
 
-For each probe in each fresh browser context, Agent 1 now preserves the observation immediately before the final search submission and the resulting observation. It compares browser-observed link targets as follows:
+Iteration 1 recovered four invisible control classes but displaced request/deep-branch work under the fixed budget; its request regression is preserved rather than hidden. The coverage policy was the material exploration improvement: versus the original baseline, covered surfaces per action increased 62%. Iteration 3 did not claim new navigation; it closed the independently measured POST-parameter and member-context representation gaps.
 
-1. Subtract all targets already present on the actionable pre-submit screen.
-2. Require both probes to introduce at least one link target.
-3. Require each probe to contribute at least one introduced target absent from the other probe's result.
-4. Require the two pre-submit link-target sets to match, so unrelated changing navigation makes the outcome unresolved.
-5. Repeat the complete paired check in two independent contexts and require the introduced target evidence to be consistent across both replays.
+Known record instances remained distinct (2/2), evaluator-known critical false merges were zero, graph connections missing referential evidence were zero, and all attempted independent navigation replays succeeded. The clean-revision repeat replayed 8/10 applicable area paths before the action cap, so structural discovery is still stronger than complete path validation.
 
-Meaningful-content differences are still recorded but are not sufficient. Query echo, title, URL, HTTP success, and literal query occurrence are not functional-success checks.
+Actual browser-run time for the four original development configurations was 45.1 seconds (configured ceilings totaled four minutes). A clean-revision Graph repeat took another 10.9 seconds. No exploit, paid provider, or benchmark target was used.
 
-Graph A retains four verification observations per replay: primary-before, primary-result, contrast-before, and contrast-result. It also records baseline targets, introduced links, probe-only targets, per-replay checks, and cross-replay consistency.
+Focused regressions passed after every iteration, and the final full suite passed **36/36** in 38.13 seconds.
 
-## Corrected measurement
+## Held-out transfer
 
-- Functional literal results: `functional_verified` — correct.
-- Echo-only broken search: `unresolved` — correct.
-- Permanent-sidebar broken search: `unresolved` — correct.
-- Functional nonliteral results: `functional_verified` — correct.
+After freezing the mapper, a separate local Northstar Shop application was evaluated without tuning:
 
-Corrected totals: **0 false positives, 0 false negatives**, 64 browser actions, 5.213 seconds, and $0 external cost.
+| Policy | Areas | Controls | Requests | Replayed area paths | Replay | Surfaces/action |
+|---|---:|---:|---:|---:|---:|---:|
+| Grouped | 7/8 | 11/11 | 7/8 | 6/8 | 21/21 | 0.179 |
+| Coverage, clean-revision repeat | 8/8 | 11/11 | 8/8 | 5/8 | 19/19 | 0.191 |
 
-Focused regressions passed **14/14**, including the existing exact-plan, hidden-toggle, wrong-record, and cosmetic-content checks. The final full Agent 1 suite passed **31/31**.
+The coverage policy transferred, improving area and request recall to 100% and efficiency by 7.2%. This is evidence on one held-out controlled application, not proof of completeness on arbitrary applications. The first coverage run replayed 6/8 labeled area paths and the clean-revision repeat replayed 5/8, despite 19/19 attempted replays in both. This variance is preserved: transition-ID tie ordering and shallow-first replay selection change which paths remain untested at the cap. Deep-path replay scheduling is the measured bottleneck.
 
-## SiyuCMS compatibility
+## Inspectable evidence
 
-No new live SiyuCMS run was necessary. Existing artifacts and results were preserved unchanged. An offline check of the previously captured `siyucms_search_integrated_v2` browser observations found, in both old replay contexts:
+- Final development Graph A: `agent1/experiments/coverage_lab_iteration3_evidence/graph_a.json`
+- Final held-out Graph A: `agent1/experiments/heldout_shop_coverage/graph_a.json`
+- Compact evaluator results: each experiment directory's `coverage_evaluation.json`
+- Readable graph: each directory's `graph_a.mmd`
+- Raw local evidence/checkpoint: retained in the same directories and ignored where credential/browser-state risk or duplication warrants it
 
-- Primary probe: 7 targets introduced after the recorded search screen, 6 unique to the primary result.
-- Contrast probe: 2 targets introduced, 1 unique to the contrast result.
+The Graph A action nodes attach method, sanitized URL, status, resource type, parameter-name set, encoding, action path, and result observation. State nodes include reversible raw observation membership, return-path length, configured context, and marker-name-only browser context. Advertised but unexecuted controls, blocked controls, failed actions, and untested paths remain visible. Evaluator-only `missed` labels are deliberately not fed into Graph A or the mapper.
 
-This supports compatibility with the new evidence rule but is not reported as a new live verification because the old artifact did not retain distinct pre-submit observations for both probes.
+Both final Graph A files record mapper revision `3012ce6d...+mapper-1cc5c02a0a12`; the final amended checkpoint changes reports/artifacts only, not mapper code.
 
-## Artifacts and reproduction
-
-- Unchanged baseline: `agent1/experiments/search_verifier_adversarial_baseline/summary.json`
-- Corrected final measurement: `agent1/experiments/search_verifier_adversarial_link_delta_final/summary.json`
-- Fixture website: `tests/fixtures/search_adversarial_app.py`
-- Separate evaluator truth: `tests/fixtures/search_adversarial_ground_truth.py`
-
-Exact comparison commands:
+## Reproduction
 
 ```bash
-.venv/bin/python experiments/run_search_verifier_fixtures.py \
-  --out agent1/experiments/search_verifier_adversarial_reproduction
-
-.venv/bin/python -m pytest \
-  tests/test_agent1_search.py tests/test_agent1_search_adversarial.py -q
+.venv/bin/python experiments/run_coverage_lab.py \
+  --out agent1/experiments/coverage_lab_reproduction \
+  --policy coverage --seconds 60 \
+  --max-transitions 30 --max-browser-actions 140
 ```
 
-## Remaining limitations
+Held-out comparison:
 
-- Search results represented only as non-link widgets remain unresolved.
-- Results whose targets were already linked before submission remain unresolved.
-- Query-dependent content behind an unchanged target remains unresolved.
-- Dynamic navigation or unstable result targets can conservatively prevent verification.
-- A site that consistently injects unrelated, probe-dependent links could still imitate the evidence; the two-context consistency check reduces but does not eliminate that risk.
-- Four synthetic cases do not establish a general false-positive rate.
+```bash
+.venv/bin/python experiments/run_heldout_shop.py \
+  --out agent1/experiments/heldout_shop_reproduction --policy coverage
+```
+
+## Benchmark isolation and protocol
+
+No WebExploitBench evaluation was run. Its gated evaluation-only terms preclude using data, metadata, outputs, traces, or derived artifacts to improve Agent 1. Existing SiyuCMS results are development history, not held-out evidence.
+
+For a later authorized evaluation: freeze the commit and configuration first; let CAGE discover/launch targets through its normal adapter; provide Agent 1 only the authorized target URL at l0 (no challenge metadata/hints); store benchmark outputs in a segregated evaluation directory; report only terms-permitted aggregate coverage/replay and CAGE scores; do not inspect per-vulnerability answers, `Location`, verifier logic, or feed misses/results back into development.
+
+## Limitations and next question
+
+- Replays are shortest-path ordered, so shallow duplicates consume the replay budget before some deep paths.
+- Novelty is control-shape based; it does not yet use component- or request-novelty feedback during exploration.
+- Cookie/storage names distinguish observed contexts but do not prove authorization semantics.
+- Whole-page content identity remains conservative; full fragment abstraction was not justified by this experiment.
+- Request structures record top-level JSON/form/multipart names, not nested schemas or WebSocket messages.
+- The evaluator corpus is controlled and finite; 100% on it is not a completeness claim.
+
+The single highest-value next experiment is a replay-aware frontier/archive policy that reserves validation budget by unique deep prerequisite path and charges actual restoration actions, measured on a larger independently authored app with overlays, hover menus, scrolling, and unstable session state.

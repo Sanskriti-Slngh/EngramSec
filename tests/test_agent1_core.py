@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from agent1.costs import BudgetError, SpendingLedger
+from agent1.explorer import Explorer, request_structure
 from agent1.providers import DecisionProvider
 from agent1.schema import (
     ActionDescriptor,
@@ -14,6 +15,7 @@ from agent1.schema import (
     FormObservation,
     Transition,
     Observation,
+    RunConfig,
     utc_now,
 )
 from agent1.state import (
@@ -213,3 +215,70 @@ def test_model_form_values_are_limited_to_observed_field_ids() -> None:
     )
     assert proposal.values == {"fld_current": "ordinary"}
     assert proposal.rejected_field_ids == ["fld_invented"]
+
+
+def test_coverage_policy_prioritizes_new_branch_over_repeated_chrome(tmp_path: Path) -> None:
+    explorer = Explorer(
+        RunConfig(
+            start_url="http://127.0.0.1:8000/",
+            output_dir=tmp_path,
+            policy="coverage",
+        ),
+        Path(__file__).resolve().parents[1],
+    )
+    shared = control(label="Home", target="http://127.0.0.1:8000/")
+    first_raw, first_group, first_route = signatures(
+        url="http://127.0.0.1:8000/one",
+        title="One",
+        controls=[shared],
+        forms=[],
+        session_context="anonymous",
+    )
+    first = Observation(
+        id="obs_one", sequence=1, url="http://127.0.0.1:8000/one", title="One",
+        text_excerpt="", controls=[shared], forms=[], state_signature=first_raw,
+        group_signature=first_group, session_context="anonymous", route_pattern=first_route,
+    )
+    explorer._enqueue(first, [])
+    explorer.frontier.clear()  # Simulate the first advertised action having been consumed.
+    repeated = shared.model_copy(update={"id": "ctl_home_again", "css_path": "#home"})
+    branch = control(label="Open reports", target="http://127.0.0.1:8000/reports").model_copy(
+        update={"id": "ctl_reports", "css_path": "#reports"}
+    )
+    second_raw, second_group, second_route = signatures(
+        url="http://127.0.0.1:8000/two", title="Two", controls=[repeated, branch], forms=[],
+        session_context="anonymous",
+    )
+    second = Observation(
+        id="obs_two", sequence=2, url="http://127.0.0.1:8000/two", title="Two",
+        text_excerpt="", controls=[repeated, branch], forms=[], state_signature=second_raw,
+        group_signature=second_group, session_context="anonymous", route_pattern=second_route,
+    )
+    explorer._enqueue(second, [])
+
+    assert explorer.frontier[0].action.label == "Open reports"
+    assert explorer.frontier[0].priority > next(
+        item.priority for item in explorer.frontier if item.action.label == "Home"
+    )
+
+
+@pytest.mark.parametrize(
+    ("method", "content_type", "body", "expected", "encoding"),
+    [
+        ("POST", "application/x-www-form-urlencoded", "member_code=do-not-store", ["member_code", "view"], "form"),
+        ("POST", "application/json", '{"query":"do-not-store","limit":5}', ["limit", "query", "view"], "json"),
+    ],
+)
+def test_request_structure_records_names_without_values(
+    method: str, content_type: str, body: str, expected: list[str], encoding: str
+) -> None:
+    names, actual_encoding = request_structure(
+        method,
+        "http://127.0.0.1/api?view=private-value",
+        {"content-type": content_type},
+        body,
+    )
+    assert names == expected
+    assert actual_encoding == encoding
+    assert "do-not-store" not in repr((names, actual_encoding))
+    assert "private-value" not in repr((names, actual_encoding))

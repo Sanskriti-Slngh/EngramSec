@@ -19,7 +19,7 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--max-browser-actions", type=int, default=80)
     parser.add_argument(
         "--policy",
-        choices=("exact", "grouped", "selective_model", "model_all"),
+        choices=("exact", "grouped", "coverage", "selective_model", "model_all"),
         default="grouped",
     )
     parser.add_argument("--provider", choices=("none", "ollama", "groq", "openai"), default="none")

@@ -1,0 +1,244 @@
+flowchart LR
+  n_state_1eac6b37707b75ae["Camp kettle"]
+  n_state_1ef1d17f344ee0f1["Northstar Shop"]
+  n_state_23d182e37c34f371["Deals"]
+  n_state_2c7cacf77a6db205["Northstar Shop"]
+  n_state_7fad412faa54e20e["Outdoor collection"]
+  n_state_8246fdde6efe8461["Northstar Shop"]
+  n_state_9156e69199edba7c["Northstar Shop"]
+  n_state_9e7045d3cfe5fc54["Northstar Shop"]
+  n_state_a19c3fbc7807ae95["Cart"]
+  n_state_b3004f61d12313be["Returns"]
+  n_state_b5e41023c7c1e50e["Camp kettle"]
+  n_state_b6e5a900ed69c52c["Trail lantern"]
+  n_state_bb934851c21e6022["Trail lantern"]
+  n_state_ccc280b890f8f9b5["Northstar Shop"]
+  n_state_fdf2d8c3d0f0a65e["Northstar Shop"]
+  n_state_ff7ccb0158ef9708["Cart"]
+  n_action_tr_b4fac6dc382e7f94cb1f{"Shipping and returns [replay_validated]"}
+  n_action_tr_352af63f22a7a2bb1fc3{"Current deals [replay_validated]"}
+  n_action_tr_54f98d866adf74168276{"Browse categories [replay_validated]"}
+  n_action_tr_540367feadbc7f9bbc12{"Trail lantern [replay_validated]"}
+  n_action_tr_cc1a44e213f5c2e42430{"Northstar Shop [replay_validated]"}
+  n_action_tr_2f015a57924e13fb0b1e{"Cart [replay_validated]"}
+  n_action_tr_86afe5e58ac04b568b12{"Camp kettle [replay_validated]"}
+  n_action_tr_4e265f5d5acf1426804e{"Add sample to cart [replay_validated]"}
+  n_action_tr_3e2c3fd61258f45b20f6{"Add sample to cart [replay_validated]"}
+  n_action_tr_fda0bffa3090666f2c63{"Shipping and returns [observed]"}
+  n_action_tr_678762023abf0ea358b1{"Shipping and returns [replay_validated]"}
+  n_action_tr_37363408b64a68d31269{"Shipping and returns [replay_validated]"}
+  n_action_tr_0dcdee8a17763f38d028{"Current deals [replay_validated]"}
+  n_action_tr_40a7909ea0807b8a73fb{"Current deals [replay_validated]"}
+  n_action_tr_269bfed43dc27f549239{"Current deals [replay_validated]"}
+  n_action_tr_61857c438dd7dbbc0a3f{"Browse categories [replay_validated]"}
+  n_action_tr_e5f119aeb6a35611db68{"Browse categories [observed]"}
+  n_action_tr_a9d0d8ce1a6f57c3e78e{"Browse categories [observed]"}
+  n_action_tr_5fbc7715817f34ea71bf{"Load customer reviews [replay_validated]"}
+  n_action_tr_37b3a0cbc324bec0fbb4{"Load customer reviews [replay_validated]"}
+  n_action_tr_2bec008bcff27bf23446{"Northstar Shop [replay_validated]"}
+  n_action_tr_ec771aa4c4c0de7f6862{"Trail lantern [observed]"}
+  n_action_tr_93b13d11b217e03ebbf1{"Trail lantern [observed]"}
+  n_action_tr_98080e21b2dae84dd76e{"Trail lantern [observed]"}
+  n_action_tr_f781b6e000df991a2b62{"See all deals [observed]"}
+  n_action_tr_84dcf138b9647be84391{"Outdoor collection [replay_validated]"}
+  n_action_tr_6e84d131ced660448f8a{"Returns guide [replay_validated]"}
+  n_action_tr_d806e81985b331a0837b{"Cart [observed]"}
+  n_action_tr_2bc94bed4ba7a3ae9a65{"Northstar Shop [replay_validated]"}
+  n_action_tr_adc7a8583a01ba0193fd{"Northstar Shop [observed]"}
+  n_workflow_e7511c9bc60d36751d(("Shipping and returns [unresolved]"))
+  n_workflow_59cc5c538f9d0bfb7e(("Current deals [unresolved]"))
+  n_workflow_55be9cf31defc0f2a8(("Browse categories [unresolved]"))
+  n_workflow_44b8af4d3ff01b4ae2(("Trail lantern [navigation_only]"))
+  n_workflow_f4731ac7406dd7cf6a(("Northstar Shop [navigation_only]"))
+  n_workflow_70598bf188dccccd89(("Cart [navigation_only]"))
+  n_workflow_f5c1720891c69fdf96(("Camp kettle [navigation_only]"))
+  n_workflow_d885a8fe5ea1e61e25(("Add sample to cart [unresolved]"))
+  n_workflow_5d8d5809f21fba6b6c(("Add sample to cart [unresolved]"))
+  n_workflow_b59d8978d21642435f(("Shipping and returns [not_tested]"))
+  n_workflow_94ea68148afd6d98eb(("Shipping and returns [unresolved]"))
+  n_workflow_5d6e5d018bd7bd6c68(("Shipping and returns [unresolved]"))
+  n_workflow_cf83bff1e3e7087092(("Current deals [unresolved]"))
+  n_workflow_52a028483539b5c973(("Current deals [unresolved]"))
+  n_workflow_8eb4f9234d7f38c6dc(("Current deals [unresolved]"))
+  n_workflow_0c1b476a05d4ba2141(("Browse categories [unresolved]"))
+  n_workflow_01ae730aeadc26e7fc(("Browse categories [not_tested]"))
+  n_workflow_e6694e8e97258c6a35(("Browse categories [not_tested]"))
+  n_workflow_b216d428ec0efc71de(("Load customer reviews [unresolved]"))
+  n_workflow_f0a8a5617482c7a3cd(("Load customer reviews [unresolved]"))
+  n_workflow_226a55b44ec1090d48(("Northstar Shop [navigation_only]"))
+  n_workflow_a64e2f37624ffbf4be(("Trail lantern [not_tested]"))
+  n_workflow_2e8180b6be4371e0f3(("Trail lantern [not_tested]"))
+  n_workflow_673cf581e134cd7f1f(("Trail lantern [not_tested]"))
+  n_workflow_57594c89533f908ef6(("See all deals [not_tested]"))
+  n_workflow_32f91aa4ddb0c592a5(("Outdoor collection [navigation_only]"))
+  n_workflow_306014f8cd29e21443(("Returns guide [navigation_only]"))
+  n_workflow_b6074a8d9b95ead8bb(("Cart [not_tested]"))
+  n_workflow_963973372fd5cb9551(("Northstar Shop [navigation_only]"))
+  n_workflow_b6a364b031b683f0d4(("Northstar Shop [not_tested]"))
+  n_advertised_obs_e6a0d0db77a916272965_ctl_8c7eff606d3aed9a3b["Admin login [not tested]"]
+  n_advertised_obs_94e782384e93d090b0e5_ctl_8a3e229328286241c4["Begin checkout [not tested]"]
+  n_advertised_obs_7b603a9f8a6823a15e7f_ctl_28296bc02818d61fe4["Featured lantern [not tested]"]
+  n_state_9e7045d3cfe5fc54 -->|replay_validated| n_action_tr_b4fac6dc382e7f94cb1f
+  n_action_tr_b4fac6dc382e7f94cb1f -->|replay_validated| n_state_1ef1d17f344ee0f1
+  n_state_9e7045d3cfe5fc54 -->|replay_validated| n_action_tr_352af63f22a7a2bb1fc3
+  n_action_tr_352af63f22a7a2bb1fc3 -->|replay_validated| n_state_fdf2d8c3d0f0a65e
+  n_state_9e7045d3cfe5fc54 -->|replay_validated| n_action_tr_54f98d866adf74168276
+  n_action_tr_54f98d866adf74168276 -->|replay_validated| n_state_2c7cacf77a6db205
+  n_state_9e7045d3cfe5fc54 -->|replay_validated| n_action_tr_540367feadbc7f9bbc12
+  n_action_tr_540367feadbc7f9bbc12 -->|replay_validated| n_state_bb934851c21e6022
+  n_state_9e7045d3cfe5fc54 -->|replay_validated| n_action_tr_cc1a44e213f5c2e42430
+  n_action_tr_cc1a44e213f5c2e42430 -->|replay_validated| n_state_9e7045d3cfe5fc54
+  n_state_9e7045d3cfe5fc54 -->|replay_validated| n_action_tr_2f015a57924e13fb0b1e
+  n_action_tr_2f015a57924e13fb0b1e -->|replay_validated| n_state_ff7ccb0158ef9708
+  n_state_9e7045d3cfe5fc54 -->|replay_validated| n_action_tr_86afe5e58ac04b568b12
+  n_action_tr_86afe5e58ac04b568b12 -->|replay_validated| n_state_1eac6b37707b75ae
+  n_state_bb934851c21e6022 -->|replay_validated| n_action_tr_4e265f5d5acf1426804e
+  n_action_tr_4e265f5d5acf1426804e -->|replay_validated| n_state_a19c3fbc7807ae95
+  n_state_1eac6b37707b75ae -->|replay_validated| n_action_tr_3e2c3fd61258f45b20f6
+  n_action_tr_3e2c3fd61258f45b20f6 -->|replay_validated| n_state_a19c3fbc7807ae95
+  n_state_1ef1d17f344ee0f1 -->|observed| n_action_tr_fda0bffa3090666f2c63
+  n_action_tr_fda0bffa3090666f2c63 -->|observed| n_state_9e7045d3cfe5fc54
+  n_state_fdf2d8c3d0f0a65e -->|replay_validated| n_action_tr_678762023abf0ea358b1
+  n_action_tr_678762023abf0ea358b1 -->|replay_validated| n_state_9156e69199edba7c
+  n_state_2c7cacf77a6db205 -->|replay_validated| n_action_tr_37363408b64a68d31269
+  n_action_tr_37363408b64a68d31269 -->|replay_validated| n_state_ccc280b890f8f9b5
+  n_state_1ef1d17f344ee0f1 -->|replay_validated| n_action_tr_0dcdee8a17763f38d028
+  n_action_tr_0dcdee8a17763f38d028 -->|replay_validated| n_state_9156e69199edba7c
+  n_state_fdf2d8c3d0f0a65e -->|replay_validated| n_action_tr_40a7909ea0807b8a73fb
+  n_action_tr_40a7909ea0807b8a73fb -->|replay_validated| n_state_fdf2d8c3d0f0a65e
+  n_state_2c7cacf77a6db205 -->|replay_validated| n_action_tr_269bfed43dc27f549239
+  n_action_tr_269bfed43dc27f549239 -->|replay_validated| n_state_8246fdde6efe8461
+  n_state_1ef1d17f344ee0f1 -->|replay_validated| n_action_tr_61857c438dd7dbbc0a3f
+  n_action_tr_61857c438dd7dbbc0a3f -->|replay_validated| n_state_ccc280b890f8f9b5
+  n_state_fdf2d8c3d0f0a65e -->|observed| n_action_tr_e5f119aeb6a35611db68
+  n_action_tr_e5f119aeb6a35611db68 -->|observed| n_state_8246fdde6efe8461
+  n_state_2c7cacf77a6db205 -->|observed| n_action_tr_a9d0d8ce1a6f57c3e78e
+  n_action_tr_a9d0d8ce1a6f57c3e78e -->|observed| n_state_2c7cacf77a6db205
+  n_state_bb934851c21e6022 -->|replay_validated| n_action_tr_5fbc7715817f34ea71bf
+  n_action_tr_5fbc7715817f34ea71bf -->|replay_validated| n_state_b6e5a900ed69c52c
+  n_state_1eac6b37707b75ae -->|replay_validated| n_action_tr_37b3a0cbc324bec0fbb4
+  n_action_tr_37b3a0cbc324bec0fbb4 -->|replay_validated| n_state_b5e41023c7c1e50e
+  n_state_ff7ccb0158ef9708 -->|replay_validated| n_action_tr_2bec008bcff27bf23446
+  n_action_tr_2bec008bcff27bf23446 -->|replay_validated| n_state_9e7045d3cfe5fc54
+  n_state_1ef1d17f344ee0f1 -->|observed| n_action_tr_ec771aa4c4c0de7f6862
+  n_action_tr_ec771aa4c4c0de7f6862 -->|observed| n_state_bb934851c21e6022
+  n_state_fdf2d8c3d0f0a65e -->|observed| n_action_tr_93b13d11b217e03ebbf1
+  n_action_tr_93b13d11b217e03ebbf1 -->|observed| n_state_bb934851c21e6022
+  n_state_2c7cacf77a6db205 -->|observed| n_action_tr_98080e21b2dae84dd76e
+  n_action_tr_98080e21b2dae84dd76e -->|observed| n_state_bb934851c21e6022
+  n_state_fdf2d8c3d0f0a65e -->|observed| n_action_tr_f781b6e000df991a2b62
+  n_action_tr_f781b6e000df991a2b62 -->|observed| n_state_23d182e37c34f371
+  n_state_2c7cacf77a6db205 -->|replay_validated| n_action_tr_84dcf138b9647be84391
+  n_action_tr_84dcf138b9647be84391 -->|replay_validated| n_state_7fad412faa54e20e
+  n_state_1ef1d17f344ee0f1 -->|replay_validated| n_action_tr_6e84d131ced660448f8a
+  n_action_tr_6e84d131ced660448f8a -->|replay_validated| n_state_b3004f61d12313be
+  n_state_ff7ccb0158ef9708 -->|observed| n_action_tr_d806e81985b331a0837b
+  n_action_tr_d806e81985b331a0837b -->|observed| n_state_ff7ccb0158ef9708
+  n_state_bb934851c21e6022 -->|replay_validated| n_action_tr_2bc94bed4ba7a3ae9a65
+  n_action_tr_2bc94bed4ba7a3ae9a65 -->|replay_validated| n_state_9e7045d3cfe5fc54
+  n_state_1eac6b37707b75ae -->|observed| n_action_tr_adc7a8583a01ba0193fd
+  n_action_tr_adc7a8583a01ba0193fd -->|observed| n_state_9e7045d3cfe5fc54
+  n_state_9e7045d3cfe5fc54 -->|not_tested| n_advertised_obs_e6a0d0db77a916272965_ctl_8c7eff606d3aed9a3b
+  n_state_a19c3fbc7807ae95 -->|not_tested| n_advertised_obs_94e782384e93d090b0e5_ctl_8a3e229328286241c4
+  n_state_7fad412faa54e20e -->|not_tested| n_advertised_obs_7b603a9f8a6823a15e7f_ctl_28296bc02818d61fe4
+  n_workflow_e7511c9bc60d36751d -->|unresolved| n_action_tr_b4fac6dc382e7f94cb1f
+  n_workflow_59cc5c538f9d0bfb7e -->|unresolved| n_action_tr_352af63f22a7a2bb1fc3
+  n_workflow_55be9cf31defc0f2a8 -->|unresolved| n_action_tr_54f98d866adf74168276
+  n_workflow_44b8af4d3ff01b4ae2 -->|navigation_only| n_action_tr_540367feadbc7f9bbc12
+  n_workflow_f4731ac7406dd7cf6a -->|navigation_only| n_action_tr_cc1a44e213f5c2e42430
+  n_workflow_70598bf188dccccd89 -->|navigation_only| n_action_tr_2f015a57924e13fb0b1e
+  n_workflow_f5c1720891c69fdf96 -->|navigation_only| n_action_tr_86afe5e58ac04b568b12
+  n_workflow_d885a8fe5ea1e61e25 -->|unresolved| n_action_tr_4e265f5d5acf1426804e
+  n_workflow_5d8d5809f21fba6b6c -->|unresolved| n_action_tr_3e2c3fd61258f45b20f6
+  n_workflow_b59d8978d21642435f -->|not_tested| n_action_tr_fda0bffa3090666f2c63
+  n_workflow_94ea68148afd6d98eb -->|unresolved| n_action_tr_678762023abf0ea358b1
+  n_workflow_5d6e5d018bd7bd6c68 -->|unresolved| n_action_tr_37363408b64a68d31269
+  n_workflow_cf83bff1e3e7087092 -->|unresolved| n_action_tr_0dcdee8a17763f38d028
+  n_workflow_52a028483539b5c973 -->|unresolved| n_action_tr_40a7909ea0807b8a73fb
+  n_workflow_8eb4f9234d7f38c6dc -->|unresolved| n_action_tr_269bfed43dc27f549239
+  n_workflow_0c1b476a05d4ba2141 -->|unresolved| n_action_tr_61857c438dd7dbbc0a3f
+  n_workflow_01ae730aeadc26e7fc -->|not_tested| n_action_tr_e5f119aeb6a35611db68
+  n_workflow_e6694e8e97258c6a35 -->|not_tested| n_action_tr_a9d0d8ce1a6f57c3e78e
+  n_workflow_b216d428ec0efc71de -->|unresolved| n_action_tr_5fbc7715817f34ea71bf
+  n_workflow_f0a8a5617482c7a3cd -->|unresolved| n_action_tr_37b3a0cbc324bec0fbb4
+  n_workflow_226a55b44ec1090d48 -->|navigation_only| n_action_tr_2bec008bcff27bf23446
+  n_workflow_a64e2f37624ffbf4be -->|not_tested| n_action_tr_ec771aa4c4c0de7f6862
+  n_workflow_2e8180b6be4371e0f3 -->|not_tested| n_action_tr_93b13d11b217e03ebbf1
+  n_workflow_673cf581e134cd7f1f -->|not_tested| n_action_tr_98080e21b2dae84dd76e
+  n_workflow_57594c89533f908ef6 -->|not_tested| n_action_tr_f781b6e000df991a2b62
+  n_workflow_32f91aa4ddb0c592a5 -->|navigation_only| n_action_tr_84dcf138b9647be84391
+  n_workflow_306014f8cd29e21443 -->|navigation_only| n_action_tr_6e84d131ced660448f8a
+  n_workflow_b6074a8d9b95ead8bb -->|not_tested| n_action_tr_d806e81985b331a0837b
+  n_workflow_963973372fd5cb9551 -->|navigation_only| n_action_tr_2bc94bed4ba7a3ae9a65
+  n_workflow_b6a364b031b683f0d4 -->|not_tested| n_action_tr_adc7a8583a01ba0193fd
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;
+  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;
+  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;
+  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;
+  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;
+  class n_action_tr_b4fac6dc382e7f94cb1f replay_validated;
+  class n_action_tr_352af63f22a7a2bb1fc3 replay_validated;
+  class n_action_tr_54f98d866adf74168276 replay_validated;
+  class n_action_tr_540367feadbc7f9bbc12 replay_validated;
+  class n_action_tr_cc1a44e213f5c2e42430 replay_validated;
+  class n_action_tr_2f015a57924e13fb0b1e replay_validated;
+  class n_action_tr_86afe5e58ac04b568b12 replay_validated;
+  class n_action_tr_4e265f5d5acf1426804e replay_validated;
+  class n_action_tr_3e2c3fd61258f45b20f6 replay_validated;
+  class n_action_tr_fda0bffa3090666f2c63 observed;
+  class n_action_tr_678762023abf0ea358b1 replay_validated;
+  class n_action_tr_37363408b64a68d31269 replay_validated;
+  class n_action_tr_0dcdee8a17763f38d028 replay_validated;
+  class n_action_tr_40a7909ea0807b8a73fb replay_validated;
+  class n_action_tr_269bfed43dc27f549239 replay_validated;
+  class n_action_tr_61857c438dd7dbbc0a3f replay_validated;
+  class n_action_tr_e5f119aeb6a35611db68 observed;
+  class n_action_tr_a9d0d8ce1a6f57c3e78e observed;
+  class n_action_tr_5fbc7715817f34ea71bf replay_validated;
+  class n_action_tr_37b3a0cbc324bec0fbb4 replay_validated;
+  class n_action_tr_2bec008bcff27bf23446 replay_validated;
+  class n_action_tr_ec771aa4c4c0de7f6862 observed;
+  class n_action_tr_93b13d11b217e03ebbf1 observed;
+  class n_action_tr_98080e21b2dae84dd76e observed;
+  class n_action_tr_f781b6e000df991a2b62 observed;
+  class n_action_tr_84dcf138b9647be84391 replay_validated;
+  class n_action_tr_6e84d131ced660448f8a replay_validated;
+  class n_action_tr_d806e81985b331a0837b observed;
+  class n_action_tr_2bc94bed4ba7a3ae9a65 replay_validated;
+  class n_action_tr_adc7a8583a01ba0193fd observed;
+  class n_workflow_e7511c9bc60d36751d unresolved;
+  class n_workflow_59cc5c538f9d0bfb7e unresolved;
+  class n_workflow_55be9cf31defc0f2a8 unresolved;
+  class n_workflow_44b8af4d3ff01b4ae2 navigation_only;
+  class n_workflow_f4731ac7406dd7cf6a navigation_only;
+  class n_workflow_70598bf188dccccd89 navigation_only;
+  class n_workflow_f5c1720891c69fdf96 navigation_only;
+  class n_workflow_d885a8fe5ea1e61e25 unresolved;
+  class n_workflow_5d8d5809f21fba6b6c unresolved;
+  class n_workflow_b59d8978d21642435f not_tested;
+  class n_workflow_94ea68148afd6d98eb unresolved;
+  class n_workflow_5d6e5d018bd7bd6c68 unresolved;
+  class n_workflow_cf83bff1e3e7087092 unresolved;
+  class n_workflow_52a028483539b5c973 unresolved;
+  class n_workflow_8eb4f9234d7f38c6dc unresolved;
+  class n_workflow_0c1b476a05d4ba2141 unresolved;
+  class n_workflow_01ae730aeadc26e7fc not_tested;
+  class n_workflow_e6694e8e97258c6a35 not_tested;
+  class n_workflow_b216d428ec0efc71de unresolved;
+  class n_workflow_f0a8a5617482c7a3cd unresolved;
+  class n_workflow_226a55b44ec1090d48 navigation_only;
+  class n_workflow_a64e2f37624ffbf4be not_tested;
+  class n_workflow_2e8180b6be4371e0f3 not_tested;
+  class n_workflow_673cf581e134cd7f1f not_tested;
+  class n_workflow_57594c89533f908ef6 not_tested;
+  class n_workflow_32f91aa4ddb0c592a5 navigation_only;
+  class n_workflow_306014f8cd29e21443 navigation_only;
+  class n_workflow_b6074a8d9b95ead8bb not_tested;
+  class n_workflow_963973372fd5cb9551 navigation_only;
+  class n_workflow_b6a364b031b683f0d4 not_tested;
+  class n_advertised_obs_e6a0d0db77a916272965_ctl_8c7eff606d3aed9a3b not_tested;
+  class n_advertised_obs_94e782384e93d090b0e5_ctl_8a3e229328286241c4 not_tested;
+  class n_advertised_obs_7b603a9f8a6823a15e7f_ctl_28296bc02818d61fe4 not_tested;
