@@ -184,7 +184,7 @@ document.querySelector('#prepare').addEventListener('click', async () => {
                     title="Dashboard",
                     body=(
                         '<h1>System dashboard</h1><p>All systems operational</p>'
-                        f'<time datetime="2026-10-28T13:{tick:02d}:00Z">Updated at 13:{tick:02d}</time>'
+                        f'<time data-volatile datetime="2026-10-28T13:{tick:02d}:00Z">Updated at 13:{tick:02d}</time>'
                         f'<span><i class="icon-eye"></i>{tick + 10}</span>'
                         '<a href="/cosmetic">Refresh dashboard</a>'
                     ),

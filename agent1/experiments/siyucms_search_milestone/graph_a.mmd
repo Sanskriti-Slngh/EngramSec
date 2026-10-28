@@ -1,0 +1,10 @@
+flowchart LR
+  H["Anonymous home\nobserved"] -->|"toggle search\nobserved prerequisite"| F["Search form exposed"]
+  F -->|"submit php\nnavigation 2/2"| R["PHP result links\nfunctional_outcome_supported"]
+  F -.->|"contrast: Linux"| C["Different result links/content\nvalidation discriminator"]
+  classDef supported fill:#d9f7df,stroke:#27823b;
+  classDef observed fill:#dcecff,stroke:#3975a8;
+  classDef check fill:#fff0c7,stroke:#9b7418;
+  class H,F observed;
+  class R supported;
+  class C check;

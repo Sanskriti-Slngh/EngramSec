@@ -14,13 +14,7 @@ INSTANCE_TOKEN = re.compile(
     re.I,
 )
 WHITESPACE = re.compile(r"\s+")
-COSMETIC_TIMESTAMP = re.compile(
-    r"\b(?:20\d{2}[-/]\d{1,2}[-/]\d{1,2}(?:[T ]\d{1,2}:\d{2}(?::\d{2})?Z?)?|"
-    r"\d{1,2}:\d{2}(?::\d{2})?\s*(?:am|pm)?|"
-    r"\d+\.\d{3,}s|"
-    r"(?:updated|generated|last\s+seen)\s+(?:at|on)\s+[^\n]{1,40})\b",
-    re.I,
-)
+COSMETIC_RUNTIME = re.compile(r"\b\d+\.\d{3,}s\b", re.I)
 VOLATILE_CONTROL = re.compile(r"^(unnamed (button|link)|previous|next|prev|carousel)$", re.I)
 
 
@@ -38,9 +32,9 @@ def normalize_instance_text(value: str) -> str:
 
 
 def normalize_meaningful_text(value: str) -> str:
-    """Normalize visible workflow content while suppressing common clock noise."""
+    """Normalize workflow content; DOM-marked cosmetics are removed at extraction."""
 
-    return compact_text(COSMETIC_TIMESTAMP.sub("{time}", value).lower(), 8_000)
+    return compact_text(COSMETIC_RUNTIME.sub("{runtime}", value).lower(), 8_000)
 
 
 def content_fingerprint(value: str) -> str:

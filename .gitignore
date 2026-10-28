@@ -19,6 +19,7 @@ agent1/experiments/**/trace.jsonl
 agent1/experiments/**/graph_a.json
 !agent1/experiments/siyucms_10m_comparison/grouped-r1/audited_v2/graph_a.json
 !agent1/experiments/validation_content_outcomes_v3/outcomes/graph_a.json
+!agent1/experiments/siyucms_search_milestone/graph_a.json
 
 # Preserve exploratory fixture iterations locally; checkpoint the corrected
 # baseline/final runs and reports without cluttering Git with setup-only reruns.

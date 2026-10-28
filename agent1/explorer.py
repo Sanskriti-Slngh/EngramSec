@@ -80,7 +80,8 @@ EXTRACT_SCRIPT = r"""
   const labelFor = (el) => {
     const labels = el.labels ? Array.from(el.labels).map(x => x.innerText).join(' ') : '';
     return (el.getAttribute('aria-label') || labels || el.innerText || el.value ||
-      el.getAttribute('title') || el.getAttribute('placeholder') || '').replace(/\s+/g, ' ').trim();
+      el.getAttribute('title') || el.getAttribute('placeholder') ||
+      (el.id ? el.id.replace(/[-_]+/g, ' ') : '') || '').replace(/\s+/g, ' ').trim();
   };
   const cssPath = (el) => {
     if (el.id) return '#' + CSS.escape(el.id);
@@ -124,7 +125,8 @@ EXTRACT_SCRIPT = r"""
     fields: Array.from(form.querySelectorAll('input,select,textarea')).filter(el => el.name || el.id).map(fieldFor),
     submit_labels: Array.from(form.querySelectorAll('button,input[type=submit],input[type=button]')).map(labelFor).filter(Boolean)
   }));
-  const selector = 'a[href],button,input[type=submit],input[type=button],[role=button]';
+  const selector = 'a[href],button,input[type=submit],input[type=button],[role=button],' +
+    '[onclick],[aria-controls],[data-toggle],[data-target],[id^="toggle-"]';
   const controls = Array.from(document.querySelectorAll(selector)).filter(visible).map((el) => {
     const tag = el.tagName.toLowerCase();
     const role = el.getAttribute('role') || (tag === 'a' ? 'link' : 'button');
@@ -145,13 +147,12 @@ EXTRACT_SCRIPT = r"""
   const main = document.querySelector('main,[role=main]') || document.body;
   const meaningful = main ? main.cloneNode(true) : null;
   if (meaningful) meaningful.querySelectorAll(
-    'script,style,noscript,template,nav,header,footer,time,[data-volatile],.timestamp,' +
-    '#think_page_trace,#think_page_trace_open,#sfWebDebug,#debug-toolbar,[data-debug-toolbar],.carousel,.swiper,.slick,.owl-carousel,' +
-    '[class*="carousel"],[class*="swiper"],[data-ride="carousel"]'
+    'script,style,noscript,template,nav,header,footer,[data-volatile],.timestamp,' +
+    '#think_page_trace,#think_page_trace_open,#sfWebDebug,#debug-toolbar,[data-debug-toolbar]'
   ).forEach(el => el.remove());
   if (meaningful) meaningful.querySelectorAll(
     'i[class*="eye"],i[class*="view"],[aria-label*="view count" i],[title*="view count" i]'
-  ).forEach(icon => (icon.closest('span,small,div') || icon).remove());
+  ).forEach(icon => (icon.closest('span,small') || icon).remove());
   const signalElements = Array.from(document.querySelectorAll(
     '[data-outcome],[role=alert],[role=status],[aria-live]:not([aria-live=off]),.success,.error,.alert,.notice,.message'
   ));
@@ -474,7 +475,7 @@ class BrowserSession:
             else:
                 if spec and spec.id in input_values:
                     value = input_values[spec.id]
-                    value_ref = f"model-cache:{input_plan_ref or 'memory'}:{spec.id}"
+                    value_ref = f"input-plan:{input_plan_ref or 'memory'}:{spec.id}"
                 else:
                     value, value_ref = self._generated_value(kind, name, spec)
                 field.fill(value, timeout=self.config.action_timeout_ms)

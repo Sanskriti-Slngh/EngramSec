@@ -5,7 +5,11 @@ from pathlib import Path
 import pytest
 
 from agent1.explorer import Explorer
+from agent1.explorer import EXTRACT_SCRIPT
 from agent1.schema import EvidenceStatus, FunctionalStatus, RunConfig
+from agent1.state import content_fingerprint
+from playwright.sync_api import sync_playwright
+from tests.fixtures.content_filter_cases import CONTENT_FILTER_CASES
 from tests.fixtures.interactive_app import start_server
 
 
@@ -83,3 +87,46 @@ def test_cosmetic_time_does_not_split_and_connections_are_complete(
     assert len({item.group_signature for item in observations}) == 1
     assert len({item.state_signature for item in observations}) == 1
     assert artifact.metrics.graph_connections_missing_evidence == 0
+
+
+@pytest.mark.parametrize(
+    ("case_name", "before_html", "after_html", "equivalent"),
+    CONTENT_FILTER_CASES,
+    ids=[item[0] for item in CONTENT_FILTER_CASES],
+)
+def test_content_filter_preserves_workflow_meaning(
+    case_name: str,
+    before_html: str,
+    after_html: str,
+    equivalent: bool,
+) -> None:
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.set_content(before_html)
+        before = page.evaluate(EXTRACT_SCRIPT)["meaningful_text"]
+        page.set_content(after_html)
+        after = page.evaluate(EXTRACT_SCRIPT)["meaningful_text"]
+        browser.close()
+
+    assert (content_fingerprint(before) == content_fingerprint(after)) is equivalent, case_name
+    if case_name == "carousel_content":
+        assert "Campaign Alpha" in before
+        assert "Campaign Beta" in after
+
+
+def test_implicit_id_marked_toggle_is_observed() -> None:
+    html = (
+        '<main><i id="toggle-search" style="display:block;width:20px;height:20px"></i>'
+        '<form><input type="search" name="query"><button>Search</button></form></main>'
+    )
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.set_content(html)
+        controls = page.evaluate(EXTRACT_SCRIPT)["controls"]
+        browser.close()
+
+    toggle = next(item for item in controls if item["label"] == "toggle search")
+    assert toggle["kind"] == "button"
+    assert toggle["role"] == "button"
