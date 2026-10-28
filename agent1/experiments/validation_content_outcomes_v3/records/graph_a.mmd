@@ -1,0 +1,21 @@
+flowchart LR
+  n_state_0536d6e10e7d14ad["Customer record"]
+  n_state_216a34364269384a["Records"]
+  n_action_tr_d5fd7f28f0f8ffbe0073{"Open record [observed]"}
+  n_workflow_99f153adc511e2a0ed(("Open record [failed]"))
+  n_advertised_obs_cb09b091e7b77b836882_ctl_f136e0e4f77b08372b["Open record [not tested]"]
+  n_state_216a34364269384a -->|observed| n_action_tr_d5fd7f28f0f8ffbe0073
+  n_action_tr_d5fd7f28f0f8ffbe0073 -->|observed| n_state_0536d6e10e7d14ad
+  n_state_216a34364269384a -->|not_tested| n_advertised_obs_cb09b091e7b77b836882_ctl_f136e0e4f77b08372b
+  n_workflow_99f153adc511e2a0ed -->|failed| n_action_tr_d5fd7f28f0f8ffbe0073
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;
+  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;
+  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;
+  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;
+  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;
+  class n_action_tr_d5fd7f28f0f8ffbe0073 observed;
+  class n_workflow_99f153adc511e2a0ed failed;
+  class n_advertised_obs_cb09b091e7b77b836882_ctl_f136e0e4f77b08372b not_tested;

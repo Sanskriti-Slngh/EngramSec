@@ -1,0 +1,67 @@
+{
+  "advertised_unexecuted": 8,
+  "browser_actions": 19,
+  "distinct_validated_feature_workflows": 2,
+  "elapsed_seconds": 7.766,
+  "grouped_states": 2,
+  "incorrect_state_merges": 0,
+  "model_calls": 0,
+  "model_failures": 0,
+  "model_input_tokens": 0,
+  "model_output_tokens": 0,
+  "monetary_cost_usd": 0.0,
+  "navigation_requests": 7,
+  "network_events_recorded": 3,
+  "progress": [
+    {
+      "browser_actions": 3,
+      "elapsed_seconds": 2.079,
+      "transitions_observed": 1,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 7,
+      "elapsed_seconds": 3.327,
+      "transitions_observed": 2,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 10,
+      "elapsed_seconds": 4.517,
+      "transitions_observed": 3,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 12,
+      "elapsed_seconds": 5.32,
+      "transitions_observed": 3,
+      "validated_workflows": 1
+    },
+    {
+      "browser_actions": 16,
+      "elapsed_seconds": 6.541,
+      "transitions_observed": 3,
+      "validated_workflows": 2
+    },
+    {
+      "browser_actions": 19,
+      "elapsed_seconds": 7.741,
+      "transitions_observed": 3,
+      "validated_workflows": 2
+    },
+    {
+      "browser_actions": 19,
+      "elapsed_seconds": 7.766,
+      "transitions_observed": 3,
+      "validated_workflows": 2
+    }
+  ],
+  "raw_states": 2,
+  "redundant_states": 0,
+  "replay_success_denominator": 3,
+  "replay_success_numerator": 3,
+  "transitions_attempted": 3,
+  "transitions_failed": 0,
+  "transitions_observed": 3,
+  "unsupported_connections": 0
+}

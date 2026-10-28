@@ -1,0 +1,40 @@
+# Agent 1 run agent1-20261028T132736Z
+
+- Code revision: `778bbbda008081c489afdaee836c6397c4cff93a+mapper-1f80f0f21b39`
+- Policy: `grouped`
+- Target: `http://127.0.0.1:62196/model-form`
+- Elapsed: 6.453 seconds
+- Browser actions (including setup/replay): 11
+- Replay-validated navigation categories: 1
+- Verified functional workflows: 1
+- Reproduced validation failures: 0
+- Functional outcomes unresolved/untested/failed: 0
+- Replay navigation success: 1/1
+- Replay failures / untested paths: 0/0
+- Graph connections with complete evidence: 6/6
+- Graph connections missing evidence: 0
+- Incorrect state merges found by audit: 0
+- Redundant raw states: 0
+- Model calls / cost: 2 / $0.000000
+
+## Fully replay-validated navigation categories
+
+- `feature_641ed42131dd9c84` — Activate demo leads to Demo access
+
+## Functional path-instance outcomes
+
+- `workflow_2889ca7a6a57642351` — Activate demo: `functional_verified` (path length 2)
+
+## Observed but not replay-validated
+
+- None.
+
+## Failed or blocked transitions
+
+- None.
+
+## Notes
+
+- Website-only browser evidence; target source and verifier internals were not inspected.
+- A browser-observed edge is not counted as a validated feature until its complete path replays.
+- Query values with sensitive-looking keys are redacted from stored network evidence.

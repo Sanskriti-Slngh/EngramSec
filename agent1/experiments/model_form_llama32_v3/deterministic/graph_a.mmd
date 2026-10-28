@@ -1,0 +1,24 @@
+flowchart LR
+  n_state_66971a14fa6af2e4["Demo access"]
+  n_state_e3fc77e71e9bab20["Demo access"]
+  n_action_tr_fd6db7b598ec908d38b7{"Activate demo [replay_validated]"}
+  n_workflow_58d71224faf3171b69(("Activate demo [validation_failure]"))
+  n_advertised_obs_331c3c24ec102aa7bfbb_ctl_0698b2737bd66aef93["Activate demo [not tested]"]
+  n_advertised_obs_3ce588203489630a4a34_ctl_0698b2737bd66aef93["Activate demo [not tested]"]
+  n_state_e3fc77e71e9bab20 -->|replay_validated| n_action_tr_fd6db7b598ec908d38b7
+  n_action_tr_fd6db7b598ec908d38b7 -->|replay_validated| n_state_66971a14fa6af2e4
+  n_state_e3fc77e71e9bab20 -->|not_tested| n_advertised_obs_331c3c24ec102aa7bfbb_ctl_0698b2737bd66aef93
+  n_state_66971a14fa6af2e4 -->|not_tested| n_advertised_obs_3ce588203489630a4a34_ctl_0698b2737bd66aef93
+  n_workflow_58d71224faf3171b69 -->|validation_failure| n_action_tr_fd6db7b598ec908d38b7
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;
+  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;
+  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;
+  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;
+  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;
+  class n_action_tr_fd6db7b598ec908d38b7 replay_validated;
+  class n_workflow_58d71224faf3171b69 validation_failure;
+  class n_advertised_obs_331c3c24ec102aa7bfbb_ctl_0698b2737bd66aef93 not_tested;
+  class n_advertised_obs_3ce588203489630a4a34_ctl_0698b2737bd66aef93 not_tested;

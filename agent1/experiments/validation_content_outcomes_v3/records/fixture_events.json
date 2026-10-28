@@ -1,0 +1,22 @@
+[
+  {
+    "choice": "1",
+    "kind": "record_index"
+  },
+  {
+    "choice": "2",
+    "kind": "record_index"
+  },
+  {
+    "kind": "record_visit",
+    "record": "2"
+  },
+  {
+    "choice": "1",
+    "kind": "record_index"
+  },
+  {
+    "kind": "record_visit",
+    "record": "1"
+  }
+]

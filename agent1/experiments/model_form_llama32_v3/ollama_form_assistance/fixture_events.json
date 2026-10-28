@@ -1,0 +1,18 @@
+[
+  {
+    "kind": "model_form_submission",
+    "success": false
+  },
+  {
+    "kind": "model_form_submission",
+    "success": true
+  },
+  {
+    "kind": "model_form_submission",
+    "success": false
+  },
+  {
+    "kind": "model_form_submission",
+    "success": true
+  }
+]

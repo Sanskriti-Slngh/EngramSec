@@ -1,0 +1,50 @@
+{
+  "model": "llama3.2:latest",
+  "runs": [
+    {
+      "browser_actions": 7,
+      "cost_usd": 0.0,
+      "elapsed_seconds": 3.047,
+      "form_attempt_statuses": [
+        "validation_failure"
+      ],
+      "functional_verified": 0,
+      "input_tokens": 0,
+      "model_calls": 0,
+      "model_failures": 0,
+      "output_tokens": 0,
+      "replay_success": "1/1",
+      "server_submission_successes": [
+        false,
+        false
+      ],
+      "validation_failures": 1,
+      "variant": "deterministic"
+    },
+    {
+      "browser_actions": 11,
+      "cost_usd": 0.0,
+      "elapsed_seconds": 6.453,
+      "form_attempt_statuses": [
+        "validation_failure",
+        "functional_verified"
+      ],
+      "functional_verified": 1,
+      "input_tokens": 678,
+      "model_calls": 2,
+      "model_failures": 0,
+      "output_tokens": 56,
+      "replay_success": "1/1",
+      "server_submission_successes": [
+        false,
+        true,
+        false,
+        true
+      ],
+      "validation_failures": 0,
+      "variant": "ollama_form_assistance"
+    }
+  ],
+  "schema_version": "model-form-comparison-1.0",
+  "wall_elapsed_seconds": 9.608
+}

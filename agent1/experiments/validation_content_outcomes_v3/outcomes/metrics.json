@@ -1,0 +1,66 @@
+{
+  "advertised_unexecuted": 13,
+  "browser_actions": 9,
+  "distinct_validated_feature_workflows": 2,
+  "elapsed_seconds": 3.883,
+  "functional_unresolved": 0,
+  "functional_validation_failures": 1,
+  "functional_workflows_verified": 1,
+  "graph_connections_complete": 21,
+  "graph_connections_missing_evidence": 0,
+  "graph_connections_total": 21,
+  "grouped_states": 3,
+  "incorrect_state_merges": 0,
+  "model_calls": 0,
+  "model_failures": 0,
+  "model_input_tokens": 0,
+  "model_output_tokens": 0,
+  "monetary_cost_usd": 0.0,
+  "navigation_categories_replay_validated": 2,
+  "navigation_requests": 5,
+  "network_events_recorded": 0,
+  "progress": [
+    {
+      "browser_actions": 3,
+      "elapsed_seconds": 1.463,
+      "transitions_observed": 1,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 5,
+      "elapsed_seconds": 2.277,
+      "transitions_observed": 2,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 7,
+      "elapsed_seconds": 3.067,
+      "transitions_observed": 2,
+      "validated_workflows": 1
+    },
+    {
+      "browser_actions": 9,
+      "elapsed_seconds": 3.859,
+      "transitions_observed": 2,
+      "validated_workflows": 2
+    },
+    {
+      "browser_actions": 9,
+      "elapsed_seconds": 3.883,
+      "transitions_observed": 2,
+      "validated_workflows": 2
+    }
+  ],
+  "raw_states": 3,
+  "redundant_states": 0,
+  "replay_attempts": 2,
+  "replay_failures": 0,
+  "replay_navigation_successes": 2,
+  "replay_success_denominator": 2,
+  "replay_success_numerator": 2,
+  "replay_untested_paths": 0,
+  "transitions_attempted": 2,
+  "transitions_failed": 0,
+  "transitions_observed": 2,
+  "unsupported_connections": 0
+}

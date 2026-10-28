@@ -1,0 +1,24 @@
+flowchart LR
+  n_state_77a8d77bc8d5fe68["Search"]
+  n_state_9080e5661779bb38["Search"]
+  n_action_tr_2101212769dd8b85e3c1{"Search [observed]"}
+  n_workflow_32ea59ee7870aaa4c8(("Search [failed]"))
+  n_advertised_obs_7c8b25f86eb82a68701f_ctl_1c17146c06ff714414["Search [not tested]"]
+  n_advertised_obs_705f27252495be06e280_ctl_1c17146c06ff714414["Search [not tested]"]
+  n_state_77a8d77bc8d5fe68 -->|observed| n_action_tr_2101212769dd8b85e3c1
+  n_action_tr_2101212769dd8b85e3c1 -->|observed| n_state_9080e5661779bb38
+  n_state_77a8d77bc8d5fe68 -->|not_tested| n_advertised_obs_7c8b25f86eb82a68701f_ctl_1c17146c06ff714414
+  n_state_9080e5661779bb38 -->|not_tested| n_advertised_obs_705f27252495be06e280_ctl_1c17146c06ff714414
+  n_workflow_32ea59ee7870aaa4c8 -->|failed| n_action_tr_2101212769dd8b85e3c1
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;
+  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;
+  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;
+  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;
+  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;
+  class n_action_tr_2101212769dd8b85e3c1 observed;
+  class n_workflow_32ea59ee7870aaa4c8 failed;
+  class n_advertised_obs_7c8b25f86eb82a68701f_ctl_1c17146c06ff714414 not_tested;
+  class n_advertised_obs_705f27252495be06e280_ctl_1c17146c06ff714414 not_tested;

@@ -1,0 +1,70 @@
+flowchart LR
+  n_state_abffb13f0dd6583d["Workspace setup"]
+  n_state_f5e6b383bfcabe17["Workspace setup"]
+  n_state_ffc3e3400c97e4da["Workspace setup"]
+  n_action_tr_396722f981be1e56e3a5{"Prepare workspace [replay_validated]"}
+  n_action_tr_80faf11b61071ea862e0{"Complete setup [replay_validated]"}
+  n_action_tr_5d4fd7853349def37f48{"Prepare workspace [replay_validated]"}
+  n_action_tr_9dcfe7b4a79d8d07796a{"Prepare workspace [replay_validated]"}
+  n_workflow_1ae176c104f1045463(("Prepare workspace [unresolved]"))
+  n_workflow_25646d157175e4aeb3(("Complete setup [functional_verified]"))
+  n_workflow_85fc11f49904de79a5(("Prepare workspace [unresolved]"))
+  n_workflow_389c803aad86784125(("Prepare workspace [unresolved]"))
+  n_advertised_obs_ea985691d30f52af6599_ctl_6aac8e5a9d3f510945["Prepare workspace [not tested]"]
+  n_advertised_obs_3744e08199ee85079fec_ctl_6aac8e5a9d3f510945["Prepare workspace [not tested]"]
+  n_advertised_obs_3744e08199ee85079fec_ctl_96486b49553e488157["Complete setup [not tested]"]
+  n_advertised_obs_81064de13b457fcfdadd_ctl_6aac8e5a9d3f510945["Prepare workspace [not tested]"]
+  n_advertised_obs_901a8fd5d11e8a9683b4_ctl_6aac8e5a9d3f510945["Prepare workspace [not tested]"]
+  n_advertised_obs_52b29bc5e6fab8e2040c_ctl_96486b49553e488157["Complete setup [not tested]"]
+  n_advertised_obs_a2da1d44808008785146_ctl_6aac8e5a9d3f510945["Prepare workspace [not tested]"]
+  n_advertised_obs_a2da1d44808008785146_ctl_96486b49553e488157["Complete setup [not tested]"]
+  n_advertised_obs_6fdfa394b11a882ff452_ctl_6aac8e5a9d3f510945["Prepare workspace [not tested]"]
+  n_advertised_obs_6fdfa394b11a882ff452_ctl_96486b49553e488157["Complete setup [not tested]"]
+  n_state_ffc3e3400c97e4da -->|replay_validated| n_action_tr_396722f981be1e56e3a5
+  n_action_tr_396722f981be1e56e3a5 -->|replay_validated| n_state_abffb13f0dd6583d
+  n_state_abffb13f0dd6583d -->|replay_validated| n_action_tr_80faf11b61071ea862e0
+  n_action_tr_80faf11b61071ea862e0 -->|replay_validated| n_state_f5e6b383bfcabe17
+  n_state_abffb13f0dd6583d -->|replay_validated| n_action_tr_5d4fd7853349def37f48
+  n_action_tr_5d4fd7853349def37f48 -->|replay_validated| n_state_abffb13f0dd6583d
+  n_state_f5e6b383bfcabe17 -->|replay_validated| n_action_tr_9dcfe7b4a79d8d07796a
+  n_action_tr_9dcfe7b4a79d8d07796a -->|replay_validated| n_state_abffb13f0dd6583d
+  n_state_ffc3e3400c97e4da -->|not_tested| n_advertised_obs_ea985691d30f52af6599_ctl_6aac8e5a9d3f510945
+  n_state_abffb13f0dd6583d -->|not_tested| n_advertised_obs_3744e08199ee85079fec_ctl_6aac8e5a9d3f510945
+  n_state_abffb13f0dd6583d -->|not_tested| n_advertised_obs_3744e08199ee85079fec_ctl_96486b49553e488157
+  n_state_abffb13f0dd6583d -->|not_tested| n_advertised_obs_81064de13b457fcfdadd_ctl_6aac8e5a9d3f510945
+  n_state_f5e6b383bfcabe17 -->|not_tested| n_advertised_obs_901a8fd5d11e8a9683b4_ctl_6aac8e5a9d3f510945
+  n_state_abffb13f0dd6583d -->|not_tested| n_advertised_obs_52b29bc5e6fab8e2040c_ctl_96486b49553e488157
+  n_state_abffb13f0dd6583d -->|not_tested| n_advertised_obs_a2da1d44808008785146_ctl_6aac8e5a9d3f510945
+  n_state_abffb13f0dd6583d -->|not_tested| n_advertised_obs_a2da1d44808008785146_ctl_96486b49553e488157
+  n_state_abffb13f0dd6583d -->|not_tested| n_advertised_obs_6fdfa394b11a882ff452_ctl_6aac8e5a9d3f510945
+  n_state_abffb13f0dd6583d -->|not_tested| n_advertised_obs_6fdfa394b11a882ff452_ctl_96486b49553e488157
+  n_workflow_1ae176c104f1045463 -->|unresolved| n_action_tr_396722f981be1e56e3a5
+  n_workflow_25646d157175e4aeb3 -->|functional_verified| n_action_tr_80faf11b61071ea862e0
+  n_workflow_85fc11f49904de79a5 -->|unresolved| n_action_tr_5d4fd7853349def37f48
+  n_workflow_389c803aad86784125 -->|unresolved| n_action_tr_9dcfe7b4a79d8d07796a
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;
+  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;
+  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;
+  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;
+  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;
+  class n_action_tr_396722f981be1e56e3a5 replay_validated;
+  class n_action_tr_80faf11b61071ea862e0 replay_validated;
+  class n_action_tr_5d4fd7853349def37f48 replay_validated;
+  class n_action_tr_9dcfe7b4a79d8d07796a replay_validated;
+  class n_workflow_1ae176c104f1045463 unresolved;
+  class n_workflow_25646d157175e4aeb3 functional_verified;
+  class n_workflow_85fc11f49904de79a5 unresolved;
+  class n_workflow_389c803aad86784125 unresolved;
+  class n_advertised_obs_ea985691d30f52af6599_ctl_6aac8e5a9d3f510945 not_tested;
+  class n_advertised_obs_3744e08199ee85079fec_ctl_6aac8e5a9d3f510945 not_tested;
+  class n_advertised_obs_3744e08199ee85079fec_ctl_96486b49553e488157 not_tested;
+  class n_advertised_obs_81064de13b457fcfdadd_ctl_6aac8e5a9d3f510945 not_tested;
+  class n_advertised_obs_901a8fd5d11e8a9683b4_ctl_6aac8e5a9d3f510945 not_tested;
+  class n_advertised_obs_52b29bc5e6fab8e2040c_ctl_96486b49553e488157 not_tested;
+  class n_advertised_obs_a2da1d44808008785146_ctl_6aac8e5a9d3f510945 not_tested;
+  class n_advertised_obs_a2da1d44808008785146_ctl_96486b49553e488157 not_tested;
+  class n_advertised_obs_6fdfa394b11a882ff452_ctl_6aac8e5a9d3f510945 not_tested;
+  class n_advertised_obs_6fdfa394b11a882ff452_ctl_96486b49553e488157 not_tested;

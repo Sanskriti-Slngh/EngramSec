@@ -1,0 +1,10 @@
+flowchart LR
+  n_state_4bd353d5af65b6b0["Records"]
+  n_state_b7e330736634384a["Customer record"]
+  n_action_tr_c2fb94b8040c897d42fd{"Open record [replay_validated]"}
+  n_state_4bd353d5af65b6b0 -->|replay_validated| n_action_tr_c2fb94b8040c897d42fd
+  n_action_tr_c2fb94b8040c897d42fd -->|replay_validated| n_state_b7e330736634384a
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  class n_action_tr_c2fb94b8040c897d42fd replay_validated;

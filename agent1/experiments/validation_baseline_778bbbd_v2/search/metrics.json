@@ -1,0 +1,43 @@
+{
+  "advertised_unexecuted": 2,
+  "browser_actions": 7,
+  "distinct_validated_feature_workflows": 1,
+  "elapsed_seconds": 2.975,
+  "grouped_states": 1,
+  "incorrect_state_merges": 0,
+  "model_calls": 0,
+  "model_failures": 0,
+  "model_input_tokens": 0,
+  "model_output_tokens": 0,
+  "monetary_cost_usd": 0.0,
+  "navigation_requests": 3,
+  "network_events_recorded": 1,
+  "progress": [
+    {
+      "browser_actions": 4,
+      "elapsed_seconds": 2.133,
+      "transitions_observed": 1,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 7,
+      "elapsed_seconds": 2.942,
+      "transitions_observed": 1,
+      "validated_workflows": 1
+    },
+    {
+      "browser_actions": 7,
+      "elapsed_seconds": 2.975,
+      "transitions_observed": 1,
+      "validated_workflows": 1
+    }
+  ],
+  "raw_states": 1,
+  "redundant_states": 0,
+  "replay_success_denominator": 1,
+  "replay_success_numerator": 1,
+  "transitions_attempted": 1,
+  "transitions_failed": 0,
+  "transitions_observed": 1,
+  "unsupported_connections": 0
+}

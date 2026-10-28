@@ -1,0 +1,18 @@
+flowchart LR
+  n_state_3b899d9f568aa498["Workspace setup"]
+  n_state_e4899217e8ebbfbc["Workspace setup"]
+  n_action_tr_7c1d4ed41a9db9a0610d{"Prepare workspace [replay_validated]"}
+  n_action_tr_6a860bfcf92b2857419b{"Complete setup [replay_validated]"}
+  n_action_tr_c8fa8fd28611ac16e970{"Prepare workspace [replay_validated]"}
+  n_state_e4899217e8ebbfbc -->|replay_validated| n_action_tr_7c1d4ed41a9db9a0610d
+  n_action_tr_7c1d4ed41a9db9a0610d -->|replay_validated| n_state_3b899d9f568aa498
+  n_state_3b899d9f568aa498 -->|replay_validated| n_action_tr_6a860bfcf92b2857419b
+  n_action_tr_6a860bfcf92b2857419b -->|replay_validated| n_state_e4899217e8ebbfbc
+  n_state_3b899d9f568aa498 -->|replay_validated| n_action_tr_c8fa8fd28611ac16e970
+  n_action_tr_c8fa8fd28611ac16e970 -->|replay_validated| n_state_3b899d9f568aa498
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  class n_action_tr_7c1d4ed41a9db9a0610d replay_validated;
+  class n_action_tr_6a860bfcf92b2857419b replay_validated;
+  class n_action_tr_c8fa8fd28611ac16e970 replay_validated;

@@ -1,0 +1,29 @@
+flowchart LR
+  n_state_6600b821f97fd630["Outcome examples"]
+  n_state_6677b05c6373c767["Outcome examples"]
+  n_state_6f91a5706cbac5a2["Outcome examples"]
+  n_action_tr_c8d71c6b067061171a55{"C verify success [replay_validated]"}
+  n_action_tr_c5f86acbdbcaedad00e9{"B show validation failure [replay_validated]"}
+  n_workflow_df3e8e5e87f8e9122b(("C verify success [functional_verified]"))
+  n_workflow_c514a362c0b7eedf18(("B show validation failure [validation_failure]"))
+  n_advertised_obs_17311734aedb9b6daf94_ctl_4e5c4ba68c70ad49a7["A leave untested [not tested]"]
+  n_state_6677b05c6373c767 -->|replay_validated| n_action_tr_c8d71c6b067061171a55
+  n_action_tr_c8d71c6b067061171a55 -->|replay_validated| n_state_6f91a5706cbac5a2
+  n_state_6677b05c6373c767 -->|replay_validated| n_action_tr_c5f86acbdbcaedad00e9
+  n_action_tr_c5f86acbdbcaedad00e9 -->|replay_validated| n_state_6600b821f97fd630
+  n_state_6677b05c6373c767 -->|not_tested| n_advertised_obs_17311734aedb9b6daf94_ctl_4e5c4ba68c70ad49a7
+  n_workflow_df3e8e5e87f8e9122b -->|functional_verified| n_action_tr_c8d71c6b067061171a55
+  n_workflow_c514a362c0b7eedf18 -->|validation_failure| n_action_tr_c5f86acbdbcaedad00e9
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;
+  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;
+  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;
+  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;
+  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;
+  class n_action_tr_c8d71c6b067061171a55 replay_validated;
+  class n_action_tr_c5f86acbdbcaedad00e9 replay_validated;
+  class n_workflow_df3e8e5e87f8e9122b functional_verified;
+  class n_workflow_c514a362c0b7eedf18 validation_failure;
+  class n_advertised_obs_17311734aedb9b6daf94_ctl_4e5c4ba68c70ad49a7 not_tested;

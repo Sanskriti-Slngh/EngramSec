@@ -1,0 +1,9 @@
+flowchart LR
+  n_state_38b60d267aef01e8["Dashboard"]
+  n_action_tr_75e71c7fa64067909cba{"Refresh dashboard [replay_validated]"}
+  n_state_38b60d267aef01e8 -->|replay_validated| n_action_tr_75e71c7fa64067909cba
+  n_action_tr_75e71c7fa64067909cba -->|replay_validated| n_state_38b60d267aef01e8
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  class n_action_tr_75e71c7fa64067909cba replay_validated;
