@@ -1,0 +1,4 @@
+policy,GETs_used,unique_forms,unique_route_patterns,max_depth_reached,unique_form_AUC,first_form_GETs
+BFS,40,3,22,2,73,1;15;34
+RedirectOnly,40,4,23,2,109,1;3;16;35
+Hybrid,40,4,30,3,139,1;3;4;17
