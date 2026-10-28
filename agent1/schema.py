@@ -260,6 +260,7 @@ class FunctionalWorkflow(BaseModel):
     transition_id: str
     replay_id: str | None = None
     replay_ids: list[str] = Field(default_factory=list)
+    verification_checks: dict[str, bool] = Field(default_factory=dict)
     path_length: int
     action_label: str
     status: FunctionalStatus

@@ -1,0 +1,61 @@
+{
+  "cases": [
+    {
+      "case": "functional_literal",
+      "expected_functional": true,
+      "expected_reason": "the submitted query selects a distinct result record",
+      "actual_status": "functional_verified",
+      "false_positive": false,
+      "false_negative": false,
+      "replay_attempts": 2,
+      "replay_navigation_successes": 2,
+      "browser_actions": 16,
+      "elapsed_seconds": 1.693,
+      "cost_usd": 0.0
+    },
+    {
+      "case": "echo_only",
+      "expected_functional": false,
+      "expected_reason": "the page only repeats the submitted text",
+      "actual_status": "unresolved",
+      "false_positive": false,
+      "false_negative": false,
+      "replay_attempts": 2,
+      "replay_navigation_successes": 2,
+      "browser_actions": 16,
+      "elapsed_seconds": 1.116,
+      "cost_usd": 0.0
+    },
+    {
+      "case": "permanent_sidebar",
+      "expected_functional": false,
+      "expected_reason": "Alpha and Beta links are permanent navigation and never respond to the query",
+      "actual_status": "functional_verified",
+      "false_positive": true,
+      "false_negative": false,
+      "replay_attempts": 2,
+      "replay_navigation_successes": 2,
+      "browser_actions": 16,
+      "elapsed_seconds": 1.059,
+      "cost_usd": 0.0
+    },
+    {
+      "case": "functional_nonliteral",
+      "expected_functional": true,
+      "expected_reason": "queries select different records whose titles use synonyms rather than query text",
+      "actual_status": "unresolved",
+      "false_positive": false,
+      "false_negative": true,
+      "replay_attempts": 2,
+      "replay_navigation_successes": 2,
+      "browser_actions": 16,
+      "elapsed_seconds": 1.189,
+      "cost_usd": 0.0
+    }
+  ],
+  "false_positives": 1,
+  "false_negatives": 1,
+  "browser_actions": 64,
+  "elapsed_seconds": 5.057,
+  "external_cost_usd": 0.0
+}

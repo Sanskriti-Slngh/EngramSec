@@ -1,84 +1,80 @@
-# Agent 1 integrated search-verification report
+# Agent 1 paired-search false-positive challenge
 
 Date: 2026-10-28
 
 ## Outcome
 
-The ordinary Agent 1 pipeline now discovers safe GET search forms from browser-observed field semantics, executes observed prerequisites, stores exact deterministic input plans in the ignored cache, and verifies search outcomes with two configured probes in two independent fresh browser contexts.
+The generic paired-search verifier was tested against four independent black-box websites with evaluator truth kept in a separate module. The unchanged verifier produced one false positive and one false negative. A general before/after link-target rule reduced the measured errors to zero on these four cases without using target-specific selectors, paths, result regions, or literal query matching.
 
-The final SiyuCMS run used the normal `agent1.cli map` command—not the dedicated historical validator—and automatically discovered:
+This is a focused regression result, not proof that arbitrary search interfaces are correctly understood.
 
-`anonymous home → toggle search → Search GET form → query-specific result links`
+## Independent cases and unchanged baseline
 
-The `Search` path was functionally verified. This establishes one anonymous SiyuCMS search workflow; it does not change the historical interpretation of the old 16 navigation categories.
+The mapper accessed each fixture only through Chromium. Evaluator truth was applied after each saved run.
 
-## Implementation
+- Functional literal results: `functional_verified` — correct.
+- Echo-only broken search: `unresolved` — correct.
+- Broken search with permanent Alpha/Beta sidebar links: `functional_verified` — **false positive**.
+- Functional search with “Operations handbook” and “Deployment manual” results: `unresolved` — **false negative** because titles did not contain the probes.
 
-- `agent1/search.py` recognizes safe GET search forms using observed input type, label, name, placeholder, description, method, and form shape. It contains no SiyuCMS selectors, routes, or result URLs.
-- Configurable CLI options `--search-probe` and `--search-contrast` provide two distinct ordinary probes.
-- Deterministic plans are saved in `agent1/.cache/` and artifacts retain protected plan references. A missing referenced plan raises an error rather than silently generating a different value.
-- Search-related controls receive bounded priority so the existing frontier can cross observed prerequisites such as an icon-only toggle. The explorer still executes and records each control through the normal transition machinery.
-- Each eligible search transition receives two paired-search replay records. Every record creates a fresh browser context and executes the complete prerequisite/action path for both probes.
-- Functional verification requires query-bearing result-link labels for both probes and different result target sets. Changed URL, echoed input, title, or full-page content alone cannot verify the function.
-- Navigation checks and functional checks remain separate. An echo-only fixture has successful navigation replays but an `unresolved` functional outcome.
-- Standard Graph A now includes the full workflow path, both replay IDs, functional checks/evidence, protected plan references, and the actual primary/contrast replay observations.
-- A grouped feature is promoted only after its transition satisfies all required replays; one successful path instance does not validate sibling instances.
+Baseline totals: **1 false positive, 1 false negative**, 64 browser actions, 5.057 seconds, and $0 external cost.
 
-## Independent regressions
+## General fix
 
-Focused tests cover:
+For each probe in each fresh browser context, Agent 1 now preserves the observation immediately before the final search submission and the resulting observation. It compares browser-observed link targets as follows:
 
-- Successful GET search with distinct result links: verified.
-- Fake search that only echoes input: navigation-valid, functionally unresolved.
-- Hidden form requiring an observed toggle: discovered with a two-action path and verified.
-- Exact deterministic query replay: exploration plus two primary replays used `alpha`; the two contrast executions used `beta`; the default generated search value was never used.
-- Missing protected plan: explicit failure rather than regenerated input.
-- Standard Graph A replay observations and paired replay IDs.
-- Existing wrong-record and cosmetic-content regressions remain passing.
+1. Subtract all targets already present on the actionable pre-submit screen.
+2. Require both probes to introduce at least one link target.
+3. Require each probe to contribute at least one introduced target absent from the other probe's result.
+4. Require the two pre-submit link-target sets to match, so unrelated changing navigation makes the outcome unresolved.
+5. Repeat the complete paired check in two independent contexts and require the introduced target evidence to be consistent across both replays.
 
-Focused search suite: **4/4 passed**. The final full Agent 1 test suite passed **27/27**.
+Meaningful-content differences are still recorded but are not sufficient. Query echo, title, URL, HTTP success, and literal query occurrence are not functional-success checks.
 
-## Live SiyuCMS evaluation
+Graph A retains four verification observations per replay: primary-before, primary-result, contrast-before, and contrast-result. It also records baseline targets, introduced links, probe-only targets, per-replay checks, and cross-replay consistency.
 
-Limits: one worker, GET only, anonymous, no model, no paid provider, two transitions, 60-second cap.
+## Corrected measurement
 
-The initial integrated run functionally verified search, but the icon-only submit was represented as `unnamed button`; the existing volatile-label filter therefore omitted its feature node. This was a representation defect, not a replay failure. The generic fix derives `Search` from the observed search field when the submit lacks an accessible label.
+- Functional literal results: `functional_verified` — correct.
+- Echo-only broken search: `unresolved` — correct.
+- Permanent-sidebar broken search: `unresolved` — correct.
+- Functional nonliteral results: `functional_verified` — correct.
 
-Final corrective run (`siyucms_search_integrated_v2`):
+Corrected totals: **0 false positives, 0 false negatives**, 64 browser actions, 5.213 seconds, and $0 external cost.
 
-- Observed paths: `toggle search` (length 1), `toggle search → Search` (length 2).
-- Replay-validated navigation features: **2**.
-- Verified functional workflows: **1** (`Search`).
-- Search paired verification: **2/2** fresh contexts.
-- All navigation replays: **3/3** (one toggle replay plus two search replays).
-- Replay failures / untested paths: **0 / 0**.
-- Graph evidence complete: **436/436** connections; missing: **0**.
-- Browser actions, including discovery, restoration, probes, and replay: **25**.
-- Elapsed: **12.823 seconds**.
-- Model calls / external cost: **0 / $0**.
+Focused regressions passed **14/14**, including the existing exact-plan, hidden-toggle, wrong-record, and cosmetic-content checks. The final full Agent 1 suite passed **31/31**.
 
-The earlier targeted milestone reported search verification 2/2 in 7.073 seconds and 16 verification actions, excluding main-explorer discovery. The integrated run is therefore functionally consistent but not a speed comparison: its 25 actions and 12.823 seconds include automatic discovery, prerequisite restoration, the toggle replay, paired search replays, checkpointing, and standard Graph construction.
+## SiyuCMS compatibility
+
+No new live SiyuCMS run was necessary. Existing artifacts and results were preserved unchanged. An offline check of the previously captured `siyucms_search_integrated_v2` browser observations found, in both old replay contexts:
+
+- Primary probe: 7 targets introduced after the recorded search screen, 6 unique to the primary result.
+- Contrast probe: 2 targets introduced, 1 unique to the contrast result.
+
+This supports compatibility with the new evidence rule but is not reported as a new live verification because the old artifact did not retain distinct pre-submit observations for both probes.
 
 ## Artifacts and reproduction
 
-- Standard Graph A: `agent1/experiments/siyucms_search_integrated_v2/graph_a.json`
-- Readable diagram: `agent1/experiments/siyucms_search_integrated_v2/graph_a.mmd`
-- Metrics/report: `agent1/experiments/siyucms_search_integrated_v2/metrics.json` and `report.md`
-- The initial label-defect run remains preserved in `siyucms_search_integrated_v1`.
+- Unchanged baseline: `agent1/experiments/search_verifier_adversarial_baseline/summary.json`
+- Corrected final measurement: `agent1/experiments/search_verifier_adversarial_link_delta_final/summary.json`
+- Fixture website: `tests/fixtures/search_adversarial_app.py`
+- Separate evaluator truth: `tests/fixtures/search_adversarial_ground_truth.py`
 
-Exact command:
+Exact comparison commands:
 
 ```bash
-.venv/bin/python -m agent1.cli map \
-  --url http://127.0.0.1:51707/ \
-  --out agent1/experiments/siyucms_search_integrated_reproduction \
-  --policy grouped --seconds 60 --max-transitions 2 --max-browser-actions 80 \
-  --search-probe php --search-contrast Linux \
-  --context-label siyucms:anonymous-search
+.venv/bin/python experiments/run_search_verifier_fixtures.py \
+  --out agent1/experiments/search_verifier_adversarial_reproduction
+
+.venv/bin/python -m pytest \
+  tests/test_agent1_search.py tests/test_agent1_search_adversarial.py -q
 ```
 
-## Limitations
+## Remaining limitations
 
-The generic evaluator is deliberately conservative. It remains unproven for search results whose useful links do not contain the query text, forms with multiple required ordinary fields, relevance ranking, authenticated search, POST search, and non-link result widgets. Those cases remain unresolved rather than receiving weaker success criteria.
-
-The next most informative test is a second independent real search UI whose result labels do not literally repeat the query, to determine whether another browser-observable non-echo signal can be added without increasing false positives.
+- Search results represented only as non-link widgets remain unresolved.
+- Results whose targets were already linked before submission remain unresolved.
+- Query-dependent content behind an unchanged target remains unresolved.
+- Dynamic navigation or unstable result targets can conservatively prevent verification.
+- A site that consistently injects unrelated, probe-dependent links could still imitate the evidence; the two-context consistency check reduces but does not eliminate that risk.
+- Four synthetic cases do not establish a general false-positive rate.

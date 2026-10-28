@@ -62,11 +62,12 @@ def test_get_search_with_different_result_sets_is_verified(search_server, tmp_pa
     replays = [item for item in artifact.replays if item.transition_id == workflow.transition_id]
 
     assert workflow.status == FunctionalStatus.VERIFIED
+    assert all(workflow.verification_checks.values())
     assert artifact.metrics.functional_workflows_verified == 1
     assert len(replays) == 2
     assert all(item.status == EvidenceStatus.REPLAY_VALIDATED for item in replays)
     assert all(all(item.functional_checks.values()) for item in replays)
-    assert all(len(item.verification_observation_ids) == 2 for item in replays)
+    assert all(len(item.verification_observation_ids) == 4 for item in replays)
     graph = build_graph_a(artifact)
     graph_workflow = next(
         item for item in graph["nodes"]["functional_workflows"] if item["id"] == workflow.id
@@ -79,7 +80,7 @@ def test_get_search_with_different_result_sets_is_verified(search_server, tmp_pa
     assert graph_workflow["status"] == FunctionalStatus.VERIFIED
     assert len(graph_workflow["replay_ids"]) == 2
     assert graph_action["workflow_path"]
-    assert len(graph["replay_observations"]) == 4
+    assert len(graph["replay_observations"]) == 8
 
 
 def test_echo_only_search_is_navigation_valid_but_unresolved(search_server, tmp_path: Path) -> None:
@@ -91,7 +92,7 @@ def test_echo_only_search_is_navigation_valid_but_unresolved(search_server, tmp_
     assert artifact.metrics.functional_workflows_verified == 0
     assert len(replays) == 2
     assert all(item.status == EvidenceStatus.REPLAY_VALIDATED for item in replays)
-    assert all(not item.functional_checks["primary_has_non_echo_result_links"] for item in replays)
+    assert all(not item.functional_checks["primary_introduces_links"] for item in replays)
 
 
 def test_hidden_search_uses_observed_toggle_and_exact_query_plans(

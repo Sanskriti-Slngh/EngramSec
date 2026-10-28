@@ -15,7 +15,13 @@ from playwright.sync_api import sync_playwright
 
 from .providers import DecisionProvider, ModelProviderError, build_provider
 from .revision import code_revision
-from .search import SEARCH_SEMANTICS, is_get_search_action, matching_result_links, search_field
+from .search import (
+    SEARCH_SEMANTICS,
+    introduced_links,
+    is_get_search_action,
+    observable_links,
+    search_field,
+)
 from .schema import (
     ActionDescriptor,
     Advertisement,
@@ -988,8 +994,9 @@ class Explorer:
         self,
         session: BrowserSession,
         path: list[ActionDescriptor],
-    ) -> tuple[Observation, int]:
+    ) -> tuple[Observation, int, list[Observation]]:
         observation = session.observe(self._next_sequence())
+        observations = [observation]
         browser_actions = 0
         for descriptor in path:
             control = session.find_current(observation, descriptor)
@@ -999,7 +1006,8 @@ class Explorer:
             _, _, _, count = session.execute(control, plan, descriptor.input_plan_ref)
             browser_actions += count
             observation = session.observe(self._next_sequence())
-        return observation, browser_actions
+            observations.append(observation)
+        return observation, browser_actions, observations
 
     def _replay_search_transition(
         self,
@@ -1036,13 +1044,15 @@ class Explorer:
             with BrowserSession(browser, self.config) as session:
                 browser_actions += session.goto_start()
                 self.artifact.metrics.navigation_requests += 1
-                primary_result, count = self._execute_replay_path(
+                primary_result, count, primary_path_observations = self._execute_replay_path(
                     session, transition.workflow_path
                 )
                 browser_actions += count
                 browser_actions += session.goto_start()
                 self.artifact.metrics.navigation_requests += 1
-                contrast_result, count = self._execute_replay_path(session, contrast_path)
+                contrast_result, count, contrast_path_observations = self._execute_replay_path(
+                    session, contrast_path
+                )
                 browser_actions += count
             expected = self._observation_by_id(transition.result_observation_id)
             checks = {
@@ -1059,23 +1069,39 @@ class Explorer:
                 and outcome_signature(primary_result.outcome_signals)
                 == outcome_signature(expected.outcome_signals),
             }
-            primary_links = matching_result_links(primary_result, primary)
-            contrast_links = matching_result_links(contrast_result, contrast)
+            primary_before = primary_path_observations[-2]
+            contrast_before = contrast_path_observations[-2]
+            primary_links = introduced_links(primary_before, primary_result)
+            contrast_links = introduced_links(contrast_before, contrast_result)
             primary_targets = sorted({item["target"] for item in primary_links})
             contrast_targets = sorted({item["target"] for item in contrast_links})
+            primary_only_targets = sorted(set(primary_targets) - set(contrast_targets))
+            contrast_only_targets = sorted(set(contrast_targets) - set(primary_targets))
+            primary_baseline_targets = sorted(
+                {item["target"] for item in observable_links(primary_before)}
+            )
+            contrast_baseline_targets = sorted(
+                {item["target"] for item in observable_links(contrast_before)}
+            )
             functional_checks = {
-                "primary_has_non_echo_result_links": bool(primary_links),
-                "contrast_has_non_echo_result_links": bool(contrast_links),
-                "result_target_sets_differ": primary_targets != contrast_targets,
+                "baseline_link_targets_match": (
+                    primary_baseline_targets == contrast_baseline_targets
+                ),
+                "primary_introduces_links": bool(primary_links),
+                "contrast_introduces_links": bool(contrast_links),
+                "primary_has_distinct_introduced_targets": bool(primary_only_targets),
+                "contrast_has_distinct_introduced_targets": bool(contrast_only_targets),
                 "meaningful_content_differs": (
                     primary_result.content_fingerprint
                     != contrast_result.content_fingerprint
                 ),
             }
             required_functional = (
-                functional_checks["primary_has_non_echo_result_links"]
-                and functional_checks["contrast_has_non_echo_result_links"]
-                and functional_checks["result_target_sets_differ"]
+                functional_checks["baseline_link_targets_match"]
+                and functional_checks["primary_introduces_links"]
+                and functional_checks["contrast_introduces_links"]
+                and functional_checks["primary_has_distinct_introduced_targets"]
+                and functional_checks["contrast_has_distinct_introduced_targets"]
             )
             kinds = {
                 item.kind
@@ -1094,11 +1120,23 @@ class Explorer:
                 else EvidenceStatus.FAILED
             )
             error = None if status == EvidenceStatus.REPLAY_VALIDATED else "navigation checks did not match"
-            self.artifact.replay_observations.extend([primary_result, contrast_result])
-            verification_ids = [primary_result.id, contrast_result.id]
+            self.artifact.replay_observations.extend(
+                [primary_before, primary_result, contrast_before, contrast_result]
+            )
+            verification_ids = [
+                primary_before.id,
+                primary_result.id,
+                contrast_before.id,
+                contrast_result.id,
+            ]
             verification_evidence = {
-                "primary_result_links": primary_links,
-                "contrast_result_links": contrast_links,
+                "evidence_rule": "introduced-link-target-delta-v2",
+                "primary_baseline_targets": primary_baseline_targets,
+                "contrast_baseline_targets": contrast_baseline_targets,
+                "primary_introduced_links": primary_links,
+                "contrast_introduced_links": contrast_links,
+                "primary_only_targets": primary_only_targets,
+                "contrast_only_targets": contrast_only_targets,
                 "primary_content_fingerprint": primary_result.content_fingerprint,
                 "contrast_content_fingerprint": contrast_result.content_fingerprint,
             }
@@ -1344,7 +1382,27 @@ class Explorer:
                 continue
             replays = replays_by_transition.get(transition.id, [])
             paired = [item for item in replays if item.verification_kind == "paired_search"]
+            workflow_checks: dict[str, bool] = {}
             if paired:
+                evidence_signatures = {
+                    digest(
+                        {
+                            "primary_only_targets": item.verification_evidence.get(
+                                "primary_only_targets", []
+                            ),
+                            "contrast_only_targets": item.verification_evidence.get(
+                                "contrast_only_targets", []
+                            ),
+                        }
+                    )
+                    for item in paired
+                }
+                workflow_checks = {
+                    "two_independent_replays": len(paired) >= 2,
+                    "introduced_target_evidence_consistent": (
+                        len(paired) >= 2 and len(evidence_signatures) == 1
+                    ),
+                }
                 if any(item.status == EvidenceStatus.FAILED for item in paired):
                     functional_status = FunctionalStatus.FAILED
                 elif any(
@@ -1356,7 +1414,7 @@ class Explorer:
                     item.status == EvidenceStatus.REPLAY_VALIDATED
                     and item.functional_status == FunctionalStatus.VERIFIED
                     for item in paired
-                ):
+                ) and all(workflow_checks.values()):
                     functional_status = FunctionalStatus.VERIFIED
                 else:
                     functional_status = FunctionalStatus.UNRESOLVED
@@ -1372,6 +1430,7 @@ class Explorer:
                     transition_id=transition.id,
                     replay_id=replays[0].id if replays else None,
                     replay_ids=[item.id for item in replays],
+                    verification_checks=workflow_checks,
                     path_length=len(transition.workflow_path),
                     action_label=transition.action.label,
                     status=functional_status,
@@ -1450,11 +1509,18 @@ class Explorer:
                 )
                 for observation_id in replay.verification_observation_ids
             ]
+            required_verification_observations = (
+                4
+                if replay.verification_evidence.get("evidence_rule")
+                == "introduced-link-target-delta-v2"
+                else 2
+            )
             complete = bool(transition and replay.outcome_checks and replay_observation) and (
                 replay.verification_kind != "paired_search"
                 or (
                     replay.functional_checks
-                    and len(verification_observations) == 2
+                    and len(verification_observations)
+                    == required_verification_observations
                     and all(verification_observations)
                 )
             )
@@ -1468,9 +1534,10 @@ class Explorer:
             if replay.verification_kind == "paired_search" and not replay.functional_checks:
                 missing.append("paired search functional checks")
             if replay.verification_kind == "paired_search" and (
-                len(verification_observations) != 2 or not all(verification_observations)
+                len(verification_observations) != required_verification_observations
+                or not all(verification_observations)
             ):
-                missing.append("both paired search result observations")
+                missing.append("paired search before/after observations")
             results.append(
                 ConnectionEvidence(
                     id="conn_" + digest(["replay", replay.id]),

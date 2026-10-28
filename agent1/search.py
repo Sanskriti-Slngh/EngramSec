@@ -36,16 +36,19 @@ def is_get_search_action(action: ActionDescriptor | Control) -> bool:
     return search_field(action) is not None
 
 
-def matching_result_links(observation: Observation, query: str) -> list[dict[str, str]]:
-    """Collect non-echo evidence from result-link labels, never from title/input text alone."""
+def observable_links(observation: Observation) -> list[dict[str, str]]:
+    """Return browser-observed links suitable for before/after target-set comparison."""
 
-    needle = query.casefold().strip()
-    if not needle:
-        return []
     return [
         {"control_id": control.id, "label": control.label, "target": control.target or ""}
         for control in observation.controls
         if control.kind == "link"
         and control.target
-        and needle in control.label.casefold()
     ]
+
+
+def introduced_links(before: Observation, after: Observation) -> list[dict[str, str]]:
+    """Links whose targets appeared only after submitting the observed search form."""
+
+    baseline_targets = {item["target"] for item in observable_links(before)}
+    return [item for item in observable_links(after) if item["target"] not in baseline_targets]

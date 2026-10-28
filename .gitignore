@@ -28,3 +28,10 @@ agent1/experiments/validation_baseline_778bbbd/
 agent1/experiments/validation_content_outcomes_v1/
 agent1/experiments/validation_content_outcomes_v2/
 agent1/experiments/validation_baseline_778bbbd_v2/posthoc_evaluation.json
+
+# Keep full adversarial fixture runs local; checkpoint their compact measured summaries.
+agent1/experiments/search_verifier_adversarial_baseline/**
+!agent1/experiments/search_verifier_adversarial_baseline/summary.json
+agent1/experiments/search_verifier_adversarial_link_delta/**
+agent1/experiments/search_verifier_adversarial_link_delta_final/**
+!agent1/experiments/search_verifier_adversarial_link_delta_final/summary.json

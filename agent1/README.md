@@ -19,8 +19,9 @@ observed success/result signal. Reproducible validation errors remain evidence
 but are never counted as successful completion.
 
 Safe browser-observed GET search forms can also use deterministic paired-query
-verification. Agent 1 requires two fresh contexts, query-bearing result links,
-and different result target sets; URL/title/input echoes are insufficient.
+verification. Agent 1 requires two fresh contexts and links introduced after
+submission with probe-distinct, repeatable target sets. Permanent navigation,
+URL/title/input echoes, and full-page changes alone are insufficient.
 
 ## Run
 
