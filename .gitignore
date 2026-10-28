@@ -1,0 +1,20 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+*.py[cod]
+
+# Runtime artifacts that can contain browser state or local model caches.
+agent1/.auth/
+agent1/.cache/
+
+# Full browser evidence remains local and reproducible; commit compact reports,
+# metrics, manifests, and diagrams instead of hundreds of MB of duplicate JSON.
+agent1/experiments/**/checkpoint.json
+agent1/experiments/**/run.json
+agent1/experiments/**/trace.jsonl
+agent1/experiments/**/graph_a.json
+!agent1/experiments/siyucms_10m_comparison/grouped-r1/audited_v2/graph_a.json

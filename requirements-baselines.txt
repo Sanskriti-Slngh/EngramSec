@@ -1,0 +1,4 @@
+# Optional runnable external baseline. Crawljax remains the selected state-flow
+# comparison, but its official 5.2.3 CLI archive is ~987 MB and needs a legacy
+# Java/Selenium stack. Crawlee is the lower-burden maintained browser crawler.
+crawlee[playwright]>=1,<2
