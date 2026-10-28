@@ -1,0 +1,10 @@
+{"step": 1, "url": "http://127.0.0.1:51707/", "depth": 0, "status": 200, "new_urls": 32, "elapsed_ms": 244.5}
+{"step": 2, "url": "http://127.0.0.1:51707/index/user/index.html", "depth": 1, "status": 302, "new_urls": 1, "elapsed_ms": 49.6}
+{"step": 3, "url": "http://127.0.0.1:51707/index/about.html", "depth": 1, "status": 200, "new_urls": 1, "elapsed_ms": 86.7}
+{"step": 4, "url": "http://127.0.0.1:51707/index/introduction.html", "depth": 1, "status": 200, "new_urls": 0, "elapsed_ms": 81.9}
+{"step": 5, "url": "http://127.0.0.1:51707/index/culture.html", "depth": 1, "status": 200, "new_urls": 0, "elapsed_ms": 87.1}
+{"step": 6, "url": "http://127.0.0.1:51707/index/news.html", "depth": 1, "status": 200, "new_urls": 9, "elapsed_ms": 120.0}
+{"step": 7, "url": "http://127.0.0.1:51707/index/Article/index.html?cate=5", "depth": 1, "status": 200, "new_urls": 4, "elapsed_ms": 100.1}
+{"step": 8, "url": "http://127.0.0.1:51707/index/information.html", "depth": 1, "status": 200, "new_urls": 0, "elapsed_ms": 81.7}
+{"step": 9, "url": "http://127.0.0.1:51707/index/honours.html", "depth": 1, "status": 200, "new_urls": 3, "elapsed_ms": 91.2}
+{"step": 10, "url": "http://127.0.0.1:51707/index/product.html", "depth": 1, "status": 200, "new_urls": 4, "elapsed_ms": 101.9}
