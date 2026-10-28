@@ -112,6 +112,23 @@ class DecisionProvider:
             return {}
         return FormProposal.model_validate(payload).values
 
+    def store_form_plan(self, values: dict[str, str], purpose: str) -> str:
+        """Persist exact deterministic values in the ignored cache and return only a reference."""
+
+        cache_key = self.cache.key(
+            "deterministic",
+            purpose,
+            {
+                "field_ids": sorted(values),
+                "value_hashes": {
+                    key: hashlib.sha256(value.encode("utf-8")).hexdigest()
+                    for key, value in sorted(values.items())
+                },
+            },
+        )
+        self.cache.put_payload(cache_key, FormProposal(values=values, plan_ref=cache_key).model_dump())
+        return cache_key
+
     @staticmethod
     def compact_form_payload(
         observation: Observation,

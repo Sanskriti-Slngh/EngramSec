@@ -29,6 +29,16 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--headed", action="store_true")
     parser.add_argument("--allow-post-forms", action="store_true")
     parser.add_argument("--context-label", default="anonymous")
+    parser.add_argument(
+        "--search-probe",
+        dest="search_probe_primary",
+        help="ordinary primary query for paired GET-search verification",
+    )
+    parser.add_argument(
+        "--search-contrast",
+        dest="search_probe_contrast",
+        help="distinct ordinary contrast query for paired GET-search verification",
+    )
 
 
 def parser() -> argparse.ArgumentParser:
@@ -90,6 +100,8 @@ def main(argv: list[str] | None = None) -> int:
             model_name=args.model,
             model_form_assistance=args.model_forms,
             max_form_retries=args.max_form_retries,
+            search_probe_primary=args.search_probe_primary,
+            search_probe_contrast=args.search_probe_contrast,
             paid_calls_enabled=False,
         )
     else:

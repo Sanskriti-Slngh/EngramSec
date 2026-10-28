@@ -18,6 +18,10 @@ functionally verified only when a fresh-context replay reproduces an explicit,
 observed success/result signal. Reproducible validation errors remain evidence
 but are never counted as successful completion.
 
+Safe browser-observed GET search forms can also use deterministic paired-query
+verification. Agent 1 requires two fresh contexts, query-bearing result links,
+and different result target sets; URL/title/input echoes are insufficient.
+
 ## Run
 
 Short model-free smoke run:
@@ -27,6 +31,17 @@ Short model-free smoke run:
   --url http://127.0.0.1:51707/ \
   --out agent1/outputs/siyucms-smoke \
   --policy grouped --seconds 60 --max-transitions 20 --max-browser-actions 80
+```
+
+Focused paired-query GET-search verification (values are configurable and exact
+input plans are stored only in the ignored cache):
+
+```bash
+.venv/bin/python -m agent1.cli map \
+  --url http://127.0.0.1:51707/ \
+  --out agent1/outputs/siyucms-search \
+  --policy grouped --seconds 60 --max-transitions 2 --max-browser-actions 80 \
+  --search-probe php --search-contrast Linux
 ```
 
 Selective local-model run:

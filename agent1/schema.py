@@ -53,6 +53,22 @@ class RunConfig(BaseModel):
     focus_query: str | None = None
     model_form_assistance: bool = False
     max_form_retries: int = Field(default=1, ge=0, le=2)
+    search_probe_primary: str | None = Field(default=None, max_length=80)
+    search_probe_contrast: str | None = Field(default=None, max_length=80)
+
+    @model_validator(mode="after")
+    def paired_search_probes(self) -> "RunConfig":
+        probes = (self.search_probe_primary, self.search_probe_contrast)
+        if (probes[0] is None) != (probes[1] is None):
+            raise ValueError("search probes must be configured as a pair")
+        if probes[0] is not None:
+            cleaned = tuple(item.strip() for item in probes if item is not None)
+            if not all(cleaned) or cleaned[0].casefold() == cleaned[1].casefold():
+                raise ValueError("search probes must be non-empty and distinct")
+            if any(any(ord(char) < 32 for char in item) for item in cleaned):
+                raise ValueError("search probes cannot contain control characters")
+            self.search_probe_primary, self.search_probe_contrast = cleaned
+        return self
 
 
 class InputReference(BaseModel):
@@ -211,6 +227,11 @@ class ReplayResult(BaseModel):
     actual_group_signature: str | None = None
     actual_observation_id: str | None = None
     outcome_checks: dict[str, bool] = Field(default_factory=dict)
+    functional_checks: dict[str, bool] = Field(default_factory=dict)
+    verification_kind: Literal["standard", "paired_search"] = "standard"
+    verification_observation_ids: list[str] = Field(default_factory=list)
+    verification_evidence: dict[str, Any] = Field(default_factory=dict)
+    input_plan_refs: list[str] = Field(default_factory=list)
     functional_status: FunctionalStatus = FunctionalStatus.NOT_TESTED
     browser_actions: int = 0
     error: str | None = None
@@ -238,6 +259,7 @@ class FunctionalWorkflow(BaseModel):
     id: str
     transition_id: str
     replay_id: str | None = None
+    replay_ids: list[str] = Field(default_factory=list)
     path_length: int
     action_label: str
     status: FunctionalStatus

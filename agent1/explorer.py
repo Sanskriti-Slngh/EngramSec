@@ -15,6 +15,7 @@ from playwright.sync_api import sync_playwright
 
 from .providers import DecisionProvider, ModelProviderError, build_provider
 from .revision import code_revision
+from .search import SEARCH_SEMANTICS, is_get_search_action, matching_result_links, search_field
 from .schema import (
     ActionDescriptor,
     Advertisement,
@@ -295,6 +296,14 @@ class BrowserSession:
             method = (raw.get("method") or "").upper() or None
             form_index = raw.get("form_index")
             fields = forms[form_index].fields if form_index is not None and form_index < len(forms) else []
+            if not label and raw["kind"] == "form_submit" and any(
+                field.input_type == "search"
+                or SEARCH_SEMANTICS.search(
+                    " ".join((field.name, field.label, field.placeholder, field.description))
+                )
+                for field in fields
+            ):
+                label = "Search"
             unsafe_reason = self._unsafe_reason(label, target, method, fields)
             signature = control_signature(raw["kind"], raw["role"], label, target, method)
             control_id = "ctl_" + digest([current_url, raw["css_path"], signature], 18)
@@ -672,6 +681,11 @@ class Explorer:
                 continue
             self.tried.add(tried_key)
             kind_score = {"form_submit": 3.0, "button": 2.0, "link": 1.0}[control.kind]
+            if self.config.search_probe_primary and (
+                is_get_search_action(control)
+                or SEARCH_SEMANTICS.search(f"{control.label} {control.target or ''}")
+            ):
+                kind_score += 20.0
             if self.config.focus_query:
                 haystack = f"{control.label} {control.target or ''}".lower()
                 if self.config.focus_query.lower() in haystack:
@@ -686,7 +700,14 @@ class Explorer:
                     priority=kind_score - rank / max(1, len(order)),
                 )
             )
-        self.frontier.sort(key=lambda item: (len(item.path), -item.priority, item.action.signature))
+        self.frontier.sort(
+            key=lambda item: (
+                item.priority < 10.0,
+                len(item.path),
+                -item.priority,
+                item.action.signature,
+            )
+        )
 
     def _explore(self, browser: Browser) -> None:
         exploration_deadline = self.config.max_seconds * (1.0 - self.config.replay_reserve_fraction)
@@ -716,7 +737,23 @@ class Explorer:
                 )
                 actual = source.state_signature if self.config.policy == "exact" else source.group_signature
                 self._record_observation(source, item.path)
-                if actual != expected:
+                expected_observation = self._observation_by_id(item.source_observation_id)
+                search_related = bool(self.config.search_probe_primary) and (
+                    is_get_search_action(item.action)
+                    or SEARCH_SEMANTICS.search(f"{item.action.label} {item.action.target or ''}")
+                    or any(
+                        is_get_search_action(descriptor)
+                        or SEARCH_SEMANTICS.search(
+                            f"{descriptor.label} {descriptor.target or ''}"
+                        )
+                        for descriptor in item.path
+                    )
+                )
+                if actual != expected and not (
+                    search_related
+                    and expected_observation
+                    and self._usable_return_screen(expected_observation, source)
+                ):
                     raise RuntimeError(
                         f"saved return path restored {actual}, expected {expected}"
                     )
@@ -829,6 +866,11 @@ class Explorer:
         descriptor: ActionDescriptor,
         feedback: list[OutcomeSignal],
     ) -> tuple[dict[str, str], str | None]:
+        field = search_field(descriptor)
+        if field and self.config.search_probe_primary:
+            values = {field.id: self.config.search_probe_primary}
+            plan_ref = self.provider.store_form_plan(values, "search-primary-v1")
+            return values, plan_ref
         if not self.config.model_form_assistance or descriptor.kind != "form_submit":
             return {}, None
         try:
@@ -856,13 +898,50 @@ class Explorer:
             )
             return {}, None
 
+    def _resolve_form_plan(self, descriptor: ActionDescriptor) -> dict[str, str]:
+        plan = self.provider.resolve_form_plan(descriptor.input_plan_ref)
+        field = search_field(descriptor)
+        if descriptor.input_plan_ref and not plan:
+            raise RuntimeError("referenced input plan is missing from the protected cache")
+        if field and self.config.search_probe_primary:
+            if not descriptor.input_plan_ref or field.id not in plan:
+                raise RuntimeError("configured search replay requires its exact protected input plan")
+        return plan
+
+    @staticmethod
+    def _usable_return_screen(expected: Observation, actual: Observation) -> bool:
+        """Match interaction affordances for restoration without validating action outcomes."""
+
+        def shape(observation: Observation) -> dict[str, Any]:
+            return {
+                "route": observation.route_pattern,
+                "session": observation.session_context,
+                "forms": [
+                    {
+                        "method": form.method,
+                        "action": form.action,
+                        "fields": [
+                            (field.name, field.input_type, field.required) for field in form.fields
+                        ],
+                    }
+                    for form in observation.forms
+                ],
+                "controls": sorted(
+                    group_control_signature(control)
+                    for control in observation.controls
+                    if control.safe and not VOLATILE_CONTROL.match(control.label)
+                ),
+            }
+
+        return shape(expected) == shape(actual)
+
     def _restore(self, session: BrowserSession, path: list[ActionDescriptor]) -> Observation:
         observation = session.observe(self._next_sequence())
         for descriptor in path:
             control = session.find_current(observation, descriptor)
             if control is None:
                 raise RuntimeError(f"return-path control missing: {descriptor.signature}")
-            plan = self.provider.resolve_form_plan(descriptor.input_plan_ref)
+            plan = self._resolve_form_plan(descriptor)
             _, _, _, count = session.execute(control, plan, descriptor.input_plan_ref)
             self.artifact.metrics.browser_actions += count
             observation = session.observe(self._next_sequence())
@@ -878,14 +957,180 @@ class Explorer:
                 break
             if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
                 break
-            replay = self._replay_transition(browser, transition)
-            self.artifact.replays.append(replay)
-            self.artifact.metrics.replay_success_denominator += 1
-            if replay.status == EvidenceStatus.REPLAY_VALIDATED:
-                self.artifact.metrics.replay_success_numerator += 1
+            paired_search = bool(self.config.search_probe_primary) and is_get_search_action(
+                transition.action
+            )
+            required_replays = 2 if paired_search else 1
+            completed: list[ReplayResult] = []
+            for pair_index in range(required_replays):
+                if self._elapsed() >= self.config.max_seconds:
+                    break
+                if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
+                    break
+                replay = (
+                    self._replay_search_transition(browser, transition, pair_index)
+                    if paired_search
+                    else self._replay_transition(browser, transition)
+                )
+                completed.append(replay)
+                self.artifact.replays.append(replay)
+                self.artifact.metrics.replay_success_denominator += 1
+                if replay.status == EvidenceStatus.REPLAY_VALIDATED:
+                    self.artifact.metrics.replay_success_numerator += 1
+            if len(completed) == required_replays and all(
+                replay.status == EvidenceStatus.REPLAY_VALIDATED for replay in completed
+            ):
                 transition.status = EvidenceStatus.REPLAY_VALIDATED
             self._record_progress()
             self.save_checkpoint()
+
+    def _execute_replay_path(
+        self,
+        session: BrowserSession,
+        path: list[ActionDescriptor],
+    ) -> tuple[Observation, int]:
+        observation = session.observe(self._next_sequence())
+        browser_actions = 0
+        for descriptor in path:
+            control = session.find_current(observation, descriptor)
+            if control is None:
+                raise RuntimeError(f"replay control missing: {descriptor.signature}")
+            plan = self._resolve_form_plan(descriptor)
+            _, _, _, count = session.execute(control, plan, descriptor.input_plan_ref)
+            browser_actions += count
+            observation = session.observe(self._next_sequence())
+        return observation, browser_actions
+
+    def _replay_search_transition(
+        self,
+        browser: Browser,
+        transition: Transition,
+        pair_index: int,
+    ) -> ReplayResult:
+        replay_id = "replay_" + digest([transition.id, "paired_search", pair_index], 20)
+        started_at = utc_now()
+        browser_actions = 0
+        checks: dict[str, bool] = {}
+        functional_checks: dict[str, bool] = {}
+        verification_evidence: dict[str, Any] = {}
+        verification_ids: list[str] = []
+        input_plan_refs: list[str] = []
+        try:
+            primary = self.config.search_probe_primary
+            contrast = self.config.search_probe_contrast
+            if not primary or not contrast:
+                raise RuntimeError("paired search probes are not configured")
+            final = transition.workflow_path[-1]
+            field = search_field(final)
+            if field is None:
+                raise RuntimeError("search transition no longer has one eligible observed field")
+            primary_plan = self._resolve_form_plan(final)
+            if primary_plan.get(field.id) != primary:
+                raise RuntimeError("primary protected input plan does not match the configured probe")
+            contrast_ref = self.provider.store_form_plan(
+                {field.id: contrast}, "search-contrast-v1"
+            )
+            contrast_final = final.model_copy(update={"input_plan_ref": contrast_ref})
+            contrast_path = list(transition.workflow_path[:-1]) + [contrast_final]
+            input_plan_refs = [final.input_plan_ref or "", contrast_ref]
+            with BrowserSession(browser, self.config) as session:
+                browser_actions += session.goto_start()
+                self.artifact.metrics.navigation_requests += 1
+                primary_result, count = self._execute_replay_path(
+                    session, transition.workflow_path
+                )
+                browser_actions += count
+                browser_actions += session.goto_start()
+                self.artifact.metrics.navigation_requests += 1
+                contrast_result, count = self._execute_replay_path(session, contrast_path)
+                browser_actions += count
+            expected = self._observation_by_id(transition.result_observation_id)
+            checks = {
+                "group_signature": bool(expected)
+                and primary_result.group_signature == transition.result_group_signature,
+                "route_pattern": bool(expected)
+                and primary_result.route_pattern == expected.route_pattern,
+                "title": bool(expected)
+                and normalize_instance_text(primary_result.title)
+                == normalize_instance_text(expected.title),
+                "content_fingerprint": bool(expected)
+                and primary_result.content_fingerprint == expected.content_fingerprint,
+                "outcome_signals": bool(expected)
+                and outcome_signature(primary_result.outcome_signals)
+                == outcome_signature(expected.outcome_signals),
+            }
+            primary_links = matching_result_links(primary_result, primary)
+            contrast_links = matching_result_links(contrast_result, contrast)
+            primary_targets = sorted({item["target"] for item in primary_links})
+            contrast_targets = sorted({item["target"] for item in contrast_links})
+            functional_checks = {
+                "primary_has_non_echo_result_links": bool(primary_links),
+                "contrast_has_non_echo_result_links": bool(contrast_links),
+                "result_target_sets_differ": primary_targets != contrast_targets,
+                "meaningful_content_differs": (
+                    primary_result.content_fingerprint
+                    != contrast_result.content_fingerprint
+                ),
+            }
+            required_functional = (
+                functional_checks["primary_has_non_echo_result_links"]
+                and functional_checks["contrast_has_non_echo_result_links"]
+                and functional_checks["result_target_sets_differ"]
+            )
+            kinds = {
+                item.kind
+                for observation in (primary_result, contrast_result)
+                for item in observation.outcome_signals
+            }
+            if "validation_error" in kinds:
+                functional_status = FunctionalStatus.VALIDATION_FAILURE
+            elif required_functional:
+                functional_status = FunctionalStatus.VERIFIED
+            else:
+                functional_status = FunctionalStatus.UNRESOLVED
+            status = (
+                EvidenceStatus.REPLAY_VALIDATED
+                if all(checks.values())
+                else EvidenceStatus.FAILED
+            )
+            error = None if status == EvidenceStatus.REPLAY_VALIDATED else "navigation checks did not match"
+            self.artifact.replay_observations.extend([primary_result, contrast_result])
+            verification_ids = [primary_result.id, contrast_result.id]
+            verification_evidence = {
+                "primary_result_links": primary_links,
+                "contrast_result_links": contrast_links,
+                "primary_content_fingerprint": primary_result.content_fingerprint,
+                "contrast_content_fingerprint": contrast_result.content_fingerprint,
+            }
+            actual_group = primary_result.group_signature
+            actual_observation_id = primary_result.id
+        except Exception as exc:
+            status = EvidenceStatus.FAILED
+            error = f"{type(exc).__name__}: {compact_text(str(exc), 300)}"
+            actual_group = None
+            actual_observation_id = None
+            functional_status = FunctionalStatus.FAILED
+        self.artifact.metrics.browser_actions += browser_actions
+        return ReplayResult(
+            id=replay_id,
+            transition_id=transition.id,
+            path_length=len(transition.workflow_path),
+            status=status,
+            expected_group_signature=transition.result_group_signature or "",
+            actual_group_signature=actual_group,
+            actual_observation_id=actual_observation_id,
+            outcome_checks=checks,
+            functional_checks=functional_checks,
+            verification_kind="paired_search",
+            verification_observation_ids=verification_ids,
+            verification_evidence=verification_evidence,
+            input_plan_refs=input_plan_refs,
+            functional_status=functional_status,
+            browser_actions=browser_actions,
+            error=error,
+            started_at=started_at,
+            ended_at=utc_now(),
+        )
 
     def _replay_transition(self, browser: Browser, transition: Transition) -> ReplayResult:
         replay_id = "replay_" + digest([transition.id, len(self.artifact.replays)], 20)
@@ -900,7 +1145,7 @@ class Explorer:
                     control = session.find_current(observation, descriptor)
                     if control is None:
                         raise RuntimeError(f"replay control missing: {descriptor.signature}")
-                    plan = self.provider.resolve_form_plan(descriptor.input_plan_ref)
+                    plan = self._resolve_form_plan(descriptor)
                     _, _, _, count = session.execute(control, plan, descriptor.input_plan_ref)
                     browser_actions += count
                     observation = session.observe(self._next_sequence())
@@ -1036,10 +1281,7 @@ class Explorer:
             validated_transition_ids = sorted(
                 transition.id
                 for transition in transitions
-                if any(
-                    replay.status == EvidenceStatus.REPLAY_VALIDATED
-                    for replay in replays_by_transition.get(transition.id, [])
-                )
+                if transition.status == EvidenceStatus.REPLAY_VALIDATED
             )
             failed_transition_ids = sorted(
                 transition.id
@@ -1093,21 +1335,46 @@ class Explorer:
         return features
 
     def _build_functional_workflows(self) -> list[FunctionalWorkflow]:
-        replays_by_transition = {item.transition_id: item for item in self.artifact.replays}
+        replays_by_transition: dict[str, list[ReplayResult]] = defaultdict(list)
+        for replay in self.artifact.replays:
+            replays_by_transition[replay.transition_id].append(replay)
         workflows: list[FunctionalWorkflow] = []
         for transition in self.artifact.transitions:
             if not transition.result_observation_id:
                 continue
-            replay = replays_by_transition.get(transition.id)
+            replays = replays_by_transition.get(transition.id, [])
+            paired = [item for item in replays if item.verification_kind == "paired_search"]
+            if paired:
+                if any(item.status == EvidenceStatus.FAILED for item in paired):
+                    functional_status = FunctionalStatus.FAILED
+                elif any(
+                    item.functional_status == FunctionalStatus.VALIDATION_FAILURE
+                    for item in paired
+                ):
+                    functional_status = FunctionalStatus.VALIDATION_FAILURE
+                elif len(paired) >= 2 and all(
+                    item.status == EvidenceStatus.REPLAY_VALIDATED
+                    and item.functional_status == FunctionalStatus.VERIFIED
+                    for item in paired
+                ):
+                    functional_status = FunctionalStatus.VERIFIED
+                else:
+                    functional_status = FunctionalStatus.UNRESOLVED
+            elif replays:
+                functional_status = replays[-1].functional_status
+            else:
+                functional_status = FunctionalStatus.NOT_TESTED
             result = self._observation_by_id(transition.result_observation_id)
             workflows.append(
                 FunctionalWorkflow(
-                    id="workflow_" + digest([transition.id, replay.id if replay else "untested"], 18),
+                    id="workflow_"
+                    + digest([transition.id, [item.id for item in replays] or ["untested"]], 18),
                     transition_id=transition.id,
-                    replay_id=replay.id if replay else None,
+                    replay_id=replays[0].id if replays else None,
+                    replay_ids=[item.id for item in replays],
                     path_length=len(transition.workflow_path),
                     action_label=transition.action.label,
-                    status=replay.functional_status if replay else FunctionalStatus.NOT_TESTED,
+                    status=functional_status,
                     outcome_signal_fingerprints=(
                         outcome_signature(result.outcome_signals) if result else []
                     ),
@@ -1172,7 +1439,25 @@ class Explorer:
                 (item for item in self.artifact.replay_observations if item.id == replay.actual_observation_id),
                 None,
             )
-            complete = bool(transition and replay.outcome_checks and replay_observation)
+            verification_observations = [
+                next(
+                    (
+                        item
+                        for item in self.artifact.replay_observations
+                        if item.id == observation_id
+                    ),
+                    None,
+                )
+                for observation_id in replay.verification_observation_ids
+            ]
+            complete = bool(transition and replay.outcome_checks and replay_observation) and (
+                replay.verification_kind != "paired_search"
+                or (
+                    replay.functional_checks
+                    and len(verification_observations) == 2
+                    and all(verification_observations)
+                )
+            )
             missing = []
             if not transition:
                 missing.append("referenced transition")
@@ -1180,13 +1465,27 @@ class Explorer:
                 missing.append("observable outcome checks")
             if not replay_observation:
                 missing.append("raw replay observation")
+            if replay.verification_kind == "paired_search" and not replay.functional_checks:
+                missing.append("paired search functional checks")
+            if replay.verification_kind == "paired_search" and (
+                len(verification_observations) != 2 or not all(verification_observations)
+            ):
+                missing.append("both paired search result observations")
             results.append(
                 ConnectionEvidence(
                     id="conn_" + digest(["replay", replay.id]),
                     claim_type="replay",
                     subject_id=replay.id,
                     complete=complete,
-                    evidence_ids=[item for item in [replay.transition_id, replay.actual_observation_id] if item],
+                    evidence_ids=[
+                        item
+                        for item in [
+                            replay.transition_id,
+                            replay.actual_observation_id,
+                            *replay.verification_observation_ids,
+                        ]
+                        if item
+                    ],
                     missing=missing,
                 )
             )
@@ -1289,16 +1588,11 @@ class Explorer:
     def _record_progress(self, validated_override: int | None = None) -> None:
         validated = validated_override
         if validated is None:
-            replayed = {
-                replay.transition_id
-                for replay in self.artifact.replays
-                if replay.status == EvidenceStatus.REPLAY_VALIDATED
-            }
             validated = len(
                 {
                     self._feature_key_for_transition(transition)
                     for transition in self.artifact.transitions
-                    if transition.id in replayed
+                    if transition.status == EvidenceStatus.REPLAY_VALIDATED
                     and self._is_meaningful_feature(transition)
                 }
             )

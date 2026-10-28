@@ -44,6 +44,10 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
                 "label": transition.action.label,
                 "status": transition.status,
                 "workflow_path_length": len(transition.workflow_path),
+                "workflow_path": [
+                    descriptor.model_dump(mode="json")
+                    for descriptor in transition.workflow_path
+                ],
                 "input_references": [item.model_dump(mode="json") for item in transition.input_references],
                 "network": [item.model_dump(mode="json") for item in transition.network],
                 "error": transition.error,
@@ -182,6 +186,9 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
         "edges": evidence_edges + feature_edges + workflow_edges,
         "advertised_unexecuted": advertised,
         "replays": [item.model_dump(mode="json") for item in artifact.replays],
+        "replay_observations": [
+            item.model_dump(mode="json") for item in artifact.replay_observations
+        ],
         "connection_evidence": [
             item.model_dump(mode="json") for item in artifact.connection_evidence
         ],

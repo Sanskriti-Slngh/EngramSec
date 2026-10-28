@@ -1,73 +1,84 @@
-# Agent 1 focused SiyuCMS interaction report
+# Agent 1 integrated search-verification report
 
 Date: 2026-10-28
-Branch: `agent1-browser-mapper-20261028`
 
 ## Outcome
 
-Agent 1 completed and independently replayed one anonymous SiyuCMS function beyond opening a page: search. The complete observed path was:
+The ordinary Agent 1 pipeline now discovers safe GET search forms from browser-observed field semantics, executes observed prerequisites, stores exact deterministic input plans in the ignored cache, and verifies search outcomes with two configured probes in two independent fresh browser contexts.
 
-`anonymous home → toggle search → exposed GET search form → fill search field → submit → query-specific result links`
+The final SiyuCMS run used the normal `agent1.cli map` command—not the dedicated historical validator—and automatically discovered:
 
-The `php` workflow had supported functional evidence in 2/2 fresh browser contexts. Each replay also submitted the contrasting ordinary query `Linux`. `php` produced six result-link labels containing the query; `Linux` produced one different query-matching result link. Their result target sets and meaningful-content fingerprints differed in both replays. A click, HTTP status, title, or echoed input was not used as sufficient evidence.
+`anonymous home → toggle search → Search GET form → query-specific result links`
 
-This is one verified anonymous search workflow, not a claim of broader SiyuCMS coverage.
+The `Search` path was functionally verified. This establishes one anonymous SiyuCMS search workflow; it does not change the historical interpretation of the old 16 navigation categories.
 
-## Content-filtering checks
+## Implementation
 
-The five paired browser fixtures were first run against the unchanged implementation. A and D passed; B, C, and E failed (`.FF.F`), reproducing three risks:
+- `agent1/search.py` recognizes safe GET search forms using observed input type, label, name, placeholder, description, method, and form shape. It contains no SiyuCMS selectors, routes, or result URLs.
+- Configurable CLI options `--search-probe` and `--search-contrast` provide two distinct ordinary probes.
+- Deterministic plans are saved in `agent1/.cache/` and artifacts retain protected plan references. A missing referenced plan raises an error rather than silently generating a different value.
+- Search-related controls receive bounded priority so the existing frontier can cross observed prerequisites such as an icon-only toggle. The explorer still executes and records each control through the normal transition machinery.
+- Each eligible search transition receives two paired-search replay records. Every record creates a fresh browser context and executes the complete prerequisite/action path for both probes.
+- Functional verification requires query-bearing result-link labels for both probes and different result target sets. Changed URL, echoed input, title, or full-page content alone cannot verify the function.
+- Navigation checks and functional checks remain separate. An echo-only fixture has successful navigation replays but an `unresolved` functional outcome.
+- Standard Graph A now includes the full workflow path, both replay IDs, functional checks/evidence, protected plan references, and the actual primary/contrast replay observations.
+- A grouped feature is promoted only after its transition satisfies all required replays; one successful path instance does not validate sibling instances.
 
-- **A — view count only: rejected as a defect.** A changing view count beside unchanged article content remained equivalent, as intended for this workflow.
-- **B — article content beside a view counter: reproduced and fixed.** Removing the closest `div` erased the article as well as the counter, causing different articles to compare equal.
-- **C — meaningful record date: reproduced and fixed.** A meaningful `<time>` record date was normalized away by the global date/clock expression.
-- **D — explicitly cosmetic clock: rejected as a defect.** A clock explicitly marked `data-volatile` remained equivalent, as intended.
-- **E — carousel content: reproduced and fixed.** Removing whole carousel regions silently erased differing featured content.
+## Independent regressions
 
-The smallest general fixes were to retain carousel regions; never remove a `div` merely because it contains a view icon; retain ordinary `<time>` elements and calendar/clock text; and reserve cosmetic removal for explicit DOM markers. Render-runtime durations remain narrowly normalized. Raw body observations are still retained separately.
+Focused tests cover:
 
-Final content-filter fixture result: 5/5 passed. The focused extraction/toggle/cosmetic set passed 7/7. The single final full suite passed 23/23.
+- Successful GET search with distinct result links: verified.
+- Fake search that only echoes input: navigation-valid, functionally unresolved.
+- Hidden form requiring an observed toggle: discovered with a two-action path and verified.
+- Exact deterministic query replay: exploration plus two primary replays used `alpha`; the two contrast executions used `beta`; the default generated search value was never used.
+- Missing protected plan: explicit failure rather than regenerated input.
+- Standard Graph A replay observations and paired replay IDs.
+- Existing wrong-record and cosmetic-content regressions remain passing.
 
-## Interaction and validation changes
+Focused search suite: **4/4 passed**. The final full Agent 1 test suite passed **27/27**.
 
-- Common implicit toggles declared with `onclick`, `aria-controls`, `data-toggle`, `data-target`, or an ID beginning `toggle-` can now be registered as observed controls. Missing accessible labels fall back to an observed element ID, with separators normalized. This exposed SiyuCMS's icon-only `toggle-search` prerequisite without a target-specific selector.
-- Supplied deterministic input references are now recorded as `input-plan:...`, not inaccurately as model-cache values.
-- `experiments/run_siyucms_search_validation.py` executes only observed safe controls, preserves the prerequisite/action path and raw observations, and evaluates non-echo result evidence plus a contrasting query.
-- The first direct attempt to click the covered search input failed. Browser hit-testing showed a sibling `text-content` region above the input. That failed attempt is retained in the evidence; executing the observed toggle resolved it.
+## Live SiyuCMS evaluation
 
-## Replay measurements
+Limits: one worker, GET only, anonymous, no model, no paid provider, two transitions, 60-second cap.
 
-- Fresh-context navigation reproduced: **2/2**
-- Fresh-context functional outcome supported: **2/2**
-- Validation failures: **0**
-- Unresolved: **0**
-- Untested paths in this selected workflow: **0**
-- Browser actions in the two verification contexts: **16**
-- Verification-run elapsed time: **7.073 seconds**
-- Local-model calls: **0**
-- Groq/OpenAI calls: **0**
-- External cost: **$0**
-- Focused iteration wall time: approximately **7 minutes**, below the 60-minute cap
+The initial integrated run functionally verified search, but the icon-only submit was represented as `unnamed button`; the existing volatile-label filter therefore omitted its feature node. This was a representation defect, not a replay failure. The generic fix derives `Search` from the observed search field when the submit lacks an accessible label.
 
-Three bounded discovery sessions were used, followed by the two verification contexts. No additional live target experiments were run afterward.
+Final corrective run (`siyucms_search_integrated_v2`):
 
-## Graph A and evidence
+- Observed paths: `toggle search` (length 1), `toggle search → Search` (length 2).
+- Replay-validated navigation features: **2**.
+- Verified functional workflows: **1** (`Search`).
+- Search paired verification: **2/2** fresh contexts.
+- All navigation replays: **3/3** (one toggle replay plus two search replays).
+- Replay failures / untested paths: **0 / 0**.
+- Graph evidence complete: **436/436** connections; missing: **0**.
+- Browser actions, including discovery, restoration, probes, and replay: **25**.
+- Elapsed: **12.823 seconds**.
+- Model calls / external cost: **0 / $0**.
 
-- Compact Graph A: `agent1/experiments/siyucms_search_milestone/graph_a.json`
-- Readable diagram: `agent1/experiments/siyucms_search_milestone/graph_a.mmd`
-- Raw observations, action/network evidence, failed discovery attempt, and replay checks: `agent1/experiments/siyucms_search_milestone/evidence.json`
+The earlier targeted milestone reported search verification 2/2 in 7.073 seconds and 16 verification actions, excluding main-explorer discovery. The integrated run is therefore functionally consistent but not a speed comparison: its 25 actions and 12.823 seconds include automatic discovery, prerequisite restoration, the toggle replay, paired search replays, checkpointing, and standard Graph construction.
 
-Graph A keeps `navigation_reproduced` and `functional_outcome_supported` separate and retains the vocabulary for `validation_failure`, `unresolved`, and `untested`. Both replay instances retain their own result links, targets, content fingerprints, and checks; grouped success is not projected onto untested instances.
+## Artifacts and reproduction
 
-## Exact reproduction command
+- Standard Graph A: `agent1/experiments/siyucms_search_integrated_v2/graph_a.json`
+- Readable diagram: `agent1/experiments/siyucms_search_integrated_v2/graph_a.mmd`
+- Metrics/report: `agent1/experiments/siyucms_search_integrated_v2/metrics.json` and `report.md`
+- The initial label-defect run remains preserved in `siyucms_search_integrated_v1`.
 
-With SiyuCMS running at the configured local URL:
+Exact command:
 
 ```bash
-.venv/bin/python experiments/run_siyucms_search_validation.py --url http://127.0.0.1:51707/ --out agent1/experiments/siyucms_search_milestone
+.venv/bin/python -m agent1.cli map \
+  --url http://127.0.0.1:51707/ \
+  --out agent1/experiments/siyucms_search_integrated_reproduction \
+  --policy grouped --seconds 60 --max-transitions 2 --max-browser-actions 80 \
+  --search-probe php --search-contrast Linux \
+  --context-label siyucms:anonymous-search
 ```
 
-## Limitation and next step
+## Limitations
 
-The outcome rule is strong for this observed search UI because result-link labels contain the submitted query and a contrast changes both targets and content. It is not a universal relevance judgment, and it does not evaluate authenticated or state-changing behavior.
+The generic evaluator is deliberately conservative. It remains unproven for search results whose useful links do not contain the query text, forms with multiple required ordinary fields, relevance ranking, authenticated search, POST search, and non-link result widgets. Those cases remain unresolved rather than receiving weaker success criteria.
 
-The single most informative next step is to integrate this paired-query, non-echo outcome assertion into the main exploration/replay pipeline so an automatically discovered search action can receive the same path-instance validation without a targeted runner.
+The next most informative test is a second independent real search UI whose result labels do not literally repeat the query, to determine whether another browser-observable non-echo signal can be added without increasing false positives.
