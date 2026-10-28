@@ -1,0 +1,18 @@
+{
+  "requests_sent": 34,
+  "pages_with_http_200_html": 33,
+  "urls_discovered": 74,
+  "urls_visited": 34,
+  "frontier_unvisited": 40,
+  "feature_groups_discovered": 15,
+  "route_patterns_visited": 20,
+  "max_depth_visited": 1,
+  "links_observed_raw": 2574,
+  "links_eligible_raw": 1638,
+  "links_unique_within_page": 777,
+  "forms_observed": 34,
+  "elapsed_seconds": 13.06,
+  "duplicate_links_within_pages": 861,
+  "links_filtered_out": 936,
+  "new_urls_per_request": 2.176
+}

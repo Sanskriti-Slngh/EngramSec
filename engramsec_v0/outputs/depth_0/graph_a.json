@@ -1,0 +1,710 @@
+{
+  "schema_version": "0.1",
+  "run_started_utc": "2026-10-28T04:41:11.597797+00:00",
+  "start_url": "http://127.0.0.1:51707/",
+  "policy": "fifo_breadth_first",
+  "limits": {
+    "max_pages": 40,
+    "max_depth": 0,
+    "delay_seconds": 0.25
+  },
+  "notes": [
+    "HTTP GET-only; JavaScript is not executed; forms are never submitted.",
+    "Feature groups are URL-path heuristics, not verified semantic features.",
+    "Unvisited means discovered but not fetched; undiscovered functionality is unknown.",
+    "No benchmark metadata, hidden target files, or vulnerability hints were used."
+  ],
+  "metrics": {
+    "requests_sent": 1,
+    "pages_with_http_200_html": 1,
+    "urls_discovered": 33,
+    "urls_visited": 1,
+    "frontier_unvisited": 32,
+    "feature_groups_discovered": 13,
+    "route_patterns_visited": 1,
+    "max_depth_visited": 0,
+    "links_observed_raw": 111,
+    "links_eligible_raw": 71,
+    "links_unique_within_page": 33,
+    "forms_observed": 1,
+    "elapsed_seconds": 0.64,
+    "duplicate_links_within_pages": 38,
+    "links_filtered_out": 40,
+    "new_urls_per_request": 33.0
+  },
+  "features": {
+    "about": {
+      "discovered": 1,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/about.html"
+      ]
+    },
+    "article": {
+      "discovered": 5,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/Article/index.html?cate=5",
+        "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=12",
+        "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=13",
+        "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=6",
+        "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=7"
+      ]
+    },
+    "contact": {
+      "discovered": 1,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/contact.html"
+      ]
+    },
+    "culture": {
+      "discovered": 1,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/culture.html"
+      ]
+    },
+    "download": {
+      "discovered": 1,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/download.html"
+      ]
+    },
+    "home": {
+      "discovered": 2,
+      "visited": 1,
+      "example_urls": [
+        "http://127.0.0.1:51707/",
+        "http://127.0.0.1:51707/index.html"
+      ]
+    },
+    "honours": {
+      "discovered": 4,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/honours.html",
+        "http://127.0.0.1:51707/index/honours/4.html",
+        "http://127.0.0.1:51707/index/honours/5.html",
+        "http://127.0.0.1:51707/index/honours/6.html"
+      ]
+    },
+    "information": {
+      "discovered": 1,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/information.html"
+      ]
+    },
+    "introduction": {
+      "discovered": 1,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/introduction.html"
+      ]
+    },
+    "news": {
+      "discovered": 1,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/news.html"
+      ]
+    },
+    "product": {
+      "discovered": 7,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/product.html",
+        "http://127.0.0.1:51707/index/product.html?cate=10",
+        "http://127.0.0.1:51707/index/product.html?cate=9",
+        "http://127.0.0.1:51707/index/product/5.html?cate=9",
+        "http://127.0.0.1:51707/index/product/6.html?cate=9"
+      ]
+    },
+    "team": {
+      "discovered": 7,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/team.html",
+        "http://127.0.0.1:51707/index/team/11.html",
+        "http://127.0.0.1:51707/index/team/12.html",
+        "http://127.0.0.1:51707/index/team/13.html",
+        "http://127.0.0.1:51707/index/team/14.html"
+      ]
+    },
+    "user": {
+      "discovered": 1,
+      "visited": 0,
+      "example_urls": [
+        "http://127.0.0.1:51707/index/user/index.html"
+      ]
+    }
+  },
+  "nodes": [
+    {
+      "id": "http://127.0.0.1:51707/",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/",
+      "depth": 0,
+      "feature": "home",
+      "route_pattern": "/",
+      "status": "visited",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "elapsed_ms": 560.6,
+      "truncated": false,
+      "error": null,
+      "title": "SIYUCMS \u5b98\u7f51",
+      "forms_count": 1,
+      "buttons": [],
+      "links_on_page": 111,
+      "eligible_links_on_page": 71,
+      "unique_links_on_page": 33
+    },
+    {
+      "id": "http://127.0.0.1:51707/index.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index.html",
+      "depth": 1,
+      "feature": "home",
+      "route_pattern": "/index.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/Article/index.html?cate=5",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/Article/index.html?cate=5",
+      "depth": 1,
+      "feature": "article",
+      "route_pattern": "/index/Article/index.html?cate",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=12",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=12",
+      "depth": 1,
+      "feature": "article",
+      "route_pattern": "/index/Article/info.html?cate&id",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=13",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=13",
+      "depth": 1,
+      "feature": "article",
+      "route_pattern": "/index/Article/info.html?cate&id",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=6",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=6",
+      "depth": 1,
+      "feature": "article",
+      "route_pattern": "/index/Article/info.html?cate&id",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=7",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=7",
+      "depth": 1,
+      "feature": "article",
+      "route_pattern": "/index/Article/info.html?cate&id",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/about.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/about.html",
+      "depth": 1,
+      "feature": "about",
+      "route_pattern": "/index/about.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/contact.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/contact.html",
+      "depth": 1,
+      "feature": "contact",
+      "route_pattern": "/index/contact.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/culture.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/culture.html",
+      "depth": 1,
+      "feature": "culture",
+      "route_pattern": "/index/culture.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/download.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/download.html",
+      "depth": 1,
+      "feature": "download",
+      "route_pattern": "/index/download.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/honours.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/honours.html",
+      "depth": 1,
+      "feature": "honours",
+      "route_pattern": "/index/honours.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/honours/4.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/honours/4.html",
+      "depth": 1,
+      "feature": "honours",
+      "route_pattern": "/index/honours/{id}.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/honours/5.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/honours/5.html",
+      "depth": 1,
+      "feature": "honours",
+      "route_pattern": "/index/honours/{id}.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/honours/6.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/honours/6.html",
+      "depth": 1,
+      "feature": "honours",
+      "route_pattern": "/index/honours/{id}.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/information.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/information.html",
+      "depth": 1,
+      "feature": "information",
+      "route_pattern": "/index/information.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/introduction.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/introduction.html",
+      "depth": 1,
+      "feature": "introduction",
+      "route_pattern": "/index/introduction.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/news.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/news.html",
+      "depth": 1,
+      "feature": "news",
+      "route_pattern": "/index/news.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/product.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/product.html",
+      "depth": 1,
+      "feature": "product",
+      "route_pattern": "/index/product.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/product.html?cate=10",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/product.html?cate=10",
+      "depth": 1,
+      "feature": "product",
+      "route_pattern": "/index/product.html?cate",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/product.html?cate=9",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/product.html?cate=9",
+      "depth": 1,
+      "feature": "product",
+      "route_pattern": "/index/product.html?cate",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/product/5.html?cate=9",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/product/5.html?cate=9",
+      "depth": 1,
+      "feature": "product",
+      "route_pattern": "/index/product/{id}.html?cate",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/product/6.html?cate=9",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/product/6.html?cate=9",
+      "depth": 1,
+      "feature": "product",
+      "route_pattern": "/index/product/{id}.html?cate",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/product/7.html?cate=9",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/product/7.html?cate=9",
+      "depth": 1,
+      "feature": "product",
+      "route_pattern": "/index/product/{id}.html?cate",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/product/8.html?cate=9",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/product/8.html?cate=9",
+      "depth": 1,
+      "feature": "product",
+      "route_pattern": "/index/product/{id}.html?cate",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/team.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/team.html",
+      "depth": 1,
+      "feature": "team",
+      "route_pattern": "/index/team.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/team/11.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/team/11.html",
+      "depth": 1,
+      "feature": "team",
+      "route_pattern": "/index/team/{id}.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/team/12.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/team/12.html",
+      "depth": 1,
+      "feature": "team",
+      "route_pattern": "/index/team/{id}.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/team/13.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/team/13.html",
+      "depth": 1,
+      "feature": "team",
+      "route_pattern": "/index/team/{id}.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/team/14.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/team/14.html",
+      "depth": 1,
+      "feature": "team",
+      "route_pattern": "/index/team/{id}.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/team/15.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/team/15.html",
+      "depth": 1,
+      "feature": "team",
+      "route_pattern": "/index/team/{id}.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/team/16.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/team/16.html",
+      "depth": 1,
+      "feature": "team",
+      "route_pattern": "/index/team/{id}.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    },
+    {
+      "id": "http://127.0.0.1:51707/index/user/index.html",
+      "type": "page",
+      "url": "http://127.0.0.1:51707/index/user/index.html",
+      "depth": 1,
+      "feature": "user",
+      "route_pattern": "/index/user/index.html",
+      "status": "discovered_not_visited",
+      "http_status": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/user/index.html",
+      "type": "links_to",
+      "label": "\u7528\u6237\u4e2d\u5fc3"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/",
+      "type": "links_to",
+      "label": ""
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/about.html",
+      "type": "links_to",
+      "label": "\u5173\u4e8e\u6211\u4eec"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/introduction.html",
+      "type": "links_to",
+      "label": "\u516c\u53f8\u4ecb\u7ecd"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/culture.html",
+      "type": "links_to",
+      "label": "\u516c\u53f8\u6587\u5316"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/news.html",
+      "type": "links_to",
+      "label": "\u65b0\u95fb\u4e2d\u5fc3"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/Article/index.html?cate=5",
+      "type": "links_to",
+      "label": "\u516c\u53f8\u65b0\u95fb"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/information.html",
+      "type": "links_to",
+      "label": "\u884c\u4e1a\u8d44\u8baf"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/honours.html",
+      "type": "links_to",
+      "label": "\u8d44\u8d28\u8363\u8a89"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/product.html",
+      "type": "links_to",
+      "label": "\u4ea7\u54c1\u4e2d\u5fc3"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/product.html?cate=9",
+      "type": "links_to",
+      "label": "\u7cbe\u9009\u4ea7\u54c1"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/product.html?cate=10",
+      "type": "links_to",
+      "label": "\u70ed\u9500\u4ea7\u54c1"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/download.html",
+      "type": "links_to",
+      "label": "\u8d44\u6599\u4e0b\u8f7d"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/team.html",
+      "type": "links_to",
+      "label": "\u4f18\u79c0\u56e2\u961f"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/contact.html",
+      "type": "links_to",
+      "label": "\u8054\u7cfb\u6211\u4eec"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/product/8.html?cate=9",
+      "type": "links_to",
+      "label": ""
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/product/7.html?cate=9",
+      "type": "links_to",
+      "label": ""
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/product/6.html?cate=9",
+      "type": "links_to",
+      "label": ""
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/product/5.html?cate=9",
+      "type": "links_to",
+      "label": ""
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=13",
+      "type": "links_to",
+      "label": ""
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=12",
+      "type": "links_to",
+      "label": ""
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=7",
+      "type": "links_to",
+      "label": ""
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=6",
+      "type": "links_to",
+      "label": ""
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/honours/6.html",
+      "type": "links_to",
+      "label": "07 Feb"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/honours/5.html",
+      "type": "links_to",
+      "label": "07 Feb"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/honours/4.html",
+      "type": "links_to",
+      "label": "07 Feb"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/team/16.html",
+      "type": "links_to",
+      "label": "\u56fd\u5185\u7f51\u7edc\u603b\u76d1"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/team/15.html",
+      "type": "links_to",
+      "label": "\u56fd\u5185\u6280\u672f\u603b\u76d1"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/team/14.html",
+      "type": "links_to",
+      "label": "\u56fd\u5916\u9500\u552e\u603b\u76d1"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/team/13.html",
+      "type": "links_to",
+      "label": "\u56fd\u5185\u4fdd\u5bc6\u8bbe\u8ba1\u5e08"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/team/12.html",
+      "type": "links_to",
+      "label": "\u56fd\u5185\u7f51\u7edc\u603b\u76d1"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index/team/11.html",
+      "type": "links_to",
+      "label": "\u56fd\u5185\u6280\u672f\u603b\u76d1"
+    },
+    {
+      "source": "http://127.0.0.1:51707/",
+      "target": "http://127.0.0.1:51707/index.html",
+      "type": "links_to",
+      "label": ""
+    }
+  ],
+  "forms": [
+    {
+      "page": "http://127.0.0.1:51707/",
+      "method": "GET",
+      "action": "http://127.0.0.1:51707/index/index/search.html",
+      "field_names": [
+        {
+          "name": "search",
+          "type": "search"
+        }
+      ],
+      "submitted": false
+    }
+  ],
+  "trace": [
+    {
+      "step": 1,
+      "url": "http://127.0.0.1:51707/",
+      "depth": 0,
+      "status": 200,
+      "new_urls": 32,
+      "elapsed_ms": 560.6
+    }
+  ]
+}
