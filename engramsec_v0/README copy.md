@@ -60,3 +60,38 @@ python crawler.py --url http://127.0.0.1:51707/ --max-pages 40 --max-depth 4 --d
 2. A/B test 10, 20, 40 GET budgets. Record discovered features, frontier, depth, and cost.
 3. Build a second policy that prioritizes novel route patterns; compare against this unchanged BFS baseline at the **same budget**.
 4. Later add Playwright for JS-only buttons and multi-step client-side flows; keep HTTP-only V0 as the control.
+
+
+## MY VERSION/UNDERSTANDING HUMAN WRITTEN
+
+Main implementation is in crawler.py: It's a deterministic crawler, not yet an autonomous AI agent.
+
+Uses BFS:
+
+1. Start at the homepage by sending HTTP HTTP GET to http://127.0.0.1:51707/
+
+2. Extract links - homepage revealed 32 previously unknown eligible URLs.
+
+3. Put URLs in a queue - Visit them in the order discovered, not according to importance.
+
+4. Update Graph A
+
+5. Repeat until queue is empty
+
+Function	What it does
+canonical_url()	Standardizes URLs, sorts query parameters, removes fragments and tracking parameters
+is_safe_page()	Restricts exploration to the same origin and filters downloads and obviously dangerous URLs
+fetch_html()	Sends GET requests with timeouts and a 1.5 MB HTML limit
+parse_page()	Extracts anchors, form field names, and button labels
+feature_name()	Groups URLs by their path, such as product, user, or article
+route_pattern()	Replaces numerical identifiers with {id} and keeps query parameter names
+crawl()	Implements the BFS queue, records discoveries, and computes metrics
+save_outputs()	Writes Graph A, Mermaid, metrics, report, and trace files
+
+
+Parameter	Default	What it controls
+--url	Required	Starting webpage
+--max-pages	40	Maximum number of HTTP GET requests
+--max-depth	4	Maximum number of link transitions away from the start
+--delay	0.25	Seconds between requests
+--out	outputs/v0_bfs	Output directory
