@@ -1,0 +1,361 @@
+# Agent 1 run agent1-20261029T003701Z
+
+- Code revision: `2b8aa183db268243e36a76153407758ad6b218ff+mapper-a787d6fa301e`
+- Policy: `coverage`
+- Target: `http://127.0.0.1:3456/`
+- Elapsed: 195.480 seconds
+- Browser actions (including setup/replay): 600
+- Replay-validated navigation categories: 5
+- Verified functional workflows: 0
+- Reproduced validation failures: 0
+- Functional outcomes unresolved/untested/failed: 174
+- Replay navigation success: 15/33
+- Replay failures / untested paths: 18/156
+- Graph connections with complete evidence: 9084/9084
+- Graph connections missing evidence: 0
+- Incorrect state merges found by audit: 0
+- Redundant raw states: 0
+- Model calls / cost: 0 / $0.000000
+
+## Fully replay-validated navigation categories
+
+- `feature_627ffbd129e0ee3e` — Observed link workflow to /test/dynamic-content/{instance}-localstorage
+- `feature_72423f96b86e37e6` — Observed link workflow to /test/forms/{instance}-get-form
+- `feature_81ae569b7def8579` — frames opens /category/frames
+- `feature_93fb4548627b69d7` — Observed link workflow to /test/buttons/{instance}-html-button
+- `feature_c07dc08199596715` — other opens /category/other
+
+## Functional path-instance outcomes
+
+- `workflow_582b049dc7fc2a45fc` — View results →: `failed` (path length 1)
+- `workflow_e4262746d756582268` — YAML export: `failed` (path length 2)
+- `workflow_1a5f40716c8911c969` — results.json: `failed` (path length 1)
+- `workflow_a108fd9861b19f9cb9` — Results: `failed` (path length 1)
+- `workflow_b6f113efb579bf9247` — XMLHttpRequest POST: `navigation_only` (path length 2)
+- `workflow_184abeff67a203842e` — Submit via XHR: `not_tested` (path length 3)
+- `workflow_2b3db2948bd40adb85` — Submit via XHR: `not_tested` (path length 4)
+- `workflow_1130b322cdbf5b8cda` — results.json: `not_tested` (path length 4)
+- `workflow_58779037ce9761b5da` — other: `navigation_only` (path length 1)
+- `workflow_caa78938b244a06ea2` — results.json: `not_tested` (path length 2)
+- `workflow_453e6f42f7768c3eba` — navigation: `failed` (path length 1)
+- `workflow_583d87a846e45a604e` — window.open() navigation: `not_tested` (path length 2)
+- `workflow_abf288af1eca32a584` — Open popup: `not_tested` (path length 3)
+- `workflow_cc840c9350d6781e7e` — results.json: `not_tested` (path length 3)
+- `workflow_77433027cdae2afc9d` — links: `failed` (path length 1)
+- `workflow_7992b208dd4215a6e8` — SVG <a> element: `not_tested` (path length 2)
+- `workflow_8fd16687b625d7210d` — unnamed link: `not_tested` (path length 3)
+- `workflow_4c4ed345feb33c900a` — Back to links: `not_tested` (path length 4)
+- `workflow_944b7ec7dea2248c3c` — SVG <a> element: `not_tested` (path length 5)
+- `workflow_d5aa0db72f14088e24` — results.json: `not_tested` (path length 3)
+- `workflow_4905b34da6a890904b` — js-events: `failed` (path length 1)
+- `workflow_c82e0a8e43a38dbe12` — Tab panel with JS-rendered content: `navigation_only` (path length 2)
+- `workflow_328c256b804a0ec934` — Tab 3: `not_tested` (path length 3)
+- `workflow_2088c0df2146775de6` — Tab 3: `not_tested` (path length 4)
+- `workflow_06fdfbc99d4e6e6220` — results.json: `not_tested` (path length 4)
+- `workflow_918092616cf351fafc` — frames: `navigation_only` (path length 1)
+- `workflow_569870c3f6a9b135d0` — results.json: `not_tested` (path length 2)
+- `workflow_c7807218656d938d11` — forms: `failed` (path length 1)
+- `workflow_a6f116f6ce4cc3d4c0` — XMLHttpRequest POST: `not_tested` (path length 2)
+- `workflow_90ed6efe51b1744ed1` — results.json: `not_tested` (path length 3)
+- `workflow_98948a0942c1362042` — dynamic-content: `failed` (path length 1)
+- `workflow_62a03bcbeb7a6bc235` — Score link inside <template> element: `not_tested` (path length 2)
+- `workflow_1eb349753e79cd0511` — Load content: `not_tested` (path length 3)
+- `workflow_e36bf5613ae4d1fd85` — Click me: `not_tested` (path length 4)
+- `workflow_e0432601117b75ba31` — Back to dynamic-content: `not_tested` (path length 5)
+- `workflow_0d5ca96a504e6679c1` — Score link inside <template> element: `not_tested` (path length 6)
+- `workflow_14456a9d57d3fbdb93` — results.json: `not_tested` (path length 3)
+- `workflow_a6375d6a46681bbd0f` — Crawlground: `navigation_only` (path length 1)
+- `workflow_e8c772b021dc7b6f43` — Categories: `navigation_only` (path length 1)
+- `workflow_11c428179fc3ce83d8` — buttons: `failed` (path length 1)
+- `workflow_215a2b63b4368fac1f` — results.json: `failed` (path length 2)
+- `workflow_2526ac7b249d150ebb` — All results: `not_tested` (path length 4)
+- `workflow_cb8d3c555b22a00794` — YAML export: `not_tested` (path length 5)
+- `workflow_2fd806142cf9031548` — Single-level CSS :hover dropdown: `not_tested` (path length 2)
+- `workflow_35a78d4124d810a4f1` — Menu ▾: `not_tested` (path length 3)
+- `workflow_31ccefdbb444a5c75a` — Option 3: `not_tested` (path length 4)
+- `workflow_cdcc2962c751accdeb` — Option 1: `not_tested` (path length 4)
+- `workflow_be66220351353a4236` — Back to js-events: `not_tested` (path length 5)
+- `workflow_4c7a64053af1976afa` — Tab panel with JS-rendered content: `not_tested` (path length 6)
+- `workflow_7254c2205c6ab6baca` — results.json: `not_tested` (path length 3)
+- `workflow_23e938d03b950d9adf` — Menu ▾: `not_tested` (path length 4)
+- `workflow_472c51d1ea69919d5d` — results.json: `not_tested` (path length 4)
+- `workflow_c6288507b102fa782d` — results.json: `failed` (path length 2)
+- `workflow_280bd0a60606880d7e` — results.json: `failed` (path length 2)
+- `workflow_84b9cde4e17457f723` — window.location.replace() navigation: `navigation_only` (path length 2)
+- `workflow_aa8dbd71ab4042c78f` — results.json: `not_tested` (path length 3)
+- `workflow_6c50f023fd727a5d5b` — results.json: `failed` (path length 2)
+- `workflow_4241fbf429d3ee5199` — Right-click (contextmenu) link injection: `not_tested` (path length 2)
+- `workflow_a0d0c2561075f5cc0d` — results.json: `not_tested` (path length 3)
+- `workflow_d5582ffcafa110df31` — Results: `failed` (path length 2)
+- `workflow_7bd4b37cadad063ec6` — YAML export: `not_tested` (path length 3)
+- `workflow_9a13b47ed16ec5baf9` — Results: `not_tested` (path length 2)
+- `workflow_c93f20a013128427e8` — XMLHttpRequest POST: `not_tested` (path length 3)
+- `workflow_22f0a8ad8b7fc098eb` — Results: `not_tested` (path length 3)
+- `workflow_9f480431dc13946269` — window.open() navigation: `not_tested` (path length 3)
+- `workflow_83f14c7b9f62c21478` — Results: `not_tested` (path length 3)
+- `workflow_92e003cfd2fd6e2322` — window.location.replace() navigation: `not_tested` (path length 3)
+- `workflow_cfc3fc840ed2c4b959` — Results: `not_tested` (path length 3)
+- `workflow_8aff9163f1b88379f9` — window.location assigned in setTimeout: `not_tested` (path length 3)
+- `workflow_0f4e3d8b61fe599bff` — results.json: `not_tested` (path length 4)
+- `workflow_fa22a71f0fdf68098d` — Results: `not_tested` (path length 2)
+- `workflow_f7c9933b12faa27444` — Tab panel with JS-rendered content: `not_tested` (path length 3)
+- `workflow_1686898022603e8262` — Results: `not_tested` (path length 3)
+- `workflow_45938898d98e3de021` — SVG <a> element: `not_tested` (path length 3)
+- `workflow_6a9f8480f789892975` — Results: `not_tested` (path length 3)
+- `workflow_fb020cb4df1214a15e` — Single-level CSS :hover dropdown: `not_tested` (path length 3)
+- `workflow_d45601c5e5aceab8fc` — results.json: `not_tested` (path length 3)
+- `workflow_afa31e9039818dd14e` — Results: `not_tested` (path length 2)
+- `workflow_9ec60078e1b1dd768c` — Score link inside <template> element: `not_tested` (path length 3)
+- `workflow_46a93ab3c3ab619e66` — Results: `not_tested` (path length 3)
+- `workflow_c2c3ee6ff7aefc8c3b` — Right-click (contextmenu) link injection: `not_tested` (path length 3)
+- `workflow_a8479e76beb9846c02` — Results: `not_tested` (path length 3)
+- `workflow_3da76e3d431718a28c` — results.json: `not_tested` (path length 3)
+- `workflow_b9dea171e78c7d2398` — window.location assigned in setTimeout: `navigation_only` (path length 2)
+- `workflow_ecb939aa8ddf09d409` — Results: `not_tested` (path length 3)
+- `workflow_41cd20a0e23294623f` — Results: `not_tested` (path length 3)
+- `workflow_1cada456ac76dede06` — POST form with submit button: `not_tested` (path length 3)
+- `workflow_1ad67a1a6143a30b84` — Submit: `not_tested` (path length 4)
+- `workflow_318406099013669a36` — Back to forms: `not_tested` (path length 5)
+- `workflow_049fe2de17feb96d24` — XMLHttpRequest POST: `not_tested` (path length 6)
+- `workflow_c45d7d44833c82a6c2` — forms: `not_tested` (path length 3)
+- `workflow_2ebff1aebc3733ad65` — results.json: `not_tested` (path length 4)
+- `workflow_ca0cc6fe7de42d770e` — results.json: `not_tested` (path length 2)
+- `workflow_872d0e232fd521a4f3` — Results: `failed` (path length 2)
+- `workflow_39e812ebe612319d84` — YAML export: `failed` (path length 2)
+- `workflow_b7b339880860b073b8` — Results: `not_tested` (path length 2)
+- `workflow_6430445bb67149d287` — XMLHttpRequest POST: `not_tested` (path length 2)
+- `workflow_7a7f81310ec06ec7e7` — Crawlground: `not_tested` (path length 3)
+- `workflow_12da987b8bd3ae8bcf` — POST form with submit button: `navigation_only` (path length 2)
+- `workflow_7fa36b4293c0a6cc50` — results.json: `not_tested` (path length 3)
+- `workflow_181768b1b84530a65c` — localStorage token gates score link: `navigation_only` (path length 2)
+- `workflow_59b472862ae3783618` — Set flag: `not_tested` (path length 3)
+- `workflow_c76471515e037c2194` — Click me: `not_tested` (path length 4)
+- `workflow_11c645c973c647b6c1` — results.json: `not_tested` (path length 5)
+- `workflow_67ad43a18d7c6697d5` — Results: `failed` (path length 2)
+- `workflow_8671e564d4b7d760f6` — YAML export: `not_tested` (path length 3)
+- `workflow_4c74f2f5fbebf6aff5` — results.json: `not_tested` (path length 2)
+- `workflow_be80f9a062fb560378` — XMLHttpRequest POST: `not_tested` (path length 3)
+- `workflow_7170528a2000772e7d` — Categories: `not_tested` (path length 3)
+- `workflow_278ee44e6b98ae41c1` — Link inside same-origin iframe (srcdoc): `not_tested` (path length 2)
+- `workflow_cbfe81ca5f847a45a2` — results.json: `not_tested` (path length 3)
+- `workflow_bffd093a35144cc212` — window.open() navigation: `not_tested` (path length 3)
+- `workflow_8dc68e629e65e04ead` — navigation: `not_tested` (path length 3)
+- `workflow_2ffde94e70c2ec139f` — window.open() navigation: `navigation_only` (path length 2)
+- `workflow_e0560003233f3abbd0` — Crawlground: `not_tested` (path length 3)
+- `workflow_5f039bbaa8933dfb18` — window.open() navigation: `not_tested` (path length 3)
+- `workflow_63294de736190acd57` — Categories: `not_tested` (path length 3)
+- `workflow_088de15cae935f8732` — Multi-step form wizard: `not_tested` (path length 2)
+- `workflow_79961361ed8b90b9a2` — Next →: `not_tested` (path length 3)
+- `workflow_d5f89eff51cf2ea6d1` — Finish: `not_tested` (path length 4)
+- `workflow_b75f0ebd387a6b9e17` — results.json: `not_tested` (path length 5)
+- `workflow_a1178ca058d2b6b87e` — window.location.replace() navigation: `not_tested` (path length 3)
+- `workflow_13b6fb491a7d47e1d6` — navigation: `not_tested` (path length 3)
+- `workflow_b8788d4c599a0fe627` — window.location.replace() navigation: `navigation_only` (path length 2)
+- `workflow_2068d2f1580e6e133d` — Crawlground: `not_tested` (path length 3)
+- `workflow_eb7a9508204a0d711f` — window.location.replace() navigation: `not_tested` (path length 3)
+- `workflow_9e244381df58c3dccc` — Categories: `not_tested` (path length 3)
+- `workflow_2192197c37c79ebd95` — Plain anchor with href: `not_tested` (path length 2)
+- `workflow_6bbefd65b26f80bcd9` — Click me: `not_tested` (path length 3)
+- `workflow_dee56660d17deaba98` — results.json: `not_tested` (path length 4)
+- `workflow_a7d6e33fd3accf5e63` — results.json: `not_tested` (path length 3)
+- `workflow_e91b6962967f28e129` — window.location assigned in setTimeout: `not_tested` (path length 3)
+- `workflow_75d89a2d36e2becd15` — navigation: `not_tested` (path length 3)
+- `workflow_2d73a2942ce9735b93` — window.location assigned in setTimeout: `navigation_only` (path length 2)
+- `workflow_f63fd0e1bddb870dba` — Crawlground: `not_tested` (path length 3)
+- `workflow_2064b6881772a3724b` — window.location assigned in setTimeout: `not_tested` (path length 3)
+- `workflow_a2d5b4fa54d3d12e77` — Categories: `not_tested` (path length 3)
+- `workflow_deac4c844dc87825b7` — Popover API — link injected on open: `not_tested` (path length 2)
+- `workflow_1af675b1e56d006459` — Open popover: `not_tested` (path length 3)
+- `workflow_52cf0fae447eeeee38` — Close: `not_tested` (path length 4)
+- `workflow_b0d24797907fa08891` — Open popover: `not_tested` (path length 5)
+- `workflow_29697bef33b2e5807b` — Click me: `not_tested` (path length 4)
+- `workflow_28d7322c60ef3179da` — results.json: `not_tested` (path length 5)
+- `workflow_2bc3555c4f21238435` — Open popover: `not_tested` (path length 4)
+- `workflow_dd2a10c3b59a467b0c` — results.json: `not_tested` (path length 5)
+- `workflow_22ed2a6f7a75f7f67d` — Link injected when <details> is opened: `not_tested` (path length 2)
+- `workflow_4754a2a88cf76866fd` — Click to expand: `not_tested` (path length 3)
+- `workflow_a4f2a6fc5d77a80d48` — Click me: `not_tested` (path length 4)
+- `workflow_f22b9f5be212c7d048` — results.json: `not_tested` (path length 5)
+- `workflow_b5d508d749dd1c76b2` — Click to expand: `not_tested` (path length 4)
+- `workflow_5753f0c593f71d9f33` — Click to expand: `not_tested` (path length 5)
+- `workflow_9a29505d2fd33465b6` — results.json: `not_tested` (path length 4)
+- `workflow_f367b4d260d4546f24` — Tab panel with JS-rendered content: `not_tested` (path length 3)
+- `workflow_338744dfd71b28c31a` — js-events: `not_tested` (path length 3)
+- `workflow_bc2a1e0d9b40fe3f8b` — Tab panel with JS-rendered content: `not_tested` (path length 4)
+- `workflow_859ad9bccd81c6e68a` — Crawlground: `not_tested` (path length 3)
+- `workflow_1dd995b6d80e71e08b` — Tab panel with JS-rendered content: `not_tested` (path length 3)
+- `workflow_91a1666a9c2f47671c` — Categories: `not_tested` (path length 3)
+- `workflow_486c210365ca2c2e83` — HTML <button> with onclick: `navigation_only` (path length 2)
+- `workflow_08094e60b6fde58b0f` — Click me: `not_tested` (path length 3)
+- `workflow_d18ba4b8c36b35a449` — Back to buttons: `not_tested` (path length 4)
+- `workflow_344f26edfb789f4ac3` — results.json: `not_tested` (path length 5)
+- `workflow_bb149b874b4505aea6` — Results: `not_tested` (path length 2)
+- `workflow_84bd26000a0d32b78e` — YAML export: `not_tested` (path length 3)
+- `workflow_14882fa3e197867f00` — XMLHttpRequest POST: `not_tested` (path length 3)
+- `workflow_9cc5d450ea6ec0701d` — window.open() navigation: `not_tested` (path length 3)
+- `workflow_86665d2dd577ea7eff` — window.location.replace() navigation: `not_tested` (path length 3)
+- `workflow_d9e4628b5331ada5e3` — window.location assigned in setTimeout: `not_tested` (path length 3)
+- `workflow_9a9983de0fdc8f71b2` — Tab panel with JS-rendered content: `not_tested` (path length 3)
+- `workflow_49ba252253e5c46ba2` — SVG <a> element: `not_tested` (path length 3)
+- `workflow_0ca116454aaba31f13` — links: `not_tested` (path length 3)
+- `workflow_492d12ef4e0a40734e` — SVG <a> element: `not_tested` (path length 4)
+- `workflow_75fe86f2f8e4fd9296` — Crawlground: `not_tested` (path length 3)
+- `workflow_50e9ab17cebd46fb20` — SVG <a> element: `not_tested` (path length 3)
+- `workflow_287884e83b3e13a79a` — Categories: `not_tested` (path length 3)
+- `workflow_692716d2eae1b3a874` — SVG <a> element: `not_tested` (path length 3)
+- `workflow_cb5c257a53796f04ea` — GET form with submit button: `navigation_only` (path length 2)
+- `workflow_c3f26941d2899aa7af` — Submit: `not_tested` (path length 3)
+- `workflow_6dee029529171e77a7` — results.json: `not_tested` (path length 4)
+- `workflow_1d7338553f432001ab` — Single-level CSS :hover dropdown: `not_tested` (path length 3)
+- `workflow_37e2f25fac2b97f1f9` — Results: `not_tested` (path length 3)
+- `workflow_0dda07df476c9862d3` — YAML export: `not_tested` (path length 3)
+- `workflow_9de686721106a02f57` — Single-level CSS :hover dropdown: `not_tested` (path length 3)
+- `workflow_af687887f31c54eb23` — js-events: `not_tested` (path length 3)
+- `workflow_7365627d13b2eeb03d` — Single-level CSS :hover dropdown: `not_tested` (path length 4)
+- `workflow_6ed0b6c4cfd4de89cb` — Crawlground: `not_tested` (path length 3)
+- `workflow_627244407467148494` — Single-level CSS :hover dropdown: `not_tested` (path length 3)
+- `workflow_9ee572b185bcd4099a` — Categories: `not_tested` (path length 3)
+- `workflow_750c0a1e25f64cf578` — pointerup event triggers navigation: `not_tested` (path length 2)
+
+## Observed but not replay-validated
+
+- `feature_055b326a21e5ac0b` — Observed link workflow to /test/links/{instance}-anchor-href
+- `feature_0a74b6dad3e18238` — Close leads to Popover API — link injected on open
+- `feature_0dfc5094cf609da0` — Next → leads to Multi-step form wizard
+- `feature_0f323cfacc8c4699` — Click to expand leads to Link injected when <details> is opened
+- `feature_1031e8c76f431515` — Observed link workflow to /test/js-events/{instance}-tab-panel
+- `feature_18d2c607d6ea0503` — Menu ▾ leads to Single-level CSS :hover dropdown
+- `feature_1cc16589cb2f7764` — Observed link workflow to /score/dynamic-content/{instance}-details-toggle
+- `feature_20376372b346fc88` — Click to expand leads to Link injected when <details> is opened
+- `feature_268cc9bc0672ad96` — Click me leads to Scored
+- `feature_29807482f41573cd` — Submit leads to Scored
+- `feature_29de62b681e7f2b3` — Open popover leads to Popover API — link injected on open
+- `feature_2b9002120dc2c497` — Observed link workflow to /test/links/{instance}-svg-anchor
+- `feature_37331aef26931b1d` — Observed link workflow to /test/forms/{instance}-xhr-post
+- `feature_39471068fd7536d6` — Observed link workflow to /test/js-events/{instance}-popover
+- `feature_461d92080e24b75c` — Observed link workflow to /test/navigation/{instance}-window-replace
+- `feature_5ce256c24795e4ad` — Observed link workflow to /
+- `feature_61136dc8e6e7b42a` — Observed link workflow to /test/forms/{instance}-post-form
+- `feature_6b56a24b05a424aa` — Observed link workflow to /score/js-events/{instance}-popover
+- `feature_7334cf8c864ccf38` — Observed link workflow to /test/navigation/{instance}-window-location-timeout
+- `feature_73729825cfd8e159` — Open popover leads to Popover API — link injected on open
+- `feature_747a88432fa2845c` — Tab 3 leads to Tab panel with JS-rendered content
+- `feature_7f5ce4933090022c` — Finish leads to Scored
+- `feature_8ceebd43e189a84e` — Observed link workflow to /test/dynamic-content/{instance}-template-element
+- `feature_97d6f7760d013871` — Load content leads to Score link inside <template> element
+- `feature_9a04f57eda706b7b` — Observed link workflow to /test/js-events/{instance}-contextmenu
+- `feature_9af94582c6840f46` — Submit leads to Scored
+- `feature_a2b72eef5a863ca2` — Set flag leads to localStorage token gates score link
+- `feature_afbfdf3b89f55427` — Observed link workflow to /test/js-events/{instance}-pointer-events
+- `feature_b05061f410d51ad3` — Observed link workflow to /test/forms/{instance}-multistep-wizard
+- `feature_b8672fe8de95e5fe` — Observed link workflow to /test/navigation/{instance}-window-open
+- `feature_c232b23cf1de4013` — Observed link workflow to /score/links/{instance}-anchor-href
+- `feature_c236ac80b4123873` — Observed link workflow to /test/js-events/{instance}-css-hover-dropdown
+- `feature_ca75e9682bbe5618` — Submit via XHR leads to XMLHttpRequest POST
+- `feature_d24cf3bba4ed2688` — Observed link workflow to /score/dynamic-content/{instance}-template-element
+- `feature_d46829cf85b40872` — Observed link workflow to /test/dynamic-content/{instance}-details-toggle
+- `feature_eaa58c2d51909af5` — Observed link workflow to /score/js-events/{instance}-css-hover-dropdown
+- `feature_f42c08407d510ac3` — Observed link workflow to /test/frames/{instance}-iframe-srcdoc
+- `feature_fa5336044cb1ec2a` — Observed link workflow to /score/dynamic-content/{instance}-localstorage
+
+## Failed or blocked transitions
+
+- `tr_fffe9307483a64273fea` — window.open() navigation: RuntimeError: saved return path restored 887af9f4c04ba43a, expected d026cc72b3e32634
+- `tr_cd4b27e21da840572897` — window.location.replace() navigation: RuntimeError: saved return path restored 2db7a019ad6fbd1e, expected d026cc72b3e32634
+- `tr_364bff0f0ee8b25c1c4a` — window.location assigned in setTimeout: RuntimeError: saved return path restored 41b18c858ead7d1e, expected d026cc72b3e32634
+- `tr_283b23c5eb0ab3352995` — Tab panel with JS-rendered content: RuntimeError: saved return path restored 41b18c858ead7d1e, expected d026cc72b3e32634
+- `tr_c1666ed458eb9c6772ae` — SVG <a> element: RuntimeError: saved return path restored 41b18c858ead7d1e, expected d026cc72b3e32634
+- `tr_9e8c2a10bb4f45db7197` — Single-level CSS :hover dropdown: RuntimeError: saved return path restored 41b18c858ead7d1e, expected d026cc72b3e32634
+- `tr_80261d1eb9106eeffe20` — Score link inside <template> element: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_db839064f8f22ac9f675` — Right-click (contextmenu) link injection: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_221317c720f8ba6668d1` — POST form with submit button: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_5c8a974293259c57badf` — Popover API — link injected on open: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_2d0f0061e1c4f644c8ce` — pointerup event triggers navigation: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_ad02876c93b7557bc207` — Plain anchor with href: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_52c550ac7f213e3aba56` — onclick with preventDefault — JS-only navigation: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_9d2ce4deb0f0505e21be` — Multi-step form wizard: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_5d34831beec7ef15af6f` — Multi-level JS dropdown menu: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_5d145440bf739c12fd95` — Meta refresh redirect: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_d343bac52bfed67c5b2b` — Long press (mousedown hold) triggers navigation: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_70139f9fe59f96d06fcf` — localStorage token gates score link: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_055c4d8778eaf3dbe471` — Link inside same-origin iframe (srcdoc): RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_7143f3d68890dc4eb04b` — Link inside same-origin iframe (src URL): RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_af97cb1cc6c85dd63769` — Link inside open Shadow DOM: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_4ec709d389be39c1d4ce` — Link inside closed Shadow DOM: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_17fcabe2d2e9f07f81e8` — Link inside <noscript>: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_a619fdc9682d9d095031` — Link inside <dialog> modal: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_58bf56297e2962eef572` — Link injected when <details> is opened: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_2077e67fab6a2add9a4c` — Link injected on mouseover: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_223b698e0e9f81a56e11` — Link injected on input focus: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_6beb3997d83d13b7b14a` — Link delivered via WebSocket: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_be92ae2221de45dff5a8` — Link delivered via Server-Sent Events: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_7f4e5b9e62e2863b516f` — Link appears on scroll (IntersectionObserver): RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_97912d156f7a4bea4e64` — Link appears after fetch() network request: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_e9834028933c4e0a0fcb` — Link appears after async delay: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_caee8eff10c4bec3ac4f` — Keyboard Enter on non-button element: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_333f80b5f8d99d05a9db` — JSON export: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_06728f9010bdc9f07652` — Infinite scroll — link in auto-loaded batch: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_641771cf52e61b166bd5` — Image map with clickable <area>: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_8f3b3d12c7ad4519274b` — HTTP 302 redirect to marker URL: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_b061167226ea08152247` — HTML <button> with onclick: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_eb6b66290033da591840` — history.replaceState() SPA navigation: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_376f354a8d7fd316cb3f` — history.pushState() SPA navigation: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_e740be4545e6a733e73b` — Hash-based SPA routing: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_c79b0383682997ed5f39` — GET form with submit button: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_c573e6fee8fa7d486ed2` — GET form with radio buttons: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_99fa2aa24295b316f90b` — GET form with checkboxes: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_82b8dd72d77b87cb839d` — GET form with <select> dropdown: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_1b2cbfed90c3a5dbdd15` — Form submitted programmatically via JS: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_546d58fc95cb06e65b05` — Double-click navigation: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_a29c0493d1def804e25c` — Div styled as button: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_b2e6ee478b23a8117a44` — CustomEvent dispatched by button click: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_ac04293d5819002b756e` — Bot-detection globals check: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_60c407ef566358df4e08` — Anchor with target="_blank": RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_79f46845653d5e26a760` — Anchor with javascript: href and onclick: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_5ff91d91ef896279b089` — Anchor with href set in JS: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_7740dcff195d90f9c720` — AJAX fetch() POST — no <form> element: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_4ab3c0baa35461e97722` — AJAX fetch() GET — no <form> element: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_ca6efbf04175dec79de3` — <input type="image"> submit button: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_f49a21924dcc79a677ea` — <button formaction> overrides form action: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_7e5e4d6868d96eea1881` — <base href> changes relative URL resolution: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_a5c02ba4337f79568afc` — "Load more" button appends score link: RuntimeError: saved return path restored 296bf9d909290cb9, expected d026cc72b3e32634
+- `tr_07721c47dd9c3b42f531` — results.json: RuntimeError: saved return path restored b83f2e1de4232822, expected d026cc72b3e32634
+- `tr_e51261ac853725bc0088` — Results: RuntimeError: saved return path restored b83f2e1de4232822, expected d026cc72b3e32634
+
+## Notes
+
+- Website-only browser evidence; target source and verifier internals were not inspected.
+- A browser-observed edge is not counted as a validated feature until its complete path replays.
+- Query values with sensitive-looking keys are redacted from stored network evidence.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for c2bd957d51ef690e.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 189d70ecb0c379a0.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for c2bd957d51ef690e.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 42b949bb25fc18e4.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for cec6c06975c13d42.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for eebf928afa64c36e.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for c2bd957d51ef690e.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for cec6c06975c13d42.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for f92c19302ed751e3.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 674201e1576f60e2.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for cec6c06975c13d42.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for c2bd957d51ef690e.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 3f14bbc12e0b8b3b.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 600290fd38b3fe44.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 189d70ecb0c379a0.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 189d70ecb0c379a0.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for c62d78058ab2a418.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for eebf928afa64c36e.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for eebf928afa64c36e.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 59a32dc238134e4f.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 1580b3c4dc8fe68a.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 2c4f4d7704a43e98.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 2c4f4d7704a43e98.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for cec6c06975c13d42.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 376ad31c927554f5.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 376ad31c927554f5.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 163e542aecad6ec4.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for e57d642f660d554e.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for e57d642f660d554e.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for e57d642f660d554e.
+- Restoration content signature differed, but the independently compared interaction shape remained usable for 09381d7a2d50ff0b.
+- unsupported_connections is retained only as a backwards-compatible failed-replay alias; use replay_failures and graph_connections_missing_evidence for distinct claims.

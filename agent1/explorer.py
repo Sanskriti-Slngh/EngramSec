@@ -12,7 +12,14 @@ from typing import Any
 from urllib.parse import urljoin, urlsplit
 from urllib.parse import parse_qsl
 
-from playwright.sync_api import Browser, BrowserContext, Page, TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import (
+    Browser,
+    BrowserContext,
+    Error as PlaywrightError,
+    Frame,
+    Page,
+    TimeoutError as PlaywrightTimeoutError,
+)
 from playwright.sync_api import sync_playwright
 
 from .providers import DecisionProvider, ModelProviderError, build_provider
@@ -73,11 +80,22 @@ DANGEROUS_ACTION = re.compile(
     re.I,
 )
 AMBIGUOUS_LABEL = re.compile(r"^(|click|submit|go|ok|more|next|button|link)$", re.I)
+LOW_VALUE_REPORT = re.compile(
+    r"^(?:view\s+)?(?:results?|score(?:board)?|reports?|status|exports?)(?:\s|$)", re.I
+)
 
 
 EXTRACT_SCRIPT = r"""
 () => {
-  const visible = (el) => {
+  const roots = [document];
+  for (let index = 0; index < roots.length; index++) {
+    for (const el of roots[index].querySelectorAll('*')) {
+      if (el.shadowRoot && !roots.includes(el.shadowRoot)) roots.push(el.shadowRoot);
+    }
+  }
+  const all = (selector) => roots.flatMap(root => Array.from(root.querySelectorAll(selector)));
+  const rendered = (el) => {
+    if (el.tagName?.toLowerCase() === 'area') return !!el.href;
     const style = window.getComputedStyle(el);
     const rect = el.getBoundingClientRect();
     if (style.visibility === 'hidden' || style.display === 'none' || style.opacity === '0' || rect.width <= 0 || rect.height <= 0) return false;
@@ -85,7 +103,8 @@ EXTRACT_SCRIPT = r"""
     const cy = rect.top + rect.height / 2;
     if (cx >= 0 && cy >= 0 && cx < window.innerWidth && cy < window.innerHeight) {
       const top = document.elementFromPoint(cx, cy);
-      if (top && top !== el && !el.contains(top)) return false;
+      const host = el.getRootNode()?.host;
+      if (top && top !== el && !el.contains(top) && top !== host && !top.contains?.(host)) return false;
     }
     return true;
   };
@@ -107,6 +126,15 @@ EXTRACT_SCRIPT = r"""
       current = current.parentElement;
     }
     return parts.join(' > ');
+  };
+  const componentFor = (el) => {
+    const landmark = el.closest?.('nav,header,footer,aside,main,form,dialog,[role=menu],[role=navigation],[role=main],[role=dialog]');
+    const node = landmark || el.getRootNode()?.host || document.body;
+    const tag = (node?.tagName || 'document').toLowerCase();
+    const role = node?.getAttribute?.('role') || '';
+    const id = node?.id || '';
+    const classes = String(node?.className || '').split(/\s+/).filter(Boolean).slice(0, 2).join('.');
+    return [tag, role, id, classes].filter(Boolean).join(':').slice(0, 160) || 'document';
   };
   const fieldFor = (el) => {
     const describedIds = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
@@ -130,40 +158,108 @@ EXTRACT_SCRIPT = r"""
       })) : []
     };
   };
-  const forms = Array.from(document.forms).map((form, index) => ({
+  const formElements = all('form');
+  const forms = formElements.map((form, index) => ({
     index,
     method: (form.method || 'GET').toUpperCase(),
     action: form.action || location.href,
     fields: Array.from(form.querySelectorAll('input,select,textarea')).filter(el => el.name || el.id).map(fieldFor),
-    submit_labels: Array.from(form.querySelectorAll('button,input[type=submit],input[type=button]')).map(labelFor).filter(Boolean)
+    submit_labels: Array.from(form.querySelectorAll('button,input[type=submit],input[type=button],input[type=image]')).map(labelFor).filter(Boolean)
   }));
-  const selector = 'a[href],button,input[type=submit],input[type=button],[role=button],' +
-    '[role=tab],[role=menuitem],summary,[data-action],[tabindex]:not([tabindex="-1"]),' +
-    '[onclick],[aria-controls],[data-toggle],[data-target],[id^="toggle-"]';
-  const controls = Array.from(document.querySelectorAll(selector)).filter(el => {
+  const eventTypesFor = (el) => {
+    const region = el.closest?.('.control-area,section,article,[data-component]');
+    let context = (el.innerText || '') + ' ' + (region?.innerText || '');
+    let sibling = region?.previousElementSibling;
+    for (let count = 0; sibling && count < 2; count++, sibling = sibling.previousElementSibling) {
+      if (sibling.matches?.('p,.desc,.description,h1,h2,h3')) context += ' ' + (sibling.innerText || '');
+    }
+    context = context.toLowerCase();
+    const events = [];
+    if (/\b(?:right[- ]?click|contextmenu|context menu)\b/.test(context)) events.push('context_menu');
+    if (/\b(?:double[- ]?click|dblclick)\b/.test(context)) events.push('double_click');
+    if (/\b(?:mouse ?over|hover)\b/.test(context)) events.push('hover');
+    if (/\b(?:focus|focusin)\b/.test(context)) events.push('focus');
+    if (/\b(?:key(?:down|up|press)|press (?:enter|return))\b/.test(context)) events.push('key_enter');
+    if (/\b(?:long[- ]?press|press and hold|mousedown)\b/.test(context)) events.push('press_hold');
+    return events;
+  };
+  const pageHasEventSemantics = /\b(?:right[- ]?click|contextmenu|double[- ]?click|dblclick|mouse ?over|hover|focus|focusin|key(?:down|up|press)|long[- ]?press|press and hold|mousedown)\b/i.test(document.body?.innerText || '');
+  const selector = 'a[href],area[href],button,input[type=submit],input[type=button],input[type=image],input[type=checkbox],input[type=radio],select,[role=button],' +
+    '[role=tab],[role=menuitem],[role=link],summary,[data-action],[tabindex]:not([tabindex="-1"]),' +
+    '[onclick],[ondblclick],[oncontextmenu],[onmouseover],[onmouseenter],[onfocus],[onkeydown],' +
+    '[onpointerup],[onmousedown],[aria-controls],[aria-haspopup],[data-toggle],[data-target],[popovertarget],[id^="toggle-"]';
+  const semanticElements = pageHasEventSemantics ? all('main div,main span,main img,main canvas,main svg,main [tabindex],main [draggable=true]').filter(el => {
+    const rect = el.getBoundingClientRect();
+    const identity = el.id || String(el.className || '') || el.getAttribute('role') || el.getAttribute('style');
+    const excluded = el.matches('nav,header,footer,.desc,.description,.breadcrumb') || el.closest('.desc,.description,.breadcrumb');
+    const hasUsefulGeometry = rect.width >= 16 && rect.height >= 16 && rect.width < window.innerWidth * 0.95;
+    const leafLike = el.children.length <= 3 || !!el.id || !!el.getAttribute('role');
+    return identity && !excluded && hasUsefulGeometry && leafLike && eventTypesFor(el).length;
+  }) : [];
+  const candidateElements = Array.from(new Set([...all(selector), ...semanticElements])).filter(el => {
     const tag = el.tagName.toLowerCase();
     const inputType = (el.getAttribute('type') || '').toLowerCase();
     const passiveField = tag === 'textarea' || tag === 'select' ||
       (tag === 'input' && !['submit', 'button', 'image'].includes(inputType));
-    return visible(el) && !passiveField && !el.disabled &&
+    const selectable = tag === 'select' || (tag === 'input' && ['checkbox','radio'].includes(inputType));
+    const hasFieldEvent = passiveField && (selectable || el.hasAttribute('onfocus') || el.hasAttribute('onkeydown'));
+    return rendered(el) && (!passiveField || hasFieldEvent) && !el.disabled &&
       el.getAttribute('aria-disabled') !== 'true';
-  }).map((el) => {
+  });
+  const controls = candidateElements.flatMap((el) => {
     const tag = el.tagName.toLowerCase();
-    const role = el.getAttribute('role') || (tag === 'a' ? 'link' : 'button');
-    const formIndex = el.form ? Array.from(document.forms).indexOf(el.form) : null;
+    const role = el.getAttribute('role') || (['a','area'].includes(tag) ? 'link' : 'button');
+    const formIndex = el.form ? formElements.indexOf(el.form) : null;
     const form = formIndex === null || formIndex < 0 ? null : forms[formIndex];
-    const kind = tag === 'a' ? 'link' : (form ? 'form_submit' : 'button');
-    return {
+    const inputType = (el.getAttribute('type') || '').toLowerCase();
+    const submitsForm = !!form && (tag === 'button' || ['submit','button','image'].includes(inputType));
+    const kind = ['a','area'].includes(tag) ? 'link' : (submitsForm ? 'form_submit' : 'button');
+    const rawHref = ['a','area'].includes(tag) ? (el.getAttribute('href') || '') : '';
+    const interactions = [];
+    if (kind === 'link' && rawHref && !el.hasAttribute('onclick') &&
+        !rawHref.startsWith('#') && !rawHref.toLowerCase().startsWith('javascript:') &&
+        (el.getAttribute('target') || '').toLowerCase() !== '_blank') interactions.push('navigate');
+    else if (kind !== 'button' || el.matches('button,[role=button],[role=tab],[role=menuitem],summary,[onclick],[data-action],[aria-controls],[popovertarget]')) interactions.push('click');
+    if (el.hasAttribute('ondblclick')) interactions.push('double_click');
+    if (el.hasAttribute('oncontextmenu')) interactions.push('context_menu');
+    if (el.hasAttribute('onmouseover') || el.hasAttribute('onmouseenter') ||
+        el.getAttribute('aria-haspopup') || /(?:hover|dropdown|menu)/i.test(String(el.className || ''))) interactions.push('hover');
+    if (el.hasAttribute('onfocus')) interactions.push('focus');
+    if (el.hasAttribute('onkeydown')) interactions.push('key_enter');
+    if (el.hasAttribute('onmousedown')) interactions.push('press_hold');
+    if (tag === 'select') interactions.push('select_option');
+    if (tag === 'input' && ['checkbox','radio'].includes(inputType)) interactions.push('toggle');
+    const localEvents = eventTypesFor(el);
+    if (semanticElements.includes(el)) interactions.push(...localEvents);
+    if (localEvents.includes('hover') && el.matches('button,a:not([href]),[role=button],[role=menuitem]')) interactions.push('hover');
+    if (localEvents.includes('focus') && el.matches('button,a:not([href]),input,select,textarea,[tabindex]')) interactions.push('focus');
+    if (localEvents.includes('key_enter') && el.matches('button,a:not([href]),input,[role=button],[tabindex]')) interactions.push('key_enter');
+    if (!interactions.length) interactions.push('click');
+    const base = {
       kind,
       label: labelFor(el),
       css_path: cssPath(el),
       role,
-      target: tag === 'a' ? el.href : (form ? form.action : null),
+      target: ['a','area'].includes(tag) ? (el.href?.baseVal || el.href || rawHref) : (form ? form.action : null),
       method: form ? form.method : null,
       form_index: formIndex === null || formIndex < 0 ? null : formIndex,
-      fields: form ? form.fields : []
+      fields: form ? form.fields : [],
+      component: componentFor(el)
     };
+    return Array.from(new Set(interactions)).map(interaction => ({...base, interaction}));
   });
+  if (document.documentElement.scrollHeight > window.innerHeight + 64) {
+    controls.push({kind:'button',label:'Scroll viewport',css_path:'__viewport__',role:'document',
+      target:null,method:null,form_index:null,fields:[],component:'document',interaction:'scroll_viewport'});
+  }
+  for (const el of all('*').filter(el => {
+    const style = window.getComputedStyle(el);
+    return rendered(el) && el.scrollHeight > el.clientHeight + 64 &&
+      ['auto','scroll'].includes(style.overflowY);
+  }).slice(0, 5)) {
+    controls.push({kind:'button',label:`Scroll ${labelFor(el) || 'container'}`,css_path:cssPath(el),role:'region',
+      target:null,method:null,form_index:null,fields:[],component:componentFor(el),interaction:'scroll_container'});
+  }
   const main = document.querySelector('main,[role=main]') || document.body;
   const meaningful = main ? main.cloneNode(true) : null;
   if (meaningful) meaningful.querySelectorAll(
@@ -173,9 +269,9 @@ EXTRACT_SCRIPT = r"""
   if (meaningful) meaningful.querySelectorAll(
     'i[class*="eye"],i[class*="view"],[aria-label*="view count" i],[title*="view count" i]'
   ).forEach(icon => (icon.closest('span,small') || icon).remove());
-  const signalElements = Array.from(document.querySelectorAll(
+  const signalElements = all(
     '[data-outcome],[role=alert],[role=status],[aria-live]:not([aria-live=off]),.success,.error,.alert,.notice,.message'
-  ));
+  );
   const outcomes = [];
   const seen = new Set();
   for (const el of signalElements) {
@@ -200,7 +296,7 @@ EXTRACT_SCRIPT = r"""
     controls,
     forms,
     body_text: document.body ? document.body.innerText : '',
-    meaningful_text: meaningful ? meaningful.innerText : '',
+    meaningful_text: [meaningful ? meaningful.innerText : '', ...roots.slice(1).map(root => root.textContent || '')].join(' '),
     outcomes
   };
 }
@@ -209,15 +305,21 @@ EXTRACT_SCRIPT = r"""
 
 READINESS_SCRIPT = r"""
 () => {
+  if (!window.__engramReadiness) {
+    window.__engramReadiness = {mutations: 0};
+    new MutationObserver(records => { window.__engramReadiness.mutations += records.length; })
+      .observe(document.documentElement, {subtree:true,childList:true,attributes:true,characterData:true});
+  }
   const visible = (el) => {
     const style = window.getComputedStyle(el);
     const rect = el.getBoundingClientRect();
     return style.visibility !== 'hidden' && style.display !== 'none' &&
       style.opacity !== '0' && rect.width > 0 && rect.height > 0;
   };
-  const selector = 'a[href],button,input[type=submit],input[type=button],[role=button],' +
-    '[role=tab],[role=menuitem],summary,[data-action],[tabindex]:not([tabindex="-1"]),' +
-    '[onclick],[aria-controls],[data-toggle],[data-target],[id^="toggle-"]';
+  const selector = 'a[href],area[href],button,input[type=submit],input[type=button],input[type=image],[role=button],' +
+    '[role=tab],[role=menuitem],[role=link],summary,[data-action],[tabindex]:not([tabindex="-1"]),' +
+    '[onclick],[ondblclick],[oncontextmenu],[onmouseover],[onmouseenter],[onfocus],[onkeydown],' +
+    '[aria-controls],[aria-haspopup],[data-toggle],[data-target],[popovertarget],[id^="toggle-"]';
   const controls = Array.from(document.querySelectorAll(selector)).filter(visible);
   const enabled = controls.filter(el => !el.disabled && el.getAttribute('aria-disabled') !== 'true');
   const shape = enabled.map(el => [
@@ -230,18 +332,20 @@ READINESS_SCRIPT = r"""
     aria_busy_count: document.querySelectorAll('[aria-busy="true"]').length,
     enabled_control_count: enabled.length,
     disabled_control_count: controls.length - enabled.length,
+    main_enabled_control_count: enabled.filter(el => !!el.closest('main,[role=main]')).length,
     control_shape: shape,
-    body_length: (document.body?.innerText || '').trim().length
+    body_length: (document.body?.innerText || '').trim().length,
+    mutation_count: window.__engramReadiness.mutations
   };
 }
 """
 
 
 class NetworkRecorder:
-    def __init__(self, page: Page):
+    def __init__(self, source: Page | BrowserContext):
         self.events: list[NetworkEvent] = []
-        page.on("response", self._response)
-        page.on("requestfailed", self._failed)
+        source.on("response", self._response)
+        source.on("requestfailed", self._failed)
 
     def _response(self, response: Any) -> None:
         request = response.request
@@ -320,15 +424,24 @@ class BrowserSession:
         self.page: Page | None = None
         self.network: NetworkRecorder | None = None
         self.dialogs: list[dict[str, str]] = []
+        self._attached_pages: set[int] = set()
         self.last_readiness = ReadinessEvidence()
         self.last_navigation_network: list[NetworkEvent] = []
+        self.last_popup_opened = False
 
     def __enter__(self) -> "BrowserSession":
         self.context = self.browser.new_context()
+        self.network = NetworkRecorder(self.context)
+        self.context.on("page", self._attach_page)
         self.page = self.context.new_page()
-        self.network = NetworkRecorder(self.page)
-        self.page.on("dialog", self._dialog)
+        self._attach_page(self.page)
         return self
+
+    def _attach_page(self, page: Page) -> None:
+        if id(page) in self._attached_pages:
+            return
+        self._attached_pages.add(id(page))
+        page.on("dialog", self._dialog)
 
     def __exit__(self, *_: Any) -> None:
         if self.context:
@@ -341,8 +454,10 @@ class BrowserSession:
         self.page = None
         self.network = None
         self.dialogs = []
+        self._attached_pages = set()
         self.last_readiness = ReadinessEvidence()
         self.last_navigation_network = []
+        self.last_popup_opened = False
         self.__enter__()
 
     def _dialog(self, dialog: Any) -> None:
@@ -393,9 +508,17 @@ class BrowserSession:
         samples: list[ReadinessSample] = []
         prior_fingerprint = ""
         stable_samples = 0
+        prior_mutations = -1
         final_status = "initializing"
         while True:
-            raw = self.page.evaluate(READINESS_SCRIPT)
+            try:
+                raw = self.page.evaluate(READINESS_SCRIPT)
+            except PlaywrightError:
+                if int((time.monotonic() - started) * 1_000) >= self.config.readiness_timeout_ms:
+                    final_status = "timeout"
+                    break
+                self.page.wait_for_timeout(self.config.readiness_poll_ms)
+                continue
             elapsed_ms = int((time.monotonic() - started) * 1_000)
             fingerprint = digest(raw.get("control_shape", ""), 16)
             sample = ReadinessSample(
@@ -405,6 +528,8 @@ class BrowserSession:
                 enabled_control_count=int(raw.get("enabled_control_count", 0)),
                 disabled_control_count=int(raw.get("disabled_control_count", 0)),
                 control_fingerprint=fingerprint,
+                main_enabled_control_count=int(raw.get("main_enabled_control_count", 0)),
+                mutation_count=int(raw.get("mutation_count", 0)),
             )
             samples.append(sample)
             initializing = (
@@ -418,14 +543,25 @@ class BrowserSession:
             if http_status in {401, 403, 407, 429}:
                 final_status = "blocked"
                 break
+            # Cosmetic timers may mutate forever.  Mutation counts remain
+            # evidence, while readiness is based on stable actionable shape;
+            # newly hydrated controls still change the fingerprint and reset
+            # the bounded stability window.
+            stable = fingerprint == prior_fingerprint
             if not initializing:
-                stable_samples = stable_samples + 1 if fingerprint == prior_fingerprint else 1
-                if stable_samples >= 3:
+                stable_samples = stable_samples + 1 if stable else 1
+                minimum_wait = (
+                    self.config.idle_page_wait_ms
+                    if sample.main_enabled_control_count == 0
+                    else self.config.readiness_poll_ms * 3
+                )
+                if stable_samples >= 3 and elapsed_ms >= minimum_wait:
                     final_status = "usable"
                     break
             else:
                 stable_samples = 0
             prior_fingerprint = fingerprint
+            prior_mutations = sample.mutation_count
             if elapsed_ms >= self.config.readiness_timeout_ms:
                 final_status = "timeout"
                 break
@@ -439,59 +575,138 @@ class BrowserSession:
 
     def observe(self, sequence: int) -> Observation:
         assert self.page
-        extracted = self.page.evaluate(EXTRACT_SCRIPT)
-        current_url = sanitize_url(self.page.url)
-        forms = []
-        for item in extracted["forms"]:
-            item = dict(item)
-            item["action"] = sanitize_url(item.get("action") or self.page.url, self.page.url)
-            fields = []
-            for field_index, raw_field in enumerate(item.get("fields", [])):
-                raw_field = dict(raw_field)
-                raw_field["id"] = "fld_" + digest(
-                    [current_url, item["index"], raw_field.get("css_path"), raw_field.get("name"), field_index],
-                    18,
+        frame_payloads: list[tuple[int, str, dict[str, Any]]] = []
+        for frame_index, frame in enumerate(self.page.frames):
+            frame_url_raw = frame.url or self.page.url
+            if frame is not self.page.main_frame and not (
+                frame_url_raw.startswith("about:")
+                or allowed_origin(
+                    self.config.start_url, frame_url_raw, self.config.origin_aliases
                 )
-                fields.append(raw_field)
-            item["fields"] = fields
-            forms.append(FormObservation.model_validate(item))
-        controls: list[Control] = []
-        for raw in extracted["controls"]:
-            target = sanitize_url(raw["target"], self.page.url) if raw.get("target") else None
-            label = compact_text(raw.get("label", ""), 160)
-            method = (raw.get("method") or "").upper() or None
-            form_index = raw.get("form_index")
-            fields = forms[form_index].fields if form_index is not None and form_index < len(forms) else []
-            if not label and raw["kind"] == "form_submit" and any(
-                field.input_type == "search"
-                or SEARCH_SEMANTICS.search(
-                    " ".join((field.name, field.label, field.placeholder, field.description))
-                )
-                for field in fields
             ):
-                label = "Search"
-            unsafe_reason = self._unsafe_reason(label, target, method, fields)
-            signature = control_signature(raw["kind"], raw["role"], label, target, method)
-            control_id = "ctl_" + digest([current_url, raw["css_path"], signature], 18)
-            controls.append(
-                Control(
-                    id=control_id,
-                    kind=raw["kind"],
-                    label=label or f"unnamed {raw['role']}",
-                    css_path=raw["css_path"],
-                    role=raw["role"],
-                    target=target,
-                    method=method,
-                    form_index=raw.get("form_index"),
-                    fields=fields,
-                    safe=unsafe_reason is None,
-                    skip_reason=unsafe_reason,
-                    signature=signature,
-                )
+                continue
+            try:
+                frame_payloads.append((frame_index, frame_url_raw, frame.evaluate(EXTRACT_SCRIPT)))
+            except PlaywrightError:
+                continue
+        if not frame_payloads:
+            raise RuntimeError("no observable same-scope browser frame")
+        current_url = sanitize_url(self.page.url)
+        forms: list[FormObservation] = []
+        forms_by_frame: dict[tuple[int, int], FormObservation] = {}
+        for frame_index, frame_url_raw, extracted in frame_payloads:
+            safe_frame_url = (
+                sanitize_url(frame_url_raw)
+                if urlsplit(frame_url_raw).scheme in {"http", "https"}
+                else compact_text(frame_url_raw, 240)
             )
+            for item in extracted["forms"]:
+                item = dict(item)
+                local_index = item["index"]
+                item["action"] = sanitize_url(
+                    item.get("action") or frame_url_raw, frame_url_raw
+                )
+                fields = []
+                for field_index, raw_field in enumerate(item.get("fields", [])):
+                    raw_field = dict(raw_field)
+                    raw_field["id"] = "fld_" + digest(
+                        [
+                            current_url,
+                            safe_frame_url,
+                            local_index,
+                            raw_field.get("css_path"),
+                            raw_field.get("name"),
+                            field_index,
+                        ],
+                        18,
+                    )
+                    fields.append(raw_field)
+                item["fields"] = fields
+                item["frame_index"] = frame_index
+                item["frame_url"] = safe_frame_url
+                observed_form = FormObservation.model_validate(item)
+                forms.append(observed_form)
+                forms_by_frame[(frame_index, local_index)] = observed_form
+        controls: list[Control] = []
+        for frame_index, frame_url_raw, extracted in frame_payloads:
+            safe_frame_url = (
+                sanitize_url(frame_url_raw)
+                if urlsplit(frame_url_raw).scheme in {"http", "https"}
+                else compact_text(frame_url_raw, 240)
+            )
+            for raw in extracted["controls"]:
+                interaction = raw.get("interaction") or "click"
+                if self.config.interaction_profile == "basic" and interaction not in {
+                    "click",
+                    "navigate",
+                }:
+                    continue
+                if interaction == "navigate" and not self.config.hybrid_link_discovery:
+                    interaction = "click"
+                raw_target = raw.get("target")
+                resolved_target = urljoin(frame_url_raw, raw_target) if raw_target else None
+                target = (
+                    sanitize_url(resolved_target)
+                    if resolved_target and urlsplit(resolved_target).scheme in {"http", "https"}
+                    else None
+                )
+                label = compact_text(raw.get("label", ""), 160)
+                method = (raw.get("method") or "").upper() or None
+                form_index = raw.get("form_index")
+                observed_form = (
+                    forms_by_frame.get((frame_index, form_index))
+                    if form_index is not None
+                    else None
+                )
+                fields = observed_form.fields if observed_form else []
+                if not label and raw["kind"] == "form_submit" and any(
+                    field.input_type == "search"
+                    or SEARCH_SEMANTICS.search(
+                        " ".join((field.name, field.label, field.placeholder, field.description))
+                    )
+                    for field in fields
+                ):
+                    label = "Search"
+                component = compact_text(raw.get("component", "document"), 160)
+                unsafe_reason = self._unsafe_reason(label, target, method, fields)
+                signature = control_signature(
+                    raw["kind"],
+                    raw["role"],
+                    label,
+                    target,
+                    method,
+                    interaction,
+                    component,
+                )
+                control_id = "ctl_" + digest(
+                    [current_url, safe_frame_url, raw["css_path"], signature], 18
+                )
+                controls.append(
+                    Control(
+                        id=control_id,
+                        kind=raw["kind"],
+                        label=label or f"unnamed {raw['role']}",
+                        css_path=raw["css_path"],
+                        role=raw["role"],
+                        target=target,
+                        method=method,
+                        form_index=form_index,
+                        fields=fields,
+                        safe=unsafe_reason is None,
+                        skip_reason=unsafe_reason,
+                        signature=signature,
+                        interaction=interaction,
+                        component=component,
+                        frame_index=frame_index,
+                        frame_url=safe_frame_url,
+                    )
+                )
         title = compact_text(self.page.title(), 200)
         session_markers = self._session_markers()
-        meaningful_text = compact_text(extracted.get("meaningful_text", ""), 8_000)
+        meaningful_text = compact_text(
+            " ".join(payload.get("meaningful_text", "") for _, _, payload in frame_payloads),
+            8_000,
+        )
         outcome_signals = [
             OutcomeSignal(
                 kind=item["kind"],
@@ -499,7 +714,8 @@ class BrowserSession:
                 fingerprint=digest([item["kind"], compact_text(item.get("text", "").lower(), 1_000)]),
                 source=compact_text(item.get("source", "unknown"), 80),
             )
-            for item in extracted.get("outcomes", [])
+            for _, _, payload in frame_payloads
+            for item in payload.get("outcomes", [])
         ]
         raw_sig, group_sig, pattern = signatures(
             url=current_url,
@@ -511,7 +727,10 @@ class BrowserSession:
             meaningful_text=meaningful_text,
         )
         observation_id = "obs_" + digest([sequence, current_url, raw_sig, time.time_ns()], 20)
-        body_text = compact_text(extracted.get("body_text", ""), 2_000)
+        body_text = compact_text(
+            " ".join(payload.get("body_text", "") for _, _, payload in frame_payloads),
+            2_000,
+        )
         return Observation(
             id=observation_id,
             sequence=sequence,
@@ -532,6 +751,7 @@ class BrowserSession:
                 "form_count": len(forms),
                 "safe_control_count": sum(control.safe for control in controls),
                 "all_control_count": len(controls),
+                "frame_count": len(frame_payloads),
             },
             readiness=self.last_readiness,
         )
@@ -587,6 +807,10 @@ class BrowserSession:
             form_index=control.form_index,
             fields=control.fields,
             signature=control.signature,
+            interaction=control.interaction,
+            component=control.component,
+            frame_index=control.frame_index,
+            frame_url=control.frame_url,
         )
 
     def find_current(self, observation: Observation, descriptor: ActionDescriptor) -> Control | None:
@@ -596,9 +820,56 @@ class BrowserSession:
         candidates = [
             control
             for control in observation.controls
-            if control.signature == descriptor.signature and control.safe
+            if control.signature == descriptor.signature
+            and control.interaction == descriptor.interaction
+            and control.safe
+        ]
+        if len(candidates) == 1:
+            return candidates[0]
+        # DOM positions and generated IDs can move after hydration.  A bounded
+        # semantic fallback remains scoped to the observed role/component and
+        # never invents a control that was not in the current observation.
+        candidates = [
+            control
+            for control in observation.controls
+            if control.safe
+            and control.role == descriptor.role
+            and control.label == descriptor.label
+            and control.interaction == descriptor.interaction
+            and (
+                descriptor.component == "document"
+                or control.component == descriptor.component
+            )
+            and (not descriptor.target or control.target == descriptor.target)
         ]
         return candidates[0] if len(candidates) == 1 else None
+
+    def _frame_for(self, frame_index: int, frame_url: str) -> Frame:
+        assert self.page
+        frames = self.page.frames
+        if 0 <= frame_index < len(frames):
+            candidate = frames[frame_index]
+            if frame_index == 0 or not frame_url or sanitize_url(candidate.url) == frame_url:
+                return candidate
+        matches = [
+            frame for frame in frames
+            if frame_url and frame.url.startswith(("http://", "https://"))
+            and sanitize_url(frame.url) == frame_url
+        ]
+        if len(matches) == 1:
+            return matches[0]
+        if frame_index == 0:
+            return self.page.main_frame
+        raise RuntimeError("observed frame is no longer available")
+
+    def _locator_for(self, control: Control) -> Any:
+        frame = self._frame_for(control.frame_index, control.frame_url)
+        locator = frame.locator(control.css_path).first
+        if locator.count() == 0 and control.role not in {"document", "generic"}:
+            locator = frame.get_by_role(control.role, name=control.label, exact=True).first
+        if locator.count() == 0:
+            raise RuntimeError("observed control locator is no longer present")
+        return locator
 
     def execute(
         self,
@@ -609,22 +880,79 @@ class BrowserSession:
         assert self.page and self.network
         self.network.drain()
         self.dialogs = []
+        self.last_popup_opened = False
         input_refs: list[InputReference] = []
         action_count = 0
         if control.kind == "form_submit" and control.form_index is not None:
             refs, fills = self._fill_form(
                 control.form_index,
                 control.fields,
+                control.frame_index,
+                control.frame_url,
                 input_values=input_values or {},
                 input_plan_ref=input_plan_ref,
             )
             input_refs.extend(refs)
             action_count += fills
-        locator = self.page.locator(control.css_path).first
-        if locator.count() == 0:
-            locator = self.page.get_by_role(control.role, name=control.label, exact=True).first
-        locator.click(timeout=self.config.action_timeout_ms)
+        prior_pages = set(self.context.pages) if self.context else {self.page}
+        if control.interaction == "navigate":
+            if not control.target:
+                raise RuntimeError("navigation candidate has no observed target")
+            self.page.goto(
+                control.target,
+                wait_until="domcontentloaded",
+                timeout=self.config.action_timeout_ms * 2,
+            )
+        elif control.interaction == "scroll_viewport":
+            self.page.evaluate("() => window.scrollBy(0, Math.max(innerHeight * 0.85, 320))")
+        else:
+            locator = self._locator_for(control)
+            if control.interaction == "hover":
+                locator.hover(timeout=self.config.action_timeout_ms)
+            elif control.interaction == "focus":
+                locator.focus(timeout=self.config.action_timeout_ms)
+            elif control.interaction == "key_enter":
+                locator.focus(timeout=self.config.action_timeout_ms)
+                locator.press("Enter", timeout=self.config.action_timeout_ms)
+            elif control.interaction == "double_click":
+                locator.dblclick(timeout=self.config.action_timeout_ms)
+            elif control.interaction == "context_menu":
+                locator.click(button="right", timeout=self.config.action_timeout_ms)
+            elif control.interaction == "press_hold":
+                locator.hover(timeout=self.config.action_timeout_ms)
+                locator.dispatch_event("mousedown")
+                self.page.wait_for_timeout(700)
+                locator.dispatch_event("mouseup")
+            elif control.interaction == "scroll_container":
+                locator.evaluate("el => el.scrollBy(0, Math.max(el.clientHeight * 0.85, 160))")
+            elif control.interaction == "toggle":
+                locator.check(timeout=self.config.action_timeout_ms)
+            elif control.interaction == "select_option":
+                values = locator.locator("option").evaluate_all(
+                    "options => options.map(option => option.value).filter(Boolean)"
+                )
+                if not values:
+                    raise RuntimeError("observed select has no non-empty option")
+                locator.select_option(values[-1], timeout=self.config.action_timeout_ms)
+            else:
+                locator.click(timeout=self.config.action_timeout_ms)
         action_count += 1
+        if self.context:
+            if len(self.context.pages) == len(prior_pages):
+                self.page.wait_for_timeout(100)
+            new_pages = [page for page in self.context.pages if page not in prior_pages]
+            if new_pages:
+                popup = new_pages[-1]
+                try:
+                    popup.wait_for_load_state("domcontentloaded", timeout=self.config.action_timeout_ms)
+                except PlaywrightTimeoutError:
+                    pass
+                if allowed_origin(self.config.start_url, popup.url, self.config.origin_aliases):
+                    self.page = popup
+                    self._attach_page(popup)
+                    self.last_popup_opened = True
+                else:
+                    popup.close()
         try:
             self.page.wait_for_load_state("domcontentloaded", timeout=self.config.action_timeout_ms)
         except PlaywrightTimeoutError:
@@ -646,11 +974,14 @@ class BrowserSession:
         self,
         form_index: int,
         observed_fields: list[FormField],
+        frame_index: int,
+        frame_url: str,
         input_values: dict[str, str],
         input_plan_ref: str | None,
     ) -> tuple[list[InputReference], int]:
         assert self.page
-        form = self.page.locator("form").nth(form_index)
+        frame = self._frame_for(frame_index, frame_url)
+        form = frame.locator("form").nth(form_index)
         fields = form.locator("input,select,textarea")
         refs: list[InputReference] = []
         actions = 0
@@ -732,6 +1063,11 @@ class Explorer:
         self.frontier: list[FrontierItem] = []
         self.tried: set[str] = set()
         self._seen_control_shapes: set[str] = set()
+        self._seen_targets: set[str] = set()
+        self._seen_components: set[str] = set()
+        self._seen_form_shapes: set[str] = set()
+        self._scheduled_global_actions: set[str] = set()
+        self._ineffective_actions: defaultdict[str, int] = defaultdict(int)
         self.provider: DecisionProvider = build_provider(
             config.model_provider,
             config.model_name,
@@ -931,7 +1267,31 @@ class Explorer:
             tried_key = f"{identity}:{control.signature}"
             if tried_key in self.tried:
                 continue
+            global_component = bool(
+                re.match(r"^(nav|header|footer|aside)(?::|$)", control.component, re.I)
+                or ":navigation" in control.component.lower()
+            )
+            global_key = digest(
+                [control.interaction, control.target or "", control.role, control.label], 20
+            )
+            repeated_view_action = control.interaction in {
+                "scroll_viewport", "scroll_container"
+            }
+            if repeated_view_action:
+                global_key = digest(
+                    [observation.route_pattern, control.interaction, control.component], 20
+                )
+            if (
+                self.config.policy == "multidimensional"
+                and (global_component or repeated_view_action)
+                and global_key in self._scheduled_global_actions
+            ):
+                self.artifact.metrics.duplicate_controls_suppressed += 1
+                self.tried.add(tried_key)
+                continue
             self.tried.add(tried_key)
+            if global_component or repeated_view_action:
+                self._scheduled_global_actions.add(global_key)
             kind_score = {"form_submit": 3.0, "button": 2.0, "link": 1.0}[control.kind]
             globally_novel = control.signature not in self._seen_control_shapes
             self._seen_control_shapes.add(control.signature)
@@ -941,6 +1301,39 @@ class Explorer:
                 # browser actions required to restore an archived path.
                 kind_score += 12.0 if globally_novel else 0.0
                 kind_score -= 0.20 * len(path)
+            if self.config.policy == "multidimensional":
+                target_key = control.target or ""
+                target_novel = bool(target_key and target_key not in self._seen_targets)
+                component_key = f"{control.component}:{control.role}:{control.label}"
+                component_novel = component_key not in self._seen_components
+                form_shape = digest(
+                    [
+                        control.method or "",
+                        control.target or "",
+                        [(field.input_type, field.name, field.required) for field in control.fields],
+                    ],
+                    20,
+                )
+                form_novel = bool(control.fields and form_shape not in self._seen_form_shapes)
+                dynamic = control.interaction not in {"click", "navigate"}
+                kind_score += 15.0 if target_novel else 0.0
+                kind_score += 8.0 if component_novel else 0.0
+                kind_score += 12.0 if form_novel else 0.0
+                kind_score += 10.0 if dynamic else 0.0
+                kind_score += 5.0 if globally_novel else 0.0
+                kind_score -= 0.6 * len(path)
+                kind_score -= 8.0 * self._ineffective_actions[control.signature]
+                if global_component and not target_novel:
+                    kind_score -= 10.0
+                if global_component:
+                    kind_score -= 18.0
+                if control.kind == "link" and LOW_VALUE_REPORT.match(control.label):
+                    kind_score -= 28.0
+                if target_key:
+                    self._seen_targets.add(target_key)
+                self._seen_components.add(component_key)
+                if control.fields:
+                    self._seen_form_shapes.add(form_shape)
             if self.config.search_probe_primary and (
                 is_get_search_action(control)
                 or SEARCH_SEMANTICS.search(f"{control.label} {control.target or ''}")
@@ -963,10 +1356,13 @@ class Explorer:
         self._sort_frontier()
 
     def _sort_frontier(self) -> None:
-        if self.config.policy == "coverage":
+        if self.config.policy in {"coverage", "multidimensional"}:
             self.frontier.sort(
                 key=lambda item: (-item.priority, len(item.path), item.action.signature)
             )
+            return
+        if self.config.policy == "breadth":
+            self.frontier.sort(key=lambda item: (len(item.path), item.action.signature))
             return
         self.frontier.sort(
             key=lambda item: (
@@ -1004,6 +1400,8 @@ class Explorer:
             self._navigate_start(session, "persistent_restore")
             live = session.observe(self._next_sequence())
             live_path: list[ActionDescriptor] = []
+            burst_group = live.group_signature
+            local_burst = 0
             self._record_observation(live, [])
             self._enqueue(live, [])
             while self.frontier:
@@ -1013,17 +1411,23 @@ class Explorer:
                     break
                 if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
                     break
-                local_index = next(
-                    (
-                        index
-                        for index, candidate in enumerate(self.frontier)
-                        if candidate.expected_source_group == live.group_signature
-                        and session.find_current(live, candidate.action) is not None
-                    ),
-                    None,
-                )
+                if live.group_signature != burst_group:
+                    burst_group = live.group_signature
+                    local_burst = 0
+                local_index = None
+                if local_burst < 8:
+                    local_index = next(
+                        (
+                            index
+                            for index, candidate in enumerate(self.frontier)
+                            if candidate.expected_source_group == live.group_signature
+                            and session.find_current(live, candidate.action) is not None
+                        ),
+                        None,
+                    )
                 item = self.frontier.pop(local_index if local_index is not None else 0)
                 local = local_index is not None
+                local_burst = local_burst + 1 if local else 0
                 required_actions = self._descriptor_action_cost(item.action)
                 if not local:
                     required_actions += 1 + self._path_action_cost(item.path)
@@ -1140,7 +1544,33 @@ class Explorer:
                     current_control, plan_values, plan_ref
                 )
                 self.artifact.metrics.browser_actions += action_count
+                if current_control.interaction == "navigate":
+                    self.artifact.metrics.static_navigation_actions += 1
+                elif current_control.interaction not in {"click"}:
+                    self.artifact.metrics.dynamic_interaction_actions += 1
+                if current_control.frame_index > 0:
+                    self.artifact.metrics.frame_observations += 1
+                if session.last_popup_opened:
+                    self.artifact.metrics.popup_navigations += 1
                 result = session.observe(self._next_sequence())
+                source_controls = sorted(
+                    (control.signature, control.interaction)
+                    for control in source.controls if control.safe
+                )
+                result_controls = sorted(
+                    (control.signature, control.interaction)
+                    for control in result.controls if control.safe
+                )
+                ineffective = (
+                    source.url == result.url
+                    and source.content_fingerprint == result.content_fingerprint
+                    and source_controls == result_controls
+                    and not network
+                    and not dialogs
+                )
+                if ineffective:
+                    self.artifact.metrics.ineffective_transitions += 1
+                    self._ineffective_actions[current_control.signature] += 1
                 if current_control.kind == "form_submit":
                     form_attempts.append(
                         FormAttempt(
@@ -1322,10 +1752,23 @@ class Explorer:
         return observation
 
     def _replay(self, browser: Browser) -> None:
-        candidates = [
+        raw_candidates = [
             transition for transition in self.artifact.transitions if transition.status == EvidenceStatus.OBSERVED
         ]
-        candidates.sort(key=lambda transition: (len(transition.workflow_path), transition.id))
+        raw_candidates.sort(key=lambda transition: (len(transition.workflow_path), transition.id))
+        candidates: list[Transition] = []
+        scheduled_destinations: set[str] = set()
+        for transition in raw_candidates:
+            result = self._observation_by_id(transition.result_observation_id)
+            if not result:
+                continue
+            key = digest(
+                [result.url, result.group_signature, transition.action.interaction], 24
+            )
+            if key in scheduled_destinations:
+                continue
+            scheduled_destinations.add(key)
+            candidates.append(transition)
         for transition in candidates:
             if self._elapsed() >= self.config.max_seconds:
                 break
@@ -1567,7 +2010,10 @@ class Explorer:
                     browser_actions += count
                     observation = session.observe(self._next_sequence())
                 expected_observation = self._observation_by_id(transition.result_observation_id)
+                source_observation = self._observation_by_id(transition.source_observation_id)
                 checks = {
+                    "exact_url": bool(expected_observation)
+                    and observation.url == expected_observation.url,
                     "group_signature": observation.group_signature == transition.result_group_signature,
                     "route_pattern": bool(expected_observation)
                     and observation.route_pattern == expected_observation.route_pattern,
@@ -1579,10 +2025,29 @@ class Explorer:
                     "outcome_signals": bool(expected_observation)
                     and outcome_signature(observation.outcome_signals)
                     == outcome_signature(expected_observation.outcome_signals),
+                    "usable_interaction_shape": bool(expected_observation)
+                    and self._usable_return_screen(expected_observation, observation),
                 }
-                status = (
-                    EvidenceStatus.REPLAY_VALIDATED if all(checks.values()) else EvidenceStatus.FAILED
+                changed_url = bool(source_observation and expected_observation) and (
+                    source_observation.url != expected_observation.url
                 )
+                navigation_valid = (
+                    changed_url
+                    and checks["exact_url"]
+                    and checks["route_pattern"]
+                    and checks["title"]
+                    and checks["usable_interaction_shape"]
+                )
+                dynamic_valid = all(
+                    checks[name]
+                    for name in (
+                        "exact_url", "group_signature", "route_pattern", "title",
+                        "content_fingerprint", "outcome_signals",
+                    )
+                )
+                status = EvidenceStatus.REPLAY_VALIDATED if (
+                    navigation_valid or dynamic_valid
+                ) else EvidenceStatus.FAILED
                 error = None if status == EvidenceStatus.REPLAY_VALIDATED else "outcome checks did not match"
                 actual_group = observation.group_signature
                 self.artifact.replay_observations.append(observation)

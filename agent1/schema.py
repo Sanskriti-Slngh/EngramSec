@@ -34,7 +34,15 @@ class FunctionalStatus(StrEnum):
 class RunConfig(BaseModel):
     start_url: str
     output_dir: Path
-    policy: Literal["exact", "grouped", "coverage", "selective_model", "model_all"] = "grouped"
+    policy: Literal[
+        "exact",
+        "grouped",
+        "coverage",
+        "breadth",
+        "multidimensional",
+        "selective_model",
+        "model_all",
+    ] = "grouped"
     max_seconds: float = Field(default=60.0, gt=0)
     max_transitions: int = Field(default=20, ge=1)
     max_browser_actions: int = Field(default=80, ge=1)
@@ -61,6 +69,9 @@ class RunConfig(BaseModel):
     readiness_poll_ms: int = Field(default=100, ge=25, le=1_000)
     origin_aliases: list[str] = Field(default_factory=list)
     exploration_mode: Literal["fresh", "persistent"] = "fresh"
+    interaction_profile: Literal["basic", "extended"] = "basic"
+    hybrid_link_discovery: bool = False
+    idle_page_wait_ms: int = Field(default=1_600, ge=250, le=5_000)
 
     @model_validator(mode="after")
     def paired_search_probes(self) -> "RunConfig":
@@ -103,6 +114,8 @@ class ReadinessSample(BaseModel):
     enabled_control_count: int
     disabled_control_count: int
     control_fingerprint: str
+    main_enabled_control_count: int = 0
+    mutation_count: int = 0
 
 
 class ReadinessEvidence(BaseModel):
@@ -152,6 +165,8 @@ class FormObservation(BaseModel):
     action: str
     fields: list[FormField] = Field(default_factory=list)
     submit_labels: list[str] = Field(default_factory=list)
+    frame_index: int = 0
+    frame_url: str = ""
 
 
 class Control(BaseModel):
@@ -167,6 +182,23 @@ class Control(BaseModel):
     safe: bool = True
     skip_reason: str | None = None
     signature: str
+    interaction: Literal[
+        "click",
+        "navigate",
+        "hover",
+        "focus",
+        "key_enter",
+        "double_click",
+        "context_menu",
+        "press_hold",
+        "scroll_viewport",
+        "scroll_container",
+        "toggle",
+        "select_option",
+    ] = "click"
+    component: str = "document"
+    frame_index: int = 0
+    frame_url: str = ""
 
 
 class Observation(BaseModel):
@@ -221,6 +253,10 @@ class ActionDescriptor(BaseModel):
     fields: list[FormField] = Field(default_factory=list)
     signature: str
     input_plan_ref: str | None = None
+    interaction: str = "click"
+    component: str = "document"
+    frame_index: int = 0
+    frame_url: str = ""
 
 
 class FormAttempt(BaseModel):
@@ -383,6 +419,12 @@ class RunMetrics(BaseModel):
     live_state_stale: int = 0
     startup_readiness_failures: int = 0
     navigation_network_events_recorded: int = 0
+    ineffective_transitions: int = 0
+    duplicate_controls_suppressed: int = 0
+    static_navigation_actions: int = 0
+    dynamic_interaction_actions: int = 0
+    frame_observations: int = 0
+    popup_navigations: int = 0
 
 
 class RunArtifact(BaseModel):

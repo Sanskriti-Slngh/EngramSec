@@ -19,7 +19,10 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--max-browser-actions", type=int, default=80)
     parser.add_argument(
         "--policy",
-        choices=("exact", "grouped", "coverage", "selective_model", "model_all"),
+        choices=(
+            "exact", "grouped", "coverage", "breadth", "multidimensional",
+            "selective_model", "model_all",
+        ),
         default="grouped",
     )
     parser.add_argument("--provider", choices=("none", "ollama", "groq", "openai"), default="none")
@@ -46,6 +49,18 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
         choices=("fresh", "persistent"),
         default="fresh",
     )
+    parser.add_argument(
+        "--interaction-profile",
+        choices=("basic", "extended"),
+        default="basic",
+        help="enable evidence-gated hover, focus, keyboard, scroll, popup, frame, and gesture actions",
+    )
+    parser.add_argument(
+        "--hybrid-links",
+        action="store_true",
+        help="treat browser-observed same-scope hrefs as lightweight navigation candidates",
+    )
+    parser.add_argument("--idle-page-wait-ms", type=int, default=1600)
     parser.add_argument(
         "--search-probe",
         dest="search_probe_primary",
@@ -117,6 +132,9 @@ def main(argv: list[str] | None = None) -> int:
             readiness_timeout_ms=args.readiness_timeout_ms,
             origin_aliases=args.origin_alias,
             exploration_mode=args.exploration_mode,
+            interaction_profile=args.interaction_profile,
+            hybrid_link_discovery=args.hybrid_links,
+            idle_page_wait_ms=args.idle_page_wait_ms,
             model_provider=args.provider,
             model_name=args.model,
             model_form_assistance=args.model_forms,

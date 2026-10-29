@@ -1,0 +1,36 @@
+{
+  "testbed": "zaproxy/crawlground",
+  "revision": "ba52303a5fd43795f461a6df39da45e2fe886c6b",
+  "denominator": 59,
+  "runs": {
+    "frozen_fast_2b8aa18": {
+      "score": 3,
+      "categories": {"buttons": 0, "dynamic-content": 0, "forms": 1, "frames": 0, "js-events": 0, "links": 1, "navigation": 1, "other": 0}
+    },
+    "frozen_serious_2b8aa18": {
+      "score": 13,
+      "categories": {"buttons": 1, "dynamic-content": 3, "forms": 4, "frames": 0, "js-events": 2, "links": 2, "navigation": 1, "other": 0}
+    },
+    "multidimensional_negative_ablation": {
+      "score": 1,
+      "categories": {"buttons": 0, "dynamic-content": 0, "forms": 0, "frames": 0, "js-events": 0, "links": 0, "navigation": 1, "other": 0}
+    },
+    "breadth_fast": {
+      "score": 0,
+      "categories": {"buttons": 0, "dynamic-content": 0, "forms": 0, "frames": 0, "js-events": 0, "links": 0, "navigation": 0, "other": 0}
+    },
+    "final_fast": {
+      "score": 3,
+      "categories": {"buttons": 0, "dynamic-content": 0, "forms": 0, "frames": 0, "js-events": 0, "links": 2, "navigation": 1, "other": 0}
+    },
+    "final_serious": {
+      "score": 39,
+      "categories": {"buttons": 2, "dynamic-content": 6, "forms": 8, "frames": 3, "js-events": 10, "links": 4, "navigation": 6, "other": 0}
+    }
+  },
+  "notes": [
+    "Counts came from Crawlground's official isolated tool buckets after full-site crawls beginning at /.",
+    "Iteration A is excluded from marker comparisons because its tool-bucket activation was blocked by the command sandbox; its mapper artifact remains preserved.",
+    "No expected marker list, solution, or score route was supplied to the mapper."
+  ]
+}

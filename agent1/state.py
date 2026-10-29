@@ -83,7 +83,15 @@ def allowed_origin(start: str, target: str, aliases: list[str] | None = None) ->
     return origin_tuple(target) in allowed
 
 
-def control_signature(kind: str, role: str, label: str, target: str | None, method: str | None) -> str:
+def control_signature(
+    kind: str,
+    role: str,
+    label: str,
+    target: str | None,
+    method: str | None,
+    interaction: str = "click",
+    component: str = "document",
+) -> str:
     target_pattern = route_pattern(target) if target else ""
     return digest(
         {
@@ -92,6 +100,8 @@ def control_signature(kind: str, role: str, label: str, target: str | None, meth
             "label": normalize_instance_text(label),
             "target": target_pattern,
             "method": (method or "").upper(),
+            "interaction": interaction,
+            "component": component,
         }
     )
 
@@ -113,6 +123,9 @@ def group_control_signature(control: Control) -> str:
             "target": route_pattern(control.target) if control.target else "",
             "method": (control.method or "").upper(),
             "fields": [(field.name, field.input_type, field.required) for field in control.fields],
+            "interaction": control.interaction,
+            "component": control.component,
+            "frame": route_pattern(control.frame_url) if control.frame_url else "",
         }
     )
 
@@ -124,6 +137,9 @@ def feature_action_signature(control: object) -> str:
     method = getattr(control, "method", None)
     label = getattr(control, "label")
     fields = getattr(control, "fields", [])
+    interaction = getattr(control, "interaction", "click")
+    component = getattr(control, "component", "document")
+    frame_url = getattr(control, "frame_url", "")
     return digest(
         {
             "kind": kind,
@@ -132,6 +148,9 @@ def feature_action_signature(control: object) -> str:
             "method": (method or "").upper(),
             "label": "" if kind == "link" and target else normalize_instance_text(label),
             "fields": [(field.name, field.input_type, field.required) for field in fields],
+            "interaction": interaction,
+            "component": component,
+            "frame": route_pattern(frame_url) if frame_url else "",
         }
     )
 

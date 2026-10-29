@@ -37,6 +37,24 @@ separate):
   --origin-alias http://localhost:8000 --exploration-mode persistent
 ```
 
+High-coverage hybrid mapping adds browser-observed same-scope href traversal,
+open-shadow/same-origin-frame observation, evidence-gated gestures, popup
+handling, and multidimensional scheduling:
+
+```bash
+.venv/bin/python -m agent1.cli map \
+  --url http://127.0.0.1:8000/ --out agent1/outputs/high-coverage \
+  --policy multidimensional --seconds 600 \
+  --max-transitions 250 --max-browser-actions 600 \
+  --robust-readiness --exploration-mode persistent \
+  --interaction-profile extended --hybrid-links
+```
+
+`--hybrid-links` follows only hrefs observed by the browser; it does not guess
+endpoints. The extended profile proposes alternate gestures only from observed
+DOM/ARIA/form semantics or bounded local semantic/geometric evidence. POST is
+still disabled unless explicitly enabled for a disposable target.
+
 Aliases must be explicit loopback origins. Unlisted hosts/ports and external
 destinations remain blocked. Persistent mode affects discovery only; validation
 still executes complete paths in fresh browser contexts.
@@ -137,7 +155,14 @@ document/Fetch/XHR structures separate from action-triggered request evidence.
 State nodes expose recorded readiness classifications; raw readiness samples
 remain in `run.json`/the checkpoint.
 
-The deterministic `coverage` policy prioritizes globally novel observed control shapes while charging a small restoration-depth cost. `grouped` remains the historical type/shallow-path baseline. Graph A request evidence records method, sanitized URL, status, resource type, parameter names, and body encoding without request values. State nodes expose cookie and storage *names* only; values are never exported.
+The deterministic `coverage` policy prioritizes globally novel observed control
+shapes while charging a small restoration-depth cost. `multidimensional` adds
+route, component, form, request/action-class, ineffective-action, global-chrome,
+and restoration signals. `breadth` is the explicit shallow baseline; `grouped`
+remains the historical type/shallow-path policy. Graph A request evidence records
+method, sanitized URL, status, resource type, parameter names, and body encoding
+without request values. State nodes expose cookie and storage *names* only;
+values are never exported.
 
 Independent local coverage evaluation:
 

@@ -24,6 +24,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
                 "type": "state",
                 "group_signature": group,
                 "route_pattern": representative.route_pattern if representative else "",
+                "url": representative.url if representative else "",
                 "title": representative.title if representative else "",
                 "session_context": representative.session_context if representative else "",
                 "session_markers": representative.session_markers if representative else {},
@@ -44,6 +45,10 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
                 "control_id": transition.action.control_id,
                 "kind": transition.action.kind,
                 "label": transition.action.label,
+                "interaction": transition.action.interaction,
+                "component": transition.action.component,
+                "frame_index": transition.action.frame_index,
+                "frame_url": transition.action.frame_url,
                 "status": transition.status,
                 "workflow_path_length": len(transition.workflow_path),
                 "workflow_path": [
