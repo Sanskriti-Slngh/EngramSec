@@ -1,0 +1,423 @@
+flowchart LR
+  n_state_1c8c51b94d9336e7["Scored"]
+  n_state_2309b5aa5fc62578["Results"]
+  n_state_3160676df83f75a5["window.location.replace() navigation"]
+  n_state_342db0ef8fcdfac5["/results.json"]
+  n_state_4bbfc6db0f84008a["window.open() navigation"]
+  n_state_4c83f08a8e24fb08["dynamic-content"]
+  n_state_5776b44af74db806["Results"]
+  n_state_59eadea2fbeb5e14["Scored"]
+  n_state_7005415c99972b65["localStorage token gates score link"]
+  n_state_73e4d1941d7394a1["Scored"]
+  n_state_752af3b7ad2da3d5["Results"]
+  n_state_7db4ca9844679437["Link injected when <details> is opened"]
+  n_state_7f88e656f4e2eaad["/results.yaml"]
+  n_state_80c3efdd8a45a3a6["localStorage token gates score link"]
+  n_state_888cfba8654a08c8["Score link inside <template> element"]
+  n_state_93498330ec50d3a6["dynamic-content"]
+  n_state_a8bcbb14f1a0d957["/results.json"]
+  n_state_ada4ee3d44f3537b["dynamic-content"]
+  n_state_bec3d51eea7c0025["XMLHttpRequest POST"]
+  n_state_c4ff7581a6766681["navigation"]
+  n_state_cc45c03a6dc6a0a7["Score link inside <template> element"]
+  n_state_ceb4dc2dcea6c11d["Link injected when <details> is opened"]
+  n_state_d74bd529f074079c["XMLHttpRequest POST"]
+  n_state_d970e52d0996cf6d["/results.json"]
+  n_state_de1f777ed9767b74["Results"]
+  n_state_ea25dc21ab361fc1["window.location assigned in setTimeout"]
+  n_state_ee761347be5eeff7["/results.json"]
+  n_action_tr_439244e8d6743942bf71{"Score link inside <template> element [replay_validated]"}
+  n_action_tr_8b2f25bd45d4701f1d33{"Load content [replay_validated]"}
+  n_action_tr_b0684cf5748a9c31cf84{"Click me [replay_validated]"}
+  n_action_tr_f053b0f7831d8c84eee6{"Back to dynamic-content [observed]"}
+  n_action_tr_3bfa935ca57455c07336{"Score link inside <template> element [observed]"}
+  n_action_tr_cce24cf2353b1e915765{"dynamic-content [observed]"}
+  n_action_tr_30f7843f3a91280a5f45{"results.json [observed]"}
+  n_action_tr_a86c938494363f04d403{"results.json [observed]"}
+  n_action_tr_b5d30394cc9739b25b51{"Results [observed]"}
+  n_action_tr_b4cb94a7b111f0d5ff98{"YAML export [observed]"}
+  n_action_tr_65716b29d946f043f62e{"localStorage token gates score link [replay_validated]"}
+  n_action_tr_39e086ebd854420a339d{"Set flag [replay_validated]"}
+  n_action_tr_f8dda9a135d8b89db013{"Click me [replay_validated]"}
+  n_action_tr_d640a1f7f978f28c5941{"results.json [observed]"}
+  n_action_tr_6927923724f87de6834f{"XMLHttpRequest POST [replay_validated]"}
+  n_action_tr_9efb322e47ac784481a1{"Submit via XHR [replay_validated]"}
+  n_action_tr_b39f5c925df2f7babeea{"Submit via XHR [replay_validated]"}
+  n_action_tr_6fa2d32dfba66f9e2c8a{"results.json [observed]"}
+  n_action_tr_ac9070a371cd659cab8e{"window.open() navigation [replay_validated]"}
+  n_action_tr_d8bf12fd5fd083ee156d{"Open popup [replay_validated]"}
+  n_action_tr_8ed882902bfb4c9eed3e{"navigation [replay_validated]"}
+  n_action_tr_bdc9969659aa4ddce80e{"window.open() navigation [replay_validated]"}
+  n_action_tr_b5ec9439efadd6dc6808{"results.json [observed]"}
+  n_action_tr_edde64959c92a875abd0{"window.location.replace() navigation [replay_validated]"}
+  n_action_tr_499bdabb0c53730ed122{"results.json [observed]"}
+  n_action_tr_ea015b443d409b66b54d{"window.location assigned in setTimeout [replay_validated]"}
+  n_action_tr_0927f7927361c1c59dc5{"results.json [observed]"}
+  n_action_tr_98ce557197fa423e985d{"Link injected when <details> is opened [replay_validated]"}
+  n_action_tr_a71c36a2f0f885152a1d{"Click to expand [replay_validated]"}
+  n_action_tr_b973420cdb3f60b73fa1{"Click me [replay_validated]"}
+  n_workflow_50069e77f469cd6c86(("Score link inside <template> element [navigation_only]"))
+  n_workflow_05326f2b46ad5aa602(("Load content [unresolved]"))
+  n_workflow_c83efff78698368778(("Click me [navigation_only]"))
+  n_workflow_9cec662e44d19625c8(("Back to dynamic-content [not_tested]"))
+  n_workflow_c4621ef593bfe62559(("Score link inside <template> element [not_tested]"))
+  n_workflow_1ff5745a960d4566a5(("dynamic-content [failed]"))
+  n_workflow_dd51d8af6f2a6e4bb5(("results.json [failed]"))
+  n_workflow_3f5d745edd405eb8df(("results.json [failed]"))
+  n_workflow_8ba2f7cdb17da6b256(("Results [failed]"))
+  n_workflow_1caae1f15a47e544f7(("YAML export [failed]"))
+  n_workflow_5228f95b5d24641f91(("localStorage token gates score link [navigation_only]"))
+  n_workflow_9dfe1fb9d04930bef5(("Set flag [unresolved]"))
+  n_workflow_81b3906872fae3ebd7(("Click me [navigation_only]"))
+  n_workflow_cf0882eb51ac3ff1d5(("results.json [failed]"))
+  n_workflow_89f9cd92395faf170a(("XMLHttpRequest POST [navigation_only]"))
+  n_workflow_faccb836aaa8b7d1ae(("Submit via XHR [unresolved]"))
+  n_workflow_554bc24067cf299a95(("Submit via XHR [unresolved]"))
+  n_workflow_674fdaaf8ceedf3a56(("results.json [failed]"))
+  n_workflow_411ac6db9f91cd3eaf(("window.open() navigation [navigation_only]"))
+  n_workflow_09236d18c39ea5075b(("Open popup [unresolved]"))
+  n_workflow_c5aa12a838aa041343(("navigation [navigation_only]"))
+  n_workflow_daaf17e2d087e2c116(("window.open() navigation [navigation_only]"))
+  n_workflow_1f5b3a21cf3ab5de10(("results.json [failed]"))
+  n_workflow_0b377948a85e632bda(("window.location.replace() navigation [navigation_only]"))
+  n_workflow_f2c81eb24f136bd1b8(("results.json [failed]"))
+  n_workflow_7141acc2ac6c53aa0d(("window.location assigned in setTimeout [navigation_only]"))
+  n_workflow_8fbadcbe733ae3a95e(("results.json [failed]"))
+  n_workflow_9605c9fba64733427d(("Link injected when <details> is opened [navigation_only]"))
+  n_workflow_365dad0c2c1707ad12(("Click to expand [unresolved]"))
+  n_workflow_75d03d2fb093c30063(("Click me [navigation_only]"))
+  n_advertised_obs_7e8bcafe36b507deb259_ctl_751c201c25515cc103["Crawlground [not tested]"]
+  n_advertised_obs_7e8bcafe36b507deb259_ctl_5341e47f5f15f27b19["Categories [not tested]"]
+  n_advertised_obs_7e8bcafe36b507deb259_ctl_3ef8d7051d13a6cc02["Reset [not tested]"]
+  n_advertised_obs_7e8bcafe36b507deb259_ctl_aaf37d3cb585106178["Link appears after async delay [not tested]"]
+  n_advertised_obs_7e8bcafe36b507deb259_ctl_e575c991489fb06a32["Link appears after fetch() network request [not tested]"]
+  n_advertised_obs_7e8bcafe36b507deb259_ctl_7469ac54916bc2e2c1["Link appears on scroll (IntersectionObserver) [not tested]"]
+  n_advertised_obs_7e8bcafe36b507deb259_ctl_7bcb348440795fadcc["Link delivered via Server-Sent Events [not tested]"]
+  n_advertised_obs_7e8bcafe36b507deb259_ctl_eadd612b01627eabc2["Link delivered via WebSocket [not tested]"]
+  n_advertised_obs_7e8bcafe36b507deb259_ctl_edd6b89d8944079c29["'Load more' button appends score link [not tested]"]
+  n_advertised_obs_7e8bcafe36b507deb259_ctl_10e3d584c98fde0ecc["Infinite scroll — link in auto-loaded batch [not tested]"]
+  n_advertised_obs_1d4fa04a76ab71282bd3_ctl_613870489cedfbd302["All results [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_497fafa6a83b9075fb["HTML <button> with onclick [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_848fd9636d95e98268["Div styled as button [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_beef8677cd7e5aa30f["GET form with submit button [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_40793d6a3e3c80b3b3["POST form with submit button [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_4d35bc34920e18f93a["<input type='image'> submit button [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_4b97fe6df9eaecc4c1["GET form with <select> dropdown [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_b932dd3d32064ca5f5["AJAX fetch() POST — no <form> element [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_3548c3b7b9b5a3bcdd["GET form with radio buttons [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_cf8afe9941155c92b4["GET form with checkboxes [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_442bf8b4a5e167e1d4["<button formaction> overrides form action [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_f4af2b77240464fcd5["Form submitted programmatically via JS [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_298ca643494f6165a9["Multi-step form wizard [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_e61baed5a458d6f6b8["AJAX fetch() GET — no <form> element [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_4eba7c11608182f935["Link inside same-origin iframe (srcdoc) [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_92e42ade3890ffa536["Link inside open Shadow DOM [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_4eaa99cff31fb60d3a["Link inside same-origin iframe (src URL) [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_18f53aab3853a8b9df["Link inside closed Shadow DOM [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_cedf74961fea37359f["Link injected on mouseover [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_dac33304d33ec62c7c["onclick with preventDefault — JS-only navigation [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_eb4dbe8c1a2549d543["Link injected on input focus [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_cf36346dce27d73faf["Single-level CSS :hover dropdown [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_8f5ce81dfff4e55561["Multi-level JS dropdown menu [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_b425841bbf13f74ea7["Link inside <dialog> modal [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_3a59c18afad314cccb["Double-click navigation [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_8d0c5e65b4b8a8df26["Keyboard Enter on non-button element [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_262d93a02250deeecd["Right-click (contextmenu) link injection [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_b3b6c47eca83abe16b["Tab panel with JS-rendered content [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_949d4b39478c23bbce["Popover API — link injected on open [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_b91d1295387e9c4cfc["pointerup event triggers navigation [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_06c063419873985e18["Long press (mousedown hold) triggers navigation [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_b1404113e909f27ea7["CustomEvent dispatched by button click [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_61a819f8a0d85e9720["Plain anchor with href [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_9426661778a9f7acaf["Anchor with href set in JS [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_abf4613cf41ff732a5["Link inside <noscript> [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_088cc497c02a8857cc["SVG <a> element [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_48f4b6025292ca7067["Anchor with target='_blank' [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_782608ee471eca85ed["Anchor with javascript: href and onclick [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_38817d54feef960993["Image map with clickable <area> [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_d9a3253a8840585aa0["Meta refresh redirect [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_6c2c9b358976dee6c0["history.pushState() SPA navigation [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_cce381599fc1a111c2["Hash-based SPA routing [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_361e7891943f1118e8["HTTP 302 redirect to marker URL [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_8d843d4fc67e9b9604["<base href> changes relative URL resolution [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_ec6c4c1e38674176cc["history.replaceState() SPA navigation [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_30f56b2b2404fa0388["Bot-detection globals check [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_c228b9459d00f26549["JSON export [not tested]"]
+  n_advertised_obs_167725f449933f788879_ctl_c00dd40111651e391b["Reset all scores [not tested]"]
+  n_advertised_obs_4a846ac92ea6347452e7_ctl_b6918e12a9f3a10655["forms [not tested]"]
+  n_state_93498330ec50d3a6 -->|replay_validated| n_action_tr_439244e8d6743942bf71
+  n_action_tr_439244e8d6743942bf71 -->|replay_validated| n_state_cc45c03a6dc6a0a7
+  n_state_cc45c03a6dc6a0a7 -->|replay_validated| n_action_tr_8b2f25bd45d4701f1d33
+  n_action_tr_8b2f25bd45d4701f1d33 -->|replay_validated| n_state_888cfba8654a08c8
+  n_state_888cfba8654a08c8 -->|replay_validated| n_action_tr_b0684cf5748a9c31cf84
+  n_action_tr_b0684cf5748a9c31cf84 -->|replay_validated| n_state_1c8c51b94d9336e7
+  n_state_1c8c51b94d9336e7 -->|observed| n_action_tr_f053b0f7831d8c84eee6
+  n_action_tr_f053b0f7831d8c84eee6 -->|observed| n_state_ada4ee3d44f3537b
+  n_state_ada4ee3d44f3537b -->|observed| n_action_tr_3bfa935ca57455c07336
+  n_action_tr_3bfa935ca57455c07336 -->|observed| n_state_cc45c03a6dc6a0a7
+  n_state_cc45c03a6dc6a0a7 -->|observed| n_action_tr_cce24cf2353b1e915765
+  n_action_tr_cce24cf2353b1e915765 -->|observed| n_state_ada4ee3d44f3537b
+  n_state_ada4ee3d44f3537b -->|observed| n_action_tr_30f7843f3a91280a5f45
+  n_action_tr_30f7843f3a91280a5f45 -->|observed| n_state_d970e52d0996cf6d
+  n_state_ada4ee3d44f3537b -->|observed| n_action_tr_a86c938494363f04d403
+  n_action_tr_a86c938494363f04d403 -->|observed| n_state_d970e52d0996cf6d
+  n_state_ada4ee3d44f3537b -->|observed| n_action_tr_b5d30394cc9739b25b51
+  n_action_tr_b5d30394cc9739b25b51 -->|observed| n_state_2309b5aa5fc62578
+  n_state_2309b5aa5fc62578 -->|observed| n_action_tr_b4cb94a7b111f0d5ff98
+  n_action_tr_b4cb94a7b111f0d5ff98 -->|observed| n_state_7f88e656f4e2eaad
+  n_state_ada4ee3d44f3537b -->|replay_validated| n_action_tr_65716b29d946f043f62e
+  n_action_tr_65716b29d946f043f62e -->|replay_validated| n_state_7005415c99972b65
+  n_state_7005415c99972b65 -->|replay_validated| n_action_tr_39e086ebd854420a339d
+  n_action_tr_39e086ebd854420a339d -->|replay_validated| n_state_80c3efdd8a45a3a6
+  n_state_80c3efdd8a45a3a6 -->|replay_validated| n_action_tr_f8dda9a135d8b89db013
+  n_action_tr_f8dda9a135d8b89db013 -->|replay_validated| n_state_73e4d1941d7394a1
+  n_state_73e4d1941d7394a1 -->|observed| n_action_tr_d640a1f7f978f28c5941
+  n_action_tr_d640a1f7f978f28c5941 -->|observed| n_state_342db0ef8fcdfac5
+  n_state_752af3b7ad2da3d5 -->|replay_validated| n_action_tr_6927923724f87de6834f
+  n_action_tr_6927923724f87de6834f -->|replay_validated| n_state_d74bd529f074079c
+  n_state_d74bd529f074079c -->|replay_validated| n_action_tr_9efb322e47ac784481a1
+  n_action_tr_9efb322e47ac784481a1 -->|replay_validated| n_state_bec3d51eea7c0025
+  n_state_bec3d51eea7c0025 -->|replay_validated| n_action_tr_b39f5c925df2f7babeea
+  n_action_tr_b39f5c925df2f7babeea -->|replay_validated| n_state_bec3d51eea7c0025
+  n_state_bec3d51eea7c0025 -->|observed| n_action_tr_6fa2d32dfba66f9e2c8a
+  n_action_tr_6fa2d32dfba66f9e2c8a -->|observed| n_state_ee761347be5eeff7
+  n_state_5776b44af74db806 -->|replay_validated| n_action_tr_ac9070a371cd659cab8e
+  n_action_tr_ac9070a371cd659cab8e -->|replay_validated| n_state_4bbfc6db0f84008a
+  n_state_4bbfc6db0f84008a -->|replay_validated| n_action_tr_d8bf12fd5fd083ee156d
+  n_action_tr_d8bf12fd5fd083ee156d -->|replay_validated| n_state_4bbfc6db0f84008a
+  n_state_4bbfc6db0f84008a -->|replay_validated| n_action_tr_8ed882902bfb4c9eed3e
+  n_action_tr_8ed882902bfb4c9eed3e -->|replay_validated| n_state_c4ff7581a6766681
+  n_state_c4ff7581a6766681 -->|replay_validated| n_action_tr_bdc9969659aa4ddce80e
+  n_action_tr_bdc9969659aa4ddce80e -->|replay_validated| n_state_4bbfc6db0f84008a
+  n_state_4bbfc6db0f84008a -->|observed| n_action_tr_b5ec9439efadd6dc6808
+  n_action_tr_b5ec9439efadd6dc6808 -->|observed| n_state_a8bcbb14f1a0d957
+  n_state_de1f777ed9767b74 -->|replay_validated| n_action_tr_edde64959c92a875abd0
+  n_action_tr_edde64959c92a875abd0 -->|replay_validated| n_state_3160676df83f75a5
+  n_state_3160676df83f75a5 -->|observed| n_action_tr_499bdabb0c53730ed122
+  n_action_tr_499bdabb0c53730ed122 -->|observed| n_state_a8bcbb14f1a0d957
+  n_state_de1f777ed9767b74 -->|replay_validated| n_action_tr_ea015b443d409b66b54d
+  n_action_tr_ea015b443d409b66b54d -->|replay_validated| n_state_ea25dc21ab361fc1
+  n_state_ea25dc21ab361fc1 -->|observed| n_action_tr_0927f7927361c1c59dc5
+  n_action_tr_0927f7927361c1c59dc5 -->|observed| n_state_a8bcbb14f1a0d957
+  n_state_4c83f08a8e24fb08 -->|replay_validated| n_action_tr_98ce557197fa423e985d
+  n_action_tr_98ce557197fa423e985d -->|replay_validated| n_state_ceb4dc2dcea6c11d
+  n_state_ceb4dc2dcea6c11d -->|replay_validated| n_action_tr_a71c36a2f0f885152a1d
+  n_action_tr_a71c36a2f0f885152a1d -->|replay_validated| n_state_7db4ca9844679437
+  n_state_7db4ca9844679437 -->|replay_validated| n_action_tr_b973420cdb3f60b73fa1
+  n_action_tr_b973420cdb3f60b73fa1 -->|replay_validated| n_state_59eadea2fbeb5e14
+  n_state_93498330ec50d3a6 -->|not_tested| n_advertised_obs_7e8bcafe36b507deb259_ctl_751c201c25515cc103
+  n_state_93498330ec50d3a6 -->|not_tested| n_advertised_obs_7e8bcafe36b507deb259_ctl_5341e47f5f15f27b19
+  n_state_93498330ec50d3a6 -->|not_tested| n_advertised_obs_7e8bcafe36b507deb259_ctl_3ef8d7051d13a6cc02
+  n_state_93498330ec50d3a6 -->|not_tested| n_advertised_obs_7e8bcafe36b507deb259_ctl_aaf37d3cb585106178
+  n_state_93498330ec50d3a6 -->|not_tested| n_advertised_obs_7e8bcafe36b507deb259_ctl_e575c991489fb06a32
+  n_state_93498330ec50d3a6 -->|not_tested| n_advertised_obs_7e8bcafe36b507deb259_ctl_7469ac54916bc2e2c1
+  n_state_93498330ec50d3a6 -->|not_tested| n_advertised_obs_7e8bcafe36b507deb259_ctl_7bcb348440795fadcc
+  n_state_93498330ec50d3a6 -->|not_tested| n_advertised_obs_7e8bcafe36b507deb259_ctl_eadd612b01627eabc2
+  n_state_93498330ec50d3a6 -->|not_tested| n_advertised_obs_7e8bcafe36b507deb259_ctl_edd6b89d8944079c29
+  n_state_93498330ec50d3a6 -->|not_tested| n_advertised_obs_7e8bcafe36b507deb259_ctl_10e3d584c98fde0ecc
+  n_state_1c8c51b94d9336e7 -->|not_tested| n_advertised_obs_1d4fa04a76ab71282bd3_ctl_613870489cedfbd302
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_497fafa6a83b9075fb
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_848fd9636d95e98268
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_beef8677cd7e5aa30f
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_40793d6a3e3c80b3b3
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_4d35bc34920e18f93a
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_4b97fe6df9eaecc4c1
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_b932dd3d32064ca5f5
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_3548c3b7b9b5a3bcdd
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_cf8afe9941155c92b4
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_442bf8b4a5e167e1d4
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_f4af2b77240464fcd5
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_298ca643494f6165a9
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_e61baed5a458d6f6b8
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_4eba7c11608182f935
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_92e42ade3890ffa536
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_4eaa99cff31fb60d3a
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_18f53aab3853a8b9df
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_cedf74961fea37359f
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_dac33304d33ec62c7c
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_eb4dbe8c1a2549d543
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_cf36346dce27d73faf
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_8f5ce81dfff4e55561
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_b425841bbf13f74ea7
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_3a59c18afad314cccb
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_8d0c5e65b4b8a8df26
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_262d93a02250deeecd
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_b3b6c47eca83abe16b
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_949d4b39478c23bbce
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_b91d1295387e9c4cfc
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_06c063419873985e18
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_b1404113e909f27ea7
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_61a819f8a0d85e9720
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_9426661778a9f7acaf
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_abf4613cf41ff732a5
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_088cc497c02a8857cc
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_48f4b6025292ca7067
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_782608ee471eca85ed
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_38817d54feef960993
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_d9a3253a8840585aa0
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_6c2c9b358976dee6c0
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_cce381599fc1a111c2
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_361e7891943f1118e8
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_8d843d4fc67e9b9604
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_ec6c4c1e38674176cc
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_30f56b2b2404fa0388
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_c228b9459d00f26549
+  n_state_2309b5aa5fc62578 -->|not_tested| n_advertised_obs_167725f449933f788879_ctl_c00dd40111651e391b
+  n_state_d74bd529f074079c -->|not_tested| n_advertised_obs_4a846ac92ea6347452e7_ctl_b6918e12a9f3a10655
+  n_workflow_50069e77f469cd6c86 -->|navigation_only| n_action_tr_439244e8d6743942bf71
+  n_workflow_05326f2b46ad5aa602 -->|unresolved| n_action_tr_8b2f25bd45d4701f1d33
+  n_workflow_c83efff78698368778 -->|navigation_only| n_action_tr_b0684cf5748a9c31cf84
+  n_workflow_9cec662e44d19625c8 -->|not_tested| n_action_tr_f053b0f7831d8c84eee6
+  n_workflow_c4621ef593bfe62559 -->|not_tested| n_action_tr_3bfa935ca57455c07336
+  n_workflow_1ff5745a960d4566a5 -->|failed| n_action_tr_cce24cf2353b1e915765
+  n_workflow_dd51d8af6f2a6e4bb5 -->|failed| n_action_tr_30f7843f3a91280a5f45
+  n_workflow_3f5d745edd405eb8df -->|failed| n_action_tr_a86c938494363f04d403
+  n_workflow_8ba2f7cdb17da6b256 -->|failed| n_action_tr_b5d30394cc9739b25b51
+  n_workflow_1caae1f15a47e544f7 -->|failed| n_action_tr_b4cb94a7b111f0d5ff98
+  n_workflow_5228f95b5d24641f91 -->|navigation_only| n_action_tr_65716b29d946f043f62e
+  n_workflow_9dfe1fb9d04930bef5 -->|unresolved| n_action_tr_39e086ebd854420a339d
+  n_workflow_81b3906872fae3ebd7 -->|navigation_only| n_action_tr_f8dda9a135d8b89db013
+  n_workflow_cf0882eb51ac3ff1d5 -->|failed| n_action_tr_d640a1f7f978f28c5941
+  n_workflow_89f9cd92395faf170a -->|navigation_only| n_action_tr_6927923724f87de6834f
+  n_workflow_faccb836aaa8b7d1ae -->|unresolved| n_action_tr_9efb322e47ac784481a1
+  n_workflow_554bc24067cf299a95 -->|unresolved| n_action_tr_b39f5c925df2f7babeea
+  n_workflow_674fdaaf8ceedf3a56 -->|failed| n_action_tr_6fa2d32dfba66f9e2c8a
+  n_workflow_411ac6db9f91cd3eaf -->|navigation_only| n_action_tr_ac9070a371cd659cab8e
+  n_workflow_09236d18c39ea5075b -->|unresolved| n_action_tr_d8bf12fd5fd083ee156d
+  n_workflow_c5aa12a838aa041343 -->|navigation_only| n_action_tr_8ed882902bfb4c9eed3e
+  n_workflow_daaf17e2d087e2c116 -->|navigation_only| n_action_tr_bdc9969659aa4ddce80e
+  n_workflow_1f5b3a21cf3ab5de10 -->|failed| n_action_tr_b5ec9439efadd6dc6808
+  n_workflow_0b377948a85e632bda -->|navigation_only| n_action_tr_edde64959c92a875abd0
+  n_workflow_f2c81eb24f136bd1b8 -->|failed| n_action_tr_499bdabb0c53730ed122
+  n_workflow_7141acc2ac6c53aa0d -->|navigation_only| n_action_tr_ea015b443d409b66b54d
+  n_workflow_8fbadcbe733ae3a95e -->|failed| n_action_tr_0927f7927361c1c59dc5
+  n_workflow_9605c9fba64733427d -->|navigation_only| n_action_tr_98ce557197fa423e985d
+  n_workflow_365dad0c2c1707ad12 -->|unresolved| n_action_tr_a71c36a2f0f885152a1d
+  n_workflow_75d03d2fb093c30063 -->|navigation_only| n_action_tr_b973420cdb3f60b73fa1
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;
+  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;
+  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;
+  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;
+  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;
+  class n_action_tr_439244e8d6743942bf71 replay_validated;
+  class n_action_tr_8b2f25bd45d4701f1d33 replay_validated;
+  class n_action_tr_b0684cf5748a9c31cf84 replay_validated;
+  class n_action_tr_f053b0f7831d8c84eee6 observed;
+  class n_action_tr_3bfa935ca57455c07336 observed;
+  class n_action_tr_cce24cf2353b1e915765 observed;
+  class n_action_tr_30f7843f3a91280a5f45 observed;
+  class n_action_tr_a86c938494363f04d403 observed;
+  class n_action_tr_b5d30394cc9739b25b51 observed;
+  class n_action_tr_b4cb94a7b111f0d5ff98 observed;
+  class n_action_tr_65716b29d946f043f62e replay_validated;
+  class n_action_tr_39e086ebd854420a339d replay_validated;
+  class n_action_tr_f8dda9a135d8b89db013 replay_validated;
+  class n_action_tr_d640a1f7f978f28c5941 observed;
+  class n_action_tr_6927923724f87de6834f replay_validated;
+  class n_action_tr_9efb322e47ac784481a1 replay_validated;
+  class n_action_tr_b39f5c925df2f7babeea replay_validated;
+  class n_action_tr_6fa2d32dfba66f9e2c8a observed;
+  class n_action_tr_ac9070a371cd659cab8e replay_validated;
+  class n_action_tr_d8bf12fd5fd083ee156d replay_validated;
+  class n_action_tr_8ed882902bfb4c9eed3e replay_validated;
+  class n_action_tr_bdc9969659aa4ddce80e replay_validated;
+  class n_action_tr_b5ec9439efadd6dc6808 observed;
+  class n_action_tr_edde64959c92a875abd0 replay_validated;
+  class n_action_tr_499bdabb0c53730ed122 observed;
+  class n_action_tr_ea015b443d409b66b54d replay_validated;
+  class n_action_tr_0927f7927361c1c59dc5 observed;
+  class n_action_tr_98ce557197fa423e985d replay_validated;
+  class n_action_tr_a71c36a2f0f885152a1d replay_validated;
+  class n_action_tr_b973420cdb3f60b73fa1 replay_validated;
+  class n_workflow_50069e77f469cd6c86 navigation_only;
+  class n_workflow_05326f2b46ad5aa602 unresolved;
+  class n_workflow_c83efff78698368778 navigation_only;
+  class n_workflow_9cec662e44d19625c8 not_tested;
+  class n_workflow_c4621ef593bfe62559 not_tested;
+  class n_workflow_1ff5745a960d4566a5 failed;
+  class n_workflow_dd51d8af6f2a6e4bb5 failed;
+  class n_workflow_3f5d745edd405eb8df failed;
+  class n_workflow_8ba2f7cdb17da6b256 failed;
+  class n_workflow_1caae1f15a47e544f7 failed;
+  class n_workflow_5228f95b5d24641f91 navigation_only;
+  class n_workflow_9dfe1fb9d04930bef5 unresolved;
+  class n_workflow_81b3906872fae3ebd7 navigation_only;
+  class n_workflow_cf0882eb51ac3ff1d5 failed;
+  class n_workflow_89f9cd92395faf170a navigation_only;
+  class n_workflow_faccb836aaa8b7d1ae unresolved;
+  class n_workflow_554bc24067cf299a95 unresolved;
+  class n_workflow_674fdaaf8ceedf3a56 failed;
+  class n_workflow_411ac6db9f91cd3eaf navigation_only;
+  class n_workflow_09236d18c39ea5075b unresolved;
+  class n_workflow_c5aa12a838aa041343 navigation_only;
+  class n_workflow_daaf17e2d087e2c116 navigation_only;
+  class n_workflow_1f5b3a21cf3ab5de10 failed;
+  class n_workflow_0b377948a85e632bda navigation_only;
+  class n_workflow_f2c81eb24f136bd1b8 failed;
+  class n_workflow_7141acc2ac6c53aa0d navigation_only;
+  class n_workflow_8fbadcbe733ae3a95e failed;
+  class n_workflow_9605c9fba64733427d navigation_only;
+  class n_workflow_365dad0c2c1707ad12 unresolved;
+  class n_workflow_75d03d2fb093c30063 navigation_only;
+  class n_advertised_obs_7e8bcafe36b507deb259_ctl_751c201c25515cc103 not_tested;
+  class n_advertised_obs_7e8bcafe36b507deb259_ctl_5341e47f5f15f27b19 not_tested;
+  class n_advertised_obs_7e8bcafe36b507deb259_ctl_3ef8d7051d13a6cc02 not_tested;
+  class n_advertised_obs_7e8bcafe36b507deb259_ctl_aaf37d3cb585106178 not_tested;
+  class n_advertised_obs_7e8bcafe36b507deb259_ctl_e575c991489fb06a32 not_tested;
+  class n_advertised_obs_7e8bcafe36b507deb259_ctl_7469ac54916bc2e2c1 not_tested;
+  class n_advertised_obs_7e8bcafe36b507deb259_ctl_7bcb348440795fadcc not_tested;
+  class n_advertised_obs_7e8bcafe36b507deb259_ctl_eadd612b01627eabc2 not_tested;
+  class n_advertised_obs_7e8bcafe36b507deb259_ctl_edd6b89d8944079c29 not_tested;
+  class n_advertised_obs_7e8bcafe36b507deb259_ctl_10e3d584c98fde0ecc not_tested;
+  class n_advertised_obs_1d4fa04a76ab71282bd3_ctl_613870489cedfbd302 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_497fafa6a83b9075fb not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_848fd9636d95e98268 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_beef8677cd7e5aa30f not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_40793d6a3e3c80b3b3 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_4d35bc34920e18f93a not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_4b97fe6df9eaecc4c1 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_b932dd3d32064ca5f5 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_3548c3b7b9b5a3bcdd not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_cf8afe9941155c92b4 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_442bf8b4a5e167e1d4 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_f4af2b77240464fcd5 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_298ca643494f6165a9 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_e61baed5a458d6f6b8 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_4eba7c11608182f935 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_92e42ade3890ffa536 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_4eaa99cff31fb60d3a not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_18f53aab3853a8b9df not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_cedf74961fea37359f not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_dac33304d33ec62c7c not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_eb4dbe8c1a2549d543 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_cf36346dce27d73faf not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_8f5ce81dfff4e55561 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_b425841bbf13f74ea7 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_3a59c18afad314cccb not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_8d0c5e65b4b8a8df26 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_262d93a02250deeecd not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_b3b6c47eca83abe16b not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_949d4b39478c23bbce not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_b91d1295387e9c4cfc not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_06c063419873985e18 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_b1404113e909f27ea7 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_61a819f8a0d85e9720 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_9426661778a9f7acaf not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_abf4613cf41ff732a5 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_088cc497c02a8857cc not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_48f4b6025292ca7067 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_782608ee471eca85ed not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_38817d54feef960993 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_d9a3253a8840585aa0 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_6c2c9b358976dee6c0 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_cce381599fc1a111c2 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_361e7891943f1118e8 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_8d843d4fc67e9b9604 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_ec6c4c1e38674176cc not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_30f56b2b2404fa0388 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_c228b9459d00f26549 not_tested;
+  class n_advertised_obs_167725f449933f788879_ctl_c00dd40111651e391b not_tested;
+  class n_advertised_obs_4a846ac92ea6347452e7_ctl_b6918e12a9f3a10655 not_tested;

@@ -66,14 +66,21 @@ def route_pattern(url: str) -> str:
 
 
 def same_origin(left: str, right: str) -> bool:
-    def origin(value: str) -> tuple[str, str, int | None]:
-        part = urlsplit(value)
-        port = part.port
-        if port is None:
-            port = 443 if part.scheme == "https" else 80
-        return part.scheme.lower(), (part.hostname or "").lower(), port
+    return origin_tuple(left) == origin_tuple(right)
 
-    return origin(left) == origin(right)
+
+def origin_tuple(value: str) -> tuple[str, str, int]:
+    part = urlsplit(value)
+    port = part.port
+    if port is None:
+        port = 443 if part.scheme == "https" else 80
+    return part.scheme.lower(), (part.hostname or "").lower(), port
+
+
+def allowed_origin(start: str, target: str, aliases: list[str] | None = None) -> bool:
+    allowed = {origin_tuple(start)}
+    allowed.update(origin_tuple(item) for item in aliases or [])
+    return origin_tuple(target) in allowed
 
 
 def control_signature(kind: str, role: str, label: str, target: str | None, method: str | None) -> str:

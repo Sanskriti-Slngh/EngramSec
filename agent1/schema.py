@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from enum import StrEnum
 from pathlib import Path
 from typing import Any, Literal
+from urllib.parse import urlsplit
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -55,6 +56,11 @@ class RunConfig(BaseModel):
     max_form_retries: int = Field(default=1, ge=0, le=2)
     search_probe_primary: str | None = Field(default=None, max_length=80)
     search_probe_contrast: str | None = Field(default=None, max_length=80)
+    robust_readiness: bool = False
+    readiness_timeout_ms: int = Field(default=2_500, ge=250, le=15_000)
+    readiness_poll_ms: int = Field(default=100, ge=25, le=1_000)
+    origin_aliases: list[str] = Field(default_factory=list)
+    exploration_mode: Literal["fresh", "persistent"] = "fresh"
 
     @model_validator(mode="after")
     def paired_search_probes(self) -> "RunConfig":
@@ -68,7 +74,44 @@ class RunConfig(BaseModel):
             if any(any(ord(char) < 32 for char in item) for item in cleaned):
                 raise ValueError("search probes cannot contain control characters")
             self.search_probe_primary, self.search_probe_contrast = cleaned
+        normalized_aliases: list[str] = []
+        for value in self.origin_aliases:
+            parsed = urlsplit(value)
+            if (
+                parsed.scheme not in {"http", "https"}
+                or parsed.hostname not in {"127.0.0.1", "localhost", "::1"}
+                or parsed.username
+                or parsed.password
+                or parsed.query
+                or parsed.fragment
+                or parsed.path not in {"", "/"}
+            ):
+                raise ValueError(
+                    "origin aliases must be explicit HTTP(S) loopback origins without credentials or paths"
+                )
+            port = parsed.port or (443 if parsed.scheme == "https" else 80)
+            host = f"[{parsed.hostname}]" if ":" in (parsed.hostname or "") else parsed.hostname
+            normalized_aliases.append(f"{parsed.scheme.lower()}://{host}:{port}")
+        self.origin_aliases = sorted(set(normalized_aliases))
         return self
+
+
+class ReadinessSample(BaseModel):
+    elapsed_ms: int
+    document_state: str
+    aria_busy_count: int
+    enabled_control_count: int
+    disabled_control_count: int
+    control_fingerprint: str
+
+
+class ReadinessEvidence(BaseModel):
+    status: Literal["not_recorded", "initializing", "usable", "blocked", "timeout"] = (
+        "not_recorded"
+    )
+    duration_ms: int = 0
+    http_status: int | None = None
+    samples: list[ReadinessSample] = Field(default_factory=list)
 
 
 class InputReference(BaseModel):
@@ -144,6 +187,7 @@ class Observation(BaseModel):
     session_markers: dict[str, list[str]] = Field(default_factory=dict)
     route_pattern: str
     instance_facts: dict[str, Any] = Field(default_factory=dict)
+    readiness: ReadinessEvidence = Field(default_factory=ReadinessEvidence)
 
 
 class NetworkEvent(BaseModel):
@@ -154,6 +198,15 @@ class NetworkEvent(BaseModel):
     failure: str | None = None
     parameter_names: list[str] = Field(default_factory=list)
     body_encoding: str | None = None
+
+
+class NavigationEvidence(BaseModel):
+    id: str
+    reason: Literal["initial", "frontier_restore", "persistent_restore", "replay"]
+    url: str
+    readiness: ReadinessEvidence = Field(default_factory=ReadinessEvidence)
+    network: list[NetworkEvent] = Field(default_factory=list)
+    recorded_at: str = Field(default_factory=utc_now)
 
 
 class ActionDescriptor(BaseModel):
@@ -324,6 +377,12 @@ class RunMetrics(BaseModel):
     model_output_tokens: int = 0
     monetary_cost_usd: float = 0.0
     progress: list[dict[str, float | int]] = Field(default_factory=list)
+    root_reloads: int = 0
+    restoration_actions: int = 0
+    live_state_reuses: int = 0
+    live_state_stale: int = 0
+    startup_readiness_failures: int = 0
+    navigation_network_events_recorded: int = 0
 
 
 class RunArtifact(BaseModel):
@@ -341,6 +400,7 @@ class RunArtifact(BaseModel):
     features: list[Feature] = Field(default_factory=list)
     functional_workflows: list[FunctionalWorkflow] = Field(default_factory=list)
     connection_evidence: list[ConnectionEvidence] = Field(default_factory=list)
+    navigation_evidence: list[NavigationEvidence] = Field(default_factory=list)
     state_groups: dict[str, list[str]] = Field(default_factory=dict)
     return_paths: dict[str, list[ActionDescriptor]] = Field(default_factory=dict)
     metrics: RunMetrics = Field(default_factory=RunMetrics)

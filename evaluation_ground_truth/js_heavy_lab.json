@@ -1,0 +1,60 @@
+{
+  "application": "js_heavy_lab",
+  "areas": [
+    {"id": "home", "route": "/", "scope": "applicable"},
+    {"id": "workflow_stage_one", "route": "/", "via_label": "Open workflow", "scope": "applicable"},
+    {"id": "workflow_ready", "route": "/", "via_label": "Continue setup", "scope": "applicable"},
+    {"id": "overview", "route": "/shallow/a", "scope": "applicable"},
+    {"id": "news", "route": "/shallow/b", "scope": "applicable"},
+    {"id": "alias", "route": "/alias-area", "scope": "applicable"},
+    {"id": "workspace", "route": "/workspace", "scope": "applicable"},
+    {"id": "workspace_detail", "route": "/workspace/detail", "scope": "applicable"},
+    {"id": "reports", "route": "/reports", "scope": "applicable"},
+    {"id": "member", "route": "/member", "scope": "applicable"},
+    {"id": "member_preferences", "route": "/member/preferences", "scope": "applicable"},
+    {"id": "external", "route": "https://example.test/outside", "scope": "outside"}
+  ],
+  "controls": [
+    {"id": "overview", "label": "Overview", "kind": "link", "scope": "applicable"},
+    {"id": "news", "label": "News", "kind": "link", "scope": "applicable"},
+    {"id": "open", "label": "Open workflow", "kind": "button", "scope": "applicable"},
+    {"id": "continue", "label": "Continue setup", "kind": "button", "scope": "applicable"},
+    {"id": "workspace", "label": "Open workspace", "kind": "link", "scope": "applicable"},
+    {"id": "detail", "label": "Workspace detail", "kind": "link", "scope": "applicable"},
+    {"id": "late", "label": "Load late reports", "kind": "button", "scope": "applicable"},
+    {"id": "reports", "label": "Open reports", "kind": "link", "scope": "applicable"},
+    {"id": "alias", "label": "Public alias area", "kind": "link", "scope": "applicable"},
+    {"id": "alias_data", "label": "Load alias data", "kind": "button", "scope": "applicable"},
+    {"id": "member", "label": "Enter member mode", "kind": "form_submit", "scope": "applicable"},
+    {"id": "preferences", "label": "Member preferences", "kind": "link", "scope": "applicable"},
+    {"id": "member_data", "label": "Load preferences", "kind": "button", "scope": "applicable"},
+    {"id": "ineffective", "label": "Refresh status", "kind": "button", "scope": "applicable"},
+    {"id": "external", "label": "External documentation", "kind": "link", "scope": "outside"}
+  ],
+  "requests": [
+    {"id": "bootstrap", "method": "GET", "path": "/api/bootstrap", "params": ["format", "mode"], "scope": "applicable", "phase": "initial"},
+    {"id": "prepare", "method": "GET", "path": "/api/workflow/prepare", "params": ["mode"], "scope": "applicable"},
+    {"id": "late", "method": "GET", "path": "/api/late", "params": ["view"], "scope": "applicable"},
+    {"id": "alias_doc", "method": "GET", "path": "/alias-area", "params": [], "scope": "applicable"},
+    {"id": "alias_data", "method": "GET", "path": "/api/alias", "params": ["source"], "scope": "applicable"},
+    {"id": "workspace_doc", "method": "GET", "path": "/workspace", "params": [], "scope": "applicable"},
+    {"id": "workspace_detail", "method": "GET", "path": "/workspace/detail", "params": [], "scope": "applicable"},
+    {"id": "reports_doc", "method": "GET", "path": "/reports", "params": [], "scope": "applicable"},
+    {"id": "session_post", "method": "POST", "path": "/session", "params": ["member_code"], "scope": "applicable"},
+    {"id": "member_doc", "method": "GET", "path": "/member", "params": [], "scope": "applicable"},
+    {"id": "preferences_doc", "method": "GET", "path": "/member/preferences", "params": [], "scope": "applicable"},
+    {"id": "preferences_data", "method": "GET", "path": "/api/member/preferences", "params": ["view"], "scope": "applicable"}
+  ],
+  "instances": [],
+  "contexts": [
+    {"id": "anonymous", "cookie_name": null, "scope": "applicable"},
+    {"id": "member", "cookie_name": "member_session", "scope": "applicable"}
+  ],
+  "expected_alias": "localhost",
+  "distinct_area_pairs": [
+    ["home", "workflow_stage_one"],
+    ["workflow_stage_one", "workflow_ready"]
+  ],
+  "sensitive_values": ["member-secret-9f31"],
+  "cosmetic_marker": "clock"
+}

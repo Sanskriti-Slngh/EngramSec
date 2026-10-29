@@ -30,6 +30,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
                 "observation_ids": member_ids,
                 "raw_state_signatures": sorted({item.state_signature for item in members}),
                 "return_path_length": len(artifact.return_paths.get(group, [])),
+                "readiness_statuses": sorted({item.readiness.status for item in members}),
             }
         )
     action_nodes = []
@@ -189,6 +190,9 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
         "replays": [item.model_dump(mode="json") for item in artifact.replays],
         "replay_observations": [
             item.model_dump(mode="json") for item in artifact.replay_observations
+        ],
+        "navigation_evidence": [
+            item.model_dump(mode="json") for item in artifact.navigation_evidence
         ],
         "connection_evidence": [
             item.model_dump(mode="json") for item in artifact.connection_evidence

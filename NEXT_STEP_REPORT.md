@@ -1,88 +1,50 @@
-# Agent 1 reachable-surface coverage milestone
+# Agent 1 JS-heavy generalization milestone
 
-Date: 2026-10-28
-
-Frozen development base: `6082c6d`
-
-External API/model cost: **$0.00**; model calls: **0**
+Date: 2026-10-29
 
 ## What was proved
 
-Agent 1 now finds generic semantic controls (`role=tab`, `<summary>`, enabled keyboard/data-action launchers), prioritizes globally novel observed control shapes, records request parameter *names* and body encoding without values, and separates browser contexts using cookie/storage marker names without values. These changes remain in the existing observation, frontier, checkpoint, replay, and Graph A pipeline.
+- P0 reproducibly missed hydration: 3/11 areas, 3/14 controls, and 0/12 request surfaces.
+- P1 readiness/origin instrumentation reached all structural areas, controls, and request surfaces, captured initial bootstrap traffic separately, accepted only the configured local alias, and rejected external/unlisted origins.
+- Corrected P2 produced fresh-context replay paths for 11/11 areas in all three repeats, with deepest path 5, 100% attempted replay reliability, zero known critical merges, and zero secret-value leaks.
+- P2 reduced mean root reloads from 37.7 to 30 and exploration restoration actions from 23 to 0 versus P1. It used 127.3 actions versus P1's 111.3 because it discovered and replayed more transitions.
+- On pinned public Crawlground, P2 reached 5/59 markers versus 1/59 for both P0 and P1. This is transfer evidence, not high coverage.
 
-An evaluator maintained separately from the mapper scored frozen Graph A files against independent application ground truth. Blocked and outside-origin surfaces were excluded from ordinary recall denominators and remained visible as separate categories.
+## What failed or remains unproved
 
-## Development evaluation and ablations
+- The first readiness rule stabilized too early; the failed probe is preserved.
+- Early P2 runs recorded incomplete live prerequisites and then crossed anonymous/member contexts during restoration. Their replay reliability was 85% and 60%. Both bugs were fixed; the failures remain preserved.
+- P2's final strict-budget Crawlground replay was only 17/27, with 10 failures and three untested paths. Hover, scroll, focus/keyboard, iframe, shadow DOM, and several nonstandard event classes remain unsupported.
+- No claim of completeness, universal superiority, business-function correctness, or vulnerability coverage follows from these results.
+- A randomized policy was not added within the two-iteration boundary. The next scheduler experiment must include one because the USENIX SoK found randomized baselines competitive.
 
-All Coverage Lab runs used 30 transitions, 140 configured browser actions, one worker, the same reset/start conditions, and the same ground truth. The action counter can overshoot by the final multi-action path; observed totals are reported.
+## Implementation
 
-| Frozen configuration | Areas | Controls | Requests | Replayed area paths | Replay | Surfaces/action |
-|---|---:|---:|---:|---:|---:|---:|
-| `6082c6d` grouped baseline | 6/10 | 11/17 | 6/10 | 5/10 | 19/19 | 0.162 |
-| Iteration 1: semantic controls, grouped | 6/10 | 15/17 | 4/10 | 6/10 | 21/21 | 0.175 |
-| Iteration 2: + coverage frontier | 10/10 | 17/17 | 9/10 | 7/10 | 17/17 | 0.257 |
-| Iteration 3 clean-revision repeat: + request/context evidence | 10/10 | 17/17 | 10/10 | 8/10 | 17/17 | 0.264 |
+- Bounded readiness traces and classifications on every observation.
+- Explicit loopback origin aliases; no inferred equivalence or global allowlist disable.
+- Initial navigation network evidence separated from action-triggered requests.
+- Persistent live-state discovery with archived-path fallback and session-context reset.
+- Actual live prerequisite provenance; fresh-context replay remains independent.
+- Backward-compatible Graph A/checkpoint defaults and focused safety regressions.
 
-Iteration 1 recovered four invisible control classes but displaced request/deep-branch work under the fixed budget; its request regression is preserved rather than hidden. The coverage policy was the material exploration improvement: versus the original baseline, covered surfaces per action increased 62%. Iteration 3 did not claim new navigation; it closed the independently measured POST-parameter and member-context representation gaps.
+## Evaluation and cost
 
-Known record instances remained distinct (2/2), evaluator-known critical false merges were zero, graph connections missing referential evidence were zero, and all attempted independent navigation replays succeeded. The clean-revision repeat replayed 8/10 applicable area paths before the action cap, so structural discovery is still stronger than complete path validation.
+Corrected matched results and denominators are in `GENERALIZATION_BASELINE.md`. Total measured browser experiment/test runtime was under 12 minutes, below the 20-minute cap. External API/model calls: 0. External cost: $0. The public testbed clone was about 568 KB before its small Node dependency install; no large framework was installed.
 
-Actual browser-run time for the four original development configurations was 45.1 seconds (configured ceilings totaled four minutes). A clean-revision Graph repeat took another 10.9 seconds. No exploit, paid provider, or benchmark target was used.
-
-Focused regressions passed after every iteration, and the final full suite passed **36/36** in 38.13 seconds.
-
-## Held-out transfer
-
-After freezing the mapper, a separate local Northstar Shop application was evaluated without tuning:
-
-| Policy | Areas | Controls | Requests | Replayed area paths | Replay | Surfaces/action |
-|---|---:|---:|---:|---:|---:|---:|
-| Grouped | 7/8 | 11/11 | 7/8 | 6/8 | 21/21 | 0.179 |
-| Coverage, clean-revision repeat | 8/8 | 11/11 | 8/8 | 5/8 | 19/19 | 0.191 |
-
-The coverage policy transferred, improving area and request recall to 100% and efficiency by 7.2%. This is evidence on one held-out controlled application, not proof of completeness on arbitrary applications. The first coverage run replayed 6/8 labeled area paths and the clean-revision repeat replayed 5/8, despite 19/19 attempted replays in both. This variance is preserved: transition-ID tie ordering and shallow-first replay selection change which paths remain untested at the cap. Deep-path replay scheduling is the measured bottleneck.
-
-## Inspectable evidence
-
-- Final development Graph A: `agent1/experiments/coverage_lab_iteration3_evidence/graph_a.json`
-- Final held-out Graph A: `agent1/experiments/heldout_shop_coverage/graph_a.json`
-- Compact evaluator results: each experiment directory's `coverage_evaluation.json`
-- Readable graph: each directory's `graph_a.mmd`
-- Raw local evidence/checkpoint: retained in the same directories and ignored where credential/browser-state risk or duplication warrants it
-
-The Graph A action nodes attach method, sanitized URL, status, resource type, parameter-name set, encoding, action path, and result observation. State nodes include reversible raw observation membership, return-path length, configured context, and marker-name-only browser context. Advertised but unexecuted controls, blocked controls, failed actions, and untested paths remain visible. Evaluator-only `missed` labels are deliberately not fed into Graph A or the mapper.
-
-Both final Graph A files record mapper revision `3012ce6d...+mapper-1cc5c02a0a12`; the final amended checkpoint changes reports/artifacts only, not mapper code.
-
-## Reproduction
+## Reproduce
 
 ```bash
-.venv/bin/python experiments/run_coverage_lab.py \
-  --out agent1/experiments/coverage_lab_reproduction \
-  --policy coverage --seconds 60 \
-  --max-transitions 30 --max-browser-actions 140
+.venv/bin/python experiments/run_generalization_lab.py \
+  --out agent1/experiments/repro-p2 --variant p2 \
+  --seconds 60 --max-transitions 30 --max-browser-actions 140
 ```
 
-Held-out comparison:
+Run regressions:
 
 ```bash
-.venv/bin/python experiments/run_heldout_shop.py \
-  --out agent1/experiments/heldout_shop_reproduction --policy coverage
+.venv/bin/python -m pytest tests -q
 ```
 
-## Benchmark isolation and protocol
+## Next highest-value question
 
-No WebExploitBench evaluation was run. Its gated evaluation-only terms preclude using data, metadata, outputs, traces, or derived artifacts to improve Agent 1. Existing SiyuCMS results are development history, not held-out evidence.
-
-For a later authorized evaluation: freeze the commit and configuration first; let CAGE discover/launch targets through its normal adapter; provide Agent 1 only the authorized target URL at l0 (no challenge metadata/hints); store benchmark outputs in a segregated evaluation directory; report only terms-permitted aggregate coverage/replay and CAGE scores; do not inspect per-vulnerability answers, `Location`, verifier logic, or feed misses/results back into development.
-
-## Limitations and next question
-
-- Replays are shortest-path ordered, so shallow duplicates consume the replay budget before some deep paths.
-- Novelty is control-shape based; it does not yet use component- or request-novelty feedback during exploration.
-- Cookie/storage names distinguish observed contexts but do not prove authorization semantics.
-- Whole-page content identity remains conservative; full fragment abstraction was not justified by this experiment.
-- Request structures record top-level JSON/form/multipart names, not nested schemas or WebSocket messages.
-- The evaluator corpus is controlled and finite; 100% on it is not a completeness claim.
-
-The single highest-value next experiment is a replay-aware frontier/archive policy that reserves validation budget by unique deep prerequisite path and charges actual restoration actions, measured on a larger independently authored app with overlays, hover menus, scrolling, and unstable session state.
+Can safe scroll and hover-disclosure plugins raise independently replayed Crawlground/gesture-fixture coverage under the same total action budget without reducing replay reliability or creating state/context merges? See `RESEARCH_NEXT_STEPS.md` for the matched ablation.

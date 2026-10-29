@@ -25,6 +25,22 @@ URL/title/input echoes, and full-page changes alone are insufficient.
 
 ## Run
 
+JavaScript-heavy mapping with browser-observable readiness, an explicitly
+approved local alias, and persistent discovery (fresh-context replay remains
+separate):
+
+```bash
+.venv/bin/python -m agent1.cli map \
+  --url http://127.0.0.1:8000/ --out agent1/outputs/js-heavy \
+  --policy coverage --seconds 60 --max-transitions 30 --max-browser-actions 140 \
+  --robust-readiness --readiness-timeout-ms 2500 \
+  --origin-alias http://localhost:8000 --exploration-mode persistent
+```
+
+Aliases must be explicit loopback origins. Unlisted hosts/ports and external
+destinations remain blocked. Persistent mode affects discovery only; validation
+still executes complete paths in fresh browser contexts.
+
 Short model-free smoke run:
 
 ```bash
@@ -115,6 +131,11 @@ Runs are sequential with one worker. Each attempted transition and replay starts
 - `run.json`: complete compact artifact, including observations and saved return paths.
 - `trace.jsonl`: one transition per line; protected values are references, not credentials.
 - `checkpoint.json`: resumable frontier and evidence.
+
+Graph A also exports `navigation_evidence`, keeping initial/root navigation
+document/Fetch/XHR structures separate from action-triggered request evidence.
+State nodes expose recorded readiness classifications; raw readiness samples
+remain in `run.json`/the checkpoint.
 
 The deterministic `coverage` policy prioritizes globally novel observed control shapes while charging a small restoration-depth cost. `grouped` remains the historical type/shallow-path baseline. Graph A request evidence records method, sanitized URL, status, resource type, parameter names, and body encoding without request values. State nodes expose cookie and storage *names* only; values are never exported.
 

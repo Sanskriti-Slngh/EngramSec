@@ -1,0 +1,54 @@
+{
+  "budget_per_repeat": {
+    "seconds": 60,
+    "max_browser_actions": 140,
+    "max_transitions": 30,
+    "worker_count": 1
+  },
+  "repeats": 3,
+  "fixture_denominators": {
+    "applicable_areas": 11,
+    "applicable_controls": 14,
+    "applicable_request_surfaces": 12
+  },
+  "p0": {
+    "area_recall": [0.272727, 0.272727, 0.272727],
+    "control_recall": [0.214286, 0.214286, 0.214286],
+    "request_recall": [0.0, 0.0, 0.0],
+    "replay_complete_area_fraction": [0.272727, 0.272727, 0.272727],
+    "deepest_verified_path": [2, 2, 2],
+    "browser_actions": [49, 49, 49],
+    "root_reloads": [19, 19, 19],
+    "restoration_actions": [6, 6, 6],
+    "replay_reliability": [1.0, 1.0, 1.0]
+  },
+  "p1": {
+    "area_recall": [1.0, 1.0, 1.0],
+    "control_recall": [1.0, 1.0, 1.0],
+    "request_recall": [1.0, 1.0, 1.0],
+    "replay_complete_area_fraction": [0.818182, 0.818182, 0.636364],
+    "deepest_verified_path": [2, 2, 2],
+    "browser_actions": [112, 112, 110],
+    "root_reloads": [38, 38, 37],
+    "restoration_actions": [23, 23, 23],
+    "replay_reliability": [1.0, 1.0, 1.0]
+  },
+  "p2": {
+    "area_recall": [1.0, 1.0, 1.0],
+    "control_recall": [1.0, 1.0, 1.0],
+    "request_recall": [1.0, 1.0, 1.0],
+    "replay_complete_area_fraction": [1.0, 1.0, 1.0],
+    "deepest_verified_path": [5, 5, 5],
+    "browser_actions": [127, 127, 128],
+    "root_reloads": [30, 30, 30],
+    "restoration_actions": [0, 0, 0],
+    "replay_reliability": [1.0, 1.0, 1.0]
+  },
+  "excluded_failed_iterations": [
+    "js_heavy_p1_probe",
+    "js_heavy_p2_probe",
+    "js_heavy_p2_r1"
+  ],
+  "external_model_calls": 0,
+  "external_cost_usd": 0.0
+}

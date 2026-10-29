@@ -208,8 +208,12 @@ def evaluate(graph: dict, truth: dict) -> dict:
             "control_action_recall": control_score[2],
             "request_surface_recall": request_score[2],
             "prerequisite_path_coverage": len(path_covered) / len(path_applicable),
-            "instance_recall": sum(item["status"].startswith("covered") for item in instance_results)
-            / len(instance_results),
+            "instance_recall": (
+                sum(item["status"].startswith("covered") for item in instance_results)
+                / len(instance_results)
+                if instance_results
+                else None
+            ),
             "instances_distinct": instances_distinct,
             "context_recall": sum(item["status"].startswith("covered") for item in context_results)
             / len(context_results),

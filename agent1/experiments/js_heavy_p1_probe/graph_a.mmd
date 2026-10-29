@@ -1,0 +1,38 @@
+flowchart LR
+  n_state_953e7402e8bf6a1d["JavaScript Readiness Lab"]
+  n_state_f4ce5d930a26a49d["JavaScript Readiness Lab"]
+  n_action_tr_140c702890e411f23a11{"Enter member mode [failed]"}
+  n_action_tr_754ae76b8be1c94eb152{"Refresh status [failed]"}
+  n_action_tr_a497d59b29ab2d92a91d{"Open workflow [failed]"}
+  n_action_tr_ca96d2e68d1b4ef0d048{"Public alias area [failed]"}
+  n_action_tr_05ddbf69094e696a902a{"Overview [failed]"}
+  n_action_tr_43951274622e0e9addf2{"News [failed]"}
+  n_action_tr_54e8400f6f4e75390b63{"JS Lab [failed]"}
+  n_advertised_obs_f7ddd96df5a447cebf5d_ctl_77e2e6f12a96faf07a["External documentation [not tested]"]
+  n_advertised_obs_30136d8c85d628b76308_ctl_d2818e73d8f80309f4["Load late reports [not tested]"]
+  n_state_f4ce5d930a26a49d -->|failed| n_action_tr_140c702890e411f23a11
+  n_state_f4ce5d930a26a49d -->|failed| n_action_tr_754ae76b8be1c94eb152
+  n_state_f4ce5d930a26a49d -->|failed| n_action_tr_a497d59b29ab2d92a91d
+  n_state_f4ce5d930a26a49d -->|failed| n_action_tr_ca96d2e68d1b4ef0d048
+  n_state_f4ce5d930a26a49d -->|failed| n_action_tr_05ddbf69094e696a902a
+  n_state_f4ce5d930a26a49d -->|failed| n_action_tr_43951274622e0e9addf2
+  n_state_f4ce5d930a26a49d -->|failed| n_action_tr_54e8400f6f4e75390b63
+  n_state_f4ce5d930a26a49d -->|not_tested| n_advertised_obs_f7ddd96df5a447cebf5d_ctl_77e2e6f12a96faf07a
+  n_state_953e7402e8bf6a1d -->|not_tested| n_advertised_obs_30136d8c85d628b76308_ctl_d2818e73d8f80309f4
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;
+  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;
+  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;
+  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;
+  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;
+  class n_action_tr_140c702890e411f23a11 failed;
+  class n_action_tr_754ae76b8be1c94eb152 failed;
+  class n_action_tr_a497d59b29ab2d92a91d failed;
+  class n_action_tr_ca96d2e68d1b4ef0d048 failed;
+  class n_action_tr_05ddbf69094e696a902a failed;
+  class n_action_tr_43951274622e0e9addf2 failed;
+  class n_action_tr_54e8400f6f4e75390b63 failed;
+  class n_advertised_obs_f7ddd96df5a447cebf5d_ctl_77e2e6f12a96faf07a not_tested;
+  class n_advertised_obs_30136d8c85d628b76308_ctl_d2818e73d8f80309f4 not_tested;

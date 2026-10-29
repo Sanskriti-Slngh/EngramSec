@@ -6,6 +6,7 @@ import re
 import tempfile
 import time
 from collections import defaultdict
+from contextlib import nullcontext
 from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin, urlsplit
@@ -39,8 +40,11 @@ from .schema import (
     FrontierItem,
     InputReference,
     NetworkEvent,
+    NavigationEvidence,
     Observation,
     OutcomeSignal,
+    ReadinessEvidence,
+    ReadinessSample,
     ReplayResult,
     RunArtifact,
     RunConfig,
@@ -58,7 +62,7 @@ from .state import (
     normalize_instance_text,
     content_fingerprint,
     outcome_signature,
-    same_origin,
+    allowed_origin,
     sanitize_url,
     signatures,
 )
@@ -203,6 +207,36 @@ EXTRACT_SCRIPT = r"""
 """
 
 
+READINESS_SCRIPT = r"""
+() => {
+  const visible = (el) => {
+    const style = window.getComputedStyle(el);
+    const rect = el.getBoundingClientRect();
+    return style.visibility !== 'hidden' && style.display !== 'none' &&
+      style.opacity !== '0' && rect.width > 0 && rect.height > 0;
+  };
+  const selector = 'a[href],button,input[type=submit],input[type=button],[role=button],' +
+    '[role=tab],[role=menuitem],summary,[data-action],[tabindex]:not([tabindex="-1"]),' +
+    '[onclick],[aria-controls],[data-toggle],[data-target],[id^="toggle-"]';
+  const controls = Array.from(document.querySelectorAll(selector)).filter(visible);
+  const enabled = controls.filter(el => !el.disabled && el.getAttribute('aria-disabled') !== 'true');
+  const shape = enabled.map(el => [
+    el.tagName.toLowerCase(), el.getAttribute('role') || '', el.getAttribute('href') || '',
+    el.getAttribute('name') || '', (el.innerText || el.value || el.getAttribute('aria-label') || '')
+      .replace(/\s+/g, ' ').trim().slice(0, 120)
+  ].join('|')).sort().join('\n');
+  return {
+    document_state: document.readyState,
+    aria_busy_count: document.querySelectorAll('[aria-busy="true"]').length,
+    enabled_control_count: enabled.length,
+    disabled_control_count: controls.length - enabled.length,
+    control_shape: shape,
+    body_length: (document.body?.innerText || '').trim().length
+  };
+}
+"""
+
+
 class NetworkRecorder:
     def __init__(self, page: Page):
         self.events: list[NetworkEvent] = []
@@ -286,6 +320,8 @@ class BrowserSession:
         self.page: Page | None = None
         self.network: NetworkRecorder | None = None
         self.dialogs: list[dict[str, str]] = []
+        self.last_readiness = ReadinessEvidence()
+        self.last_navigation_network: list[NetworkEvent] = []
 
     def __enter__(self) -> "BrowserSession":
         self.context = self.browser.new_context()
@@ -297,6 +333,17 @@ class BrowserSession:
     def __exit__(self, *_: Any) -> None:
         if self.context:
             self.context.close()
+
+    def reset_context(self) -> None:
+        if self.context:
+            self.context.close()
+        self.context = None
+        self.page = None
+        self.network = None
+        self.dialogs = []
+        self.last_readiness = ReadinessEvidence()
+        self.last_navigation_network = []
+        self.__enter__()
 
     def _dialog(self, dialog: Any) -> None:
         self.dialogs.append(
@@ -314,15 +361,81 @@ class BrowserSession:
             wait_until="domcontentloaded",
             timeout=self.config.action_timeout_ms * 2,
         )
-        if not same_origin(self.config.start_url, self.page.url):
+        if not allowed_origin(
+            self.config.start_url, self.page.url, self.config.origin_aliases
+        ):
             raise RuntimeError("start navigation left the configured origin")
         if response and response.status >= 500:
             raise RuntimeError(f"start navigation returned HTTP {response.status}")
-        if self.config.settle_ms:
+        if self.config.robust_readiness:
+            self.last_readiness = self._wait_for_readiness(
+                response.status if response else None
+            )
+        elif self.config.settle_ms:
             self.page.wait_for_timeout(self.config.settle_ms)
+            self.last_readiness = ReadinessEvidence()
+        else:
+            self.last_readiness = ReadinessEvidence()
         if self.network:
-            self.network.drain()
+            self.last_navigation_network = self.network.drain()
         return 1
+
+    def _wait_for_readiness(self, http_status: int | None = None) -> ReadinessEvidence:
+        """Record a bounded, browser-observable readiness trace.
+
+        This is deliberately not a claim that the whole application has loaded.
+        It waits for explicit busy/disabled initialization signals to clear and
+        for the visible action shape to stabilize briefly.
+        """
+
+        assert self.page
+        started = time.monotonic()
+        samples: list[ReadinessSample] = []
+        prior_fingerprint = ""
+        stable_samples = 0
+        final_status = "initializing"
+        while True:
+            raw = self.page.evaluate(READINESS_SCRIPT)
+            elapsed_ms = int((time.monotonic() - started) * 1_000)
+            fingerprint = digest(raw.get("control_shape", ""), 16)
+            sample = ReadinessSample(
+                elapsed_ms=elapsed_ms,
+                document_state=str(raw.get("document_state", "unknown")),
+                aria_busy_count=int(raw.get("aria_busy_count", 0)),
+                enabled_control_count=int(raw.get("enabled_control_count", 0)),
+                disabled_control_count=int(raw.get("disabled_control_count", 0)),
+                control_fingerprint=fingerprint,
+            )
+            samples.append(sample)
+            initializing = (
+                sample.document_state == "loading"
+                or sample.aria_busy_count > 0
+                or (
+                    sample.enabled_control_count == 0
+                    and sample.disabled_control_count > 0
+                )
+            )
+            if http_status in {401, 403, 407, 429}:
+                final_status = "blocked"
+                break
+            if not initializing:
+                stable_samples = stable_samples + 1 if fingerprint == prior_fingerprint else 1
+                if stable_samples >= 3:
+                    final_status = "usable"
+                    break
+            else:
+                stable_samples = 0
+            prior_fingerprint = fingerprint
+            if elapsed_ms >= self.config.readiness_timeout_ms:
+                final_status = "timeout"
+                break
+            self.page.wait_for_timeout(self.config.readiness_poll_ms)
+        return ReadinessEvidence(
+            status=final_status,
+            duration_ms=int((time.monotonic() - started) * 1_000),
+            http_status=http_status,
+            samples=samples,
+        )
 
     def observe(self, sequence: int) -> Observation:
         assert self.page
@@ -420,6 +533,7 @@ class BrowserSession:
                 "safe_control_count": sum(control.safe for control in controls),
                 "all_control_count": len(controls),
             },
+            readiness=self.last_readiness,
         )
 
     def _session_markers(self) -> dict[str, list[str]]:
@@ -447,7 +561,9 @@ class BrowserSession:
         method: str | None,
         fields: list[FormField],
     ) -> str | None:
-        if target and not same_origin(self.config.start_url, target):
+        if target and not allowed_origin(
+            self.config.start_url, target, self.config.origin_aliases
+        ):
             return "cross_origin"
         candidate = f"{label} {urlsplit(target).path if target else ''}"
         if DANGEROUS_ACTION.search(candidate):
@@ -513,9 +629,16 @@ class BrowserSession:
             self.page.wait_for_load_state("domcontentloaded", timeout=self.config.action_timeout_ms)
         except PlaywrightTimeoutError:
             pass
-        if self.config.settle_ms:
+        if self.config.robust_readiness:
+            self.last_readiness = self._wait_for_readiness()
+        elif self.config.settle_ms:
             self.page.wait_for_timeout(self.config.settle_ms)
-        if not same_origin(self.config.start_url, self.page.url):
+            self.last_readiness = ReadinessEvidence()
+        else:
+            self.last_readiness = ReadinessEvidence()
+        if not allowed_origin(
+            self.config.start_url, self.page.url, self.config.origin_aliases
+        ):
             raise RuntimeError("action left the configured origin")
         return input_refs, self.network.drain(), list(self.dialogs), action_count
 
@@ -641,9 +764,64 @@ class Explorer:
     def _elapsed(self) -> float:
         return time.monotonic() - self.started_monotonic
 
+    @staticmethod
+    def _descriptor_action_cost(descriptor: ActionDescriptor) -> int:
+        fills = 0
+        if descriptor.kind == "form_submit":
+            fills = sum(
+                field.input_type
+                not in {"hidden", "submit", "button", "reset", "password", "file", "image"}
+                for field in descriptor.fields
+            )
+        return 1 + fills
+
+    @classmethod
+    def _path_action_cost(cls, path: list[ActionDescriptor]) -> int:
+        return sum(cls._descriptor_action_cost(item) for item in path)
+
+    def _fits_action_budget(self, additional_actions: int) -> bool:
+        return (
+            self.artifact.metrics.browser_actions + additional_actions
+            <= self.config.max_browser_actions
+        )
+
     def _next_sequence(self) -> int:
         self.sequence += 1
         return self.sequence
+
+    def _navigate_start(
+        self,
+        session: BrowserSession,
+        reason: str,
+    ) -> None:
+        self.artifact.metrics.browser_actions += session.goto_start()
+        self.artifact.metrics.navigation_requests += 1
+        self.artifact.metrics.root_reloads += 1
+        self._record_navigation_evidence(session, reason)
+
+    def _record_navigation_evidence(
+        self,
+        session: BrowserSession,
+        reason: str,
+    ) -> None:
+        readiness = session.last_readiness
+        if readiness.status in {"blocked", "timeout"}:
+            self.artifact.metrics.startup_readiness_failures += 1
+        network = list(session.last_navigation_network)
+        self.artifact.metrics.navigation_network_events_recorded += len(network)
+        self.artifact.navigation_evidence.append(
+            NavigationEvidence(
+                id="nav_"
+                + digest(
+                    [self.run_id, reason, len(self.artifact.navigation_evidence), session.page.url],
+                    20,
+                ),
+                reason=reason,
+                url=sanitize_url(session.page.url),
+                readiness=readiness,
+                network=network,
+            )
+        )
 
     def _validate_target(self) -> None:
         parsed = urlsplit(self.config.start_url)
@@ -672,8 +850,7 @@ class Explorer:
 
     def _initialize(self, browser: Browser) -> None:
         with BrowserSession(browser, self.config) as session:
-            self.artifact.metrics.browser_actions += session.goto_start()
-            self.artifact.metrics.navigation_requests += 1
+            self._navigate_start(session, "initial")
             observation = session.observe(self._next_sequence())
         self._record_observation(observation, [])
         self._enqueue(observation, [])
@@ -801,6 +978,9 @@ class Explorer:
         )
 
     def _explore(self, browser: Browser) -> None:
+        if self.config.exploration_mode == "persistent":
+            self._explore_persistent(browser)
+            return
         exploration_deadline = self.config.max_seconds * (1.0 - self.config.replay_reserve_fraction)
         while self.frontier:
             if self._elapsed() >= exploration_deadline:
@@ -810,25 +990,120 @@ class Explorer:
             if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
                 break
             item = self.frontier.pop(0)
+            if not self._fits_action_budget(
+                1 + self._path_action_cost(item.path) + self._descriptor_action_cost(item.action)
+            ):
+                self.frontier.insert(0, item)
+                break
             self._attempt_frontier(browser, item)
             self.save_checkpoint()
 
-    def _attempt_frontier(self, browser: Browser, item: FrontierItem) -> None:
+    def _explore_persistent(self, browser: Browser) -> None:
+        exploration_deadline = self.config.max_seconds * (1.0 - self.config.replay_reserve_fraction)
+        with BrowserSession(browser, self.config) as session:
+            self._navigate_start(session, "persistent_restore")
+            live = session.observe(self._next_sequence())
+            live_path: list[ActionDescriptor] = []
+            self._record_observation(live, [])
+            self._enqueue(live, [])
+            while self.frontier:
+                if self._elapsed() >= exploration_deadline:
+                    break
+                if len(self.artifact.transitions) >= self.config.max_transitions:
+                    break
+                if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
+                    break
+                local_index = next(
+                    (
+                        index
+                        for index, candidate in enumerate(self.frontier)
+                        if candidate.expected_source_group == live.group_signature
+                        and session.find_current(live, candidate.action) is not None
+                    ),
+                    None,
+                )
+                item = self.frontier.pop(local_index if local_index is not None else 0)
+                local = local_index is not None
+                required_actions = self._descriptor_action_cost(item.action)
+                if not local:
+                    required_actions += 1 + self._path_action_cost(item.path)
+                if not self._fits_action_budget(required_actions):
+                    self.frontier.insert(local_index if local_index is not None else 0, item)
+                    break
+                updated = self._attempt_frontier(
+                    browser,
+                    item,
+                    persistent_session=session,
+                    live_source=live,
+                    live_path=live_path,
+                )
+                if updated is None:
+                    self.artifact.metrics.live_state_stale += 1
+                    self._navigate_start(session, "persistent_restore")
+                    live = session.observe(self._next_sequence())
+                    live_path = []
+                else:
+                    live, observed_path = updated
+                    live_path = list(
+                        self.artifact.return_paths.get(live.group_signature, observed_path)
+                    )
+                self.save_checkpoint()
+
+    def _attempt_frontier(
+        self,
+        browser: Browser,
+        item: FrontierItem,
+        *,
+        persistent_session: BrowserSession | None = None,
+        live_source: Observation | None = None,
+        live_path: list[ActionDescriptor] | None = None,
+    ) -> tuple[Observation, list[ActionDescriptor]] | None:
         started_at = utc_now()
         self.artifact.metrics.transitions_attempted += 1
-        with BrowserSession(browser, self.config) as session:
+        manager = (
+            nullcontext(persistent_session)
+            if persistent_session is not None
+            else BrowserSession(browser, self.config)
+        )
+        with manager as session:
             try:
-                self.artifact.metrics.browser_actions += session.goto_start()
-                self.artifact.metrics.navigation_requests += 1
-                source = self._restore(session, item.path)
+                expected_observation = self._observation_by_id(item.source_observation_id)
                 expected = (
                     item.expected_source_signature
                     if self.config.policy == "exact"
                     else item.expected_source_group
                 )
+                live_actual = None
+                if live_source is not None:
+                    live_actual = (
+                        live_source.state_signature
+                        if self.config.policy == "exact"
+                        else live_source.group_signature
+                    )
+                current_live_control = (
+                    session.find_current(live_source, item.action)
+                    if live_source is not None
+                    else None
+                )
+                if live_source is not None and live_actual == expected and current_live_control:
+                    source = live_source
+                    source_path = list(live_path if live_path is not None else item.path)
+                    self.artifact.metrics.live_state_reuses += 1
+                else:
+                    reason = "persistent_restore" if persistent_session is not None else "frontier_restore"
+                    if (
+                        persistent_session is not None
+                        and live_source is not None
+                        and expected_observation is not None
+                        and live_source.session_markers
+                        != expected_observation.session_markers
+                    ):
+                        session.reset_context()
+                    self._navigate_start(session, reason)
+                    source = self._restore(session, item.path)
+                    source_path = list(item.path)
                 actual = source.state_signature if self.config.policy == "exact" else source.group_signature
-                self._record_observation(source, item.path)
-                expected_observation = self._observation_by_id(item.source_observation_id)
+                self._record_observation(source, source_path)
                 search_related = bool(self.config.search_probe_primary) and (
                     is_get_search_action(item.action)
                     or SEARCH_SEMANTICS.search(f"{item.action.label} {item.action.target or ''}")
@@ -840,13 +1115,17 @@ class Explorer:
                         for descriptor in item.path
                     )
                 )
-                if actual != expected and not (
-                    search_related
-                    and expected_observation
-                    and self._usable_return_screen(expected_observation, source)
-                ):
-                    raise RuntimeError(
-                        f"saved return path restored {actual}, expected {expected}"
+                if actual != expected:
+                    usable = bool(expected_observation) and self._usable_return_screen(
+                        expected_observation, source
+                    )
+                    if not ((search_related or self.config.robust_readiness) and usable):
+                        raise RuntimeError(
+                            f"saved return path restored {actual}, expected {expected}"
+                        )
+                    self.artifact.notes.append(
+                        "Restoration content signature differed, but the independently compared "
+                        f"interaction shape remained usable for {item.action.signature}."
                     )
                 current_control = session.find_current(source, item.action)
                 if current_control is None:
@@ -908,7 +1187,7 @@ class Explorer:
                             input_plan_ref=retry_ref,
                         )
                     )
-                workflow_path = list(item.path) + descriptors
+                workflow_path = source_path + descriptors
                 self._record_observation(result, workflow_path)
                 transition = Transition(
                     id="tr_" + digest([self.run_id, source.id, current_control.id, result.id], 20),
@@ -933,6 +1212,7 @@ class Explorer:
                 self.artifact.metrics.transitions_observed += 1
                 self._enqueue(result, workflow_path)
                 self._record_progress()
+                return result, workflow_path
             except Exception as exc:
                 transition = Transition(
                     id="tr_" + digest([self.run_id, item.source_observation_id, item.action.signature, started_at], 20),
@@ -950,6 +1230,7 @@ class Explorer:
                 self.artifact.transitions.append(transition)
                 self.artifact.metrics.transitions_failed += 1
                 self._record_progress()
+                return None
 
     def _propose_form_plan(
         self,
@@ -1007,6 +1288,7 @@ class Explorer:
             return {
                 "route": observation.route_pattern,
                 "session": observation.session_context,
+                "session_markers": observation.session_markers,
                 "forms": [
                     {
                         "method": form.method,
@@ -1035,6 +1317,7 @@ class Explorer:
             plan = self._resolve_form_plan(descriptor)
             _, _, _, count = session.execute(control, plan, descriptor.input_plan_ref)
             self.artifact.metrics.browser_actions += count
+            self.artifact.metrics.restoration_actions += count
             observation = session.observe(self._next_sequence())
         return observation
 
@@ -1057,6 +1340,11 @@ class Explorer:
                 if self._elapsed() >= self.config.max_seconds:
                     break
                 if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
+                    break
+                path_cost = 1 + self._path_action_cost(transition.workflow_path)
+                if paired_search:
+                    path_cost *= 2
+                if not self._fits_action_budget(path_cost):
                     break
                 replay = (
                     self._replay_search_transition(browser, transition, pair_index)
@@ -1129,12 +1417,16 @@ class Explorer:
             with BrowserSession(browser, self.config) as session:
                 browser_actions += session.goto_start()
                 self.artifact.metrics.navigation_requests += 1
+                self.artifact.metrics.root_reloads += 1
+                self._record_navigation_evidence(session, "replay")
                 primary_result, count, primary_path_observations = self._execute_replay_path(
                     session, transition.workflow_path
                 )
                 browser_actions += count
                 browser_actions += session.goto_start()
                 self.artifact.metrics.navigation_requests += 1
+                self.artifact.metrics.root_reloads += 1
+                self._record_navigation_evidence(session, "replay")
                 contrast_result, count, contrast_path_observations = self._execute_replay_path(
                     session, contrast_path
                 )
@@ -1263,6 +1555,8 @@ class Explorer:
             with BrowserSession(browser, self.config) as session:
                 browser_actions += session.goto_start()
                 self.artifact.metrics.navigation_requests += 1
+                self.artifact.metrics.root_reloads += 1
+                self._record_navigation_evidence(session, "replay")
                 observation = session.observe(self._next_sequence())
                 for descriptor in transition.workflow_path:
                     control = session.find_current(observation, descriptor)

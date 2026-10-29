@@ -30,6 +30,23 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--allow-post-forms", action="store_true")
     parser.add_argument("--context-label", default="anonymous")
     parser.add_argument(
+        "--robust-readiness",
+        action="store_true",
+        help="record and wait for bounded browser-observable interaction readiness",
+    )
+    parser.add_argument("--readiness-timeout-ms", type=int, default=2500)
+    parser.add_argument(
+        "--origin-alias",
+        action="append",
+        default=[],
+        help="explicit additional loopback origin (repeatable; never inferred)",
+    )
+    parser.add_argument(
+        "--exploration-mode",
+        choices=("fresh", "persistent"),
+        default="fresh",
+    )
+    parser.add_argument(
         "--search-probe",
         dest="search_probe_primary",
         help="ordinary primary query for paired GET-search verification",
@@ -96,6 +113,10 @@ def main(argv: list[str] | None = None) -> int:
             headless=not args.headed,
             allow_post_forms=args.allow_post_forms,
             context_label=args.context_label,
+            robust_readiness=args.robust_readiness,
+            readiness_timeout_ms=args.readiness_timeout_ms,
+            origin_aliases=args.origin_alias,
+            exploration_mode=args.exploration_mode,
             model_provider=args.provider,
             model_name=args.model,
             model_form_assistance=args.model_forms,
