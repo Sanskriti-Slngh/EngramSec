@@ -23,6 +23,7 @@ from playwright.sync_api import (
 from playwright.sync_api import sync_playwright
 
 from .providers import DecisionProvider, ModelProviderError, build_provider
+from .resource_spider import ResourceBudget, TypedResourceSpider
 from .revision import code_revision
 from .search import (
     SEARCH_SEMANTICS,
@@ -50,9 +51,11 @@ from .schema import (
     NavigationEvidence,
     Observation,
     OutcomeSignal,
+    PrerequisiteStepEvidence,
     ReadinessEvidence,
     ReadinessSample,
     ReplayResult,
+    ResourceEvidence,
     RunArtifact,
     RunConfig,
     Transition,
@@ -336,20 +339,48 @@ READINESS_SCRIPT = r"""
     control_shape: shape,
     body_length: (document.body?.innerText || '').trim().length,
     mutation_count: window.__engramReadiness.mutations
+    ,script_count: document.scripts.length
+    ,meta_refresh_delay_ms: (() => {
+      const meta = document.querySelector('meta[http-equiv="refresh" i]');
+      if (!meta) return null;
+      const match = (meta.content || '').match(/^\s*(\d+(?:\.\d+)?)/);
+      return match ? Math.ceil(Number(match[1]) * 1000) : null;
+    })()
   };
 }
 """
 
 
 class NetworkRecorder:
-    def __init__(self, source: Page | BrowserContext):
+    TRACKED_TYPES = {
+        "document", "xhr", "fetch", "stylesheet", "script", "image", "media", "font", "manifest"
+    }
+
+    def __init__(
+        self,
+        source: Page | BrowserContext,
+        config: RunConfig,
+        resource_budget: ResourceBudget,
+    ):
         self.events: list[NetworkEvent] = []
+        self.config = config
+        self.spider = TypedResourceSpider(
+            config.start_url,
+            config.origin_aliases,
+            resource_budget,
+            config.max_resource_depth,
+            config.max_resource_body_bytes,
+        )
+        self.request_count = 0
         source.on("response", self._response)
         source.on("requestfailed", self._failed)
 
     def _response(self, response: Any) -> None:
         request = response.request
-        if request.resource_type not in {"document", "xhr", "fetch"}:
+        self.request_count += 1
+        if request.resource_type not in self.TRACKED_TYPES:
+            return
+        if not allowed_origin(self.config.start_url, request.url, self.config.origin_aliases):
             return
         parameter_names, body_encoding = request_structure(
             request.method, request.url, request.headers, request.post_data
@@ -364,9 +395,41 @@ class NetworkRecorder:
                 body_encoding=body_encoding,
             )
         )
+        content_type = response.headers.get("content-type", "")
+        if self.config.typed_resource_spider and request.resource_type in {
+            "document", "stylesheet", "script", "manifest"
+        }:
+            media = content_type.lower()
+            if any(kind in media for kind in ("html", "css", "javascript", "ecmascript")):
+                try:
+                    body_size = int(response.headers.get("content-length", "0") or 0)
+                    # Response.body() is fully buffered by Playwright before
+                    # Python can slice it; skip unknown/oversized bodies to
+                    # keep extraction memory bounded.
+                    body = (
+                        response.body()
+                        if 0 < body_size <= self.config.max_resource_body_bytes
+                        else b""
+                    )
+                    charset = re.search(r"charset\s*=\s*['\"]?([^;\s'\"]+)", content_type, re.I)
+                    try:
+                        text = body.decode(charset.group(1) if charset else "utf-8", errors="replace")
+                    except LookupError:
+                        text = body.decode("utf-8", errors="replace")
+                    self.spider.observe_response(
+                        text,
+                        response.url,
+                        content_type,
+                        {str(k).lower(): str(v) for k, v in response.headers.items()},
+                    )
+                except (PlaywrightError, UnicodeError, ValueError, LookupError):
+                    pass
 
     def _failed(self, request: Any) -> None:
-        if request.resource_type not in {"document", "xhr", "fetch"}:
+        self.request_count += 1
+        if request.resource_type not in self.TRACKED_TYPES:
+            return
+        if not allowed_origin(self.config.start_url, request.url, self.config.origin_aliases):
             return
         parameter_names, body_encoding = request_structure(
             request.method, request.url, request.headers, request.post_data
@@ -386,6 +449,26 @@ class NetworkRecorder:
         current = self.events
         self.events = []
         return current
+
+    def drain_resources(self, request_context: Any) -> list[ResourceEvidence]:
+        records = self.spider.fetch_pending(request_context)
+        return [
+            ResourceEvidence.model_validate(
+                item
+                | {
+                    "evidence_id": "resource_evidence_"
+                    + digest(
+                        [
+                            item.get("url"), item.get("kind"), item.get("source_type"),
+                            item.get("source_url"), item.get("source"), item.get("relation"),
+                            item.get("depth"), item.get("status"), item.get("http_status"),
+                        ],
+                        20,
+                    )
+                }
+            )
+            for item in records
+        ]
 
 
 def request_structure(
@@ -417,9 +500,12 @@ def request_structure(
 
 
 class BrowserSession:
-    def __init__(self, browser: Browser, config: RunConfig):
+    def __init__(
+        self, browser: Browser, config: RunConfig, resource_budget: ResourceBudget | None = None
+    ):
         self.browser = browser
         self.config = config
+        self.resource_budget = resource_budget or ResourceBudget(config.max_resource_fetches)
         self.context: BrowserContext | None = None
         self.page: Page | None = None
         self.network: NetworkRecorder | None = None
@@ -427,11 +513,13 @@ class BrowserSession:
         self._attached_pages: set[int] = set()
         self.last_readiness = ReadinessEvidence()
         self.last_navigation_network: list[NetworkEvent] = []
+        self.last_navigation_resources: list[ResourceEvidence] = []
+        self.last_action_resources: list[ResourceEvidence] = []
         self.last_popup_opened = False
 
     def __enter__(self) -> "BrowserSession":
         self.context = self.browser.new_context()
-        self.network = NetworkRecorder(self.context)
+        self.network = NetworkRecorder(self.context, self.config, self.resource_budget)
         self.context.on("page", self._attach_page)
         self.page = self.context.new_page()
         self._attach_page(self.page)
@@ -457,6 +545,8 @@ class BrowserSession:
         self._attached_pages = set()
         self.last_readiness = ReadinessEvidence()
         self.last_navigation_network = []
+        self.last_navigation_resources = []
+        self.last_navigation_resources = []
         self.last_popup_opened = False
         self.__enter__()
 
@@ -492,6 +582,8 @@ class BrowserSession:
         else:
             self.last_readiness = ReadinessEvidence()
         if self.network:
+            if self.config.typed_resource_spider:
+                self.last_navigation_resources = self.network.drain_resources(self.context.request)
             self.last_navigation_network = self.network.drain()
         return 1
 
@@ -530,6 +622,8 @@ class BrowserSession:
                 control_fingerprint=fingerprint,
                 main_enabled_control_count=int(raw.get("main_enabled_control_count", 0)),
                 mutation_count=int(raw.get("mutation_count", 0)),
+                script_count=int(raw.get("script_count", 0)),
+                meta_refresh_delay_ms=raw.get("meta_refresh_delay_ms"),
             )
             samples.append(sample)
             initializing = (
@@ -550,11 +644,16 @@ class BrowserSession:
             stable = fingerprint == prior_fingerprint
             if not initializing:
                 stable_samples = stable_samples + 1 if stable else 1
-                minimum_wait = (
-                    self.config.idle_page_wait_ms
-                    if sample.main_enabled_control_count == 0
-                    else self.config.readiness_poll_ms * 3
-                )
+                refresh_wait = (sample.meta_refresh_delay_ms or 0) + 250
+                if sample.main_enabled_control_count == 0:
+                    minimum_wait = max(
+                        self.config.idle_page_wait_ms
+                        if sample.script_count
+                        else self.config.passive_page_wait_ms,
+                        refresh_wait,
+                    )
+                else:
+                    minimum_wait = max(self.config.readiness_poll_ms * 3, refresh_wait)
                 if stable_samples >= 3 and elapsed_ms >= minimum_wait:
                     final_status = "usable"
                     break
@@ -881,6 +980,7 @@ class BrowserSession:
         self.network.drain()
         self.dialogs = []
         self.last_popup_opened = False
+        self.last_action_resources = []
         input_refs: list[InputReference] = []
         action_count = 0
         if control.kind == "form_submit" and control.form_index is not None:
@@ -964,6 +1064,8 @@ class BrowserSession:
             self.last_readiness = ReadinessEvidence()
         else:
             self.last_readiness = ReadinessEvidence()
+        if self.config.typed_resource_spider and self.network and self.context:
+            self.last_action_resources = self.network.drain_resources(self.context.request)
         if not allowed_origin(
             self.config.start_url, self.page.url, self.config.origin_aliases
         ):
@@ -1060,6 +1162,7 @@ class Explorer:
         self.started_monotonic = time.monotonic()
         self.prior_elapsed = 0.0
         self.sequence = 0
+        self.resource_budget = ResourceBudget(config.max_resource_fetches)
         self.frontier: list[FrontierItem] = []
         self.tried: set[str] = set()
         self._seen_control_shapes: set[str] = set()
@@ -1135,6 +1238,30 @@ class Explorer:
         self.artifact.metrics.root_reloads += 1
         self._record_navigation_evidence(session, reason)
 
+    def _collect_resource_evidence(self, records: list[ResourceEvidence]) -> None:
+        if not records:
+            return
+        self.artifact.resource_evidence.extend(records)
+        self.artifact.metrics.resource_references_discovered = len(
+            {item.url for item in self.artifact.resource_evidence}
+        )
+        attempts = sum(item.status in {"fetched", "failed"} for item in records)
+        self.artifact.metrics.resource_fetches_attempted += attempts
+        self.artifact.metrics.resource_fetches_succeeded += sum(item.status == "fetched" for item in records)
+        self.artifact.metrics.resource_fetch_failures += sum(item.status == "failed" for item in records)
+        self.artifact.metrics.resource_fetch_budget_exhausted += sum(
+            item.status == "budget_limited" for item in records
+        )
+
+    def _account_readiness(self, readiness: ReadinessEvidence) -> None:
+        if not readiness.samples:
+            return
+        latest = readiness.samples[-1]
+        if latest.main_enabled_control_count or latest.script_count:
+            self.artifact.metrics.interactive_readiness_wait_ms += readiness.duration_ms
+        else:
+            self.artifact.metrics.passive_readiness_wait_ms += readiness.duration_ms
+
     def _record_navigation_evidence(
         self,
         session: BrowserSession,
@@ -1145,6 +1272,9 @@ class Explorer:
             self.artifact.metrics.startup_readiness_failures += 1
         network = list(session.last_navigation_network)
         self.artifact.metrics.navigation_network_events_recorded += len(network)
+        self.artifact.metrics.observed_http_requests += len(network)
+        self._account_readiness(readiness)
+        self._collect_resource_evidence(session.last_navigation_resources)
         self.artifact.navigation_evidence.append(
             NavigationEvidence(
                 id="nav_"
@@ -1185,7 +1315,7 @@ class Explorer:
         return self.artifact
 
     def _initialize(self, browser: Browser) -> None:
-        with BrowserSession(browser, self.config) as session:
+        with BrowserSession(browser, self.config, self.resource_budget) as session:
             self._navigate_start(session, "initial")
             observation = session.observe(self._next_sequence())
         self._record_observation(observation, [])
@@ -1396,7 +1526,7 @@ class Explorer:
 
     def _explore_persistent(self, browser: Browser) -> None:
         exploration_deadline = self.config.max_seconds * (1.0 - self.config.replay_reserve_fraction)
-        with BrowserSession(browser, self.config) as session:
+        with BrowserSession(browser, self.config, self.resource_budget) as session:
             self._navigate_start(session, "persistent_restore")
             live = session.observe(self._next_sequence())
             live_path: list[ActionDescriptor] = []
@@ -1467,9 +1597,12 @@ class Explorer:
         manager = (
             nullcontext(persistent_session)
             if persistent_session is not None
-            else BrowserSession(browser, self.config)
+            else BrowserSession(browser, self.config, self.resource_budget)
         )
         with manager as session:
+            prerequisite_network: list[PrerequisiteStepEvidence] = []
+            restoration_attempted = False
+            action_network: list[NetworkEvent] = []
             try:
                 expected_observation = self._observation_by_id(item.source_observation_id)
                 expected = (
@@ -1504,7 +1637,8 @@ class Explorer:
                     ):
                         session.reset_context()
                     self._navigate_start(session, reason)
-                    source = self._restore(session, item.path)
+                    restoration_attempted = True
+                    source = self._restore(session, item.path, prerequisite_network)
                     source_path = list(item.path)
                 actual = source.state_signature if self.config.policy == "exact" else source.group_signature
                 self._record_observation(source, source_path)
@@ -1543,7 +1677,11 @@ class Explorer:
                 input_refs, network, dialogs, action_count = session.execute(
                     current_control, plan_values, plan_ref
                 )
+                action_network.extend(network)
                 self.artifact.metrics.browser_actions += action_count
+                self.artifact.metrics.observed_http_requests += len(network)
+                self._account_readiness(session.last_readiness)
+                self._collect_resource_evidence(session.last_action_resources)
                 if current_control.interaction == "navigate":
                     self.artifact.metrics.static_navigation_actions += 1
                 elif current_control.interaction not in {"click"}:
@@ -1602,7 +1740,11 @@ class Explorer:
                     retry_refs, retry_network, retry_dialogs, retry_actions = session.execute(
                         retry_control, retry_values, retry_ref
                     )
+                    action_network.extend(retry_network)
                     self.artifact.metrics.browser_actions += retry_actions
+                    self.artifact.metrics.observed_http_requests += len(retry_network)
+                    self._account_readiness(session.last_readiness)
+                    self._collect_resource_evidence(session.last_action_resources)
                     input_refs.extend(retry_refs)
                     network.extend(retry_network)
                     dialogs.extend(retry_dialogs)
@@ -1632,7 +1774,9 @@ class Explorer:
                     result_state_signature=result.state_signature,
                     result_group_signature=result.group_signature,
                     status=EvidenceStatus.OBSERVED,
-                    network=network,
+                    network=action_network,
+                    restoration_attempted=restoration_attempted,
+                    prerequisite_network=prerequisite_network,
                     dialogs=dialogs,
                     started_at=started_at,
                     ended_at=utc_now(),
@@ -1652,6 +1796,9 @@ class Explorer:
                     action=item.action,
                     workflow_path=list(item.path) + [item.action],
                     status=EvidenceStatus.FAILED,
+                    network=action_network,
+                    restoration_attempted=restoration_attempted,
+                    prerequisite_network=prerequisite_network,
                     error=f"{type(exc).__name__}: {compact_text(str(exc), 300)}",
                     started_at=started_at,
                     ended_at=utc_now(),
@@ -1738,16 +1885,32 @@ class Explorer:
 
         return shape(expected) == shape(actual)
 
-    def _restore(self, session: BrowserSession, path: list[ActionDescriptor]) -> Observation:
+    def _restore(
+        self,
+        session: BrowserSession,
+        path: list[ActionDescriptor],
+        network_evidence: list[PrerequisiteStepEvidence],
+    ) -> Observation:
         observation = session.observe(self._next_sequence())
-        for descriptor in path:
+        for step_index, descriptor in enumerate(path):
             control = session.find_current(observation, descriptor)
             if control is None:
                 raise RuntimeError(f"return-path control missing: {descriptor.signature}")
             plan = self._resolve_form_plan(descriptor)
-            _, _, _, count = session.execute(control, plan, descriptor.input_plan_ref)
+            _, network, _, count = session.execute(control, plan, descriptor.input_plan_ref)
+            network_evidence.append(
+                PrerequisiteStepEvidence(
+                    step_index=step_index,
+                    action_signature=descriptor.signature,
+                    action_label=descriptor.label,
+                    network=network,
+                )
+            )
             self.artifact.metrics.browser_actions += count
             self.artifact.metrics.restoration_actions += count
+            self.artifact.metrics.observed_http_requests += len(network)
+            self._account_readiness(session.last_readiness)
+            self._collect_resource_evidence(session.last_action_resources)
             observation = session.observe(self._next_sequence())
         return observation
 
@@ -1769,6 +1932,10 @@ class Explorer:
                 continue
             scheduled_destinations.add(key)
             candidates.append(transition)
+        if self.config.replay_policy == "diverse":
+            candidates = self._diverse_replay_order(candidates)
+        else:
+            candidates.sort(key=lambda transition: (len(transition.workflow_path), transition.id))
         for transition in candidates:
             if self._elapsed() >= self.config.max_seconds:
                 break
@@ -1806,24 +1973,83 @@ class Explorer:
             self._record_progress()
             self.save_checkpoint()
 
+    def _diverse_replay_order(self, candidates: list[Transition]) -> list[Transition]:
+        """Greedily cover distinct routes/actions/requests/contexts per replay cost."""
+        remaining = list(candidates)
+        selected: list[Transition] = []
+        seen_routes: set[str] = set()
+        seen_actions: set[str] = set()
+        seen_requests: set[str] = set()
+        seen_contexts: set[str] = set()
+        seen_groups: set[str] = set()
+        observations = {item.id: item for item in self.artifact.observations}
+        while remaining:
+            ranked: list[tuple[float, int, str, Transition, tuple[str, str, str, str, str]]] = []
+            for transition in remaining:
+                result = observations.get(transition.result_observation_id or "")
+                route = result.route_pattern if result else ""
+                action = f"{transition.action.kind}:{transition.action.interaction}"
+                request_shape = digest(
+                    sorted(
+                        (event.method, event.resource_type or "", event.parameter_names)
+                        for event in transition.network
+                    ),
+                    16,
+                ) if transition.network else "none"
+                context = digest(
+                    [result.session_context, sorted(result.session_markers)] if result else "unknown",
+                    16,
+                )
+                group = transition.result_group_signature or ""
+                novel = (
+                    (2.0 if route and route not in seen_routes else 0.0)
+                    + (1.5 if action not in seen_actions else 0.0)
+                    + (1.5 if request_shape != "none" and request_shape not in seen_requests else 0.0)
+                    + (1.0 if context not in seen_contexts else 0.0)
+                    + (0.75 if group and group not in seen_groups else 0.0)
+                )
+                cost = 1 + self._path_action_cost(transition.workflow_path)
+                # A small floor prevents known deep paths from being starved
+                # after all shallow novelty has been exhausted.
+                score = novel / cost + (0.15 if len(transition.workflow_path) >= 3 else 0.0)
+                ranked.append((score, -cost, transition.id, transition, (route, action, request_shape, context, group)))
+            _, _, _, chosen, features = max(ranked, key=lambda item: (item[0], item[1], item[2]))
+            selected.append(chosen)
+            remaining.remove(chosen)
+            route, action, request_shape, context, group = features
+            if route:
+                seen_routes.add(route)
+            seen_actions.add(action)
+            if request_shape != "none":
+                seen_requests.add(request_shape)
+            seen_contexts.add(context)
+            if group:
+                seen_groups.add(group)
+        return selected
+
     def _execute_replay_path(
         self,
         session: BrowserSession,
         path: list[ActionDescriptor],
-    ) -> tuple[Observation, int, list[Observation]]:
+    ) -> tuple[Observation, int, list[Observation], list[NetworkEvent]]:
         observation = session.observe(self._next_sequence())
         observations = [observation]
         browser_actions = 0
+        network_events: list[NetworkEvent] = []
         for descriptor in path:
             control = session.find_current(observation, descriptor)
             if control is None:
                 raise RuntimeError(f"replay control missing: {descriptor.signature}")
             plan = self._resolve_form_plan(descriptor)
-            _, _, _, count = session.execute(control, plan, descriptor.input_plan_ref)
+            _, network, _, count = session.execute(control, plan, descriptor.input_plan_ref)
             browser_actions += count
+            network_events.extend(network)
+            self.artifact.metrics.observed_http_requests += len(network)
+            self._account_readiness(session.last_readiness)
+            self._collect_resource_evidence(session.last_action_resources)
             observation = session.observe(self._next_sequence())
             observations.append(observation)
-        return observation, browser_actions, observations
+        return observation, browser_actions, observations, network_events
 
     def _replay_search_transition(
         self,
@@ -1839,6 +2065,7 @@ class Explorer:
         verification_evidence: dict[str, Any] = {}
         verification_ids: list[str] = []
         input_plan_refs: list[str] = []
+        replay_network: list[NetworkEvent] = []
         try:
             primary = self.config.search_probe_primary
             contrast = self.config.search_probe_contrast
@@ -1857,12 +2084,12 @@ class Explorer:
             contrast_final = final.model_copy(update={"input_plan_ref": contrast_ref})
             contrast_path = list(transition.workflow_path[:-1]) + [contrast_final]
             input_plan_refs = [final.input_plan_ref or "", contrast_ref]
-            with BrowserSession(browser, self.config) as session:
+            with BrowserSession(browser, self.config, self.resource_budget) as session:
                 browser_actions += session.goto_start()
                 self.artifact.metrics.navigation_requests += 1
                 self.artifact.metrics.root_reloads += 1
                 self._record_navigation_evidence(session, "replay")
-                primary_result, count, primary_path_observations = self._execute_replay_path(
+                primary_result, count, primary_path_observations, primary_network = self._execute_replay_path(
                     session, transition.workflow_path
                 )
                 browser_actions += count
@@ -1870,10 +2097,11 @@ class Explorer:
                 self.artifact.metrics.navigation_requests += 1
                 self.artifact.metrics.root_reloads += 1
                 self._record_navigation_evidence(session, "replay")
-                contrast_result, count, contrast_path_observations = self._execute_replay_path(
+                contrast_result, count, contrast_path_observations, contrast_network = self._execute_replay_path(
                     session, contrast_path
                 )
                 browser_actions += count
+                replay_network = primary_network + contrast_network
             expected = self._observation_by_id(transition.result_observation_id)
             checks = {
                 "group_signature": bool(expected)
@@ -1983,6 +2211,7 @@ class Explorer:
             verification_observation_ids=verification_ids,
             verification_evidence=verification_evidence,
             input_plan_refs=input_plan_refs,
+            network=replay_network,
             functional_status=functional_status,
             browser_actions=browser_actions,
             error=error,
@@ -1994,8 +2223,9 @@ class Explorer:
         replay_id = "replay_" + digest([transition.id, len(self.artifact.replays)], 20)
         started_at = utc_now()
         browser_actions = 0
+        replay_network: list[NetworkEvent] = []
         try:
-            with BrowserSession(browser, self.config) as session:
+            with BrowserSession(browser, self.config, self.resource_budget) as session:
                 browser_actions += session.goto_start()
                 self.artifact.metrics.navigation_requests += 1
                 self.artifact.metrics.root_reloads += 1
@@ -2006,8 +2236,12 @@ class Explorer:
                     if control is None:
                         raise RuntimeError(f"replay control missing: {descriptor.signature}")
                     plan = self._resolve_form_plan(descriptor)
-                    _, _, _, count = session.execute(control, plan, descriptor.input_plan_ref)
+                    _, network, _, count = session.execute(control, plan, descriptor.input_plan_ref)
                     browser_actions += count
+                    replay_network.extend(network)
+                    self.artifact.metrics.observed_http_requests += len(network)
+                    self._account_readiness(session.last_readiness)
+                    self._collect_resource_evidence(session.last_action_resources)
                     observation = session.observe(self._next_sequence())
                 expected_observation = self._observation_by_id(transition.result_observation_id)
                 source_observation = self._observation_by_id(transition.source_observation_id)
@@ -2028,6 +2262,10 @@ class Explorer:
                     "usable_interaction_shape": bool(expected_observation)
                     and self._usable_return_screen(expected_observation, observation),
                 }
+                if self.config.replay_policy == "diverse":
+                    checks["content_identity"] = bool(expected_observation) and self._content_identity_match(
+                        expected_observation, observation
+                    )
                 changed_url = bool(source_observation and expected_observation) and (
                     source_observation.url != expected_observation.url
                 )
@@ -2037,6 +2275,10 @@ class Explorer:
                     and checks["route_pattern"]
                     and checks["title"]
                     and checks["usable_interaction_shape"]
+                    and (
+                        self.config.replay_policy != "diverse"
+                        or checks.get("content_identity", False)
+                    )
                 )
                 dynamic_valid = all(
                     checks[name]
@@ -2076,6 +2318,7 @@ class Explorer:
             outcome_checks=checks,
             functional_status=functional_status,
             browser_actions=browser_actions,
+            network=replay_network,
             error=error,
             started_at=started_at,
             ended_at=utc_now(),
@@ -2097,6 +2340,24 @@ class Explorer:
         if action_kind == "link":
             return FunctionalStatus.NAVIGATION_ONLY
         return FunctionalStatus.UNRESOLVED
+
+    @staticmethod
+    def _content_identity_match(expected: Observation, actual: Observation) -> bool:
+        """Require shared meaningful body evidence for navigational replay."""
+        def tokens(value: str) -> set[str]:
+            ignored = {"this", "that", "with", "from", "your", "have", "been", "will"}
+            return {
+                item for item in re.findall(r"[a-z0-9]{4,}", value.lower())
+                if item not in ignored
+            }
+
+        expected_tokens = tokens(expected.meaningful_text or expected.text_excerpt)
+        actual_tokens = tokens(actual.meaningful_text or actual.text_excerpt)
+        if not expected_tokens:
+            return expected.content_fingerprint == actual.content_fingerprint
+        shared = len(expected_tokens & actual_tokens)
+        minimum = min(3, max(1, (len(expected_tokens) + 3) // 4))
+        return shared >= minimum and shared / len(expected_tokens) >= 0.25
 
     def _observation_by_id(self, observation_id: str | None) -> Observation | None:
         if not observation_id:
@@ -2336,6 +2597,30 @@ class Explorer:
                         missing=[] if result_complete else ["matching result observation"],
                     )
                 )
+            if transition.restoration_attempted:
+                expected_steps = max(0, len(transition.workflow_path) - 1)
+                indexes = [item.step_index for item in transition.prerequisite_network]
+                restore_complete = (
+                    len(indexes) == expected_steps
+                    and indexes == list(range(expected_steps))
+                )
+                results.append(
+                    ConnectionEvidence(
+                        id="conn_" + digest(["prerequisite_network", transition.id]),
+                        claim_type="prerequisite_network",
+                        subject_id=transition.id,
+                        complete=restore_complete,
+                        evidence_ids=[
+                            f"{transition.id}:prerequisite:{item.step_index}"
+                            for item in transition.prerequisite_network
+                        ],
+                        missing=[] if restore_complete else [
+                            f"prerequisite step evidence {index}"
+                            for index in range(expected_steps)
+                            if index not in indexes
+                        ],
+                    )
+                )
         for replay in self.artifact.replays:
             transition = transitions.get(replay.transition_id)
             replay_observation = next(
@@ -2398,6 +2683,36 @@ class Explorer:
                         if item
                     ],
                     missing=missing,
+                )
+            )
+        for resource in self.artifact.resource_evidence:
+            resource_evidence_id = resource.evidence_id or (
+                "resource_evidence_" + digest(resource.model_dump(mode="json"), 20)
+            )
+            complete = bool(
+                resource_evidence_id
+                and resource.url
+                and resource.kind
+                and resource.source_url
+                and resource.source_type
+                and resource.source
+            )
+            results.append(
+                ConnectionEvidence(
+                    id="conn_" + digest(["resource_reference", resource_evidence_id, resource.url]),
+                    claim_type="resource_reference",
+                    subject_id=resource_evidence_id or resource.url,
+                    complete=complete,
+                    evidence_ids=[resource_evidence_id] if resource_evidence_id else [],
+                    missing=[] if complete else [
+                        name for name, value in (
+                            ("stable evidence id", resource_evidence_id),
+                            ("reference URL", resource.url),
+                            ("source response URL", resource.source_url),
+                            ("source type", resource.source_type),
+                            ("source element or header", resource.source),
+                        ) if not value
+                    ],
                 )
             )
         return results
@@ -2489,6 +2804,13 @@ class Explorer:
         )
         self.artifact.metrics.network_events_recorded = sum(
             len(transition.network) for transition in self.artifact.transitions
+        ) + sum(
+            sum(len(step.network) for step in transition.prerequisite_network)
+            for transition in self.artifact.transitions
+        ) + sum(
+            len(item.network) for item in self.artifact.navigation_evidence
+        ) + sum(
+            len(item.network) for item in self.artifact.replays
         )
         self.artifact.notes.append(
             "unsupported_connections is retained only as a backwards-compatible failed-replay alias; "

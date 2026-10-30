@@ -1,0 +1,44 @@
+{
+  "mode": "coverage",
+  "results": {
+    "combined_shallow_frozen-final": {
+      "application": "heldout_shop",
+      "counts": {
+        "browser_actions": 94,
+        "covered_areas": 8,
+        "covered_controls": 11,
+        "covered_requests": 8,
+        "elapsed_seconds": 42.52,
+        "graph_connections_missing_evidence": 0,
+        "grouped_states": 17,
+        "incorrect_state_merges_self_audit": 0,
+        "raw_states": 17,
+        "replay_attempts": 18,
+        "replay_successes": 18
+      },
+      "denominators": {
+        "areas": 8,
+        "blocked_areas_excluded": 1,
+        "contexts": 2,
+        "controls": 11,
+        "instances": 2,
+        "outside_areas_excluded": 0,
+        "paths": 8,
+        "requests": 8
+      },
+      "metrics": {
+        "context_recall": 1.0,
+        "control_action_recall": 1.0,
+        "covered_surfaces_per_browser_action": 0.2872340425531915,
+        "covered_surfaces_per_minute": 38.0997177798683,
+        "instance_recall": 1.0,
+        "instances_distinct": true,
+        "prerequisite_path_coverage": 1.0,
+        "replay_reliability": 1.0,
+        "request_precision": 0.9444444444444444,
+        "request_surface_recall": 1.0,
+        "state_interface_recall": 1.0
+      }
+    }
+  }
+}

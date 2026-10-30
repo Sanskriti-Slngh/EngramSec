@@ -47,7 +47,10 @@ handling, and multidimensional scheduling:
   --policy multidimensional --seconds 600 \
   --max-transitions 250 --max-browser-actions 600 \
   --robust-readiness --exploration-mode persistent \
-  --interaction-profile extended --hybrid-links
+  --interaction-profile extended --hybrid-links \
+  --typed-resource-spider --max-resource-fetches 100 \
+  --max-resource-depth 3 --passive-page-wait-ms 200 \
+  --replay-policy shallow
 ```
 
 `--hybrid-links` follows only hrefs observed by the browser; it does not guess
@@ -58,6 +61,18 @@ still disabled unless explicitly enabled for a disposable target.
 Aliases must be explicit loopback origins. Unlisted hosts/ports and external
 destinations remain blocked. Persistent mode affects discovery only; validation
 still executes complete paths in fresh browser contexts.
+
+`--typed-resource-spider` extracts URL references observed in response HTML,
+CSS, scripts, and headers, classifies navigation, asset, and API candidates,
+and records them separately from browser transitions. It fetches bounded
+same-scope navigation/assets only; API candidates are recorded but not
+submitted. `--max-resource-fetches` and `--max-resource-depth` cap this work.
+`--passive-page-wait-ms` bounds observation of passive documents; scripted
+documents retain the `--idle-page-wait-ms` window. `--replay-policy diverse`
+schedules validation across routes, action types, request shapes, and contexts
+while estimating path cost. It did not increase validations within the matched
+Crawl Maze budget, so `shallow` remains the default while `diverse` stays
+available for additional tests.
 
 Short model-free smoke run:
 

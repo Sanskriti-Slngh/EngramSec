@@ -61,6 +61,11 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
         help="treat browser-observed same-scope hrefs as lightweight navigation candidates",
     )
     parser.add_argument("--idle-page-wait-ms", type=int, default=1600)
+    parser.add_argument("--passive-page-wait-ms", type=int, default=200)
+    parser.add_argument("--typed-resource-spider", action="store_true")
+    parser.add_argument("--max-resource-fetches", type=int, default=100)
+    parser.add_argument("--max-resource-depth", type=int, default=3)
+    parser.add_argument("--replay-policy", choices=("shallow", "diverse"), default="shallow")
     parser.add_argument(
         "--search-probe",
         dest="search_probe_primary",
@@ -135,6 +140,11 @@ def main(argv: list[str] | None = None) -> int:
             interaction_profile=args.interaction_profile,
             hybrid_link_discovery=args.hybrid_links,
             idle_page_wait_ms=args.idle_page_wait_ms,
+            passive_page_wait_ms=args.passive_page_wait_ms,
+            typed_resource_spider=args.typed_resource_spider,
+            max_resource_fetches=args.max_resource_fetches,
+            max_resource_depth=args.max_resource_depth,
+            replay_policy=args.replay_policy,
             model_provider=args.provider,
             model_name=args.model,
             model_form_assistance=args.model_forms,

@@ -10,7 +10,7 @@ from urllib.parse import parse_qs
 import pytest
 
 from agent1.explorer import BrowserSession, Explorer
-from agent1.exporter import build_graph_a, write_outputs
+from agent1.exporter import build_graph_a, mermaid, write_outputs
 from agent1.schema import EvidenceStatus, RunConfig
 
 
@@ -73,6 +73,20 @@ class FixtureHandler(BaseHTTPRequestHandler):
             )
         elif path == "/popup":
             self._html("<html><title>Popup destination</title><body>Popup evidence</body></html>")
+        elif path == "/late-control":
+            self._html(
+                "<html><title>Late control</title><body><main><div id='mount'></div>"
+                "<script>setTimeout(()=>{const b=document.createElement('button');"
+                "b.textContent='Hydrated control';document.querySelector('#mount').append(b)},350)</script>"
+                "</main></body></html>"
+            )
+        elif path == "/delayed-refresh":
+            self._html(
+                "<html><head><meta http-equiv='refresh' content='0.5;url=/redirected'></head>"
+                "<body><p>Waiting for the delayed redirect.</p></body></html>"
+            )
+        elif path == "/redirected":
+            self._html("<html><title>Redirect destination</title><body><main>Reached destination.</main></body></html>")
         elif path.startswith("/catalog/"):
             item = path.rsplit("/", 1)[-1]
             self._html(
@@ -195,6 +209,59 @@ def test_checkpoint_resume_preserves_run_and_advances_frontier(
     assert any("Resumed from checkpoint" in note for note in resumed.notes)
 
 
+def test_typed_spider_is_exported_as_candidates_separate_from_browser_actions(
+    fixture_url: str, tmp_path: Path
+) -> None:
+    output = tmp_path / "typed-spider"
+    config = RunConfig(
+        start_url=fixture_url,
+        output_dir=output,
+        policy="breadth",
+        max_seconds=12,
+        max_transitions=6,
+        max_browser_actions=30,
+        settle_ms=10,
+        typed_resource_spider=True,
+        max_resource_fetches=8,
+        max_resource_depth=2,
+    )
+    artifact = Explorer(config, Path(__file__).resolve().parents[1]).run()
+    assert artifact.metrics.resource_fetches_attempted <= 8
+    assert artifact.metrics.resource_fetches_succeeded > 0
+    assert artifact.resource_evidence
+    assert any(item.kind == "navigation" for item in artifact.resource_evidence)
+    assert any(transition.restoration_attempted for transition in artifact.transitions)
+    assert artifact.metrics.browser_actions <= 30
+    graph = build_graph_a(artifact)
+    assert graph["resource_evidence"]
+    assert graph["nodes"]["resource_references"]
+    assert graph["nodes"]["resource_source_responses"]
+    assert any(edge["type"] == "references" for edge in graph["edges"])
+    assert all(
+        item["complete"]
+        for item in graph["connection_evidence"]
+        if item["claim_type"] in {"resource_reference", "prerequisite_network"}
+    )
+    assert graph["metrics"]["graph_connections_missing_evidence"] == 0
+    assert graph["metrics"]["resource_fetches_attempted"] <= 8
+    preserved_browser_events = (
+        sum(len(item.get("network", [])) for item in graph["navigation_evidence"])
+        + sum(len(item.get("network", [])) for item in graph["nodes"]["actions_evidence"])
+        + sum(
+            len(step.get("network", []))
+            for item in graph["nodes"]["actions_evidence"]
+            for step in item.get("prerequisite_network", [])
+        )
+        + sum(len(item.get("network", [])) for item in graph["replays"])
+    )
+    assert graph["metrics"]["network_events_recorded"] == preserved_browser_events
+    assert graph["metrics"]["observed_http_requests"] == preserved_browser_events
+    diagram = mermaid(graph)
+    assert "HTTP response" in diagram or "Response 127.0.0.1" in diagram
+    assert "fetched" in diagram
+    assert "_resource_diagram_labels" not in graph
+
+
 def test_extended_interaction_engine_observes_frames_shadow_and_popup(
     fixture_url: str, tmp_path: Path
 ) -> None:
@@ -273,5 +340,39 @@ def test_extended_interaction_engine_observes_frames_shadow_and_popup(
                 session.execute(popup)
                 assert session.last_popup_opened
                 assert session.page and session.page.title() == "Popup destination"
+        finally:
+            browser.close()
+
+
+def test_readiness_waits_for_late_control_and_delayed_redirect(
+    fixture_url: str, tmp_path: Path
+) -> None:
+    from playwright.sync_api import sync_playwright
+
+    config = RunConfig(
+        start_url=f"{fixture_url}late-control",
+        output_dir=tmp_path / "readiness",
+        robust_readiness=True,
+        readiness_timeout_ms=2_500,
+        readiness_poll_ms=50,
+        idle_page_wait_ms=1_600,
+        passive_page_wait_ms=100,
+    )
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        try:
+            with BrowserSession(browser, config) as session:
+                session.goto_start()
+                late = session.observe(1)
+                assert any(item.label == "Hydrated control" for item in late.controls)
+                assert late.readiness.status == "usable"
+                assert late.readiness.duration_ms >= 300
+
+                session.config = config.model_copy(
+                    update={"start_url": f"{fixture_url}delayed-refresh"}
+                )
+                # Keep the browser-session allowlist rooted to the same fixture origin.
+                session.goto_start()
+                assert session.page and session.page.url.endswith("/redirected")
         finally:
             browser.close()

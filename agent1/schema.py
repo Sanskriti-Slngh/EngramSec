@@ -72,6 +72,12 @@ class RunConfig(BaseModel):
     interaction_profile: Literal["basic", "extended"] = "basic"
     hybrid_link_discovery: bool = False
     idle_page_wait_ms: int = Field(default=1_600, ge=250, le=5_000)
+    passive_page_wait_ms: int = Field(default=200, ge=50, le=5_000)
+    typed_resource_spider: bool = False
+    max_resource_fetches: int = Field(default=100, ge=0, le=2_000)
+    max_resource_depth: int = Field(default=3, ge=0, le=10)
+    max_resource_body_bytes: int = Field(default=1_000_000, ge=16_384, le=4_000_000)
+    replay_policy: Literal["shallow", "diverse"] = "shallow"
 
     @model_validator(mode="after")
     def paired_search_probes(self) -> "RunConfig":
@@ -116,6 +122,8 @@ class ReadinessSample(BaseModel):
     control_fingerprint: str
     main_enabled_control_count: int = 0
     mutation_count: int = 0
+    script_count: int = 0
+    meta_refresh_delay_ms: int | None = None
 
 
 class ReadinessEvidence(BaseModel):
@@ -232,6 +240,22 @@ class NetworkEvent(BaseModel):
     body_encoding: str | None = None
 
 
+class ResourceEvidence(BaseModel):
+    evidence_id: str = ""
+    url: str
+    kind: Literal["navigation", "asset", "api"]
+    source_type: str
+    source_url: str
+    source: str
+    relation: str = ""
+    depth: int = 0
+    status: Literal["discovered", "fetched", "failed", "out_of_scope", "budget_limited", "depth_limited", "sensitive_reference"] = "discovered"
+    http_status: int | None = None
+    content_type: str | None = None
+    redirected_to: str | None = None
+    error: str | None = None
+
+
 class NavigationEvidence(BaseModel):
     id: str
     reason: Literal["initial", "frontier_restore", "persistent_restore", "replay"]
@@ -267,6 +291,13 @@ class FormAttempt(BaseModel):
     input_plan_ref: str | None = None
 
 
+class PrerequisiteStepEvidence(BaseModel):
+    step_index: int = Field(ge=0)
+    action_signature: str
+    action_label: str
+    network: list[NetworkEvent] = Field(default_factory=list)
+
+
 class Transition(BaseModel):
     id: str
     source_observation_id: str
@@ -281,6 +312,8 @@ class Transition(BaseModel):
     result_group_signature: str | None = None
     status: EvidenceStatus
     network: list[NetworkEvent] = Field(default_factory=list)
+    restoration_attempted: bool = False
+    prerequisite_network: list[PrerequisiteStepEvidence] = Field(default_factory=list)
     dialogs: list[dict[str, str]] = Field(default_factory=list)
     error: str | None = None
     started_at: str = Field(default_factory=utc_now)
@@ -324,6 +357,7 @@ class ReplayResult(BaseModel):
     verification_observation_ids: list[str] = Field(default_factory=list)
     verification_evidence: dict[str, Any] = Field(default_factory=dict)
     input_plan_refs: list[str] = Field(default_factory=list)
+    network: list[NetworkEvent] = Field(default_factory=list)
     functional_status: FunctionalStatus = FunctionalStatus.NOT_TESTED
     browser_actions: int = 0
     error: str | None = None
@@ -363,7 +397,10 @@ class FunctionalWorkflow(BaseModel):
 
 class ConnectionEvidence(BaseModel):
     id: str
-    claim_type: Literal["advertised_control", "source_action", "action_result", "replay"]
+    claim_type: Literal[
+        "advertised_control", "source_action", "action_result", "replay",
+        "prerequisite_network", "resource_reference",
+    ]
     subject_id: str
     complete: bool
     evidence_ids: list[str] = Field(default_factory=list)
@@ -425,6 +462,14 @@ class RunMetrics(BaseModel):
     dynamic_interaction_actions: int = 0
     frame_observations: int = 0
     popup_navigations: int = 0
+    resource_references_discovered: int = 0
+    resource_fetches_attempted: int = 0
+    resource_fetches_succeeded: int = 0
+    resource_fetch_failures: int = 0
+    resource_fetch_budget_exhausted: int = 0
+    passive_readiness_wait_ms: int = 0
+    interactive_readiness_wait_ms: int = 0
+    observed_http_requests: int = 0
 
 
 class RunArtifact(BaseModel):
@@ -443,6 +488,7 @@ class RunArtifact(BaseModel):
     functional_workflows: list[FunctionalWorkflow] = Field(default_factory=list)
     connection_evidence: list[ConnectionEvidence] = Field(default_factory=list)
     navigation_evidence: list[NavigationEvidence] = Field(default_factory=list)
+    resource_evidence: list[ResourceEvidence] = Field(default_factory=list)
     state_groups: dict[str, list[str]] = Field(default_factory=dict)
     return_paths: dict[str, list[ActionDescriptor]] = Field(default_factory=dict)
     metrics: RunMetrics = Field(default_factory=RunMetrics)
