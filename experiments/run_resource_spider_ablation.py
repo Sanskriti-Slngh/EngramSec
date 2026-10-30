@@ -50,6 +50,11 @@ def main() -> int:
     parser.add_argument("--script-budget", type=int)
     parser.add_argument("--stylesheet-budget", type=int)
     parser.add_argument("--asset-budget", type=int)
+    parser.add_argument("--zap-evidence", type=Path)
+    parser.add_argument("--zap-source-origin")
+    parser.add_argument("--max-total-http-requests", type=int)
+    parser.add_argument("--state-reuse", choices=("root", "prefix"), default="root")
+    parser.add_argument("--exploration-policy", choices=("multidimensional", "hierarchical"), default="multidimensional")
     args = parser.parse_args()
     args.root.mkdir(parents=True, exist_ok=True)
     summary: list[dict[str, object]] = []
@@ -92,7 +97,7 @@ def main() -> int:
         config = RunConfig(
             start_url=start_url,
             output_dir=out,
-            policy="multidimensional",
+            policy=args.exploration_policy,
             max_seconds=args.seconds,
             max_transitions=args.max_transitions,
             max_browser_actions=args.max_browser_actions,
@@ -119,6 +124,10 @@ def main() -> int:
             share_resource_frontier=not args.no_shared_frontier,
             budget_allocation_strategy=budget_strategy,
             replay_policy="diverse" if diverse else "shallow",
+            zap_evidence_path=args.zap_evidence,
+            zap_source_origin=args.zap_source_origin,
+            max_total_http_requests=args.max_total_http_requests,
+            state_reuse=args.state_reuse,
             allow_post_forms=args.allow_post_forms,
             model_provider="none",
             paid_calls_enabled=False,

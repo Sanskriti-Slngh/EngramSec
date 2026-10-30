@@ -46,7 +46,9 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
         evidence_id = evidence.get("evidence_id") or "resource_evidence_" + digest(evidence, 20)
         evidence["evidence_id"] = evidence_id
         response_url = str(item.source_url)
-        response_id = "response_" + hashlib.sha256(response_url.encode()).hexdigest()[:20]
+        external_candidate = item.source_type == "zap_seed" and item.status not in {"fetched", "failed"}
+        response_key = response_url + ("\0external_seed" if external_candidate else "")
+        response_id = "response_" + hashlib.sha256(response_key.encode()).hexdigest()[:20]
         reference_key = (
             f"unresolved\0{evidence_id}"
             if item.url is None
@@ -57,7 +59,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
             response_id,
             {
                 "id": response_id,
-                "type": "resource_source_response",
+                "type": "external_seed_source" if external_candidate else "resource_source_response",
                 "url": response_url,
             },
         )
@@ -83,11 +85,33 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
             {
                 "source": response_id,
                 "target": reference_id,
-                "type": "references",
+                "type": ("external_seed_candidate" if external_candidate else "agent_seed_fetch") if item.source_type == "zap_seed" else "references",
                 "status": item.status,
                 "evidence_id": evidence_id,
             }
         )
+    external_runs: dict[str, dict[str, Any]] = {}
+    external_nodes: list[dict[str, Any]] = []
+    external_edges: list[dict[str, Any]] = []
+    for item in artifact.external_discoveries:
+        run_id = "external_run_" + digest([item.engine, item.run_id, item.source_origin, item.export_digest], 20)
+        external_runs.setdefault(run_id, {
+            "id": run_id, "type": "external_discovery_run", "engine": item.engine,
+            "run_id": item.run_id, "source_origin": item.source_origin,
+            "export_digest": item.export_digest, "session_context": "unknown",
+        })
+        external_nodes.append({"type": "external_discovery_evidence", **item.model_dump(mode="json")})
+        external_edges.append({
+            "source": run_id, "target": item.id, "type": "external_report",
+            "status": item.status, "evidence_id": item.id,
+        })
+        for reference in resource_references.values():
+            if reference.get("url") == item.mapped_url:
+                external_edges.append({
+                    "source": item.id, "target": reference["id"],
+                    "type": "external_candidate_for_resource", "status": item.status,
+                    "evidence_id": item.id,
+                })
     action_nodes = []
     evidence_edges = []
     for transition in artifact.transitions:
@@ -251,8 +275,10 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
             "resource_source_responses": list(resource_responses.values()),
             "resource_references": list(resource_references.values()),
             "resource_evidence": list(resource_evidence_nodes.values()),
+            "external_discovery_runs": list(external_runs.values()),
+            "external_discoveries": external_nodes,
         },
-        "edges": evidence_edges + feature_edges + workflow_edges + resource_edges,
+        "edges": evidence_edges + feature_edges + workflow_edges + resource_edges + external_edges,
         "advertised_unexecuted": advertised,
         "replays": [item.model_dump(mode="json") for item in artifact.replays],
         "replay_observations": [
@@ -264,6 +290,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
         "resource_evidence": [
             item.model_dump(mode="json") for item in artifact.resource_evidence
         ],
+        "external_discoveries": [item.model_dump(mode="json") for item in artifact.external_discoveries],
         "connection_evidence": [
             item.model_dump(mode="json") for item in artifact.connection_evidence
         ],
@@ -273,6 +300,13 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
 
 def mermaid(graph: dict[str, Any]) -> str:
     lines = ["flowchart LR"]
+    for run in graph["nodes"].get("external_discovery_runs", []):
+        lines.append(f'  {_slug(run["id"])}(("ZAP external run"))')
+    for item in graph["nodes"].get("external_discoveries", [])[:100]:
+        label = f'{urlsplit(item["mapped_url"]).path} [{item["status"]}]'.replace('"', "'")[:100]
+        lines.append(f'  {_slug(item["id"])}["{label}"]')
+        run_id = "external_run_" + digest([item["engine"], item["run_id"], item["source_origin"], item["export_digest"]], 20)
+        lines.append(f'  {_slug(run_id)} -->|external report| {_slug(item["id"])}')
     states = graph["nodes"]["states"]
     for state in states:
         label = (state["title"] or state["route_pattern"] or "state").replace('"', "'")[:60]
@@ -304,12 +338,14 @@ def mermaid(graph: dict[str, Any]) -> str:
             ),
         )[0]
         resource_nodes[key][1].add(status)
+        external_candidate = evidence.get("source_type") == "zap_seed" and status not in {"fetched", "failed"}
+        response_key = source_url + ("\0external_seed" if external_candidate else "")
         response_id = resource_responses.setdefault(
-            source_url,
-            "response_" + hashlib.sha256(source_url.encode()).hexdigest()[:20],
+            response_key,
+            "response_" + hashlib.sha256(response_key.encode()).hexdigest()[:20],
         )
         response_parts = urlsplit(source_url)
-        response_label = f"Response {response_parts.netloc}{response_parts.path or '/'}"[:90]
+        response_label = f"{'External seed' if external_candidate else 'Response'} {response_parts.netloc}{response_parts.path or '/'}"[:90]
         resource_url_parts = urlsplit(resource_url)
         query_names = sorted({name for name, _ in parse_qsl(resource_url_parts.query, keep_blank_values=True)})
         query_suffix = f" ?{','.join(query_names)}" if query_names else ""

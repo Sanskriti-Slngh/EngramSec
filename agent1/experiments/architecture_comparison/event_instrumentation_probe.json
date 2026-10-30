@@ -1,0 +1,518 @@
+{
+  "summary": {
+    "states_probed": 84,
+    "states_with_listener_only_elements": 0,
+    "listener_only_elements_total": 0,
+    "states_with_js_api_calls": 0,
+    "same_origin_js_api_paths": 0,
+    "js_api_paths_absent_from_run_graph": 0,
+    "absent_paths_by_api": {},
+    "errors": 0
+  },
+  "per_state": [
+    {
+      "state_path": "/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/css/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/css/font-face.html",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/headers/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/headers/content-location/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/headers/link/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/headers/refresh/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/background.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/blockquote/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/blockquote/cite.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/embed/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/embed/src.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/form/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/form/button/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/form/button/formaction.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/frameset/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/frameset/frame/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/frameset/frame/src.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/iframe/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/iframe/srcdoc.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/img/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/img/srcset.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/input/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/input/src.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/isindex/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/isindex/action.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/map/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/map/area/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/map/area/ping.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/object/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/object/param/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/object/param/value.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/script/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/script/src.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/svg/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/svg/image/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/svg/image/xlink.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/table/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/table/td/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/table/td/background.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/video/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/video/track/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/body/video/track/src.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/doctype.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/head/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/head/base/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/head/comment/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/head/comment/comment-conditional.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/head/import/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/head/import/implementation.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/head/meta/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/head/meta/content-redirect.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/head/profile.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/html/manifest.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/frameworks/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/frameworks/angular/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/frameworks/angularjs/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/frameworks/polymer/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/frameworks/react/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/js-post.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/js-put.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/listener-and-event-attribute.html/",
+      "listener_elements": 1,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/multi-step-request-event-attribute.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/multi-step-request-event-listener-div-dom.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/multi-step-request-event-listener-div.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/multi-step-request-event-listener-dom.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/multi-step-request-event-listener.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/multi-step-request-redefine-event-attribute.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/interactive/two-listeners.html/",
+      "listener_elements": 1,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/misc/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/misc/automatic-post.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/misc/comment.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/misc/string-concat-variable.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/javascript/misc/string-variable.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/misc/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/misc/known-files/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/misc/known-files/robots.txt.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/misc/known-files/sitemap.xml.html/",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/test/headers/location.found",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    },
+    {
+      "state_path": "/test/html/body/form/button/formaction.found",
+      "listener_elements": 0,
+      "listener_only_elements": 0,
+      "js_api_calls": 0
+    }
+  ]
+}

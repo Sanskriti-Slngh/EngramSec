@@ -25,6 +25,8 @@ from playwright.sync_api import sync_playwright
 from .providers import DecisionProvider, ModelProviderError, build_provider
 from .resource_spider import ResourceBudget, TypedResourceSpider
 from .revision import code_revision
+from .hierarchical import AreaTourPlanner
+from .zap_adapter import load_zap_evidence
 from .search import (
     SEARCH_SEMANTICS,
     introduced_links,
@@ -525,6 +527,7 @@ class BrowserSession:
         resource_budget: ResourceBudget | None = None,
         resource_spider: TypedResourceSpider | None = None,
         run_started_monotonic: float | None = None,
+        http_budget: Any | None = None,
     ):
         self.browser = browser
         self.config = config
@@ -535,10 +538,11 @@ class BrowserSession:
                 "script": config.max_resource_script_fetches,
                 "stylesheet": config.max_resource_stylesheet_fetches,
                 "other_asset": config.max_resource_asset_fetches,
-            },
+            }, http_budget,
         )
         self.resource_spider = resource_spider
         self.run_started_monotonic = run_started_monotonic or time.monotonic()
+        self.http_budget = http_budget
         self.context: BrowserContext | None = None
         self.page: Page | None = None
         self.network: NetworkRecorder | None = None
@@ -552,6 +556,48 @@ class BrowserSession:
 
     def __enter__(self) -> "BrowserSession":
         self.context = self.browser.new_context()
+        if self.http_budget is not None:
+            budget, config = self.http_budget, self.config
+
+            def bounded_route(route: Any, request: Any) -> None:
+                # Playwright routes only the first request of a redirect chain.
+                if not allowed_origin(config.start_url, request.url, config.origin_aliases):
+                    budget.blocked += 1
+                    route.abort("blockedbyclient")
+                    return
+                if not budget.consume("browser"):
+                    route.abort("blockedbyclient")
+                    return
+                try:
+                    response = route.fetch(max_redirects=0, timeout=config.action_timeout_ms * 2)
+                except PlaywrightError:
+                    route.abort("failed")
+                    return
+                location = response.headers.get("location")
+                if 300 <= response.status < 400 and location:
+                    # The browser follows this hop outside the router, so scope
+                    # and budget are enforced here; the hop is charged when its
+                    # request event fires, never at this point (no double charge).
+                    if not allowed_origin(config.start_url, urljoin(request.url, location), config.origin_aliases):
+                        budget.blocked += 1
+                        route.abort("blockedbyclient")
+                        return
+                    if not budget.remaining():
+                        budget.blocked += 1
+                        route.abort("blockedbyclient")
+                        return
+                route.fulfill(response=response)
+
+            def charge_redirect_hop(request: Any) -> None:
+                if request.redirected_from is None:
+                    return
+                budget.charge_observed("browser_redirect")
+                if not allowed_origin(config.start_url, request.url, config.origin_aliases):
+                    # A second or later hop cannot be intercepted by Playwright.
+                    budget.redirect_scope_violations += 1
+
+            self.context.route("**/*", bounded_route)
+            self.context.on("request", charge_redirect_hop)
         self.network = NetworkRecorder(
             self.context,
             self.config,
@@ -625,6 +671,28 @@ class BrowserSession:
                 self.last_navigation_resources = self.network.drain_resources(self.context.request)
             self.last_navigation_network = self.network.drain()
         return 1
+
+    def go_back(self) -> bool:
+        """One browser-history step in the live context; the caller verifies the result."""
+        assert self.page
+        try:
+            response = self.page.go_back(wait_until="domcontentloaded", timeout=self.config.action_timeout_ms * 2)
+        except PlaywrightError:
+            return False
+        if not allowed_origin(self.config.start_url, self.page.url, self.config.origin_aliases):
+            raise RuntimeError("history return left the configured origin")
+        if self.config.robust_readiness:
+            self.last_readiness = self._wait_for_readiness(response.status if response else None)
+        elif self.config.settle_ms:
+            self.page.wait_for_timeout(self.config.settle_ms)
+            self.last_readiness = ReadinessEvidence()
+        else:
+            self.last_readiness = ReadinessEvidence()
+        if self.network:
+            if self.config.typed_resource_spider:
+                self.last_navigation_resources = self.network.drain_resources(self.context.request)
+            self.last_navigation_network = self.network.drain()
+        return True
 
     def _wait_for_readiness(self, http_status: int | None = None) -> ReadinessEvidence:
         """Record a bounded, browser-observable readiness trace.
@@ -1203,6 +1271,60 @@ class BrowserSession:
         return "EngramSec test", "generated:text"
 
 
+class HttpBudget:
+    """Run-wide HTTP request ledger shared by browser, replay, spider and ZAP traffic.
+
+    Pre-flight requests (browser route, spider GET) are charged with
+    ``consume`` and refused once the limit is reached. Playwright does not route
+    redirect hops, so each hop is charged once from the context ``request`` event
+    via ``charge_observed``; hops that could not be refused are counted as
+    ``redirect_overrun`` when they exceed the limit.
+    """
+
+    def __init__(self, limit: int):
+        self.limit, self.used, self.blocked = limit, 0, 0
+        self.redirect_overrun = 0
+        self.redirect_scope_violations = 0
+        self.by_source: defaultdict[str, int] = defaultdict(int)
+
+    def remaining(self) -> bool:
+        return self.used < self.limit
+
+    def consume(self, source: str = "browser") -> bool:
+        if not self.remaining():
+            self.blocked += 1
+            return False
+        self.used += 1
+        self.by_source[source] += 1
+        return True
+
+    def charge_observed(self, source: str) -> None:
+        self.used += 1
+        self.by_source[source] += 1
+        if self.used > self.limit:
+            self.redirect_overrun += 1
+
+    def charge_external(self, requests: int, source: str) -> None:
+        if requests > self.limit - self.used:
+            raise ValueError(f"{source} request count exceeds the remaining HTTP budget")
+        self.used += requests
+        self.by_source[source] += requests
+
+    def export(self, metrics: Any) -> None:
+        metrics.total_http_budget_used = self.used
+        metrics.total_http_budget_blocked = self.blocked
+        metrics.http_redirect_budget_overrun = self.redirect_overrun
+        metrics.http_redirect_scope_violations = self.redirect_scope_violations
+        metrics.http_budget_by_source = dict(self.by_source)
+
+    def restore(self, metrics: Any) -> None:
+        self.used = metrics.total_http_budget_used
+        self.blocked = metrics.total_http_budget_blocked
+        self.redirect_overrun = metrics.http_redirect_budget_overrun
+        self.redirect_scope_violations = metrics.http_redirect_scope_violations
+        self.by_source = defaultdict(int, metrics.http_budget_by_source)
+
+
 class Explorer:
     def __init__(self, config: RunConfig, repository_root: Path):
         self.config = config
@@ -1212,6 +1334,7 @@ class Explorer:
         self.started_monotonic = time.monotonic()
         self.prior_elapsed = 0.0
         self.sequence = 0
+        self.http_budget = HttpBudget(config.max_total_http_requests) if config.max_total_http_requests else None
         self.resource_budget = ResourceBudget(
             config.max_resource_fetches,
             {
@@ -1219,7 +1342,7 @@ class Explorer:
                 "script": config.max_resource_script_fetches,
                 "stylesheet": config.max_resource_stylesheet_fetches,
                 "other_asset": config.max_resource_asset_fetches,
-            },
+            }, self.http_budget,
         )
         self.resource_spider = (
             TypedResourceSpider(
@@ -1282,6 +1405,7 @@ class Explorer:
             self.resource_budget,
             self.resource_spider,
             self.started_monotonic,
+            self.http_budget,
         )
 
     def _revision(self) -> str:
@@ -1428,6 +1552,12 @@ class Explorer:
         session: BrowserSession,
         reason: str,
     ) -> None:
+        if reason == "replay":
+            self.artifact.metrics.verification_root_reloads += 1
+        elif reason == "history_return":
+            self.artifact.metrics.history_returns += 1
+        else:
+            self.artifact.metrics.discovery_root_reloads += 1
         readiness = session.last_readiness
         if readiness.status in {"blocked", "timeout"}:
             self.artifact.metrics.startup_readiness_failures += 1
@@ -1460,6 +1590,22 @@ class Explorer:
     def run(self) -> RunArtifact:
         self._validate_target()
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        if self.config.zap_evidence_path and not self.config.resume_from:
+            records, rejected, requests, elapsed = load_zap_evidence(
+                self.config.zap_evidence_path, self.config.zap_source_origin or "", self.config.start_url
+            )
+            if self.http_budget is not None:
+                self.http_budget.charge_external(requests, "zap_traditional_spider")
+            self.artifact.external_discoveries = records
+            self.artifact.metrics.external_discovery_records = len(records)
+            self.artifact.metrics.external_discovery_rejected = rejected
+            self.artifact.metrics.external_request_upper_bound = requests
+            self.artifact.metrics.external_elapsed_seconds = elapsed
+            self.artifact.notes.append("ZAP evidence is externally reported and does not prove a UI transition or replay.")
+            for item in records:
+                if (item.method == "GET" and item.http_status is not None and 200 <= item.http_status < 300
+                        and not item.parameter_names and not DANGEROUS_ACTION.search(urlsplit(item.mapped_url).path)):
+                    self.resource_spider.seed_external(item.mapped_url)
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(headless=self.config.headless)
             try:
@@ -1577,7 +1723,7 @@ class Explorer:
                     [observation.route_pattern, control.interaction, control.component], 20
                 )
             if (
-                self.config.policy == "multidimensional"
+                self.config.policy in {"multidimensional", "hierarchical"}
                 and (global_component or repeated_view_action)
                 and global_key in self._scheduled_global_actions
             ):
@@ -1596,7 +1742,7 @@ class Explorer:
                 # browser actions required to restore an archived path.
                 kind_score += 12.0 if globally_novel else 0.0
                 kind_score -= 0.20 * len(path)
-            if self.config.policy == "multidimensional":
+            if self.config.policy in {"multidimensional", "hierarchical"}:
                 target_key = control.target or ""
                 target_novel = bool(target_key and target_key not in self._seen_targets)
                 component_key = f"{control.component}:{control.role}:{control.label}"
@@ -1651,7 +1797,7 @@ class Explorer:
         self._sort_frontier()
 
     def _sort_frontier(self) -> None:
-        if self.config.policy in {"coverage", "multidimensional"}:
+        if self.config.policy in {"coverage", "multidimensional", "hierarchical"}:
             self.frontier.sort(
                 key=lambda item: (-item.priority, len(item.path), item.action.signature)
             )
@@ -1689,6 +1835,8 @@ class Explorer:
             self.save_checkpoint()
 
     def _explore_persistent(self, browser: Browser) -> None:
+        planner = (AreaTourPlanner(prefix_reuse=self.config.state_reuse == "prefix")
+                   if self.config.policy == "hierarchical" else None)
         with self._browser_session(browser) as session:
             self._navigate_start(session, "persistent_restore")
             live = session.observe(self._next_sequence())
@@ -1708,7 +1856,18 @@ class Explorer:
                     burst_group = live.group_signature
                     local_burst = 0
                 local_index = None
-                if local_burst < 8:
+                selected_index = None
+                if planner:
+                    selected_index = planner.choose(
+                        self.frontier,
+                        {item.id: item for item in self.artifact.observations},
+                        live, live_path,
+                    )
+                    candidate = self.frontier[selected_index]
+                    if (candidate.expected_source_group == live.group_signature
+                            and session.find_current(live, candidate.action) is not None):
+                        local_index = selected_index
+                elif local_burst < 8:
                     local_index = next(
                         (
                             index
@@ -1718,14 +1877,15 @@ class Explorer:
                         ),
                         None,
                     )
-                item = self.frontier.pop(local_index if local_index is not None else 0)
+                chosen_index = selected_index if selected_index is not None else (local_index if local_index is not None else 0)
+                item = self.frontier.pop(chosen_index)
                 local = local_index is not None
                 local_burst = local_burst + 1 if local else 0
                 required_actions = self._descriptor_action_cost(item.action)
                 if not local:
                     required_actions += 1 + self._path_action_cost(item.path)
                 if not self._fits_exploration_action_budget(required_actions):
-                    self.frontier.insert(local_index if local_index is not None else 0, item)
+                    self.frontier.insert(chosen_index, item)
                     break
                 updated = self._attempt_frontier(
                     browser,
@@ -1765,6 +1925,7 @@ class Explorer:
         with manager as session:
             prerequisite_network: list[PrerequisiteStepEvidence] = []
             restoration_attempted = False
+            reused_prefix_steps = 0
             action_network: list[NetworkEvent] = []
             try:
                 expected_observation = self._observation_by_id(item.source_observation_id)
@@ -1789,6 +1950,26 @@ class Explorer:
                     source = live_source
                     source_path = list(live_path if live_path is not None else item.path)
                     self.artifact.metrics.live_state_reuses += 1
+                elif (prefix := self._reusable_live_prefix(item, live_source, live_path, expected_observation,
+                                                          persistent_session is not None)) is not None:
+                    # TimeMachine-style reuse: the live page is the verified end of a
+                    # prefix of this item's return path, so only the suffix is executed.
+                    # The final source signature is still verified below.
+                    restoration_attempted = True
+                    reused_prefix_steps = prefix
+                    self.artifact.metrics.prefix_state_reuses += 1
+                    self.artifact.metrics.root_reloads_avoided += 1
+                    source = self._restore(session, item.path[prefix:], prerequisite_network, start_index=prefix)
+                    source_path = list(item.path)
+                elif (parent := self._history_return(session, item, live_source, live_path,
+                                                     expected_observation, persistent_session is not None)) is not None:
+                    # Verified one-step history return to the live parent, then the suffix.
+                    restoration_attempted = True
+                    reused_prefix_steps = len(parent[1])
+                    self.artifact.metrics.root_reloads_avoided += 1
+                    source = self._restore(session, item.path[len(parent[1]):], prerequisite_network,
+                                           start_index=len(parent[1]), initial=parent[0])
+                    source_path = list(item.path)
                 else:
                     reason = "persistent_restore" if persistent_session is not None else "frontier_restore"
                     if (
@@ -1939,6 +2120,7 @@ class Explorer:
                     status=EvidenceStatus.OBSERVED,
                     network=action_network,
                     restoration_attempted=restoration_attempted,
+                    reused_prefix_steps=reused_prefix_steps,
                     prerequisite_network=prerequisite_network,
                     dialogs=dialogs,
                     started_at=started_at,
@@ -1961,6 +2143,7 @@ class Explorer:
                     status=EvidenceStatus.FAILED,
                     network=action_network,
                     restoration_attempted=restoration_attempted,
+                    reused_prefix_steps=reused_prefix_steps,
                     prerequisite_network=prerequisite_network,
                     error=f"{type(exc).__name__}: {compact_text(str(exc), 300)}",
                     started_at=started_at,
@@ -2048,14 +2231,79 @@ class Explorer:
 
         return shape(expected) == shape(actual)
 
+    def _reusable_live_prefix(
+        self,
+        item: FrontierItem,
+        live_source: Observation | None,
+        live_path: list[ActionDescriptor] | None,
+        expected_observation: Observation | None,
+        persistent: bool,
+    ) -> int | None:
+        """Length of the live return path when it is a strict prefix of ``item.path``.
+
+        Reuse requires the same session markers as the item's source, so record
+        and session identities are never crossed; cookies or storage are not
+        assumed to restore server state because the prefix is still live.
+        """
+        if (self.config.state_reuse != "prefix" or not persistent or live_source is None
+                or live_path is None or expected_observation is None
+                or live_source.session_markers != expected_observation.session_markers
+                or len(live_path) >= len(item.path)):
+            return None
+        if [step.signature for step in item.path[:len(live_path)]] != [step.signature for step in live_path]:
+            return None
+        return len(live_path)
+
+    def _history_return(
+        self,
+        session: BrowserSession,
+        item: FrontierItem,
+        live_source: Observation | None,
+        live_path: list[ActionDescriptor] | None,
+        expected_observation: Observation | None,
+        persistent: bool,
+    ) -> tuple[Observation, list[ActionDescriptor]] | None:
+        """Return to the live state's parent with one history step when it is a prefix of ``item.path``.
+
+        Only an undo of a plain, input-free navigate/click is attempted, inside
+        the same context and session markers. The parent is accepted only if the
+        next required control (or the item's own control) is present; otherwise
+        the caller falls back to a root reload. Server state is never assumed:
+        the page is re-observed and the final source signature is still checked.
+        """
+        if (self.config.state_reuse != "prefix" or not persistent or live_source is None
+                or not live_path or expected_observation is None
+                or live_source.session_markers != expected_observation.session_markers):
+            return None
+        parent_path = live_path[:-1]
+        undone = live_path[-1]
+        if (undone.interaction not in {"navigate", "click"} or undone.input_plan_ref or undone.fields
+                or len(parent_path) > len(item.path)
+                or [s.signature for s in item.path[:len(parent_path)]] != [s.signature for s in parent_path]):
+            return None
+        self.artifact.metrics.history_return_attempts += 1
+        if not session.go_back():
+            return None
+        self.artifact.metrics.browser_actions += 1
+        self.artifact.metrics.restoration_actions += 1
+        self._record_navigation_evidence(session, "history_return")
+        observation = session.observe(self._next_sequence())
+        needed = item.path[len(parent_path)] if len(item.path) > len(parent_path) else item.action
+        if session.find_current(observation, needed) is None:
+            self.artifact.metrics.history_return_rejected += 1
+            return None
+        return observation, parent_path
+
     def _restore(
         self,
         session: BrowserSession,
         path: list[ActionDescriptor],
         network_evidence: list[PrerequisiteStepEvidence],
+        start_index: int = 0,
+        initial: Observation | None = None,
     ) -> Observation:
-        observation = session.observe(self._next_sequence())
-        for step_index, descriptor in enumerate(path):
+        observation = initial or session.observe(self._next_sequence())
+        for step_index, descriptor in enumerate(path, start=start_index):
             control = session.find_current(observation, descriptor)
             if control is None:
                 raise RuntimeError(f"return-path control missing: {descriptor.signature}")
@@ -2762,11 +3010,11 @@ class Explorer:
                 )
             if transition.restoration_attempted:
                 expected_steps = max(0, len(transition.workflow_path) - 1)
+                # Steps before reused_prefix_steps ran earlier in the same live
+                # context and are evidenced by their own transitions.
+                expected_range = list(range(transition.reused_prefix_steps, expected_steps))
                 indexes = [item.step_index for item in transition.prerequisite_network]
-                restore_complete = (
-                    len(indexes) == expected_steps
-                    and indexes == list(range(expected_steps))
-                )
+                restore_complete = indexes == expected_range
                 results.append(
                     ConnectionEvidence(
                         id="conn_" + digest(["prerequisite_network", transition.id]),
@@ -2779,7 +3027,7 @@ class Explorer:
                         ],
                         missing=[] if restore_complete else [
                             f"prerequisite step evidence {index}"
-                            for index in range(expected_steps)
+                            for index in expected_range
                             if index not in indexes
                         ],
                     )
@@ -2848,6 +3096,15 @@ class Explorer:
                     missing=missing,
                 )
             )
+        for external in self.artifact.external_discoveries:
+            complete = bool(external.id and external.engine and external.run_id and external.source_origin
+                            and external.source_record_id and external.export_digest and external.mapped_url)
+            results.append(ConnectionEvidence(
+                id="conn_" + digest(["external_observation", external.id]),
+                claim_type="external_observation", subject_id=external.id, complete=complete,
+                evidence_ids=[external.id] if complete else [],
+                missing=[] if complete else ["external record provenance"],
+            ))
         for resource in self.artifact.resource_evidence:
             resource_evidence_id = resource.evidence_id or (
                 "resource_evidence_" + digest(resource.model_dump(mode="json"), 20)
@@ -2908,6 +3165,8 @@ class Explorer:
         return incorrect
 
     def _finalize(self) -> None:
+        if self.http_budget is not None:
+            self.http_budget.export(self.artifact.metrics)
         self.artifact.ended_at = utc_now()
         self.artifact.features = self._build_features()
         self.artifact.functional_workflows = self._build_functional_workflows()
@@ -3004,6 +3263,8 @@ class Explorer:
     def save_checkpoint(self) -> None:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.artifact.metrics.elapsed_seconds = round(self.prior_elapsed + self._elapsed(), 3)
+        if self.http_budget is not None:
+            self.http_budget.export(self.artifact.metrics)
         checkpoint = Checkpoint(
             artifact=self.artifact,
             frontier=self.frontier,
@@ -3014,6 +3275,8 @@ class Explorer:
     def _load_checkpoint(self, path: Path) -> None:
         checkpoint = Checkpoint.model_validate_json(path.read_text(encoding="utf-8"))
         self.artifact = checkpoint.artifact
+        if self.http_budget is not None:
+            self.http_budget.restore(self.artifact.metrics)
         self.run_id = self.artifact.run_id
         self.frontier = checkpoint.frontier
         self.tried = set(checkpoint.tried)

@@ -1,0 +1,426 @@
+flowchart LR
+  n_state_13b84927ccb28c68["/misc/"]
+  n_state_2cad795c97be24f0["CrawlMaze - Testbed for Web Crawlers."]
+  n_state_47f9a58cb6fdd496["/javascript/"]
+  n_state_558f03471959fff3["CrawlMaze - Testbed for Web Crawlers - Known files"]
+  n_state_691fd367df373b0e["/html/"]
+  n_state_706fbac757bb049e["/javascript/misc/"]
+  n_state_8b4c5fd8ecd9a07c["CrawlMaze - Testbed for Web Crawlers - HTTP headers"]
+  n_state_8eedace1d42c2357["CrawlMaze - Testbed for Web Crawlers - JavaScript"]
+  n_state_f05845c1738dac63["/headers/"]
+  n_state_f4f487a281c86cbe["/misc/known-files/"]
+  n_state_f8e5ff39c295b1dc["CrawlMaze - Testbed for Web Crawlers - Manifest"]
+  n_action_tr_fe5b43c2a99b8c7ff602{"Response headers [replay_validated]"}
+  n_action_tr_1ad1539ba9ef9763e695{"refresh/ [replay_validated]"}
+  n_action_tr_6d38ba6e895c45c5abf3{"Misc [replay_validated]"}
+  n_action_tr_7f7eb7621a1a344934c4{"known-files/ [replay_validated]"}
+  n_action_tr_3dbe25c58ea76263594e{"sitemap.xml.html [replay_validated]"}
+  n_action_tr_803efa4b0aef83967168{"JavaScript [replay_validated]"}
+  n_action_tr_1e1eefff752ebed5133d{"misc/ [replay_validated]"}
+  n_action_tr_30c3c57d6eb52994c090{"string-variable.html [replay_validated]"}
+  n_action_tr_bb1946d59259ff45113c{"HTML [replay_validated]"}
+  n_action_tr_e440c1e4e5014b67baeb{"manifest.html [replay_validated]"}
+  n_workflow_a6efd5acb891ec57d1(("Response headers [navigation_only]"))
+  n_workflow_42071210abd66f5f6a(("refresh/ [navigation_only]"))
+  n_workflow_ceed8a3fe7b2773d2a(("Misc [navigation_only]"))
+  n_workflow_7982cc2398f16f59f9(("known-files/ [navigation_only]"))
+  n_workflow_43273fc827d917de4e(("sitemap.xml.html [navigation_only]"))
+  n_workflow_7f978512905c21313e(("JavaScript [navigation_only]"))
+  n_workflow_1b99adf9b7d6ddb90e(("misc/ [navigation_only]"))
+  n_workflow_aa29945f8c7c5a3e25(("string-variable.html [navigation_only]"))
+  n_workflow_4a921c7f9d2cafc3eb(("HTML [navigation_only]"))
+  n_workflow_848aeb201cc1cd0359(("manifest.html [navigation_only]"))
+  n_response_066ce6a7d37ce74f4b29(("Response 127.0.0.1:3460/css/font-face.html"))
+  n_response_0f359af8e34b505345fd(("Response 127.0.0.1:3460/javascript//misc/"))
+  n_response_13dd2248ee80816d88c9(("Response 127.0.0.1:3460/headers/refresh/"))
+  n_response_1d27644c344492f156fc(("Response 127.0.0.1:3460/headers/"))
+  n_response_2b66a971fff3c08ff326(("Response 127.0.0.1:3460/"))
+  n_response_4ab6b59b2eff83225972(("Response 127.0.0.1:3460/html/head/"))
+  n_response_4e7b1f0456b6cc681caf(("Response 127.0.0.1:3460/html//body/"))
+  n_response_4f0bc3e677c1df3b4670(("Response 127.0.0.1:3460/javascript//frameworks/"))
+  n_response_543839992ab203e3e541(("Response 127.0.0.1:3460/html/body/"))
+  n_response_5941bbf69a1af9887f65(("Response 127.0.0.1:3460/css/"))
+  n_response_63f7c2f7a92cf78fdf5f(("Response 127.0.0.1:3460/html//misc/"))
+  n_response_6833c11be3d3f0c2973b(("Response 127.0.0.1:3460/misc//known-files/"))
+  n_response_7ae91323c613c071bd04(("Response 127.0.0.1:3460/javascript/interactive/"))
+  n_response_7b336782752fd4251cf2(("Response 127.0.0.1:3460/misc/"))
+  n_response_7b8df59c8c1610d3317a(("Response 127.0.0.1:3460/css/font-face.css"))
+  n_response_956b5ab99c819a5e72e6(("Response 127.0.0.1:3460/html//doctype.html"))
+  n_response_ad4179ad3e9abc2f0e0e(("Response 127.0.0.1:3460/html/"))
+  n_response_ba7ac5700c6849124999(("Response 127.0.0.1:3460/headers/link/"))
+  n_response_baa072e341ce775ca01a(("Response 127.0.0.1:3460/html//manifest.html"))
+  n_response_bb011790730f16302940(("Response 127.0.0.1:3460/javascript/"))
+  n_response_bb0d005552f09ef80577(("Response 127.0.0.1:3460/javascript/misc/string-variable.html/"))
+  n_response_cd07f634415ef62b1c31(("Response 127.0.0.1:3460/html/misc/"))
+  n_response_df8384c49ec40fe7abfc(("Response 127.0.0.1:3460/html//head/"))
+  n_response_efe7001b2392a17d9f8e(("Response 127.0.0.1:3460/javascript//interactive/"))
+  n_response_f10a73aaa2aba4128b5a(("Response 127.0.0.1:3460/javascript/frameworks/"))
+  n_response_f4e21708f0e7792b2e21(("Response 127.0.0.1:3460/headers/location/"))
+  n_response_fed0a44c14c11e76e959(("Response 127.0.0.1:3460/misc/known-files/"))
+  n_response_ff74d71f4ad225a189e0(("Response 127.0.0.1:3460/javascript/misc/"))
+  n_resource_1ac25e68ffc7ae9b813d["navigation: 127.0.0.1:3460/css/ [discovered, fetched]"]
+  n_resource_d5bcd17d9b37f3d98a4f["asset: 127.0.0.1:3460/css/font-face.css [discovered, fetched]"]
+  n_resource_5a48ca95c7da971dafa0["navigation: 127.0.0.1:3460/css/font-face.html [discovered, fetched]"]
+  n_resource_2998391487d3bd436ed3["navigation: 127.0.0.1:3460/headers/ [discovered, fetched]"]
+  n_resource_d078d56d6c90586eb8e6["navigation: 127.0.0.1:3460/headers/content-location/ [discovered, fetched]"]
+  n_resource_4e8dd9d325b402770b37["navigation: 127.0.0.1:3460/headers/link/ [discovered, fetched]"]
+  n_resource_456263f5618eb517d33b["navigation: 127.0.0.1:3460/headers/location/ [discovered, fetched]"]
+  n_resource_36838b00845b647204fd["navigation: 127.0.0.1:3460/headers/refresh/ [discovered, fetched]"]
+  n_resource_8622988ac11b36f068a3["navigation: 127.0.0.1:3460/html/ [discovered, fetched]"]
+  n_resource_b855c1d98efdbff78180["navigation: 127.0.0.1:3460/html//body/ [discovered, fetched]"]
+  n_resource_40b3d10213817bb03042["navigation: 127.0.0.1:3460/html//doctype.html [discovered, fetched]"]
+  n_resource_2dcadd06466ac2aec01d["navigation: 127.0.0.1:3460/html//head/ [discovered, fetched]"]
+  n_resource_4328cbbd26804d4b8aae["navigation: 127.0.0.1:3460/html//manifest.html [discovered, fetched]"]
+  n_resource_0072e7086e41b27a01c7["navigation: 127.0.0.1:3460/html//misc/ [discovered, fetched]"]
+  n_resource_7bd953f6b1e42e6c8251["navigation: 127.0.0.1:3460/html/body/ [discovered, fetched]"]
+  n_resource_bd6760dfc3b793ca39e1["navigation: 127.0.0.1:3460/html/body/a/ [discovered]"]
+  n_resource_6e8a9efb69b20500a011["navigation: 127.0.0.1:3460/html/body/applet/ [discovered]"]
+  n_resource_53a51bf9aa7c2f81c765["navigation: 127.0.0.1:3460/html/body/audio/ [discovered]"]
+  n_resource_a99adfa2d2bfe2e97b8f["navigation: 127.0.0.1:3460/html/body/background.html [discovered]"]
+  n_resource_c4e147ba0d5f24e8d070["navigation: 127.0.0.1:3460/html/body/blockquote/ [discovered]"]
+  n_resource_3aab4a5c3d7078e8dfa3["navigation: 127.0.0.1:3460/html/body/embed/ [discovered]"]
+  n_resource_e1eab565bf62853397b4["navigation: 127.0.0.1:3460/html/body/form/ [discovered]"]
+  n_resource_b55819fdf28eb550dbd9["navigation: 127.0.0.1:3460/html/body/frameset/ [discovered]"]
+  n_resource_bca8aa6a3c7e55158446["navigation: 127.0.0.1:3460/html/body/iframe/ [discovered]"]
+  n_resource_1148e5074746474b028b["navigation: 127.0.0.1:3460/html/body/img/ [discovered]"]
+  n_resource_ca200534058f206971ee["navigation: 127.0.0.1:3460/html/body/input/ [discovered]"]
+  n_resource_6d1c100de45b6365040e["navigation: 127.0.0.1:3460/html/body/isindex/ [discovered]"]
+  n_resource_11fde7c233a5295ccb58["navigation: 127.0.0.1:3460/html/body/map/ [discovered]"]
+  n_resource_16fcd2a31c266353ce64["navigation: 127.0.0.1:3460/html/body/object/ [discovered]"]
+  n_resource_d37130d85d0288b4934c["navigation: 127.0.0.1:3460/html/body/script/ [discovered]"]
+  n_resource_f445bb2edcb281972d6b["navigation: 127.0.0.1:3460/html/body/svg/ [discovered]"]
+  n_resource_87c1ad6faaa1c7b9f9e4["navigation: 127.0.0.1:3460/html/body/table/ [discovered]"]
+  n_resource_bcd45ff2e5a66ec0ec8f["navigation: 127.0.0.1:3460/html/body/video/ [discovered]"]
+  n_resource_a23e5438e3d7f9308417["navigation: 127.0.0.1:3460/html/doctype.html/ [discovered, fetched]"]
+  n_resource_45205d979e68d7445919["navigation: 127.0.0.1:3460/html/head/ [discovered, fetched]"]
+  n_resource_45cdfab1b68adeb3535b["navigation: 127.0.0.1:3460/html/head/base/ [discovered]"]
+  n_resource_9ba279768dc9814277ab["navigation: 127.0.0.1:3460/html/head/comment/ [discovered]"]
+  n_resource_33a9eb2b3fc9737f7c49["navigation: 127.0.0.1:3460/html/head/import/ [discovered]"]
+  n_resource_ca01e9aa2ba05a4b1e8d["navigation: 127.0.0.1:3460/html/head/link/ [discovered]"]
+  n_resource_12f5209ecbc16547eea6["navigation: 127.0.0.1:3460/html/head/meta/ [discovered]"]
+  n_resource_b635446b4287b1a58b76["navigation: 127.0.0.1:3460/html/head/profile.html [discovered]"]
+  n_resource_36b8ba0b145bbca3adf8["navigation: 127.0.0.1:3460/html/manifest.html/ [discovered, fetched]"]
+  n_resource_355959d3698e93e27061["navigation: 127.0.0.1:3460/html/misc/ [discovered, fetched]"]
+  n_resource_027aa45976bbce664be3["navigation: 127.0.0.1:3460/html/misc/string/ [discovered]"]
+  n_resource_fb628cb29b2ded547abb["navigation: 127.0.0.1:3460/html/misc/url/ [discovered]"]
+  n_resource_6b43554fc710168c5fc5["navigation: 127.0.0.1:3460/javascript/ [discovered, fetched]"]
+  n_resource_a57f799dcfb1ea8f7fd1["navigation: 127.0.0.1:3460/javascript//frameworks/ [discovered, fetched]"]
+  n_resource_89b83480243e2a01e272["navigation: 127.0.0.1:3460/javascript//interactive/ [discovered, fetched]"]
+  n_resource_0f400e07cc66a297e2a8["navigation: 127.0.0.1:3460/javascript//misc/ [discovered, fetched]"]
+  n_resource_9561e439db69d8ece226["navigation: 127.0.0.1:3460/javascript/frameworks/ [discovered, fetched]"]
+  n_resource_7cee100f49ec1a4e0217["navigation: 127.0.0.1:3460/javascript/frameworks/angular/ [discovered]"]
+  n_resource_b8ce1655c0b5cd88871f["navigation: 127.0.0.1:3460/javascript/frameworks/angularjs/ [discovered]"]
+  n_resource_6255d04af986c2b3a432["navigation: 127.0.0.1:3460/javascript/frameworks/polymer/ [discovered]"]
+  n_resource_950470c8c921f04fcfc4["navigation: 127.0.0.1:3460/javascript/frameworks/react/ [discovered]"]
+  n_resource_393ac3affd6365971192["navigation: 127.0.0.1:3460/javascript/interactive/ [discovered, fetched]"]
+  n_resource_43eb08ead360da852aa2["navigation: 127.0.0.1:3460/javascript/interactive/js-delete.html [discovered]"]
+  n_resource_78649a73d210918284f5["navigation: 127.0.0.1:3460/javascript/interactive/js-post-event-listener.html [discovered]"]
+  n_resource_1a251a6e10f02a2f01c8["navigation: 127.0.0.1:3460/javascript/interactive/js-post.html [discovered]"]
+  n_resource_e46fb59e6639c7127b28["navigation: 127.0.0.1:3460/javascript/interactive/js-put.html [discovered]"]
+  n_resource_e470ed4d475fa96caf9f["navigation: 127.0.0.1:3460/javascript/interactive/listener-and-event-attribute.html [discovered]"]
+  n_resource_7e6844a9d42d36875033["navigation: 127.0.0.1:3460/javascript/interactive/multi-step-request-event-attribute.html [discovered]"]
+  n_resource_0bf7e5b040c3d1f3c66c["navigation: 127.0.0.1:3460/javascript/interactive/multi-step-request-event-listener-div-dom.html [discovered]"]
+  n_resource_0bc010eb766aca599a83["navigation: 127.0.0.1:3460/javascript/interactive/multi-step-request-event-listener-div.html [discovered]"]
+  n_resource_2dc957168f700a23a6f7["navigation: 127.0.0.1:3460/javascript/interactive/multi-step-request-event-listener-dom.html [discovered]"]
+  n_resource_5461fc15bf5e71bb541d["navigation: 127.0.0.1:3460/javascript/interactive/multi-step-request-event-listener.html [discovered]"]
+  n_resource_46d244686aa52f6785c3["navigation: 127.0.0.1:3460/javascript/interactive/multi-step-request-redefine-event-attribute.html [discovered]"]
+  n_resource_bbffeb8236a2ad68e783["navigation: 127.0.0.1:3460/javascript/interactive/multi-step-request-remove-button.html [discovered]"]
+  n_resource_2539b8f628fad486609c["navigation: 127.0.0.1:3460/javascript/interactive/multi-step-request-remove-event-listener.html [discovered]"]
+  n_resource_cba3d8849e1dc8bad111["navigation: 127.0.0.1:3460/javascript/interactive/two-listeners.html [discovered]"]
+  n_resource_6b2f48656a73ee6d6c1a["navigation: 127.0.0.1:3460/javascript/misc/ [discovered, fetched]"]
+  n_resource_7c36771c1b85c002af2f["navigation: 127.0.0.1:3460/javascript/misc/automatic-post.html [discovered]"]
+  n_resource_db0e559406bedab636ee["navigation: 127.0.0.1:3460/javascript/misc/comment.html [discovered]"]
+  n_resource_36b9e17f0f62e76bc2bb["navigation: 127.0.0.1:3460/javascript/misc/string-concat-variable.html [discovered]"]
+  n_resource_22a2e6924e27a72fe939["navigation: 127.0.0.1:3460/javascript/misc/string-variable.html [discovered]"]
+  n_resource_dd742304419bfdc4bf18["asset: 127.0.0.1:3460/javascript/misc/string-variable.js [discovered, fetched]"]
+  n_resource_8df8ab63b4b1f73b4fe1["navigation: 127.0.0.1:3460/misc/ [discovered, fetched]"]
+  n_resource_073bceb66f80b977f5c1["navigation: 127.0.0.1:3460/misc//known-files/ [discovered, fetched]"]
+  n_resource_66f41139e6dbb9354810["navigation: 127.0.0.1:3460/misc/known-files/ [discovered, fetched]"]
+  n_resource_41338701165273569d17["navigation: 127.0.0.1:3460/misc/known-files/robots.txt.html [discovered]"]
+  n_resource_6807e1fe6c83a66e8a9a["navigation: 127.0.0.1:3460/misc/known-files/sitemap.xml.html [discovered]"]
+  n_resource_93a11ea46af0c8c2cf22["asset: 127.0.0.1:3460/test/css/font-face.found [discovered]"]
+  n_resource_2a23567db68e8d3e5097["asset: 127.0.0.1:3460/test/headers/link.found [discovered, fetched]"]
+  n_resource_464c856a0d18bfe7041a["navigation: 127.0.0.1:3460/test/headers/location.found [discovered, fetched]"]
+  n_resource_ccce02675822f24c7c75["navigation: 127.0.0.1:3460/test/headers/refresh.found [discovered, fetched]"]
+  n_resource_daf768b0a6df71f82023["navigation: github.com/google/security-crawl-maze [out_of_scope]"]
+  n_response_066ce6a7d37ce74f4b29 -->|<link>[href] [discovered]| n_resource_d5bcd17d9b37f3d98a4f
+  n_response_066ce6a7d37ce74f4b29 -->|<link>[href] [fetched]| n_resource_d5bcd17d9b37f3d98a4f
+  n_response_0f359af8e34b505345fd -->|<a>[href] [discovered]| n_resource_6b2f48656a73ee6d6c1a
+  n_response_0f359af8e34b505345fd -->|Location [discovered]| n_resource_6b2f48656a73ee6d6c1a
+  n_response_0f359af8e34b505345fd -->|Location [fetched]| n_resource_6b2f48656a73ee6d6c1a
+  n_response_13dd2248ee80816d88c9 -->|Refresh [discovered]| n_resource_ccce02675822f24c7c75
+  n_response_13dd2248ee80816d88c9 -->|Refresh [fetched]| n_resource_ccce02675822f24c7c75
+  n_response_1d27644c344492f156fc -->|<a>[href] [discovered]| n_resource_36838b00845b647204fd
+  n_response_1d27644c344492f156fc -->|<a>[href] [fetched]| n_resource_36838b00845b647204fd
+  n_response_1d27644c344492f156fc -->|<a>[href] [discovered]| n_resource_456263f5618eb517d33b
+  n_response_1d27644c344492f156fc -->|<a>[href] [fetched]| n_resource_456263f5618eb517d33b
+  n_response_1d27644c344492f156fc -->|<a>[href] [discovered]| n_resource_4e8dd9d325b402770b37
+  n_response_1d27644c344492f156fc -->|<a>[href] [fetched]| n_resource_4e8dd9d325b402770b37
+  n_response_1d27644c344492f156fc -->|<a>[href] [discovered]| n_resource_d078d56d6c90586eb8e6
+  n_response_1d27644c344492f156fc -->|<a>[href] [fetched]| n_resource_d078d56d6c90586eb8e6
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [discovered]| n_resource_1ac25e68ffc7ae9b813d
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [fetched]| n_resource_1ac25e68ffc7ae9b813d
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [discovered]| n_resource_2998391487d3bd436ed3
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [fetched]| n_resource_2998391487d3bd436ed3
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [discovered]| n_resource_6b43554fc710168c5fc5
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [fetched]| n_resource_6b43554fc710168c5fc5
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [discovered]| n_resource_8622988ac11b36f068a3
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [fetched]| n_resource_8622988ac11b36f068a3
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [discovered]| n_resource_8df8ab63b4b1f73b4fe1
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [fetched]| n_resource_8df8ab63b4b1f73b4fe1
+  n_response_2b66a971fff3c08ff326 -->|<a>[href] [out_of_scope]| n_resource_daf768b0a6df71f82023
+  n_response_4ab6b59b2eff83225972 -->|<a>[href] [discovered]| n_resource_12f5209ecbc16547eea6
+  n_response_4ab6b59b2eff83225972 -->|<a>[href] [discovered]| n_resource_33a9eb2b3fc9737f7c49
+  n_response_4ab6b59b2eff83225972 -->|<a>[href] [discovered]| n_resource_45cdfab1b68adeb3535b
+  n_response_4ab6b59b2eff83225972 -->|<a>[href] [discovered]| n_resource_9ba279768dc9814277ab
+  n_response_4ab6b59b2eff83225972 -->|<a>[href] [discovered]| n_resource_b635446b4287b1a58b76
+  n_response_4ab6b59b2eff83225972 -->|<a>[href] [discovered]| n_resource_ca01e9aa2ba05a4b1e8d
+  n_response_4e7b1f0456b6cc681caf -->|<a>[href] [discovered]| n_resource_7bd953f6b1e42e6c8251
+  n_response_4e7b1f0456b6cc681caf -->|Location [discovered]| n_resource_7bd953f6b1e42e6c8251
+  n_response_4e7b1f0456b6cc681caf -->|Location [fetched]| n_resource_7bd953f6b1e42e6c8251
+  n_response_4f0bc3e677c1df3b4670 -->|<a>[href] [discovered]| n_resource_9561e439db69d8ece226
+  n_response_4f0bc3e677c1df3b4670 -->|Location [discovered]| n_resource_9561e439db69d8ece226
+  n_response_4f0bc3e677c1df3b4670 -->|Location [fetched]| n_resource_9561e439db69d8ece226
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_1148e5074746474b028b
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_11fde7c233a5295ccb58
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_16fcd2a31c266353ce64
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_3aab4a5c3d7078e8dfa3
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_53a51bf9aa7c2f81c765
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_6d1c100de45b6365040e
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_6e8a9efb69b20500a011
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_87c1ad6faaa1c7b9f9e4
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_a99adfa2d2bfe2e97b8f
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_b55819fdf28eb550dbd9
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_bca8aa6a3c7e55158446
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_bcd45ff2e5a66ec0ec8f
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_bd6760dfc3b793ca39e1
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_c4e147ba0d5f24e8d070
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_ca200534058f206971ee
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_d37130d85d0288b4934c
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_e1eab565bf62853397b4
+  n_response_543839992ab203e3e541 -->|<a>[href] [discovered]| n_resource_f445bb2edcb281972d6b
+  n_response_5941bbf69a1af9887f65 -->|<a>[href] [discovered]| n_resource_5a48ca95c7da971dafa0
+  n_response_5941bbf69a1af9887f65 -->|<a>[href] [fetched]| n_resource_5a48ca95c7da971dafa0
+  n_response_63f7c2f7a92cf78fdf5f -->|<a>[href] [discovered]| n_resource_355959d3698e93e27061
+  n_response_63f7c2f7a92cf78fdf5f -->|Location [discovered]| n_resource_355959d3698e93e27061
+  n_response_63f7c2f7a92cf78fdf5f -->|Location [fetched]| n_resource_355959d3698e93e27061
+  n_response_6833c11be3d3f0c2973b -->|<a>[href] [discovered]| n_resource_66f41139e6dbb9354810
+  n_response_6833c11be3d3f0c2973b -->|Location [discovered]| n_resource_66f41139e6dbb9354810
+  n_response_6833c11be3d3f0c2973b -->|Location [fetched]| n_resource_66f41139e6dbb9354810
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_0bc010eb766aca599a83
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_0bf7e5b040c3d1f3c66c
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_1a251a6e10f02a2f01c8
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_2539b8f628fad486609c
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_2dc957168f700a23a6f7
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_43eb08ead360da852aa2
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_46d244686aa52f6785c3
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_5461fc15bf5e71bb541d
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_78649a73d210918284f5
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_7e6844a9d42d36875033
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_bbffeb8236a2ad68e783
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_cba3d8849e1dc8bad111
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_e46fb59e6639c7127b28
+  n_response_7ae91323c613c071bd04 -->|<a>[href] [discovered]| n_resource_e470ed4d475fa96caf9f
+  n_response_7b336782752fd4251cf2 -->|<a>[href] [discovered]| n_resource_073bceb66f80b977f5c1
+  n_response_7b336782752fd4251cf2 -->|<a>[href] [fetched]| n_resource_073bceb66f80b977f5c1
+  n_response_7b8df59c8c1610d3317a -->|url() [discovered]| n_resource_93a11ea46af0c8c2cf22
+  n_response_956b5ab99c819a5e72e6 -->|<a>[href] [discovered]| n_resource_a23e5438e3d7f9308417
+  n_response_956b5ab99c819a5e72e6 -->|Location [discovered]| n_resource_a23e5438e3d7f9308417
+  n_response_956b5ab99c819a5e72e6 -->|Location [fetched]| n_resource_a23e5438e3d7f9308417
+  n_response_ad4179ad3e9abc2f0e0e -->|<a>[href] [discovered]| n_resource_0072e7086e41b27a01c7
+  n_response_ad4179ad3e9abc2f0e0e -->|<a>[href] [fetched]| n_resource_0072e7086e41b27a01c7
+  n_response_ad4179ad3e9abc2f0e0e -->|<a>[href] [discovered]| n_resource_2dcadd06466ac2aec01d
+  n_response_ad4179ad3e9abc2f0e0e -->|<a>[href] [fetched]| n_resource_2dcadd06466ac2aec01d
+  n_response_ad4179ad3e9abc2f0e0e -->|<a>[href] [discovered]| n_resource_40b3d10213817bb03042
+  n_response_ad4179ad3e9abc2f0e0e -->|<a>[href] [fetched]| n_resource_40b3d10213817bb03042
+  n_response_ad4179ad3e9abc2f0e0e -->|<a>[href] [discovered]| n_resource_4328cbbd26804d4b8aae
+  n_response_ad4179ad3e9abc2f0e0e -->|<a>[href] [fetched]| n_resource_4328cbbd26804d4b8aae
+  n_response_ad4179ad3e9abc2f0e0e -->|<a>[href] [discovered]| n_resource_b855c1d98efdbff78180
+  n_response_ad4179ad3e9abc2f0e0e -->|<a>[href] [fetched]| n_resource_b855c1d98efdbff78180
+  n_response_ba7ac5700c6849124999 -->|Link [discovered]| n_resource_2a23567db68e8d3e5097
+  n_response_ba7ac5700c6849124999 -->|Link [fetched]| n_resource_2a23567db68e8d3e5097
+  n_response_baa072e341ce775ca01a -->|<a>[href] [discovered]| n_resource_36b8ba0b145bbca3adf8
+  n_response_baa072e341ce775ca01a -->|Location [discovered]| n_resource_36b8ba0b145bbca3adf8
+  n_response_baa072e341ce775ca01a -->|Location [fetched]| n_resource_36b8ba0b145bbca3adf8
+  n_response_bb011790730f16302940 -->|<a>[href] [discovered]| n_resource_0f400e07cc66a297e2a8
+  n_response_bb011790730f16302940 -->|<a>[href] [fetched]| n_resource_0f400e07cc66a297e2a8
+  n_response_bb011790730f16302940 -->|<a>[href] [discovered]| n_resource_89b83480243e2a01e272
+  n_response_bb011790730f16302940 -->|<a>[href] [fetched]| n_resource_89b83480243e2a01e272
+  n_response_bb011790730f16302940 -->|<a>[href] [discovered]| n_resource_a57f799dcfb1ea8f7fd1
+  n_response_bb011790730f16302940 -->|<a>[href] [fetched]| n_resource_a57f799dcfb1ea8f7fd1
+  n_response_bb0d005552f09ef80577 -->|<script>[src] [discovered]| n_resource_dd742304419bfdc4bf18
+  n_response_bb0d005552f09ef80577 -->|<script>[src] [fetched]| n_resource_dd742304419bfdc4bf18
+  n_response_cd07f634415ef62b1c31 -->|<a>[href] [discovered]| n_resource_027aa45976bbce664be3
+  n_response_cd07f634415ef62b1c31 -->|<a>[href] [discovered]| n_resource_fb628cb29b2ded547abb
+  n_response_df8384c49ec40fe7abfc -->|<a>[href] [discovered]| n_resource_45205d979e68d7445919
+  n_response_df8384c49ec40fe7abfc -->|Location [discovered]| n_resource_45205d979e68d7445919
+  n_response_df8384c49ec40fe7abfc -->|Location [fetched]| n_resource_45205d979e68d7445919
+  n_response_efe7001b2392a17d9f8e -->|<a>[href] [discovered]| n_resource_393ac3affd6365971192
+  n_response_efe7001b2392a17d9f8e -->|Location [discovered]| n_resource_393ac3affd6365971192
+  n_response_efe7001b2392a17d9f8e -->|Location [fetched]| n_resource_393ac3affd6365971192
+  n_response_f10a73aaa2aba4128b5a -->|<a>[href] [discovered]| n_resource_6255d04af986c2b3a432
+  n_response_f10a73aaa2aba4128b5a -->|<a>[href] [discovered]| n_resource_7cee100f49ec1a4e0217
+  n_response_f10a73aaa2aba4128b5a -->|<a>[href] [discovered]| n_resource_950470c8c921f04fcfc4
+  n_response_f10a73aaa2aba4128b5a -->|<a>[href] [discovered]| n_resource_b8ce1655c0b5cd88871f
+  n_response_f4e21708f0e7792b2e21 -->|Location [discovered]| n_resource_464c856a0d18bfe7041a
+  n_response_f4e21708f0e7792b2e21 -->|Location [fetched]| n_resource_464c856a0d18bfe7041a
+  n_response_fed0a44c14c11e76e959 -->|<a>[href] [discovered]| n_resource_41338701165273569d17
+  n_response_fed0a44c14c11e76e959 -->|<a>[href] [discovered]| n_resource_6807e1fe6c83a66e8a9a
+  n_response_ff74d71f4ad225a189e0 -->|<a>[href] [discovered]| n_resource_22a2e6924e27a72fe939
+  n_response_ff74d71f4ad225a189e0 -->|<a>[href] [discovered]| n_resource_36b9e17f0f62e76bc2bb
+  n_response_ff74d71f4ad225a189e0 -->|<a>[href] [discovered]| n_resource_7c36771c1b85c002af2f
+  n_response_ff74d71f4ad225a189e0 -->|<a>[href] [discovered]| n_resource_db0e559406bedab636ee
+  n_advertised_obs_0468a3f1f3b768b337f8_ctl_65d06474e7d8585dd5["repository [not tested]"]
+  n_advertised_obs_0468a3f1f3b768b337f8_ctl_0c5c46dc975ce68f1d["CSS [not tested]"]
+  n_advertised_obs_e7b2526818e6b50d6387_ctl_8272378b8812608871["location/ [not tested]"]
+  n_advertised_obs_e7b2526818e6b50d6387_ctl_e81ec80824519ed33d["link/ [not tested]"]
+  n_advertised_obs_e7b2526818e6b50d6387_ctl_d765fd48bf2fa53751["content-location/ [not tested]"]
+  n_advertised_obs_db95f0a74aacfb4e1c64_ctl_9f0a96c1326a498e68["robots.txt.html [not tested]"]
+  n_advertised_obs_7ed2c4fbed333c2ac966_ctl_15546c731197e32db0["interactive/ [not tested]"]
+  n_advertised_obs_7ed2c4fbed333c2ac966_ctl_f3c450f02fd40cbb80["frameworks/ [not tested]"]
+  n_advertised_obs_4bc7c3f3fd5c73d8956b_ctl_3f7747f8f370a9b891["comment.html [not tested]"]
+  n_advertised_obs_4bc7c3f3fd5c73d8956b_ctl_40a47a799084ef6d39["string-concat-variable.html [not tested]"]
+  n_advertised_obs_4bc7c3f3fd5c73d8956b_ctl_72305c348553b3ed6e["automatic-post.html [not tested]"]
+  n_advertised_obs_07a7f8aa388e31777efd_ctl_c08dc862c9519e9d53["body/ [not tested]"]
+  n_advertised_obs_07a7f8aa388e31777efd_ctl_b70fb695ad3b195909["doctype.html [not tested]"]
+  n_advertised_obs_07a7f8aa388e31777efd_ctl_b08879ae15d5efa171["head/ [not tested]"]
+  n_state_2cad795c97be24f0 -->|replay_validated| n_action_tr_fe5b43c2a99b8c7ff602
+  n_action_tr_fe5b43c2a99b8c7ff602 -->|replay_validated| n_state_f05845c1738dac63
+  n_state_f05845c1738dac63 -->|replay_validated| n_action_tr_1ad1539ba9ef9763e695
+  n_action_tr_1ad1539ba9ef9763e695 -->|replay_validated| n_state_8b4c5fd8ecd9a07c
+  n_state_2cad795c97be24f0 -->|replay_validated| n_action_tr_6d38ba6e895c45c5abf3
+  n_action_tr_6d38ba6e895c45c5abf3 -->|replay_validated| n_state_13b84927ccb28c68
+  n_state_13b84927ccb28c68 -->|replay_validated| n_action_tr_7f7eb7621a1a344934c4
+  n_action_tr_7f7eb7621a1a344934c4 -->|replay_validated| n_state_f4f487a281c86cbe
+  n_state_f4f487a281c86cbe -->|replay_validated| n_action_tr_3dbe25c58ea76263594e
+  n_action_tr_3dbe25c58ea76263594e -->|replay_validated| n_state_558f03471959fff3
+  n_state_2cad795c97be24f0 -->|replay_validated| n_action_tr_803efa4b0aef83967168
+  n_action_tr_803efa4b0aef83967168 -->|replay_validated| n_state_47f9a58cb6fdd496
+  n_state_47f9a58cb6fdd496 -->|replay_validated| n_action_tr_1e1eefff752ebed5133d
+  n_action_tr_1e1eefff752ebed5133d -->|replay_validated| n_state_706fbac757bb049e
+  n_state_706fbac757bb049e -->|replay_validated| n_action_tr_30c3c57d6eb52994c090
+  n_action_tr_30c3c57d6eb52994c090 -->|replay_validated| n_state_8eedace1d42c2357
+  n_state_2cad795c97be24f0 -->|replay_validated| n_action_tr_bb1946d59259ff45113c
+  n_action_tr_bb1946d59259ff45113c -->|replay_validated| n_state_691fd367df373b0e
+  n_state_691fd367df373b0e -->|replay_validated| n_action_tr_e440c1e4e5014b67baeb
+  n_action_tr_e440c1e4e5014b67baeb -->|replay_validated| n_state_f8e5ff39c295b1dc
+  n_state_2cad795c97be24f0 -->|not_tested| n_advertised_obs_0468a3f1f3b768b337f8_ctl_65d06474e7d8585dd5
+  n_state_2cad795c97be24f0 -->|not_tested| n_advertised_obs_0468a3f1f3b768b337f8_ctl_0c5c46dc975ce68f1d
+  n_state_f05845c1738dac63 -->|not_tested| n_advertised_obs_e7b2526818e6b50d6387_ctl_8272378b8812608871
+  n_state_f05845c1738dac63 -->|not_tested| n_advertised_obs_e7b2526818e6b50d6387_ctl_e81ec80824519ed33d
+  n_state_f05845c1738dac63 -->|not_tested| n_advertised_obs_e7b2526818e6b50d6387_ctl_d765fd48bf2fa53751
+  n_state_f4f487a281c86cbe -->|not_tested| n_advertised_obs_db95f0a74aacfb4e1c64_ctl_9f0a96c1326a498e68
+  n_state_47f9a58cb6fdd496 -->|not_tested| n_advertised_obs_7ed2c4fbed333c2ac966_ctl_15546c731197e32db0
+  n_state_47f9a58cb6fdd496 -->|not_tested| n_advertised_obs_7ed2c4fbed333c2ac966_ctl_f3c450f02fd40cbb80
+  n_state_706fbac757bb049e -->|not_tested| n_advertised_obs_4bc7c3f3fd5c73d8956b_ctl_3f7747f8f370a9b891
+  n_state_706fbac757bb049e -->|not_tested| n_advertised_obs_4bc7c3f3fd5c73d8956b_ctl_40a47a799084ef6d39
+  n_state_706fbac757bb049e -->|not_tested| n_advertised_obs_4bc7c3f3fd5c73d8956b_ctl_72305c348553b3ed6e
+  n_state_691fd367df373b0e -->|not_tested| n_advertised_obs_07a7f8aa388e31777efd_ctl_c08dc862c9519e9d53
+  n_state_691fd367df373b0e -->|not_tested| n_advertised_obs_07a7f8aa388e31777efd_ctl_b70fb695ad3b195909
+  n_state_691fd367df373b0e -->|not_tested| n_advertised_obs_07a7f8aa388e31777efd_ctl_b08879ae15d5efa171
+  n_workflow_a6efd5acb891ec57d1 -->|navigation_only| n_action_tr_fe5b43c2a99b8c7ff602
+  n_workflow_42071210abd66f5f6a -->|navigation_only| n_action_tr_1ad1539ba9ef9763e695
+  n_workflow_ceed8a3fe7b2773d2a -->|navigation_only| n_action_tr_6d38ba6e895c45c5abf3
+  n_workflow_7982cc2398f16f59f9 -->|navigation_only| n_action_tr_7f7eb7621a1a344934c4
+  n_workflow_43273fc827d917de4e -->|navigation_only| n_action_tr_3dbe25c58ea76263594e
+  n_workflow_7f978512905c21313e -->|navigation_only| n_action_tr_803efa4b0aef83967168
+  n_workflow_1b99adf9b7d6ddb90e -->|navigation_only| n_action_tr_1e1eefff752ebed5133d
+  n_workflow_aa29945f8c7c5a3e25 -->|navigation_only| n_action_tr_30c3c57d6eb52994c090
+  n_workflow_4a921c7f9d2cafc3eb -->|navigation_only| n_action_tr_bb1946d59259ff45113c
+  n_workflow_848aeb201cc1cd0359 -->|navigation_only| n_action_tr_e440c1e4e5014b67baeb
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;
+  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;
+  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;
+  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;
+  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef resource_fetched fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef resource_discovered fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef resource_failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  class n_action_tr_fe5b43c2a99b8c7ff602 replay_validated;
+  class n_action_tr_1ad1539ba9ef9763e695 replay_validated;
+  class n_action_tr_6d38ba6e895c45c5abf3 replay_validated;
+  class n_action_tr_7f7eb7621a1a344934c4 replay_validated;
+  class n_action_tr_3dbe25c58ea76263594e replay_validated;
+  class n_action_tr_803efa4b0aef83967168 replay_validated;
+  class n_action_tr_1e1eefff752ebed5133d replay_validated;
+  class n_action_tr_30c3c57d6eb52994c090 replay_validated;
+  class n_action_tr_bb1946d59259ff45113c replay_validated;
+  class n_action_tr_e440c1e4e5014b67baeb replay_validated;
+  class n_workflow_a6efd5acb891ec57d1 navigation_only;
+  class n_workflow_42071210abd66f5f6a navigation_only;
+  class n_workflow_ceed8a3fe7b2773d2a navigation_only;
+  class n_workflow_7982cc2398f16f59f9 navigation_only;
+  class n_workflow_43273fc827d917de4e navigation_only;
+  class n_workflow_7f978512905c21313e navigation_only;
+  class n_workflow_1b99adf9b7d6ddb90e navigation_only;
+  class n_workflow_aa29945f8c7c5a3e25 navigation_only;
+  class n_workflow_4a921c7f9d2cafc3eb navigation_only;
+  class n_workflow_848aeb201cc1cd0359 navigation_only;
+  class n_advertised_obs_0468a3f1f3b768b337f8_ctl_65d06474e7d8585dd5 not_tested;
+  class n_advertised_obs_0468a3f1f3b768b337f8_ctl_0c5c46dc975ce68f1d not_tested;
+  class n_advertised_obs_e7b2526818e6b50d6387_ctl_8272378b8812608871 not_tested;
+  class n_advertised_obs_e7b2526818e6b50d6387_ctl_e81ec80824519ed33d not_tested;
+  class n_advertised_obs_e7b2526818e6b50d6387_ctl_d765fd48bf2fa53751 not_tested;
+  class n_advertised_obs_db95f0a74aacfb4e1c64_ctl_9f0a96c1326a498e68 not_tested;
+  class n_advertised_obs_7ed2c4fbed333c2ac966_ctl_15546c731197e32db0 not_tested;
+  class n_advertised_obs_7ed2c4fbed333c2ac966_ctl_f3c450f02fd40cbb80 not_tested;
+  class n_advertised_obs_4bc7c3f3fd5c73d8956b_ctl_3f7747f8f370a9b891 not_tested;
+  class n_advertised_obs_4bc7c3f3fd5c73d8956b_ctl_40a47a799084ef6d39 not_tested;
+  class n_advertised_obs_4bc7c3f3fd5c73d8956b_ctl_72305c348553b3ed6e not_tested;
+  class n_advertised_obs_07a7f8aa388e31777efd_ctl_c08dc862c9519e9d53 not_tested;
+  class n_advertised_obs_07a7f8aa388e31777efd_ctl_b70fb695ad3b195909 not_tested;
+  class n_advertised_obs_07a7f8aa388e31777efd_ctl_b08879ae15d5efa171 not_tested;
+  class n_resource_93a11ea46af0c8c2cf22 resource_discovered;
+  class n_resource_fb628cb29b2ded547abb resource_discovered;
+  class n_resource_027aa45976bbce664be3 resource_discovered;
+  class n_resource_f445bb2edcb281972d6b resource_discovered;
+  class n_resource_b55819fdf28eb550dbd9 resource_discovered;
+  class n_resource_bcd45ff2e5a66ec0ec8f resource_discovered;
+  class n_resource_e1eab565bf62853397b4 resource_discovered;
+  class n_resource_bca8aa6a3c7e55158446 resource_discovered;
+  class n_resource_3aab4a5c3d7078e8dfa3 resource_discovered;
+  class n_resource_ca200534058f206971ee resource_discovered;
+  class n_resource_6d1c100de45b6365040e resource_discovered;
+  class n_resource_6e8a9efb69b20500a011 resource_discovered;
+  class n_resource_bd6760dfc3b793ca39e1 resource_discovered;
+  class n_resource_d37130d85d0288b4934c resource_discovered;
+  class n_resource_1148e5074746474b028b resource_discovered;
+  class n_resource_53a51bf9aa7c2f81c765 resource_discovered;
+  class n_resource_11fde7c233a5295ccb58 resource_discovered;
+  class n_resource_16fcd2a31c266353ce64 resource_discovered;
+  class n_resource_87c1ad6faaa1c7b9f9e4 resource_discovered;
+  class n_resource_c4e147ba0d5f24e8d070 resource_discovered;
+  class n_resource_a99adfa2d2bfe2e97b8f resource_discovered;
+  class n_resource_b635446b4287b1a58b76 resource_discovered;
+  class n_resource_9ba279768dc9814277ab resource_discovered;
+  class n_resource_12f5209ecbc16547eea6 resource_discovered;
+  class n_resource_ca01e9aa2ba05a4b1e8d resource_discovered;
+  class n_resource_33a9eb2b3fc9737f7c49 resource_discovered;
+  class n_resource_45cdfab1b68adeb3535b resource_discovered;
+  class n_resource_22a2e6924e27a72fe939 resource_discovered;
+  class n_resource_db0e559406bedab636ee resource_discovered;
+  class n_resource_36b9e17f0f62e76bc2bb resource_discovered;
+  class n_resource_7c36771c1b85c002af2f resource_discovered;
+  class n_resource_0bf7e5b040c3d1f3c66c resource_discovered;
+  class n_resource_2dc957168f700a23a6f7 resource_discovered;
+  class n_resource_e46fb59e6639c7127b28 resource_discovered;
+  class n_resource_43eb08ead360da852aa2 resource_discovered;
+  class n_resource_e470ed4d475fa96caf9f resource_discovered;
+  class n_resource_bbffeb8236a2ad68e783 resource_discovered;
+  class n_resource_cba3d8849e1dc8bad111 resource_discovered;
+  class n_resource_46d244686aa52f6785c3 resource_discovered;
+  class n_resource_78649a73d210918284f5 resource_discovered;
+  class n_resource_5461fc15bf5e71bb541d resource_discovered;
+  class n_resource_0bc010eb766aca599a83 resource_discovered;
+  class n_resource_2539b8f628fad486609c resource_discovered;
+  class n_resource_1a251a6e10f02a2f01c8 resource_discovered;
+  class n_resource_7e6844a9d42d36875033 resource_discovered;
+  class n_resource_b8ce1655c0b5cd88871f resource_discovered;
+  class n_resource_6255d04af986c2b3a432 resource_discovered;
+  class n_resource_7cee100f49ec1a4e0217 resource_discovered;
+  class n_resource_950470c8c921f04fcfc4 resource_discovered;
+  class n_resource_6807e1fe6c83a66e8a9a resource_discovered;
+  class n_resource_41338701165273569d17 resource_discovered;

@@ -40,6 +40,7 @@ class RunConfig(BaseModel):
         "coverage",
         "breadth",
         "multidimensional",
+        "hierarchical",
         "selective_model",
         "model_all",
     ] = "grouped"
@@ -89,9 +90,17 @@ class RunConfig(BaseModel):
     share_resource_frontier: bool = True
     budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"
     replay_policy: Literal["shallow", "diverse"] = "shallow"
+    state_reuse: Literal["root", "prefix"] = "root"
+    zap_evidence_path: Path | None = None
+    zap_source_origin: str | None = None
+    max_total_http_requests: int | None = Field(default=None, ge=1, le=100_000)
 
     @model_validator(mode="after")
     def paired_search_probes(self) -> "RunConfig":
+        if (self.zap_evidence_path is None) != (self.zap_source_origin is None):
+            raise ValueError("ZAP evidence and explicit source origin must be supplied together")
+        if self.zap_evidence_path and (not self.typed_resource_spider or not self.share_resource_frontier):
+            raise ValueError("ZAP seeds require the shared typed-resource spider")
         probes = (self.search_probe_primary, self.search_probe_contrast)
         if (probes[0] is None) != (probes[1] is None):
             raise ValueError("search probes must be configured as a pair")
@@ -278,9 +287,24 @@ class ResourceEvidence(BaseModel):
     error: str | None = None
 
 
+class ExternalDiscoveryEvidence(BaseModel):
+    id: str
+    engine: str
+    run_id: str
+    source_origin: str
+    source_record_id: str
+    export_digest: str
+    mapped_url: str
+    method: str
+    http_status: int | None = None
+    parameter_names: list[str] = Field(default_factory=list)
+    status: Literal["external_response", "external_candidate"]
+    session_context: str = "unknown"
+
+
 class NavigationEvidence(BaseModel):
     id: str
-    reason: Literal["initial", "frontier_restore", "persistent_restore", "replay"]
+    reason: Literal["initial", "frontier_restore", "persistent_restore", "replay", "history_return"]
     url: str
     readiness: ReadinessEvidence = Field(default_factory=ReadinessEvidence)
     network: list[NetworkEvent] = Field(default_factory=list)
@@ -335,6 +359,7 @@ class Transition(BaseModel):
     status: EvidenceStatus
     network: list[NetworkEvent] = Field(default_factory=list)
     restoration_attempted: bool = False
+    reused_prefix_steps: int = Field(default=0, ge=0)
     prerequisite_network: list[PrerequisiteStepEvidence] = Field(default_factory=list)
     dialogs: list[dict[str, str]] = Field(default_factory=list)
     error: str | None = None
@@ -421,7 +446,7 @@ class ConnectionEvidence(BaseModel):
     id: str
     claim_type: Literal[
         "advertised_control", "source_action", "action_result", "replay",
-        "prerequisite_network", "resource_reference",
+        "prerequisite_network", "resource_reference", "external_observation",
     ]
     subject_id: str
     complete: bool
@@ -499,6 +524,22 @@ class RunMetrics(BaseModel):
     passive_readiness_wait_ms: int = 0
     interactive_readiness_wait_ms: int = 0
     observed_http_requests: int = 0
+    external_discovery_records: int = 0
+    external_discovery_rejected: int = 0
+    external_request_upper_bound: int = 0
+    external_elapsed_seconds: float = 0.0
+    total_http_budget_used: int = 0
+    total_http_budget_blocked: int = 0
+    http_redirect_budget_overrun: int = 0
+    http_redirect_scope_violations: int = 0
+    http_budget_by_source: dict[str, int] = Field(default_factory=dict)
+    discovery_root_reloads: int = 0
+    verification_root_reloads: int = 0
+    prefix_state_reuses: int = 0
+    root_reloads_avoided: int = 0
+    history_returns: int = 0
+    history_return_attempts: int = 0
+    history_return_rejected: int = 0
 
 
 class RunArtifact(BaseModel):
@@ -518,6 +559,7 @@ class RunArtifact(BaseModel):
     connection_evidence: list[ConnectionEvidence] = Field(default_factory=list)
     navigation_evidence: list[NavigationEvidence] = Field(default_factory=list)
     resource_evidence: list[ResourceEvidence] = Field(default_factory=list)
+    external_discoveries: list[ExternalDiscoveryEvidence] = Field(default_factory=list)
     state_groups: dict[str, list[str]] = Field(default_factory=dict)
     return_paths: dict[str, list[ActionDescriptor]] = Field(default_factory=dict)
     metrics: RunMetrics = Field(default_factory=RunMetrics)

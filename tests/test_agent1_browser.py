@@ -9,7 +9,7 @@ from urllib.parse import parse_qs
 
 import pytest
 
-from agent1.explorer import BrowserSession, Explorer
+from agent1.explorer import BrowserSession, Explorer, HttpBudget
 from agent1.exporter import build_graph_a, mermaid, write_outputs
 from agent1.schema import EvidenceStatus, RunConfig
 
@@ -80,6 +80,14 @@ class FixtureHandler(BaseHTTPRequestHandler):
                 "b.textContent='Hydrated control';document.querySelector('#mount').append(b)},350)</script>"
                 "</main></body></html>"
             )
+        elif path == "/budget-redirect":
+            self.send_response(HTTPStatus.FOUND)
+            self.send_header("Location", "/redirected")
+            self.end_headers()
+        elif path == "/budget-redirect-chain":
+            self.send_response(HTTPStatus.FOUND)
+            self.send_header("Location", "/budget-redirect")
+            self.end_headers()
         elif path == "/delayed-refresh":
             self._html(
                 "<html><head><meta http-equiv='refresh' content='0.5;url=/redirected'></head>"
@@ -176,6 +184,77 @@ def test_live_pipeline_records_and_replays_prerequisite_paths(
     graph = json.loads((output / "graph_a.json").read_text(encoding="utf-8"))
     assert graph["nodes"]["features"]
     assert graph["replays"]
+
+
+def test_external_seed_is_fetched_separately_and_http_budget_is_shared(
+    fixture_url: str, tmp_path: Path
+) -> None:
+    source = tmp_path / "zap.json"
+    source.write_text(json.dumps({
+        "schema": "zap-http-history-1", "run_id": "fixture",
+        "source_origin": "http://crawlmaze:3460", "request_upper_bound": 3,
+        "elapsed_seconds": 1.0,
+        "records": [{"path": "/catalog/1", "method": "GET", "status": 200, "parameter_names": []}],
+    }))
+    config = RunConfig(
+        start_url=fixture_url, output_dir=tmp_path / "budgeted", policy="hierarchical",
+        exploration_mode="persistent", max_seconds=12, max_transitions=1,
+        max_browser_actions=20, settle_ms=0, typed_resource_spider=True,
+        max_resource_fetches=2, max_total_http_requests=10,
+        zap_evidence_path=source, zap_source_origin="http://crawlmaze:3460",
+    )
+    artifact = Explorer(config, Path(__file__).resolve().parents[1]).run()
+    graph = build_graph_a(artifact)
+    assert artifact.metrics.total_http_budget_used <= 10
+    assert artifact.metrics.external_request_upper_bound == 3
+    assert len(graph["nodes"]["external_discoveries"]) == 1
+    assert any(edge["type"] == "external_report" for edge in graph["edges"])
+    assert any(edge["type"] == "agent_seed_fetch" for edge in graph["edges"])
+    assert all(item["status"] != "replay_validated" for item in graph["nodes"]["external_discoveries"])
+
+
+def test_http_budget_counts_redirect_requests(fixture_url: str, tmp_path: Path) -> None:
+    from playwright.sync_api import sync_playwright
+    config = RunConfig(start_url=f"{fixture_url}budget-redirect", output_dir=tmp_path, settle_ms=0)
+    budget = HttpBudget(10)
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        try:
+            with BrowserSession(browser, config, http_budget=budget) as session:
+                session.goto_start()
+                assert session.page and session.page.url.endswith("/redirected")
+            assert budget.used == 2
+            assert budget.redirect_overrun == 0
+        finally:
+            browser.close()
+
+
+def test_http_budget_charges_unrouted_chain_hops_once_and_refuses_when_exhausted(
+    fixture_url: str, tmp_path: Path
+) -> None:
+    from playwright.sync_api import sync_playwright
+    chain = RunConfig(start_url=f"{fixture_url}budget-redirect-chain", output_dir=tmp_path, settle_ms=0)
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        try:
+            # Three wire requests: the routed first hop and two unrouted redirect hops.
+            budget = HttpBudget(10)
+            with BrowserSession(browser, chain, http_budget=budget) as session:
+                session.goto_start()
+                assert session.page and session.page.url.endswith("/redirected")
+            assert budget.used == 3
+            assert dict(budget.by_source) == {"browser": 1, "browser_redirect": 2}
+            assert budget.redirect_overrun == 0 and budget.redirect_scope_violations == 0
+            # With one request left, the 302 is refused before the browser can follow it.
+            exhausted = HttpBudget(1)
+            single = RunConfig(start_url=f"{fixture_url}budget-redirect", output_dir=tmp_path, settle_ms=0)
+            with BrowserSession(browser, single, http_budget=exhausted) as session:
+                with pytest.raises(Exception, match="ERR_BLOCKED_BY_CLIENT"):
+                    session.goto_start()
+            assert exhausted.used == 1 and exhausted.blocked >= 1
+            assert exhausted.redirect_overrun == 0
+        finally:
+            browser.close()
 
 
 def test_checkpoint_resume_preserves_run_and_advances_frontier(
@@ -377,3 +456,23 @@ def test_readiness_waits_for_late_control_and_delayed_redirect(
                 assert session.page and session.page.url.endswith("/redirected")
         finally:
             browser.close()
+
+
+def test_history_return_is_verified_and_keeps_graph_evidence_complete(
+    fixture_url: str, tmp_path: Path
+) -> None:
+    config = RunConfig(
+        start_url=fixture_url, output_dir=tmp_path / "history", policy="hierarchical",
+        exploration_mode="persistent", state_reuse="prefix", max_seconds=25,
+        max_transitions=12, max_browser_actions=60, settle_ms=0,
+    )
+    artifact = Explorer(config, Path(__file__).resolve().parents[1]).run()
+    metrics = artifact.metrics
+    assert metrics.history_returns == metrics.history_return_attempts
+    assert metrics.root_reloads_avoided <= metrics.history_returns + metrics.prefix_state_reuses
+    assert metrics.graph_connections_missing_evidence == 0
+    assert all(
+        [step.step_index for step in t.prerequisite_network]
+        == list(range(t.reused_prefix_steps, len(t.workflow_path) - 1))
+        for t in artifact.transitions if t.restoration_attempted and t.status != EvidenceStatus.FAILED
+    )

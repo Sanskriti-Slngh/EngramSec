@@ -572,23 +572,27 @@ def _dedupe(items: list[ResourceReference]) -> list[ResourceReference]:
 class ResourceBudget:
     """Run-scoped budget shared by browser contexts and replay sessions."""
 
-    def __init__(self, limit: int, per_class_limits: dict[str, int | None] | None = None):
+    def __init__(self, limit: int, per_class_limits: dict[str, int | None] | None = None, http_budget: object | None = None):
         self.limit = limit
         self.per_class_limits = per_class_limits or {}
         self.attempted = 0
         self.attempted_by_class: defaultdict[str, int] = defaultdict(int)
         self.new_references = 0
         self.responses = 0
+        self.http_budget = http_budget
 
     def remaining(self, candidate_class: str) -> bool:
         class_limit = self.per_class_limits.get(candidate_class)
         return (
             self.attempted < self.limit
             and (class_limit is None or self.attempted_by_class[candidate_class] < class_limit)
+            and (self.http_budget is None or self.http_budget.remaining())
         )
 
     def consume(self, candidate_class: str) -> bool:
         if not self.remaining(candidate_class):
+            return False
+        if self.http_budget is not None and not self.http_budget.consume("resource_spider"):  # type: ignore[attr-defined]
             return False
         self.attempted += 1
         self.attempted_by_class[candidate_class] += 1
@@ -632,6 +636,23 @@ class TypedResourceSpider:
         self._yield_by_class: defaultdict[str, list[int]] = defaultdict(lambda: [0, 0])
         self.evidence: list[dict[str, object]] = []
         self._evidence_seen: set[tuple[object, ...]] = set()
+
+    def seed_external(self, url: str) -> bool:
+        """Queue a validated external GET candidate for an Agent 1-owned fetch."""
+        safe = _safe_resource_url(url)
+        if (safe in self.seen or not allowed_origin(self.start_url, url, self.aliases)
+                or urlsplit(url).query):
+            return False
+        self.seen.add(safe)
+        self.discovered_urls.add(safe)
+        reference = ResourceReference(url, "asset", "zap_seed", "ZAP observed GET", "external_seed")
+        self._record({
+            "url": safe, "kind": "asset", "source_type": "zap_seed", "source_url": safe,
+            "source": "ZAP observed GET", "relation": "external_seed", "depth": 0,
+            "status": "discovered", "queue_decision": "admitted",
+        })
+        self.queue.append((reference, url, 1))
+        return True
 
     def _record(self, record: dict[str, object]) -> None:
         record.setdefault("elapsed_ms", int((time.monotonic() - self.started_monotonic) * 1_000))
@@ -686,6 +707,7 @@ class TypedResourceSpider:
                 if isinstance(source_url, str):
                     self.queue.append((reference, source_url, max(1, int(item.get("depth", 0)) + 1)))
         self.budget.attempted = len(fetched_urls)
+        self.queue = [item for item in self.queue if _safe_resource_url(item[0].url) not in fetched_urls]
         self.budget.attempted_by_class.clear()
         class_urls: set[tuple[str, str]] = set()
         for item in items:
@@ -847,6 +869,9 @@ class TypedResourceSpider:
             if self.budget.attempted >= self.budget.limit:
                 self._update_unattempted_status(reference, source_url, depth, "budget_limited")
                 continue
+            if self.budget.http_budget is not None and not self.budget.http_budget.remaining():
+                self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                continue
             if not self.budget.remaining(candidate_class):
                 self._update_unattempted_status(reference, source_url, depth, "class_budget_limited")
                 continue
@@ -854,7 +879,9 @@ class TypedResourceSpider:
                 continue
             if any(SENSITIVE_QUERY_KEYS.search(key) for key, _ in parse_qsl(urlsplit(reference.url).query)):
                 continue
-            self.budget.consume(candidate_class)
+            if not self.budget.consume(candidate_class):
+                self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                continue
             batch_attempts += 1
             route_bucket = self._route_bucket(reference)
             self.fetched.add(_safe_resource_url(reference.url))

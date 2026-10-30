@@ -1,0 +1,330 @@
+flowchart LR
+  n_state_09c51546d05ecd32["JavaScript Readiness Lab"]
+  n_state_115d8d59c12421cb["JavaScript Readiness Lab"]
+  n_state_176538368c53bd08["Overview"]
+  n_state_3bb355c37d93b663["Workspace"]
+  n_state_454f031d50aed8ea["Reports"]
+  n_state_70c99194160d5fac["News"]
+  n_state_769f87095bc16b7e["JavaScript Readiness Lab"]
+  n_state_80d9e03c79c7f569["JavaScript Readiness Lab"]
+  n_state_8e2cbf634827d1e5["JavaScript Readiness Lab"]
+  n_state_8ec757f315cc9391["Alias Area"]
+  n_state_d3fa3e1f7785f61b["JavaScript Readiness Lab"]
+  n_action_tr_991a0ff7bfc38ce383c8{"Public alias area [replay_validated]"}
+  n_action_tr_ed6f6db13d04e56efd2d{"Refresh status [replay_validated]"}
+  n_action_tr_8300b150ec6b6ad13ce5{"Open workflow [replay_validated]"}
+  n_action_tr_6dad1999535721a32102{"Continue setup [replay_validated]"}
+  n_action_tr_425f34073a6cb6daf73c{"Open workspace [observed]"}
+  n_action_tr_58d10ac85222a9cc8711{"Load late reports [replay_validated]"}
+  n_action_tr_de355c4cc978f12ecb76{"Open reports [replay_validated]"}
+  n_action_tr_c5f0f7b7757c6cf6afca{"Overview [replay_validated]"}
+  n_action_tr_b578248979772ff8c616{"News [replay_validated]"}
+  n_action_tr_0684d6c3ca0d5144996f{"JS Lab [replay_validated]"}
+  n_action_tr_74d346869add13a0bf3e{"Open workflow [observed]"}
+  n_action_tr_7174ca1d06924a51652c{"Load late reports [observed]"}
+  n_action_tr_512ef8f3ca76b8036920{"Continue setup [observed]"}
+  n_action_tr_00ccf15b9e19f5f935d3{"Public alias area [observed]"}
+  n_action_tr_1861ad0af832213492d2{"Open workflow [replay_validated]"}
+  n_action_tr_2e1468e8fa11499e3834{"Public alias area [observed]"}
+  n_action_tr_05d244ea4775c928e305{"Public alias area [observed]"}
+  n_action_tr_ea7d2956036d5398045a{"Public alias area [observed]"}
+  n_action_tr_c4be05e64e1b39c3f31d{"Refresh status [observed]"}
+  n_action_tr_4407b759fff047d364e9{"Open workflow [observed]"}
+  n_action_tr_fbc069c9ac42329cd9d0{"Load late reports [observed]"}
+  n_action_tr_1028db608d5ac4536eec{"Open workspace [observed]"}
+  n_action_tr_d5c41de218b71fb04031{"Public alias area [failed]"}
+  n_action_tr_6a4dd63f6973ba5c605d{"Refresh status [observed]"}
+  n_action_tr_ab7b52944942ce5095a5{"Open reports [observed]"}
+  n_action_tr_592a70825155477b8eb8{"Refresh status [observed]"}
+  n_action_tr_5f6a4f207da8569d0f21{"Refresh status [observed]"}
+  n_action_tr_bd20ead355e3c5995dc3{"Open workflow [observed]"}
+  n_action_tr_1f78753a769036ace536{"Open reports [observed]"}
+  n_action_tr_2866794c8d80af088043{"Refresh status [observed]"}
+  n_workflow_0d7b8be56ed18d3153(("Public alias area [navigation_only]"))
+  n_workflow_ac548e6d7ac8839083(("Refresh status [unresolved]"))
+  n_workflow_569e2611b74349e48f(("Open workflow [unresolved]"))
+  n_workflow_5ec7a0573cc8a78e98(("Continue setup [unresolved]"))
+  n_workflow_8f440a90c3f531a913(("Open workspace [not_tested]"))
+  n_workflow_77a13479e3e4b09d60(("Load late reports [unresolved]"))
+  n_workflow_e823785a7bd141776a(("Open reports [navigation_only]"))
+  n_workflow_2c2ea6fedd1fe33a78(("Overview [navigation_only]"))
+  n_workflow_da9516f19083b24f77(("News [navigation_only]"))
+  n_workflow_e3eff11382e72962d7(("JS Lab [navigation_only]"))
+  n_workflow_35e9aeb1cf437fdf8b(("Open workflow [not_tested]"))
+  n_workflow_8f90781c8ede344cc0(("Load late reports [not_tested]"))
+  n_workflow_80d79610067ce37467(("Continue setup [not_tested]"))
+  n_workflow_4b651760f75ac152ea(("Public alias area [not_tested]"))
+  n_workflow_c8b0faf1c5163d2963(("Open workflow [unresolved]"))
+  n_workflow_26b8f6ea640a0ff3a7(("Public alias area [not_tested]"))
+  n_workflow_0084b1efb0c226e16c(("Public alias area [not_tested]"))
+  n_workflow_b076fd42c12f853532(("Public alias area [not_tested]"))
+  n_workflow_03f3893bdd8160bdb6(("Refresh status [not_tested]"))
+  n_workflow_7e17aa669b9538cea5(("Open workflow [not_tested]"))
+  n_workflow_86419e003db170854e(("Load late reports [not_tested]"))
+  n_workflow_f4c3057f18d4f64c01(("Open workspace [not_tested]"))
+  n_workflow_654bb4bf2490ef93f7(("Refresh status [not_tested]"))
+  n_workflow_47d0cc7974e6186251(("Open reports [not_tested]"))
+  n_workflow_62ff4482d4496a636f(("Refresh status [not_tested]"))
+  n_workflow_139351a16751bca875(("Refresh status [not_tested]"))
+  n_workflow_b03ff566bbe37f7cbb(("Open workflow [not_tested]"))
+  n_workflow_3e997692fdf21f0167(("Open reports [not_tested]"))
+  n_workflow_d8edbdf4743b260b80(("Refresh status [not_tested]"))
+  n_response_26d8a7440ea75302d0ea(("Response localhost:50792/alias-area"))
+  n_response_2c0ef18cfb4cfe261b48(("Response 127.0.0.1:50792/"))
+  n_response_34ceffda6fe5cd5d126e(("Response localhost:50792/shallow/b"))
+  n_response_42b15fd767279a343342(("Response 127.0.0.1:50792/workspace"))
+  n_response_50f147b6665290b10d93(("Response localhost:50792/"))
+  n_response_70268ed943740a0a8b75(("Response 127.0.0.1:50792/shallow/b"))
+  n_response_80932beb083ea2e4a9a2(("Response localhost:50792/shallow/a"))
+  n_response_b6bc707780b65097fa05(("Response 127.0.0.1:50792/reports"))
+  n_response_e840f696cc97b50b818d(("Response 127.0.0.1:50792/shallow/a"))
+  n_response_fad48049d6f553c68f8b(("Response 127.0.0.1:50792/workspace/detail"))
+  n_resource_f04ba56608d803738897["navigation: 127.0.0.1:50792/ [discovered, fetched]"]
+  n_resource_e4617b8a7dcea4fa7c31["api: 127.0.0.1:50792/api/bootstrap ?format,mode [discovered]"]
+  n_resource_26b025f24842a1a367d1["api: 127.0.0.1:50792/api/late ?view [discovered]"]
+  n_resource_c8a41dd0330fef7cc8d2["api: 127.0.0.1:50792/api/workflow/prepare ?mode [discovered]"]
+  n_resource_c67a560471d780421ff4["api: 127.0.0.1:50792/session [discovered]"]
+  n_resource_52f9f03e855c55fdef07["navigation: 127.0.0.1:50792/shallow/a [discovered, fetched]"]
+  n_resource_0d6aa487204f87fdfea2["navigation: 127.0.0.1:50792/shallow/b [discovered, fetched]"]
+  n_resource_871c0eab1ecb946d97df["navigation: 127.0.0.1:50792/workspace/detail [discovered, fetched]"]
+  n_resource_6eff31d43aa5073fc5f9["navigation: localhost:50792/ [discovered, fetched]"]
+  n_resource_0afd1d349aebadf9ec3c["navigation: localhost:50792/alias-area [discovered, fetched]"]
+  n_resource_9aea4965d404b1889ef8["api: localhost:50792/api/alias ?source [discovered]"]
+  n_resource_a00e3349b10ba9b5df0e["api: localhost:50792/api/bootstrap ?format,mode [discovered]"]
+  n_resource_60c5b2a05565b1df4388["api: localhost:50792/api/late ?view [discovered]"]
+  n_resource_fbd3bd7a20b273ce8bab["api: localhost:50792/api/workflow/prepare ?mode [discovered]"]
+  n_resource_fe207e6792c64cda0bab["api: localhost:50792/session [discovered]"]
+  n_resource_cb9431c68cb52c3820f5["navigation: localhost:50792/shallow/a [discovered, fetched]"]
+  n_resource_d7a8538ac148067e21c6["navigation: localhost:50792/shallow/b [discovered, fetched]"]
+  n_resource_7732e6651ae6b279cdea["navigation: example.test/outside [out_of_scope]"]
+  n_response_26d8a7440ea75302d0ea -->|<a>[href] [discovered]| n_resource_6eff31d43aa5073fc5f9
+  n_response_26d8a7440ea75302d0ea -->|<a>[href] [fetched]| n_resource_6eff31d43aa5073fc5f9
+  n_response_26d8a7440ea75302d0ea -->|call:fetch [discovered]| n_resource_9aea4965d404b1889ef8
+  n_response_26d8a7440ea75302d0ea -->|<a>[href] [discovered]| n_resource_cb9431c68cb52c3820f5
+  n_response_26d8a7440ea75302d0ea -->|<a>[href] [fetched]| n_resource_cb9431c68cb52c3820f5
+  n_response_26d8a7440ea75302d0ea -->|<a>[href] [discovered]| n_resource_d7a8538ac148067e21c6
+  n_response_26d8a7440ea75302d0ea -->|<a>[href] [fetched]| n_resource_d7a8538ac148067e21c6
+  n_response_2c0ef18cfb4cfe261b48 -->|<a>[href] [discovered]| n_resource_0afd1d349aebadf9ec3c
+  n_response_2c0ef18cfb4cfe261b48 -->|<a>[href] [fetched]| n_resource_0afd1d349aebadf9ec3c
+  n_response_2c0ef18cfb4cfe261b48 -->|<a>[href] [discovered]| n_resource_0d6aa487204f87fdfea2
+  n_response_2c0ef18cfb4cfe261b48 -->|<a>[href] [fetched]| n_resource_0d6aa487204f87fdfea2
+  n_response_2c0ef18cfb4cfe261b48 -->|call:fetch [discovered]| n_resource_26b025f24842a1a367d1
+  n_response_2c0ef18cfb4cfe261b48 -->|<a>[href] [discovered]| n_resource_52f9f03e855c55fdef07
+  n_response_2c0ef18cfb4cfe261b48 -->|<a>[href] [fetched]| n_resource_52f9f03e855c55fdef07
+  n_response_2c0ef18cfb4cfe261b48 -->|<a>[href] [out_of_scope]| n_resource_7732e6651ae6b279cdea
+  n_response_2c0ef18cfb4cfe261b48 -->|<form>[action] [discovered]| n_resource_c67a560471d780421ff4
+  n_response_2c0ef18cfb4cfe261b48 -->|call:fetch [discovered]| n_resource_c8a41dd0330fef7cc8d2
+  n_response_2c0ef18cfb4cfe261b48 -->|call:fetch [discovered]| n_resource_e4617b8a7dcea4fa7c31
+  n_response_2c0ef18cfb4cfe261b48 -->|<a>[href] [discovered]| n_resource_f04ba56608d803738897
+  n_response_2c0ef18cfb4cfe261b48 -->|<a>[href] [fetched]| n_resource_f04ba56608d803738897
+  n_response_34ceffda6fe5cd5d126e -->|<a>[href] [discovered]| n_resource_6eff31d43aa5073fc5f9
+  n_response_34ceffda6fe5cd5d126e -->|<a>[href] [discovered]| n_resource_cb9431c68cb52c3820f5
+  n_response_34ceffda6fe5cd5d126e -->|<a>[href] [discovered]| n_resource_d7a8538ac148067e21c6
+  n_response_42b15fd767279a343342 -->|<a>[href] [discovered]| n_resource_0d6aa487204f87fdfea2
+  n_response_42b15fd767279a343342 -->|<a>[href] [discovered]| n_resource_52f9f03e855c55fdef07
+  n_response_42b15fd767279a343342 -->|<a>[href] [discovered]| n_resource_871c0eab1ecb946d97df
+  n_response_42b15fd767279a343342 -->|<a>[href] [fetched]| n_resource_871c0eab1ecb946d97df
+  n_response_42b15fd767279a343342 -->|<a>[href] [discovered]| n_resource_f04ba56608d803738897
+  n_response_50f147b6665290b10d93 -->|<a>[href] [discovered]| n_resource_0afd1d349aebadf9ec3c
+  n_response_50f147b6665290b10d93 -->|call:fetch [discovered]| n_resource_60c5b2a05565b1df4388
+  n_response_50f147b6665290b10d93 -->|<a>[href] [discovered]| n_resource_6eff31d43aa5073fc5f9
+  n_response_50f147b6665290b10d93 -->|<a>[href] [out_of_scope]| n_resource_7732e6651ae6b279cdea
+  n_response_50f147b6665290b10d93 -->|call:fetch [discovered]| n_resource_a00e3349b10ba9b5df0e
+  n_response_50f147b6665290b10d93 -->|<a>[href] [discovered]| n_resource_cb9431c68cb52c3820f5
+  n_response_50f147b6665290b10d93 -->|<a>[href] [discovered]| n_resource_d7a8538ac148067e21c6
+  n_response_50f147b6665290b10d93 -->|call:fetch [discovered]| n_resource_fbd3bd7a20b273ce8bab
+  n_response_50f147b6665290b10d93 -->|<form>[action] [discovered]| n_resource_fe207e6792c64cda0bab
+  n_response_70268ed943740a0a8b75 -->|<a>[href] [discovered]| n_resource_0d6aa487204f87fdfea2
+  n_response_70268ed943740a0a8b75 -->|<a>[href] [discovered]| n_resource_52f9f03e855c55fdef07
+  n_response_70268ed943740a0a8b75 -->|<a>[href] [discovered]| n_resource_f04ba56608d803738897
+  n_response_80932beb083ea2e4a9a2 -->|<a>[href] [discovered]| n_resource_6eff31d43aa5073fc5f9
+  n_response_80932beb083ea2e4a9a2 -->|<a>[href] [discovered]| n_resource_cb9431c68cb52c3820f5
+  n_response_80932beb083ea2e4a9a2 -->|<a>[href] [discovered]| n_resource_d7a8538ac148067e21c6
+  n_response_b6bc707780b65097fa05 -->|<a>[href] [discovered]| n_resource_0d6aa487204f87fdfea2
+  n_response_b6bc707780b65097fa05 -->|<a>[href] [discovered]| n_resource_52f9f03e855c55fdef07
+  n_response_b6bc707780b65097fa05 -->|<a>[href] [discovered]| n_resource_f04ba56608d803738897
+  n_response_e840f696cc97b50b818d -->|<a>[href] [discovered]| n_resource_0d6aa487204f87fdfea2
+  n_response_e840f696cc97b50b818d -->|<a>[href] [discovered]| n_resource_52f9f03e855c55fdef07
+  n_response_e840f696cc97b50b818d -->|<a>[href] [discovered]| n_resource_f04ba56608d803738897
+  n_response_fad48049d6f553c68f8b -->|<a>[href] [discovered]| n_resource_0d6aa487204f87fdfea2
+  n_response_fad48049d6f553c68f8b -->|<a>[href] [discovered]| n_resource_52f9f03e855c55fdef07
+  n_response_fad48049d6f553c68f8b -->|<a>[href] [discovered]| n_resource_f04ba56608d803738897
+  n_advertised_obs_d3da5501ac0d98bb3c3c_ctl_b045d7e44414791f61["Enter member mode [not tested]"]
+  n_advertised_obs_d3da5501ac0d98bb3c3c_ctl_395fcea1baac31a498["External documentation [not tested]"]
+  n_advertised_obs_d5d0429299cf882ec759_ctl_ad2804681fc0f8f6f3["Load alias data [not tested]"]
+  n_advertised_obs_157eccdc5d79a25ee203_ctl_dc5b7c3d65a847b541["Workspace detail [not tested]"]
+  n_state_115d8d59c12421cb -->|replay_validated| n_action_tr_991a0ff7bfc38ce383c8
+  n_action_tr_991a0ff7bfc38ce383c8 -->|replay_validated| n_state_8ec757f315cc9391
+  n_state_115d8d59c12421cb -->|replay_validated| n_action_tr_ed6f6db13d04e56efd2d
+  n_action_tr_ed6f6db13d04e56efd2d -->|replay_validated| n_state_115d8d59c12421cb
+  n_state_115d8d59c12421cb -->|replay_validated| n_action_tr_8300b150ec6b6ad13ce5
+  n_action_tr_8300b150ec6b6ad13ce5 -->|replay_validated| n_state_80d9e03c79c7f569
+  n_state_80d9e03c79c7f569 -->|replay_validated| n_action_tr_6dad1999535721a32102
+  n_action_tr_6dad1999535721a32102 -->|replay_validated| n_state_769f87095bc16b7e
+  n_state_769f87095bc16b7e -->|observed| n_action_tr_425f34073a6cb6daf73c
+  n_action_tr_425f34073a6cb6daf73c -->|observed| n_state_3bb355c37d93b663
+  n_state_115d8d59c12421cb -->|replay_validated| n_action_tr_58d10ac85222a9cc8711
+  n_action_tr_58d10ac85222a9cc8711 -->|replay_validated| n_state_8e2cbf634827d1e5
+  n_state_8e2cbf634827d1e5 -->|replay_validated| n_action_tr_de355c4cc978f12ecb76
+  n_action_tr_de355c4cc978f12ecb76 -->|replay_validated| n_state_454f031d50aed8ea
+  n_state_115d8d59c12421cb -->|replay_validated| n_action_tr_c5f0f7b7757c6cf6afca
+  n_action_tr_c5f0f7b7757c6cf6afca -->|replay_validated| n_state_176538368c53bd08
+  n_state_115d8d59c12421cb -->|replay_validated| n_action_tr_b578248979772ff8c616
+  n_action_tr_b578248979772ff8c616 -->|replay_validated| n_state_70c99194160d5fac
+  n_state_115d8d59c12421cb -->|replay_validated| n_action_tr_0684d6c3ca0d5144996f
+  n_action_tr_0684d6c3ca0d5144996f -->|replay_validated| n_state_115d8d59c12421cb
+  n_state_80d9e03c79c7f569 -->|observed| n_action_tr_74d346869add13a0bf3e
+  n_action_tr_74d346869add13a0bf3e -->|observed| n_state_80d9e03c79c7f569
+  n_state_80d9e03c79c7f569 -->|observed| n_action_tr_7174ca1d06924a51652c
+  n_action_tr_7174ca1d06924a51652c -->|observed| n_state_d3fa3e1f7785f61b
+  n_state_d3fa3e1f7785f61b -->|observed| n_action_tr_512ef8f3ca76b8036920
+  n_action_tr_512ef8f3ca76b8036920 -->|observed| n_state_09c51546d05ecd32
+  n_state_09c51546d05ecd32 -->|observed| n_action_tr_00ccf15b9e19f5f935d3
+  n_action_tr_00ccf15b9e19f5f935d3 -->|observed| n_state_8ec757f315cc9391
+  n_state_8e2cbf634827d1e5 -->|replay_validated| n_action_tr_1861ad0af832213492d2
+  n_action_tr_1861ad0af832213492d2 -->|replay_validated| n_state_d3fa3e1f7785f61b
+  n_state_d3fa3e1f7785f61b -->|observed| n_action_tr_2e1468e8fa11499e3834
+  n_action_tr_2e1468e8fa11499e3834 -->|observed| n_state_8ec757f315cc9391
+  n_state_8e2cbf634827d1e5 -->|observed| n_action_tr_05d244ea4775c928e305
+  n_action_tr_05d244ea4775c928e305 -->|observed| n_state_8ec757f315cc9391
+  n_state_80d9e03c79c7f569 -->|observed| n_action_tr_ea7d2956036d5398045a
+  n_action_tr_ea7d2956036d5398045a -->|observed| n_state_8ec757f315cc9391
+  n_state_80d9e03c79c7f569 -->|observed| n_action_tr_c4be05e64e1b39c3f31d
+  n_action_tr_c4be05e64e1b39c3f31d -->|observed| n_state_80d9e03c79c7f569
+  n_state_769f87095bc16b7e -->|observed| n_action_tr_4407b759fff047d364e9
+  n_action_tr_4407b759fff047d364e9 -->|observed| n_state_80d9e03c79c7f569
+  n_state_769f87095bc16b7e -->|observed| n_action_tr_fbc069c9ac42329cd9d0
+  n_action_tr_fbc069c9ac42329cd9d0 -->|observed| n_state_09c51546d05ecd32
+  n_state_09c51546d05ecd32 -->|observed| n_action_tr_1028db608d5ac4536eec
+  n_action_tr_1028db608d5ac4536eec -->|observed| n_state_3bb355c37d93b663
+  n_state_769f87095bc16b7e -->|failed| n_action_tr_d5c41de218b71fb04031
+  n_state_8e2cbf634827d1e5 -->|observed| n_action_tr_6a4dd63f6973ba5c605d
+  n_action_tr_6a4dd63f6973ba5c605d -->|observed| n_state_8e2cbf634827d1e5
+  n_state_d3fa3e1f7785f61b -->|observed| n_action_tr_ab7b52944942ce5095a5
+  n_action_tr_ab7b52944942ce5095a5 -->|observed| n_state_454f031d50aed8ea
+  n_state_769f87095bc16b7e -->|observed| n_action_tr_592a70825155477b8eb8
+  n_action_tr_592a70825155477b8eb8 -->|observed| n_state_769f87095bc16b7e
+  n_state_d3fa3e1f7785f61b -->|observed| n_action_tr_5f6a4f207da8569d0f21
+  n_action_tr_5f6a4f207da8569d0f21 -->|observed| n_state_d3fa3e1f7785f61b
+  n_state_d3fa3e1f7785f61b -->|observed| n_action_tr_bd20ead355e3c5995dc3
+  n_action_tr_bd20ead355e3c5995dc3 -->|observed| n_state_d3fa3e1f7785f61b
+  n_state_09c51546d05ecd32 -->|observed| n_action_tr_1f78753a769036ace536
+  n_action_tr_1f78753a769036ace536 -->|observed| n_state_454f031d50aed8ea
+  n_state_09c51546d05ecd32 -->|observed| n_action_tr_2866794c8d80af088043
+  n_action_tr_2866794c8d80af088043 -->|observed| n_state_09c51546d05ecd32
+  n_state_115d8d59c12421cb -->|not_tested| n_advertised_obs_d3da5501ac0d98bb3c3c_ctl_b045d7e44414791f61
+  n_state_115d8d59c12421cb -->|not_tested| n_advertised_obs_d3da5501ac0d98bb3c3c_ctl_395fcea1baac31a498
+  n_state_8ec757f315cc9391 -->|not_tested| n_advertised_obs_d5d0429299cf882ec759_ctl_ad2804681fc0f8f6f3
+  n_state_3bb355c37d93b663 -->|not_tested| n_advertised_obs_157eccdc5d79a25ee203_ctl_dc5b7c3d65a847b541
+  n_workflow_0d7b8be56ed18d3153 -->|navigation_only| n_action_tr_991a0ff7bfc38ce383c8
+  n_workflow_ac548e6d7ac8839083 -->|unresolved| n_action_tr_ed6f6db13d04e56efd2d
+  n_workflow_569e2611b74349e48f -->|unresolved| n_action_tr_8300b150ec6b6ad13ce5
+  n_workflow_5ec7a0573cc8a78e98 -->|unresolved| n_action_tr_6dad1999535721a32102
+  n_workflow_8f440a90c3f531a913 -->|not_tested| n_action_tr_425f34073a6cb6daf73c
+  n_workflow_77a13479e3e4b09d60 -->|unresolved| n_action_tr_58d10ac85222a9cc8711
+  n_workflow_e823785a7bd141776a -->|navigation_only| n_action_tr_de355c4cc978f12ecb76
+  n_workflow_2c2ea6fedd1fe33a78 -->|navigation_only| n_action_tr_c5f0f7b7757c6cf6afca
+  n_workflow_da9516f19083b24f77 -->|navigation_only| n_action_tr_b578248979772ff8c616
+  n_workflow_e3eff11382e72962d7 -->|navigation_only| n_action_tr_0684d6c3ca0d5144996f
+  n_workflow_35e9aeb1cf437fdf8b -->|not_tested| n_action_tr_74d346869add13a0bf3e
+  n_workflow_8f90781c8ede344cc0 -->|not_tested| n_action_tr_7174ca1d06924a51652c
+  n_workflow_80d79610067ce37467 -->|not_tested| n_action_tr_512ef8f3ca76b8036920
+  n_workflow_4b651760f75ac152ea -->|not_tested| n_action_tr_00ccf15b9e19f5f935d3
+  n_workflow_c8b0faf1c5163d2963 -->|unresolved| n_action_tr_1861ad0af832213492d2
+  n_workflow_26b8f6ea640a0ff3a7 -->|not_tested| n_action_tr_2e1468e8fa11499e3834
+  n_workflow_0084b1efb0c226e16c -->|not_tested| n_action_tr_05d244ea4775c928e305
+  n_workflow_b076fd42c12f853532 -->|not_tested| n_action_tr_ea7d2956036d5398045a
+  n_workflow_03f3893bdd8160bdb6 -->|not_tested| n_action_tr_c4be05e64e1b39c3f31d
+  n_workflow_7e17aa669b9538cea5 -->|not_tested| n_action_tr_4407b759fff047d364e9
+  n_workflow_86419e003db170854e -->|not_tested| n_action_tr_fbc069c9ac42329cd9d0
+  n_workflow_f4c3057f18d4f64c01 -->|not_tested| n_action_tr_1028db608d5ac4536eec
+  n_workflow_654bb4bf2490ef93f7 -->|not_tested| n_action_tr_6a4dd63f6973ba5c605d
+  n_workflow_47d0cc7974e6186251 -->|not_tested| n_action_tr_ab7b52944942ce5095a5
+  n_workflow_62ff4482d4496a636f -->|not_tested| n_action_tr_592a70825155477b8eb8
+  n_workflow_139351a16751bca875 -->|not_tested| n_action_tr_5f6a4f207da8569d0f21
+  n_workflow_b03ff566bbe37f7cbb -->|not_tested| n_action_tr_bd20ead355e3c5995dc3
+  n_workflow_3e997692fdf21f0167 -->|not_tested| n_action_tr_1f78753a769036ace536
+  n_workflow_d8edbdf4743b260b80 -->|not_tested| n_action_tr_2866794c8d80af088043
+  classDef replay_validated fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef observed fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  classDef functional_verified fill:#c8f7c5,stroke:#176b2c,color:#102a18;
+  classDef validation_failure fill:#ffe0b2,stroke:#b35c00,color:#3d2100;
+  classDef not_tested fill:#e2e3e5,stroke:#6c757d,color:#202124;
+  classDef navigation_only fill:#d6eaff,stroke:#245b91,color:#10253b;
+  classDef unresolved fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef resource_fetched fill:#d7f5df,stroke:#237a3b,color:#102a18;
+  classDef resource_discovered fill:#fff3cd,stroke:#9a7600,color:#332600;
+  classDef resource_failed fill:#f8d7da,stroke:#a61b29,color:#3d080d;
+  class n_action_tr_991a0ff7bfc38ce383c8 replay_validated;
+  class n_action_tr_ed6f6db13d04e56efd2d replay_validated;
+  class n_action_tr_8300b150ec6b6ad13ce5 replay_validated;
+  class n_action_tr_6dad1999535721a32102 replay_validated;
+  class n_action_tr_425f34073a6cb6daf73c observed;
+  class n_action_tr_58d10ac85222a9cc8711 replay_validated;
+  class n_action_tr_de355c4cc978f12ecb76 replay_validated;
+  class n_action_tr_c5f0f7b7757c6cf6afca replay_validated;
+  class n_action_tr_b578248979772ff8c616 replay_validated;
+  class n_action_tr_0684d6c3ca0d5144996f replay_validated;
+  class n_action_tr_74d346869add13a0bf3e observed;
+  class n_action_tr_7174ca1d06924a51652c observed;
+  class n_action_tr_512ef8f3ca76b8036920 observed;
+  class n_action_tr_00ccf15b9e19f5f935d3 observed;
+  class n_action_tr_1861ad0af832213492d2 replay_validated;
+  class n_action_tr_2e1468e8fa11499e3834 observed;
+  class n_action_tr_05d244ea4775c928e305 observed;
+  class n_action_tr_ea7d2956036d5398045a observed;
+  class n_action_tr_c4be05e64e1b39c3f31d observed;
+  class n_action_tr_4407b759fff047d364e9 observed;
+  class n_action_tr_fbc069c9ac42329cd9d0 observed;
+  class n_action_tr_1028db608d5ac4536eec observed;
+  class n_action_tr_d5c41de218b71fb04031 failed;
+  class n_action_tr_6a4dd63f6973ba5c605d observed;
+  class n_action_tr_ab7b52944942ce5095a5 observed;
+  class n_action_tr_592a70825155477b8eb8 observed;
+  class n_action_tr_5f6a4f207da8569d0f21 observed;
+  class n_action_tr_bd20ead355e3c5995dc3 observed;
+  class n_action_tr_1f78753a769036ace536 observed;
+  class n_action_tr_2866794c8d80af088043 observed;
+  class n_workflow_0d7b8be56ed18d3153 navigation_only;
+  class n_workflow_ac548e6d7ac8839083 unresolved;
+  class n_workflow_569e2611b74349e48f unresolved;
+  class n_workflow_5ec7a0573cc8a78e98 unresolved;
+  class n_workflow_8f440a90c3f531a913 not_tested;
+  class n_workflow_77a13479e3e4b09d60 unresolved;
+  class n_workflow_e823785a7bd141776a navigation_only;
+  class n_workflow_2c2ea6fedd1fe33a78 navigation_only;
+  class n_workflow_da9516f19083b24f77 navigation_only;
+  class n_workflow_e3eff11382e72962d7 navigation_only;
+  class n_workflow_35e9aeb1cf437fdf8b not_tested;
+  class n_workflow_8f90781c8ede344cc0 not_tested;
+  class n_workflow_80d79610067ce37467 not_tested;
+  class n_workflow_4b651760f75ac152ea not_tested;
+  class n_workflow_c8b0faf1c5163d2963 unresolved;
+  class n_workflow_26b8f6ea640a0ff3a7 not_tested;
+  class n_workflow_0084b1efb0c226e16c not_tested;
+  class n_workflow_b076fd42c12f853532 not_tested;
+  class n_workflow_03f3893bdd8160bdb6 not_tested;
+  class n_workflow_7e17aa669b9538cea5 not_tested;
+  class n_workflow_86419e003db170854e not_tested;
+  class n_workflow_f4c3057f18d4f64c01 not_tested;
+  class n_workflow_654bb4bf2490ef93f7 not_tested;
+  class n_workflow_47d0cc7974e6186251 not_tested;
+  class n_workflow_62ff4482d4496a636f not_tested;
+  class n_workflow_139351a16751bca875 not_tested;
+  class n_workflow_b03ff566bbe37f7cbb not_tested;
+  class n_workflow_3e997692fdf21f0167 not_tested;
+  class n_workflow_d8edbdf4743b260b80 not_tested;
+  class n_advertised_obs_d3da5501ac0d98bb3c3c_ctl_b045d7e44414791f61 not_tested;
+  class n_advertised_obs_d3da5501ac0d98bb3c3c_ctl_395fcea1baac31a498 not_tested;
+  class n_advertised_obs_d5d0429299cf882ec759_ctl_ad2804681fc0f8f6f3 not_tested;
+  class n_advertised_obs_157eccdc5d79a25ee203_ctl_dc5b7c3d65a847b541 not_tested;
+  class n_resource_c67a560471d780421ff4 resource_discovered;
+  class n_resource_e4617b8a7dcea4fa7c31 resource_discovered;
+  class n_resource_c8a41dd0330fef7cc8d2 resource_discovered;
+  class n_resource_26b025f24842a1a367d1 resource_discovered;
+  class n_resource_9aea4965d404b1889ef8 resource_discovered;
+  class n_resource_fe207e6792c64cda0bab resource_discovered;
+  class n_resource_a00e3349b10ba9b5df0e resource_discovered;
+  class n_resource_fbd3bd7a20b273ce8bab resource_discovered;
+  class n_resource_60c5b2a05565b1df4388 resource_discovered;

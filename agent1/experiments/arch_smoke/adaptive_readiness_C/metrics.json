@@ -1,0 +1,316 @@
+{
+  "advertised_unexecuted": 138,
+  "app": "crawlmaze",
+  "browser_actions": 88,
+  "discovery_root_reloads": 19,
+  "distinct_validated_feature_workflows": 11,
+  "duplicate_controls_suppressed": 0,
+  "dynamic_interaction_actions": 0,
+  "elapsed_seconds": 40.487,
+  "external_discovery_records": 0,
+  "external_discovery_rejected": 0,
+  "external_elapsed_seconds": 0.0,
+  "external_request_upper_bound": 0,
+  "frame_observations": 0,
+  "functional_unresolved": 16,
+  "functional_validation_failures": 0,
+  "functional_workflows_verified": 0,
+  "graph_connections_complete": 470,
+  "graph_connections_missing_evidence": 0,
+  "graph_connections_total": 470,
+  "grouped_states": 27,
+  "http_budget_by_source": {
+    "browser": 94,
+    "browser_redirect": 19,
+    "resource_spider": 43
+  },
+  "http_redirect_budget_overrun": 0,
+  "http_redirect_scope_violations": 0,
+  "incorrect_state_merges": 0,
+  "ineffective_transitions": 0,
+  "interactive_readiness_wait_ms": 3361,
+  "live_state_reuses": 10,
+  "live_state_stale": 0,
+  "model_calls": 0,
+  "model_failures": 0,
+  "model_input_tokens": 0,
+  "model_output_tokens": 0,
+  "monetary_cost_usd": 0.0,
+  "navigation_categories_replay_validated": 11,
+  "navigation_network_events_recorded": 31,
+  "navigation_requests": 30,
+  "network_events_recorded": 113,
+  "observed_http_requests": 113,
+  "passive_readiness_wait_ms": 26648,
+  "popup_navigations": 0,
+  "progress": [
+    {
+      "browser_actions": 3,
+      "elapsed_seconds": 2.222,
+      "transitions_observed": 1,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 5,
+      "elapsed_seconds": 2.989,
+      "transitions_observed": 2,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 7,
+      "elapsed_seconds": 3.77,
+      "transitions_observed": 3,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 9,
+      "elapsed_seconds": 4.556,
+      "transitions_observed": 4,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 11,
+      "elapsed_seconds": 5.371,
+      "transitions_observed": 5,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 12,
+      "elapsed_seconds": 5.855,
+      "transitions_observed": 6,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 15,
+      "elapsed_seconds": 7.08,
+      "transitions_observed": 7,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 18,
+      "elapsed_seconds": 8.309,
+      "transitions_observed": 8,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 21,
+      "elapsed_seconds": 9.536,
+      "transitions_observed": 9,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 24,
+      "elapsed_seconds": 10.751,
+      "transitions_observed": 10,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 27,
+      "elapsed_seconds": 11.983,
+      "transitions_observed": 11,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 30,
+      "elapsed_seconds": 13.22,
+      "transitions_observed": 12,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 31,
+      "elapsed_seconds": 13.701,
+      "transitions_observed": 13,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 34,
+      "elapsed_seconds": 14.955,
+      "transitions_observed": 14,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 37,
+      "elapsed_seconds": 16.209,
+      "transitions_observed": 15,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 38,
+      "elapsed_seconds": 16.707,
+      "transitions_observed": 16,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 39,
+      "elapsed_seconds": 17.152,
+      "transitions_observed": 17,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 40,
+      "elapsed_seconds": 17.62,
+      "transitions_observed": 18,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 43,
+      "elapsed_seconds": 19.013,
+      "transitions_observed": 19,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 44,
+      "elapsed_seconds": 20.033,
+      "transitions_observed": 20,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 47,
+      "elapsed_seconds": 21.254,
+      "transitions_observed": 21,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 48,
+      "elapsed_seconds": 22.243,
+      "transitions_observed": 22,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 49,
+      "elapsed_seconds": 23.304,
+      "transitions_observed": 23,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 52,
+      "elapsed_seconds": 24.589,
+      "transitions_observed": 24,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 53,
+      "elapsed_seconds": 25.045,
+      "transitions_observed": 25,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 57,
+      "elapsed_seconds": 27.275,
+      "transitions_observed": 26,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 60,
+      "elapsed_seconds": 28.524,
+      "transitions_observed": 27,
+      "validated_workflows": 0
+    },
+    {
+      "browser_actions": 62,
+      "elapsed_seconds": 29.403,
+      "transitions_observed": 27,
+      "validated_workflows": 1
+    },
+    {
+      "browser_actions": 64,
+      "elapsed_seconds": 30.258,
+      "transitions_observed": 27,
+      "validated_workflows": 2
+    },
+    {
+      "browser_actions": 66,
+      "elapsed_seconds": 31.095,
+      "transitions_observed": 27,
+      "validated_workflows": 3
+    },
+    {
+      "browser_actions": 68,
+      "elapsed_seconds": 31.934,
+      "transitions_observed": 27,
+      "validated_workflows": 4
+    },
+    {
+      "browser_actions": 70,
+      "elapsed_seconds": 32.776,
+      "transitions_observed": 27,
+      "validated_workflows": 5
+    },
+    {
+      "browser_actions": 73,
+      "elapsed_seconds": 34.05,
+      "transitions_observed": 27,
+      "validated_workflows": 6
+    },
+    {
+      "browser_actions": 76,
+      "elapsed_seconds": 35.35,
+      "transitions_observed": 27,
+      "validated_workflows": 7
+    },
+    {
+      "browser_actions": 79,
+      "elapsed_seconds": 36.638,
+      "transitions_observed": 27,
+      "validated_workflows": 8
+    },
+    {
+      "browser_actions": 82,
+      "elapsed_seconds": 37.895,
+      "transitions_observed": 27,
+      "validated_workflows": 9
+    },
+    {
+      "browser_actions": 85,
+      "elapsed_seconds": 39.164,
+      "transitions_observed": 27,
+      "validated_workflows": 10
+    },
+    {
+      "browser_actions": 88,
+      "elapsed_seconds": 40.435,
+      "transitions_observed": 27,
+      "validated_workflows": 11
+    },
+    {
+      "browser_actions": 88,
+      "elapsed_seconds": 40.487,
+      "transitions_observed": 27,
+      "validated_workflows": 11
+    }
+  ],
+  "raw_states": 27,
+  "redundant_states": 0,
+  "replay_attempts": 11,
+  "replay_failures": 0,
+  "replay_navigation_successes": 11,
+  "replay_success_denominator": 11,
+  "replay_success_numerator": 11,
+  "replay_untested_paths": 16,
+  "resource_fetch_budget_exhausted": 0,
+  "resource_fetch_class_budget_exhausted": 0,
+  "resource_fetch_failures": 0,
+  "resource_fetches_attempted": 43,
+  "resource_fetches_succeeded": 43,
+  "resource_new_references": 85,
+  "resource_references_discovered": 99,
+  "resource_references_excluded": 0,
+  "resource_references_extracted": 97,
+  "resource_references_queued": 85,
+  "resource_responses_with_body": 43,
+  "resource_unresolved_candidates": 0,
+  "restoration_actions": 14,
+  "root_reloads": 30,
+  "run_id": "agent1-20261030T210836Z",
+  "server_request_counts": {},
+  "startup_readiness_failures": 0,
+  "static_navigation_actions": 26,
+  "total_http_budget_blocked": 0,
+  "total_http_budget_used": 156,
+  "transitions_attempted": 27,
+  "transitions_failed": 0,
+  "transitions_observed": 27,
+  "unsupported_connections": 0,
+  "variant": "adaptive_readiness_C",
+  "verification_root_reloads": 11
+}

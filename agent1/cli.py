@@ -20,7 +20,7 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--policy",
         choices=(
-            "exact", "grouped", "coverage", "breadth", "multidimensional",
+            "exact", "grouped", "coverage", "breadth", "multidimensional", "hierarchical",
             "selective_model", "model_all",
         ),
         default="grouped",
@@ -81,6 +81,10 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--no-shared-resource-frontier", dest="share_resource_frontier", action="store_false", default=True)
     parser.add_argument("--budget-allocation-strategy", choices=("fixed", "adaptive"), default="fixed")
     parser.add_argument("--replay-policy", choices=("shallow", "diverse"), default="shallow")
+    parser.add_argument("--zap-evidence", type=Path)
+    parser.add_argument("--zap-source-origin")
+    parser.add_argument("--max-total-http-requests", type=int)
+    parser.add_argument("--state-reuse", choices=("root", "prefix"), default="root")
     parser.add_argument(
         "--search-probe",
         dest="search_probe_primary",
@@ -171,6 +175,10 @@ def main(argv: list[str] | None = None) -> int:
             share_resource_frontier=args.share_resource_frontier,
             budget_allocation_strategy=args.budget_allocation_strategy,
             replay_policy=args.replay_policy,
+            zap_evidence_path=args.zap_evidence,
+            zap_source_origin=args.zap_source_origin,
+            max_total_http_requests=args.max_total_http_requests,
+            state_reuse=args.state_reuse,
             model_provider=args.provider,
             model_name=args.model,
             model_form_assistance=args.model_forms,
