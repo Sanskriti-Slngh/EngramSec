@@ -357,6 +357,7 @@ def test_readiness_waits_for_late_control_and_delayed_redirect(
         readiness_poll_ms=50,
         idle_page_wait_ms=1_600,
         passive_page_wait_ms=100,
+        readiness_strategy="adaptive",
     )
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(headless=True)
@@ -366,7 +367,7 @@ def test_readiness_waits_for_late_control_and_delayed_redirect(
                 late = session.observe(1)
                 assert any(item.label == "Hydrated control" for item in late.controls)
                 assert late.readiness.status == "usable"
-                assert late.readiness.duration_ms >= 300
+                assert 300 <= late.readiness.duration_ms <= 1_500
 
                 session.config = config.model_copy(
                     update={"start_url": f"{fixture_url}delayed-refresh"}

@@ -38,3 +38,22 @@ agent1/experiments/search_verifier_adversarial_baseline/**
 agent1/experiments/search_verifier_adversarial_link_delta/**
 agent1/experiments/search_verifier_adversarial_link_delta_final/**
 !agent1/experiments/search_verifier_adversarial_link_delta_final/summary.json
+
+# Keep 2026-10-30 crawler raw graphs, traces, and checkpoints locally. The
+# reviewed aggregate and selected diagrams are saved in crawler_breakthrough_20261030/.
+agent1/experiments/budget_ablation/
+agent1/experiments/depth_ablation/
+agent1/experiments/document_quota_ablation/
+agent1/experiments/fast_ablation/
+agent1/experiments/fifo_repeats/
+agent1/experiments/frontier_matrix/
+agent1/experiments/frontier_state_ablation/
+agent1/experiments/heldout_shop_crawler_transfer/
+agent1/experiments/js_heavy_agent1_generalization_adaptive_default/
+agent1/experiments/js_heavy_agent1_generalization_adaptive_explicit/
+agent1/experiments/js_heavy_agent1_generalization_r1/
+agent1/experiments/parser_ablation/
+agent1/experiments/readiness_ablation/
+agent1/experiments/readiness_repeats/
+agent1/experiments/replay_ablation/
+agent1/experiments/serious_budget/

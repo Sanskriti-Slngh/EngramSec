@@ -23,6 +23,9 @@ def main() -> int:
     parser.add_argument("--seconds", type=float, default=60)
     parser.add_argument("--max-transitions", type=int, default=30)
     parser.add_argument("--max-browser-actions", type=int, default=140)
+    parser.add_argument(
+        "--readiness-strategy", choices=("fixed", "adaptive"), default="fixed"
+    )
     args = parser.parse_args()
     server, thread, start_url = start_js_heavy_lab()
     try:
@@ -37,6 +40,7 @@ def main() -> int:
             "settle_ms": 30,
             "replay_reserve_fraction": 0.35,
             "context_label": "js-heavy-lab",
+            "readiness_strategy": args.readiness_strategy,
         }
         if args.variant in {"p1", "p2"}:
             config_data.update(

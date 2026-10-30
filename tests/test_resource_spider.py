@@ -3,6 +3,7 @@ from __future__ import annotations
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright
 
@@ -13,6 +14,7 @@ from agent1.resource_spider import (
     extract_header_references,
     extract_html_references,
     extract_script_references,
+    extract_uncertain_script_candidates,
 )
 
 
@@ -65,6 +67,56 @@ def test_http_headers_css_and_script_references_are_observed() -> None:
         ("https://app.test/js/chunk.js", "asset"),
         ("https://app.test/api/search?q=x", "api"),
     }
+
+
+def test_ast_script_discovery_resolves_constants_and_resource_loading() -> None:
+    script = """
+      const base = '/api/';
+      const endpoint = base + 'records';
+      fetch(endpoint);
+      const req = new Request('/api/profile');
+      const node = document.createElement('script');
+      node.src = '/chunks/app.js';
+      node.setAttribute('data-unused', 'not-a-url');
+      import('/chunks/lazy.js');
+      xhr.open('GET', '/api/search');
+      window.location.href = '/account';
+      fetch(`/api/users/${userId}`);
+    """
+    result = extract_script_references(script, "https://site.test/assets/app.js")
+    observed = {(item.url, item.kind, item.source_type) for item in result}
+    assert ("https://site.test/api/records", "api", "script-ast") in observed
+    assert ("https://site.test/api/profile", "api", "script-ast") in observed
+    assert ("https://site.test/chunks/app.js", "asset", "script-ast") in observed
+    assert ("https://site.test/chunks/lazy.js", "asset", "script-ast") in observed
+    assert ("https://site.test/api/search", "api", "script-ast") in observed
+    assert ("https://site.test/account", "navigation", "script-ast") in observed
+    assert not any("users" in item.url for item in result)
+    uncertain = extract_uncertain_script_candidates(script, "https://site.test/assets/app.js")
+    assert any(item["confidence"] == "low" and item["candidate_prefix"] == "/api/users/" for item in uncertain)
+
+
+def test_manifest_svg_sitemap_and_robots_references_are_parsed() -> None:
+    from agent1.resource_spider import (
+        extract_manifest_references,
+        extract_robots_sitemaps,
+        extract_xml_references,
+    )
+
+    manifest = extract_manifest_references(
+        '{"start_url":"/app","icons":[{"src":"/icon.png"}]}',
+        "https://site.test/manifest.webmanifest",
+    )
+    assert {item.url for item in manifest} == {"https://site.test/app", "https://site.test/icon.png"}
+    xml = extract_xml_references(
+        '<urlset><url><loc>/records/1</loc></url></urlset>',
+        "https://site.test/sitemap.xml",
+    )
+    assert [item.url for item in xml] == ["https://site.test/records/1"]
+    robots = extract_robots_sitemaps("User-agent: *\nSitemap: /sitemap.xml", "https://site.test/robots.txt")
+    assert robots[0].url == "https://site.test/sitemap.xml"
+    svg = extract_html_references('<svg><use xlink:href="/icons.svg#search"/></svg>', "https://site.test/")
+    assert any(item.url == "https://site.test/icons.svg" for item in svg)
 
 
 class SpiderHandler(BaseHTTPRequestHandler):
@@ -145,3 +197,79 @@ def test_typed_spider_fetches_only_observed_in_scope_references_and_honors_budge
     finally:
         server.shutdown()
         server.server_close()
+
+
+class RecordingRequestContext:
+    def __init__(self) -> None:
+        self.urls: list[str] = []
+
+    def get(self, url: str, **_: object):
+        self.urls.append(url)
+        return type("Response", (), {
+            "headers": {"content-type": "text/plain", "content-length": "0"},
+            "url": url,
+            "status": 200,
+            "body": lambda _self: b"",
+        })()
+
+
+def _fetch_order(policy: str, seed: int = 0) -> list[str]:
+    base = "https://site.test/"
+    spider = TypedResourceSpider(base, [], ResourceBudget(10), 1, 64_000, policy, seed)
+    spider.observe_response(
+        '<img src="/assets/logo.png"><a href="/alpha/one">one</a>'
+        '<a href="/alpha/two">two</a><a href="/beta/three">three</a>',
+        base, "text/html", {},
+    )
+    context = RecordingRequestContext()
+    spider.fetch_pending(context)
+    return context.urls
+
+
+def test_resource_frontier_policies_are_distinct_deterministic_and_bounded() -> None:
+    fifo = _fetch_order("fifo")
+    diverse = _fetch_order("route_diverse")
+    marginal = _fetch_order("marginal_value")
+    random_one = _fetch_order("random", 5)
+    random_two = _fetch_order("random", 5)
+    assert fifo[0].endswith("/assets/logo.png")
+    assert diverse[0].endswith("/assets/logo.png")
+    assert len({urlsplit(item).path.split("/")[1] for item in diverse[:3]}) == 3
+    assert marginal[0].endswith("/alpha/one")
+    assert random_one == random_two
+    assert random_one != fifo
+
+
+def test_class_budget_preserves_document_capacity_when_asset_cap_is_spent() -> None:
+    base = "https://site.test/"
+    budget = ResourceBudget(10, {"other_asset": 1, "document": 5})
+    spider = TypedResourceSpider(base, [], budget, 1, 64_000)
+    spider.observe_response(
+        '<img src="/a.png"><img src="/b.png"><a href="/one">one</a>'
+        '<a href="/two">two</a>', base, "text/html", {},
+    )
+    context = RecordingRequestContext()
+    evidence = spider.fetch_pending(context)
+    assert sum(".png" in url for url in context.urls) == 1
+    assert any(url.endswith("/one") for url in context.urls)
+    assert any(url.endswith("/two") for url in context.urls)
+    assert any(item.get("status") == "class_budget_limited" for item in evidence)
+
+
+def test_computed_target_is_recorded_unresolved_and_never_fetched() -> None:
+    spider = TypedResourceSpider(
+        "https://site.test/", [], ResourceBudget(10), 3, 64_000,
+        javascript_parser="ast",
+    )
+    spider.observe_response(
+        "fetch(`/api/accounts/${accountId}`)",
+        "https://site.test/assets/app.js", "application/javascript", {},
+    )
+    context = RecordingRequestContext()
+    evidence = spider.fetch_pending(context)
+    unresolved = [item for item in evidence if item.get("status") == "unresolved_candidate"]
+    assert len(unresolved) == 1
+    assert unresolved[0]["url"] is None
+    assert unresolved[0]["confidence"] == "low"
+    assert unresolved[0]["candidate_prefix"] == "/api/accounts/"
+    assert not context.urls

@@ -144,9 +144,55 @@ def score(graph: dict, categories: dict[str, set[str]]) -> dict:
     denom = total["expected"]
     all_expected = set().union(*categories.values()) if categories else set()
     hit_count = len(all_expected & (browser_ok | spider_fetched))
+    candidate_paths = {path_of(item["url"]) for item in references if item.get("url")}
+    queued_paths = {
+        path_of(item["url"]) for item in references
+        if item.get("url") and item.get("queue_decision") == "admitted"
+    }
+    attempted_paths = {
+        path_of(item["url"]) for item in references
+        if item.get("url") and item.get("status") in {"fetched", "failed"}
+    }
+    resource_times: dict[str, int] = {}
+    for item in references:
+        if item.get("url") and item.get("status") == "fetched" and item.get("elapsed_ms") is not None:
+            path = path_of(item["url"])
+            resource_times[path] = min(resource_times.get(path, 2**63 - 1), int(item["elapsed_ms"]))
+    for event in all_browser_events:
+        if event.get("url") and event.get("elapsed_ms") is not None and event.get("status") is not None and 200 <= int(event["status"]) < 400:
+            path = path_of(event["url"])
+            resource_times[path] = min(resource_times.get(path, 2**63 - 1), int(event["elapsed_ms"]))
+    time_curve = {
+        f"{seconds}s": sum(
+            path in resource_times and resource_times[path] <= seconds * 1_000
+            for path in all_expected
+        )
+        for seconds in (30, 60, 120, 180, 300, 600)
+    }
+    new_references = sum(int(item.get("new_references") or 0) for item in references)
+    response_count = sum(item.get("new_references") is not None for item in references)
+    spider_gets = metrics.get("resource_fetches_attempted", 0)
     return {
         "coverage_by_category": by_category,
         "coverage_total": total,
+        "discovery_funnel": {
+            "expected": len(all_expected),
+            "candidate_references": len(all_expected & candidate_paths),
+            "queue_admitted": len(all_expected & queued_paths),
+            "spider_attempted": len(all_expected & attempted_paths),
+            "spider_succeeded": len(all_expected & spider_fetched),
+            "browser_requested_successfully": len(all_expected & browser_ok),
+            "ui_state_reached": len(all_expected & ui_state_paths),
+            "replay_requested": len(all_expected & replay_paths),
+            "not_referenced": len(all_expected - candidate_paths),
+        },
+        "time_to_coverage": time_curve,
+        "resource_yield": {
+            "successful_spider_marker_paths_per_get": len(all_expected & spider_fetched) / spider_gets if spider_gets else None,
+            "new_unique_references_per_response": new_references / response_count if response_count else None,
+            "new_unique_references": new_references,
+            "responses_with_yield_measure": response_count,
+        },
         "recall": {
             key: (total[key] / denom if denom else None)
             for key in (
@@ -164,6 +210,12 @@ def score(graph: dict, categories: dict[str, set[str]]) -> dict:
             "typed_resource_fetches": metrics.get("resource_fetches_attempted", 0),
             "typed_resource_fetch_successes": metrics.get("resource_fetches_succeeded", 0),
             "typed_resource_failures": metrics.get("resource_fetch_failures", 0),
+            "typed_resource_budget_limited": metrics.get("resource_fetch_budget_exhausted", 0),
+            "typed_resource_class_budget_limited": metrics.get("resource_fetch_class_budget_exhausted", 0),
+            "resource_references_extracted": metrics.get("resource_references_extracted", 0),
+            "resource_references_queued": metrics.get("resource_references_queued", 0),
+            "resource_references_excluded": metrics.get("resource_references_excluded", 0),
+            "resource_unresolved_candidates": metrics.get("resource_unresolved_candidates", 0),
             "replay_attempts": metrics.get("replay_attempts", 0),
             "replay_successes": replay_successes,
             "replay_failures": replay_failures,
@@ -190,8 +242,10 @@ def main() -> int:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--extra-graph", type=Path, action="append", default=[])
     parser.add_argument("--server-log", type=Path)
+    parser.add_argument("--baseline-graph", type=Path)
     args = parser.parse_args()
-    baseline = json.loads((args.root / "p0" / "graph_a.json").read_text(encoding="utf-8"))
+    baseline_path = args.baseline_graph or args.root / "p0" / "graph_a.json"
+    baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
     categories = top_level_categories(baseline, args.url)
     truth = expected_paths(args.url, categories)
     results = {}

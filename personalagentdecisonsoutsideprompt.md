@@ -1,0 +1,14 @@
+# Personal agent decisions outside the prompt
+
+This file records engineering choices made to operationalize the requested work. These choices did not expand the target scope or relax the evidence/safety rules.
+
+1. **Used Tree-sitter's maintained JavaScript grammar.** The old regex path was brittle for syntax and nested expressions. The parser only resolves literal strings and simple constant concatenations; it does not interpret or execute application code. This adds two bounded dependencies (`tree-sitter`, `tree-sitter-javascript`) to both `pyproject.toml` and `requirements-agent1.txt`.
+2. **Kept dynamic computed references unresolved.** The mapper records a low-confidence candidate prefix and expression fingerprint instead of guessing a URL. This favors evidence integrity over fetching more resources.
+3. **Shared the resource frontier across run contexts by default.** The queue now persists with the run-level request budget when fresh BrowserSessions are recreated. A no-sharing ablation generated many more repeated class-budget records; its one-run marker difference was inconclusive, so sharing is primarily an efficiency choice.
+4. **Kept FIFO resource order as default.** Route diversity, empirical yield, and random ordering did not change the 21/91 set at 180 seconds. They remain selectable for future work, but no complex scheduler is promoted without evidence.
+5. **Kept adaptive readiness opt-in.** It reached 25/91 in three matched repeats and reduced interactive wait, but the previous Crawlground 39/59 score was not rerun. Default readiness stays fixed to preserve the existing behavior until that regression check is available.
+6. **Kept the default spider GET budget at 100 and default max depth at 3.** A document cap of 90 yielded fewer markers than the smaller class-capped quota, and depth 6 reduced coverage. The experiment runner now allows a larger total budget explicitly; it does not silently increase normal CLI cost.
+7. **Kept diverse replay opt-in.** It exposed more replayed marker destinations in two runs, but one replay failed and the untested transition count did not decline.
+8. **Did not use the local unrelated service as a held-out target.** The only safe additional application available in the workspace was a previously used disposable shop fixture. It passed an independent post-run evaluator but does not count as a fresh unseen transfer application.
+9. **Kept raw graphs/checkpoints/traces ignored.** The target evidence is retained locally for reproduction; committed summaries and diagrams are limited to evidence needed for the report. No credentials or external model keys were used.
+10. **Ran Crawl Maze's official evaluator only after each crawl.** Its response was not imported by Agent 1. The local testbed uses one browser worker, no external models, and zero API spending.

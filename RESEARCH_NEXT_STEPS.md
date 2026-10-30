@@ -2,6 +2,22 @@
 
 Date: 2026-10-28
 
+## Status update — 2026-10-30
+
+The 2026-10-28 priorities were tested on Google Security Crawl Maze. The typed resource spider and AST parser now exist in `agent1/`; current matched 180-second fixed FIFO reaches 20–21/91 paths, and repeated adaptive-readiness reaches 25/91. A 300-second adaptive run reaches 37/91, below the 50-marker breakthrough goal. The detailed ablation and failure funnel are in [COVERAGE_ABLATIONS.md](COVERAGE_ABLATIONS.md) and [DISCOVERY_FAILURE_ANALYSIS.md](DISCOVERY_FAILURE_ANALYSIS.md).
+
+### Updated priority order from measured evidence
+
+1. **Improve candidate generation and runtime evidence for unseen paths.** The 300-second post-run funnel has 39/91 expected paths without a matching reference or successful browser request. Increasing depth to 6 raised extracted references but reduced coverage, so investigate underrepresented standard reference mechanisms and browser-observed runtime/request branches with independent fixtures. Do not infer that missing paths correspond to any particular target feature.
+2. **Improve allocation from evidence to queue and fetch.** Of 52 matching expected references in the serious run, 36 were admitted and 27 attempted. API references with uncertain methods remain safely unsubmitted; future work should capture actual UI-triggered method/parameter structures and avoid arbitrary direct requests.
+3. **Reduce restoration cost while preserving path-level replay.** Adaptive readiness created more transitions and improved discovery, but left 79–80 paths untested at 180 seconds. Diverse replay increased marker destination variety in successful paths, but one repeat failed and the untested count did not improve. Investigate prefix reuse and cost-aware replay as a separate ablation.
+4. **Treat queue-order heuristics as low priority.** FIFO, route diversity, marginal reference yield, and seeded random selection found the same 21/91 marker set. More elaborate scores need a new source of predictive evidence before further implementation.
+5. **Keep depth 3 until independent evidence changes.** Depth 6 produced 17/91 versus 21/91 at depth 3 and the depth-3 run recorded no depth-limited resources.
+
+Adaptive readiness remains an explicit option rather than the default. It repeatedly gained 4 markers versus a 20–21 fixed range and cut interactive waits, but Crawlground's historical 39/59 marker result was not re-run during this milestone. The standard CLI default is therefore preserved until a same-budget Crawlground check confirms the tradeoff.
+
+The JS-heavy lab and known disposable-shop fixture passed regression/transfer checks. The shop is not a previously unused holdout. No fresh, independent real application was available without touching an unrelated local service, so transfer to a new real application remains untested. Existing 39/59 Crawlground and 11/11 JS-lab values are historical unless explicitly rerun in this report.
+
 ## Evidence boundary
 
 These priorities use controlled-development results, public Crawlground aggregate/category scores, the post-freeze Google Security Crawl Maze aggregate evaluation, and published crawler research. They do not use WebExploitBench outputs, protected metadata, vulnerability locations, or exploit traces.

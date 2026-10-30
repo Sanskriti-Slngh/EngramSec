@@ -73,10 +73,21 @@ class RunConfig(BaseModel):
     hybrid_link_discovery: bool = False
     idle_page_wait_ms: int = Field(default=1_600, ge=250, le=5_000)
     passive_page_wait_ms: int = Field(default=200, ge=50, le=5_000)
+    readiness_strategy: Literal["fixed", "adaptive"] = "fixed"
     typed_resource_spider: bool = False
     max_resource_fetches: int = Field(default=100, ge=0, le=2_000)
+    max_resource_fetches_per_observation: int = Field(default=10, ge=1, le=200)
+    max_resource_document_fetches: int | None = Field(default=None, ge=0, le=2_000)
+    max_resource_script_fetches: int | None = Field(default=None, ge=0, le=2_000)
+    max_resource_stylesheet_fetches: int | None = Field(default=None, ge=0, le=2_000)
+    max_resource_asset_fetches: int | None = Field(default=None, ge=0, le=2_000)
     max_resource_depth: int = Field(default=3, ge=0, le=10)
     max_resource_body_bytes: int = Field(default=1_000_000, ge=16_384, le=4_000_000)
+    resource_frontier_policy: Literal["fifo", "route_diverse", "marginal_value", "random"] = "fifo"
+    resource_random_seed: int = Field(default=0, ge=0, le=2_147_483_647)
+    javascript_reference_parser: Literal["legacy_regex", "ast"] = "ast"
+    share_resource_frontier: bool = True
+    budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"
     replay_policy: Literal["shallow", "diverse"] = "shallow"
 
     @model_validator(mode="after")
@@ -238,20 +249,31 @@ class NetworkEvent(BaseModel):
     failure: str | None = None
     parameter_names: list[str] = Field(default_factory=list)
     body_encoding: str | None = None
+    elapsed_ms: int | None = None
 
 
 class ResourceEvidence(BaseModel):
     evidence_id: str = ""
-    url: str
+    url: str | None
     kind: Literal["navigation", "asset", "api"]
     source_type: str
     source_url: str
     source: str
     relation: str = ""
     depth: int = 0
-    status: Literal["discovered", "fetched", "failed", "out_of_scope", "budget_limited", "depth_limited", "sensitive_reference"] = "discovered"
+    status: Literal["discovered", "fetched", "failed", "out_of_scope", "budget_limited", "class_budget_limited", "depth_limited", "sensitive_reference", "unresolved_candidate"] = "discovered"
+    queue_decision: str = "admitted"
+    confidence: str = "observed_literal"
+    expression_fingerprint: str | None = None
+    candidate_prefix: str | None = None
+    elapsed_ms: int | None = None
     http_status: int | None = None
     content_type: str | None = None
+    new_references: int | None = None
+    candidate_class: str | None = None
+    response_reference_count: int | None = None
+    queued_references: int | None = None
+    excluded_references: int | None = None
     redirected_to: str | None = None
     error: str | None = None
 
@@ -467,6 +489,13 @@ class RunMetrics(BaseModel):
     resource_fetches_succeeded: int = 0
     resource_fetch_failures: int = 0
     resource_fetch_budget_exhausted: int = 0
+    resource_fetch_class_budget_exhausted: int = 0
+    resource_new_references: int = 0
+    resource_responses_with_body: int = 0
+    resource_references_extracted: int = 0
+    resource_references_queued: int = 0
+    resource_references_excluded: int = 0
+    resource_unresolved_candidates: int = 0
     passive_readiness_wait_ms: int = 0
     interactive_readiness_wait_ms: int = 0
     observed_http_requests: int = 0

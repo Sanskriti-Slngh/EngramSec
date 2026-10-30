@@ -62,9 +62,24 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument("--idle-page-wait-ms", type=int, default=1600)
     parser.add_argument("--passive-page-wait-ms", type=int, default=200)
+    parser.add_argument("--readiness-strategy", choices=("fixed", "adaptive"), default="fixed")
     parser.add_argument("--typed-resource-spider", action="store_true")
     parser.add_argument("--max-resource-fetches", type=int, default=100)
+    parser.add_argument("--max-resource-fetches-per-observation", type=int, default=10)
+    parser.add_argument("--max-resource-document-fetches", type=int)
+    parser.add_argument("--max-resource-script-fetches", type=int)
+    parser.add_argument("--max-resource-stylesheet-fetches", type=int)
+    parser.add_argument("--max-resource-asset-fetches", type=int)
     parser.add_argument("--max-resource-depth", type=int, default=3)
+    parser.add_argument(
+        "--resource-frontier-policy",
+        choices=("fifo", "route_diverse", "marginal_value", "random"),
+        default="fifo",
+    )
+    parser.add_argument("--resource-random-seed", type=int, default=0)
+    parser.add_argument("--javascript-reference-parser", choices=("legacy_regex", "ast"), default="ast")
+    parser.add_argument("--no-shared-resource-frontier", dest="share_resource_frontier", action="store_false", default=True)
+    parser.add_argument("--budget-allocation-strategy", choices=("fixed", "adaptive"), default="fixed")
     parser.add_argument("--replay-policy", choices=("shallow", "diverse"), default="shallow")
     parser.add_argument(
         "--search-probe",
@@ -141,9 +156,20 @@ def main(argv: list[str] | None = None) -> int:
             hybrid_link_discovery=args.hybrid_links,
             idle_page_wait_ms=args.idle_page_wait_ms,
             passive_page_wait_ms=args.passive_page_wait_ms,
+            readiness_strategy=args.readiness_strategy,
             typed_resource_spider=args.typed_resource_spider,
             max_resource_fetches=args.max_resource_fetches,
+            max_resource_fetches_per_observation=args.max_resource_fetches_per_observation,
+            max_resource_document_fetches=args.max_resource_document_fetches,
+            max_resource_script_fetches=args.max_resource_script_fetches,
+            max_resource_stylesheet_fetches=args.max_resource_stylesheet_fetches,
+            max_resource_asset_fetches=args.max_resource_asset_fetches,
             max_resource_depth=args.max_resource_depth,
+            resource_frontier_policy=args.resource_frontier_policy,
+            resource_random_seed=args.resource_random_seed,
+            javascript_reference_parser=args.javascript_reference_parser,
+            share_resource_frontier=args.share_resource_frontier,
+            budget_allocation_strategy=args.budget_allocation_strategy,
             replay_policy=args.replay_policy,
             model_provider=args.provider,
             model_name=args.model,

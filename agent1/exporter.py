@@ -47,7 +47,11 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
         evidence["evidence_id"] = evidence_id
         response_url = str(item.source_url)
         response_id = "response_" + hashlib.sha256(response_url.encode()).hexdigest()[:20]
-        reference_key = f"{item.kind}\0{item.url}"
+        reference_key = (
+            f"unresolved\0{evidence_id}"
+            if item.url is None
+            else f"{item.kind}\0{item.url}"
+        )
         reference_id = "resource_" + hashlib.sha256(reference_key.encode()).hexdigest()[:20]
         resource_responses.setdefault(
             response_id,

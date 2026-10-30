@@ -282,3 +282,45 @@ def test_request_structure_records_names_without_values(
     assert actual_encoding == encoding
     assert "do-not-store" not in repr((names, actual_encoding))
     assert "private-value" not in repr((names, actual_encoding))
+
+
+def test_adaptive_budget_reserves_actions_for_distinct_replays(tmp_path: Path) -> None:
+    config = RunConfig(
+        start_url="http://127.0.0.1:8000/",
+        output_dir=tmp_path / "adaptive-budget",
+        max_seconds=100,
+        max_browser_actions=100,
+        replay_reserve_fraction=0.3,
+        budget_allocation_strategy="adaptive",
+    )
+    explorer = Explorer(config, Path(__file__).resolve().parents[1])
+    assert explorer._current_replay_reserve() == (0.0, 0)
+
+    action = ActionDescriptor.model_construct(
+        control_id="ctl", kind="link", label="Open", role="link", css_path="a",
+        signature="sig", interaction="click",
+    )
+    observation = Observation.model_construct(
+        id="obs", url="http://127.0.0.1:8000/record/1", group_signature="group",
+    )
+    transition = Transition.model_construct(
+        id="tr", result_observation_id="obs", status=EvidenceStatus.OBSERVED,
+        action=action, workflow_path=[action],
+    )
+    explorer.artifact.observations.append(observation)
+    explorer.artifact.transitions.append(transition)
+    reserve_fraction, action_reserve = explorer._current_replay_reserve()
+    assert reserve_fraction == 0.05
+    assert action_reserve == 2
+    assert explorer._exploration_deadline() == pytest.approx(95)
+    assert not explorer._fits_exploration_action_budget(99)
+
+
+def test_readiness_strategy_keeps_fixed_default_and_allows_adaptive_opt_in(tmp_path: Path) -> None:
+    config = RunConfig(
+        start_url="http://127.0.0.1:8000/",
+        output_dir=tmp_path / "adaptive-readiness-default",
+        robust_readiness=True,
+    )
+    assert config.readiness_strategy == "fixed"
+    assert config.model_copy(update={"readiness_strategy": "adaptive"}).readiness_strategy == "adaptive"

@@ -361,15 +361,27 @@ class NetworkRecorder:
         source: Page | BrowserContext,
         config: RunConfig,
         resource_budget: ResourceBudget,
+        resource_spider: TypedResourceSpider | None = None,
+        run_started_monotonic: float | None = None,
     ):
         self.events: list[NetworkEvent] = []
         self.config = config
-        self.spider = TypedResourceSpider(
+        self.run_started_monotonic = run_started_monotonic or time.monotonic()
+        self.spider = resource_spider or TypedResourceSpider(
             config.start_url,
             config.origin_aliases,
             resource_budget,
             config.max_resource_depth,
             config.max_resource_body_bytes,
+            config.resource_frontier_policy,
+            config.resource_random_seed,
+            {
+                "document": config.max_resource_document_fetches,
+                "script": config.max_resource_script_fetches,
+                "stylesheet": config.max_resource_stylesheet_fetches,
+                "other_asset": config.max_resource_asset_fetches,
+            },
+            config.javascript_reference_parser,
         )
         self.request_count = 0
         source.on("response", self._response)
@@ -393,14 +405,17 @@ class NetworkRecorder:
                 resource_type=request.resource_type,
                 parameter_names=parameter_names,
                 body_encoding=body_encoding,
+                elapsed_ms=int((time.monotonic() - self.run_started_monotonic) * 1_000),
             )
         )
         content_type = response.headers.get("content-type", "")
-        if self.config.typed_resource_spider and request.resource_type in {
-            "document", "stylesheet", "script", "manifest"
-        }:
+        if self.config.typed_resource_spider and (
+            request.resource_type in {"document", "stylesheet", "script", "manifest"}
+            or request.resource_type == "image" and "image/svg+xml" in content_type.lower()
+        ):
             media = content_type.lower()
-            if any(kind in media for kind in ("html", "css", "javascript", "ecmascript")):
+            is_robots = "text/plain" in media and "robots.txt" in urlsplit(response.url).path.lower()
+            if is_robots or any(kind in media for kind in ("html", "css", "javascript", "ecmascript", "manifest+json", "image/svg+xml", "application/xml")):
                 try:
                     body_size = int(response.headers.get("content-length", "0") or 0)
                     # Response.body() is fully buffered by Playwright before
@@ -442,6 +457,7 @@ class NetworkRecorder:
                 failure=compact_text(str(request.failure or "request failed"), 200),
                 parameter_names=parameter_names,
                 body_encoding=body_encoding,
+                elapsed_ms=int((time.monotonic() - self.run_started_monotonic) * 1_000),
             )
         )
 
@@ -451,7 +467,9 @@ class NetworkRecorder:
         return current
 
     def drain_resources(self, request_context: Any) -> list[ResourceEvidence]:
-        records = self.spider.fetch_pending(request_context)
+        records = self.spider.fetch_pending(
+            request_context, self.config.max_resource_fetches_per_observation
+        )
         return [
             ResourceEvidence.model_validate(
                 item
@@ -501,11 +519,26 @@ def request_structure(
 
 class BrowserSession:
     def __init__(
-        self, browser: Browser, config: RunConfig, resource_budget: ResourceBudget | None = None
+        self,
+        browser: Browser,
+        config: RunConfig,
+        resource_budget: ResourceBudget | None = None,
+        resource_spider: TypedResourceSpider | None = None,
+        run_started_monotonic: float | None = None,
     ):
         self.browser = browser
         self.config = config
-        self.resource_budget = resource_budget or ResourceBudget(config.max_resource_fetches)
+        self.resource_budget = resource_budget or ResourceBudget(
+            config.max_resource_fetches,
+            {
+                "document": config.max_resource_document_fetches,
+                "script": config.max_resource_script_fetches,
+                "stylesheet": config.max_resource_stylesheet_fetches,
+                "other_asset": config.max_resource_asset_fetches,
+            },
+        )
+        self.resource_spider = resource_spider
+        self.run_started_monotonic = run_started_monotonic or time.monotonic()
         self.context: BrowserContext | None = None
         self.page: Page | None = None
         self.network: NetworkRecorder | None = None
@@ -519,7 +552,13 @@ class BrowserSession:
 
     def __enter__(self) -> "BrowserSession":
         self.context = self.browser.new_context()
-        self.network = NetworkRecorder(self.context, self.config, self.resource_budget)
+        self.network = NetworkRecorder(
+            self.context,
+            self.config,
+            self.resource_budget,
+            self.resource_spider,
+            self.run_started_monotonic,
+        )
         self.context.on("page", self._attach_page)
         self.page = self.context.new_page()
         self._attach_page(self.page)
@@ -646,12 +685,23 @@ class BrowserSession:
                 stable_samples = stable_samples + 1 if stable else 1
                 refresh_wait = (sample.meta_refresh_delay_ms or 0) + 250
                 if sample.main_enabled_control_count == 0:
-                    minimum_wait = max(
-                        self.config.idle_page_wait_ms
-                        if sample.script_count
-                        else self.config.passive_page_wait_ms,
-                        refresh_wait,
-                    )
+                    if self.config.readiness_strategy == "adaptive" and sample.script_count:
+                        mutation_active = (
+                            prior_mutations >= 0
+                            and sample.mutation_count > prior_mutations
+                        )
+                        hydration_window = 1_000 if mutation_active else 800
+                        minimum_wait = max(
+                            min(self.config.idle_page_wait_ms, hydration_window),
+                            refresh_wait,
+                        )
+                    else:
+                        minimum_wait = max(
+                            self.config.idle_page_wait_ms
+                            if sample.script_count
+                            else self.config.passive_page_wait_ms,
+                            refresh_wait,
+                        )
                 else:
                     minimum_wait = max(self.config.readiness_poll_ms * 3, refresh_wait)
                 if stable_samples >= 3 and elapsed_ms >= minimum_wait:
@@ -1162,7 +1212,35 @@ class Explorer:
         self.started_monotonic = time.monotonic()
         self.prior_elapsed = 0.0
         self.sequence = 0
-        self.resource_budget = ResourceBudget(config.max_resource_fetches)
+        self.resource_budget = ResourceBudget(
+            config.max_resource_fetches,
+            {
+                "document": config.max_resource_document_fetches,
+                "script": config.max_resource_script_fetches,
+                "stylesheet": config.max_resource_stylesheet_fetches,
+                "other_asset": config.max_resource_asset_fetches,
+            },
+        )
+        self.resource_spider = (
+            TypedResourceSpider(
+                config.start_url,
+                config.origin_aliases,
+                self.resource_budget,
+                config.max_resource_depth,
+                config.max_resource_body_bytes,
+                config.resource_frontier_policy,
+                config.resource_random_seed,
+                {
+                    "document": config.max_resource_document_fetches,
+                    "script": config.max_resource_script_fetches,
+                    "stylesheet": config.max_resource_stylesheet_fetches,
+                    "other_asset": config.max_resource_asset_fetches,
+                },
+                config.javascript_reference_parser,
+            )
+            if config.typed_resource_spider and config.share_resource_frontier
+            else None
+        )
         self.frontier: list[FrontierItem] = []
         self.tried: set[str] = set()
         self._seen_control_shapes: set[str] = set()
@@ -1197,6 +1275,15 @@ class Explorer:
             data["resume_from"] = str(data["resume_from"])
         return data
 
+    def _browser_session(self, browser: Browser) -> BrowserSession:
+        return BrowserSession(
+            browser,
+            self.config,
+            self.resource_budget,
+            self.resource_spider,
+            self.started_monotonic,
+        )
+
     def _revision(self) -> str:
         return code_revision(self.repository_root)
 
@@ -1224,6 +1311,59 @@ class Explorer:
             <= self.config.max_browser_actions
         )
 
+    def _replay_candidates(self) -> list[Transition]:
+        candidates: list[Transition] = []
+        seen_destinations: set[str] = set()
+        for transition in self.artifact.transitions:
+            if transition.status == EvidenceStatus.REPLAY_VALIDATED:
+                continue
+            result = self._observation_by_id(transition.result_observation_id or "")
+            if result is None:
+                continue
+            destination = digest(
+                [result.url, result.group_signature, transition.action.interaction], 24
+            )
+            if destination in seen_destinations:
+                continue
+            seen_destinations.add(destination)
+            candidates.append(transition)
+        return candidates
+
+    def _current_replay_reserve(self) -> tuple[float, int]:
+        if self.config.budget_allocation_strategy == "fixed":
+            return self.config.replay_reserve_fraction, 0
+        candidates = self._replay_candidates()
+        if not candidates:
+            return 0.0, 0
+        reserve_fraction = min(
+            self.config.replay_reserve_fraction,
+            max(0.05, 0.025 * len(candidates)),
+        )
+        action_cap = int(self.config.max_browser_actions * self.config.replay_reserve_fraction)
+        estimated_actions = 0
+        for transition in sorted(
+            candidates,
+            key=lambda item: (1 + self._path_action_cost(item.workflow_path), item.id),
+        ):
+            cost = 1 + self._path_action_cost(transition.workflow_path)
+            if estimated_actions + cost > action_cap:
+                break
+            estimated_actions += cost
+        return reserve_fraction, estimated_actions
+
+    def _exploration_deadline(self) -> float:
+        reserve_fraction, _ = self._current_replay_reserve()
+        return self.config.max_seconds * (1.0 - reserve_fraction)
+
+    def _fits_exploration_action_budget(self, additional_actions: int) -> bool:
+        if self.config.budget_allocation_strategy == "fixed":
+            return self._fits_action_budget(additional_actions)
+        _, reserve = self._current_replay_reserve()
+        return (
+            self.artifact.metrics.browser_actions + additional_actions + reserve
+            <= self.config.max_browser_actions
+        )
+
     def _next_sequence(self) -> int:
         self.sequence += 1
         return self.sequence
@@ -1243,7 +1383,7 @@ class Explorer:
             return
         self.artifact.resource_evidence.extend(records)
         self.artifact.metrics.resource_references_discovered = len(
-            {item.url for item in self.artifact.resource_evidence}
+            {item.url for item in self.artifact.resource_evidence if item.url}
         )
         attempts = sum(item.status in {"fetched", "failed"} for item in records)
         self.artifact.metrics.resource_fetches_attempted += attempts
@@ -1251,6 +1391,27 @@ class Explorer:
         self.artifact.metrics.resource_fetch_failures += sum(item.status == "failed" for item in records)
         self.artifact.metrics.resource_fetch_budget_exhausted += sum(
             item.status == "budget_limited" for item in records
+        )
+        self.artifact.metrics.resource_fetch_class_budget_exhausted += sum(
+            item.status == "class_budget_limited" for item in records
+        )
+        self.artifact.metrics.resource_new_references += sum(
+            item.new_references or 0 for item in records
+        )
+        self.artifact.metrics.resource_responses_with_body += sum(
+            item.new_references is not None for item in records
+        )
+        self.artifact.metrics.resource_references_extracted += sum(
+            item.response_reference_count or 0 for item in records
+        )
+        self.artifact.metrics.resource_references_queued += sum(
+            item.queued_references or 0 for item in records
+        )
+        self.artifact.metrics.resource_references_excluded += sum(
+            item.excluded_references or 0 for item in records
+        )
+        self.artifact.metrics.resource_unresolved_candidates += sum(
+            item.status == "unresolved_candidate" for item in records
         )
 
     def _account_readiness(self, readiness: ReadinessEvidence) -> None:
@@ -1304,6 +1465,10 @@ class Explorer:
             try:
                 if self.config.resume_from:
                     self._load_checkpoint(self.config.resume_from)
+                    if self.resource_spider:
+                        self.resource_spider.restore_from_evidence(
+                            [item.model_dump(mode="json") for item in self.artifact.resource_evidence]
+                        )
                 else:
                     self._initialize(browser)
                 self._explore(browser)
@@ -1315,7 +1480,7 @@ class Explorer:
         return self.artifact
 
     def _initialize(self, browser: Browser) -> None:
-        with BrowserSession(browser, self.config, self.resource_budget) as session:
+        with self._browser_session(browser) as session:
             self._navigate_start(session, "initial")
             observation = session.observe(self._next_sequence())
         self._record_observation(observation, [])
@@ -1507,16 +1672,15 @@ class Explorer:
         if self.config.exploration_mode == "persistent":
             self._explore_persistent(browser)
             return
-        exploration_deadline = self.config.max_seconds * (1.0 - self.config.replay_reserve_fraction)
         while self.frontier:
-            if self._elapsed() >= exploration_deadline:
+            if self._elapsed() >= self._exploration_deadline():
                 break
             if len(self.artifact.transitions) >= self.config.max_transitions:
                 break
             if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
                 break
             item = self.frontier.pop(0)
-            if not self._fits_action_budget(
+            if not self._fits_exploration_action_budget(
                 1 + self._path_action_cost(item.path) + self._descriptor_action_cost(item.action)
             ):
                 self.frontier.insert(0, item)
@@ -1525,8 +1689,7 @@ class Explorer:
             self.save_checkpoint()
 
     def _explore_persistent(self, browser: Browser) -> None:
-        exploration_deadline = self.config.max_seconds * (1.0 - self.config.replay_reserve_fraction)
-        with BrowserSession(browser, self.config, self.resource_budget) as session:
+        with self._browser_session(browser) as session:
             self._navigate_start(session, "persistent_restore")
             live = session.observe(self._next_sequence())
             live_path: list[ActionDescriptor] = []
@@ -1535,7 +1698,7 @@ class Explorer:
             self._record_observation(live, [])
             self._enqueue(live, [])
             while self.frontier:
-                if self._elapsed() >= exploration_deadline:
+                if self._elapsed() >= self._exploration_deadline():
                     break
                 if len(self.artifact.transitions) >= self.config.max_transitions:
                     break
@@ -1561,7 +1724,7 @@ class Explorer:
                 required_actions = self._descriptor_action_cost(item.action)
                 if not local:
                     required_actions += 1 + self._path_action_cost(item.path)
-                if not self._fits_action_budget(required_actions):
+                if not self._fits_exploration_action_budget(required_actions):
                     self.frontier.insert(local_index if local_index is not None else 0, item)
                     break
                 updated = self._attempt_frontier(
@@ -1597,7 +1760,7 @@ class Explorer:
         manager = (
             nullcontext(persistent_session)
             if persistent_session is not None
-            else BrowserSession(browser, self.config, self.resource_budget)
+            else self._browser_session(browser)
         )
         with manager as session:
             prerequisite_network: list[PrerequisiteStepEvidence] = []
@@ -2084,7 +2247,7 @@ class Explorer:
             contrast_final = final.model_copy(update={"input_plan_ref": contrast_ref})
             contrast_path = list(transition.workflow_path[:-1]) + [contrast_final]
             input_plan_refs = [final.input_plan_ref or "", contrast_ref]
-            with BrowserSession(browser, self.config, self.resource_budget) as session:
+            with self._browser_session(browser) as session:
                 browser_actions += session.goto_start()
                 self.artifact.metrics.navigation_requests += 1
                 self.artifact.metrics.root_reloads += 1
@@ -2225,7 +2388,7 @@ class Explorer:
         browser_actions = 0
         replay_network: list[NetworkEvent] = []
         try:
-            with BrowserSession(browser, self.config, self.resource_budget) as session:
+            with self._browser_session(browser) as session:
                 browser_actions += session.goto_start()
                 self.artifact.metrics.navigation_requests += 1
                 self.artifact.metrics.root_reloads += 1
