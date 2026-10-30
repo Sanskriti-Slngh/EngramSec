@@ -91,6 +91,12 @@ class RunConfig(BaseModel):
     budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"
     replay_policy: Literal["shallow", "diverse"] = "shallow"
     state_reuse: Literal["root", "prefix"] = "root"
+    # Optional discovery changes (defaults keep the frozen baseline behavior).
+    resource_allocation: Literal["class_caps", "shared_http"] = "class_caps"
+    passive_document_http_reserve: int | None = Field(default=None, ge=0, le=100_000)
+    max_passive_document_fetches: int | None = Field(default=None, ge=0, le=100_000)
+    html_extraction: Literal["baseline", "extended"] = "baseline"
+    max_speculative_fetches: int = Field(default=0, ge=0, le=10_000)
     zap_evidence_path: Path | None = None
     zap_source_origin: str | None = None
     max_total_http_requests: int | None = Field(default=None, ge=1, le=100_000)
@@ -99,6 +105,11 @@ class RunConfig(BaseModel):
     def paired_search_probes(self) -> "RunConfig":
         if (self.zap_evidence_path is None) != (self.zap_source_origin is None):
             raise ValueError("ZAP evidence and explicit source origin must be supplied together")
+        if self.resource_allocation == "shared_http" and (
+                self.max_total_http_requests is None or not self.typed_resource_spider):
+            raise ValueError("shared_http allocation requires the typed-resource spider and a total HTTP budget")
+        if self.max_speculative_fetches and self.max_total_http_requests is None:
+            raise ValueError("speculative fetches require a total HTTP budget")
         if self.zap_evidence_path and (not self.typed_resource_spider or not self.share_resource_frontier):
             raise ValueError("ZAP seeds require the shared typed-resource spider")
         probes = (self.search_probe_primary, self.search_probe_contrast)
@@ -264,7 +275,7 @@ class NetworkEvent(BaseModel):
 class ResourceEvidence(BaseModel):
     evidence_id: str = ""
     url: str | None
-    kind: Literal["navigation", "asset", "api"]
+    kind: Literal["navigation", "asset", "api", "form_action", "ping", "security_report"]
     source_type: str
     source_url: str
     source: str
@@ -285,6 +296,8 @@ class ResourceEvidence(BaseModel):
     excluded_references: int | None = None
     redirected_to: str | None = None
     error: str | None = None
+    channel: str | None = None
+    method: str | None = None
 
 
 class ExternalDiscoveryEvidence(BaseModel):
@@ -540,6 +553,10 @@ class RunMetrics(BaseModel):
     history_returns: int = 0
     history_return_attempts: int = 0
     history_return_rejected: int = 0
+    passive_document_fetches: int = 0
+    speculative_fetches: int = 0
+    observed_only_request_surfaces: int = 0
+    effective_resource_budgets: dict[str, int | float | str | None] = Field(default_factory=dict)
 
 
 class RunArtifact(BaseModel):

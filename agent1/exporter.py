@@ -15,6 +15,79 @@ def _slug(value: str) -> str:
     return "n_" + re.sub(r"[^A-Za-z0-9_]", "_", value)[:80]
 
 
+SURFACE_OUTCOMES = ("successful_resource", "sent_non_2xx", "sent_no_response", "observed_not_sent")
+
+
+def build_request_surfaces(artifact: RunArtifact) -> list[dict[str, Any]]:
+    """Request surfaces keyed by method, path and parameter names (no values).
+
+    Outcomes are deliberately distinct: a request the browser sent that was
+    answered 405 is a *sent* surface, not a fetched resource and not a workflow.
+    A workflow is verified only by an independent replay of a UI transition.
+    """
+    surfaces: dict[tuple[str, str, tuple[str, ...]], dict[str, Any]] = {}
+
+    def entry(method: str, url: str, names: list[str] | tuple[str, ...]) -> dict[str, Any]:
+        parts = urlsplit(url)
+        path_url = f"{parts.scheme}://{parts.netloc}{parts.path or '/'}"
+        key = (method.upper(), path_url, tuple(sorted(set(names))))
+        return surfaces.setdefault(key, {
+            "method": key[0], "url": path_url, "parameter_names": list(key[2]),
+            "sent_by": set(), "statuses": set(), "observed_as": set(), "in_replay_validated_workflow": False,
+        })
+
+    def sent(event: Any, channel: str) -> None:
+        names = event.parameter_names or [k for k, _ in parse_qsl(urlsplit(event.url).query, keep_blank_values=True)]
+        item = entry(event.method, event.url, names)
+        item["sent_by"].add(channel)
+        item["statuses"].add(event.status)
+
+    for nav in artifact.navigation_evidence:
+        for event in nav.network:
+            sent(event, f"browser_{nav.reason}")
+    for transition in artifact.transitions:
+        for event in transition.network:
+            sent(event, "browser_action")
+        for step in transition.prerequisite_network:
+            for event in step.network:
+                sent(event, "browser_restoration")
+    validated = {item.transition_id for item in artifact.replays if item.status == EvidenceStatus.REPLAY_VALIDATED}
+    for replay in artifact.replays:
+        for event in replay.network:
+            sent(event, "replay")
+            if replay.transition_id in validated:
+                entry(event.method, event.url, event.parameter_names)["in_replay_validated_workflow"] = True
+    for item in artifact.resource_evidence:
+        if not item.url:
+            continue
+        names = [k for k, _ in parse_qsl(urlsplit(item.url).query, keep_blank_values=True)]
+        if item.status in {"fetched", "failed"}:
+            record = entry("GET", item.url, names)
+            record["sent_by"].add(f"spider_{item.channel or 'typed_resource'}")
+            record["statuses"].add(item.http_status)
+        else:
+            method = item.method or ("GET" if item.kind in {"navigation", "asset"} else "UNKNOWN")
+            entry(method, item.url, names)["observed_as"].add(f"{item.kind}:{item.queue_decision}")
+    result = []
+    for item in surfaces.values():
+        statuses = {status for status in item["statuses"] if status is not None}
+        if any(200 <= status < 300 for status in statuses):
+            outcome = "successful_resource"
+        elif statuses:
+            outcome = "sent_non_2xx"
+        elif item["sent_by"]:
+            outcome = "sent_no_response"
+        else:
+            outcome = "observed_not_sent"
+        result.append(item | {
+            "outcome": outcome,
+            "sent_by": sorted(item["sent_by"]),
+            "statuses": sorted(statuses),
+            "observed_as": sorted(item["observed_as"]),
+        })
+    return sorted(result, key=lambda x: (x["url"], x["method"], x["parameter_names"]))
+
+
 def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
     observations = {item.id: item for item in artifact.observations}
     state_nodes = []
@@ -256,6 +329,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
                 "replay_id": workflow.replay_id,
             }
         )
+    request_surfaces = build_request_surfaces(artifact)
     return {
         "schema_version": "graph-a-1.1",
         "run": {
@@ -294,6 +368,10 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
         "connection_evidence": [
             item.model_dump(mode="json") for item in artifact.connection_evidence
         ],
+        "request_surfaces": request_surfaces,
+        "request_surface_summary": {
+            outcome: sum(item["outcome"] == outcome for item in request_surfaces) for outcome in SURFACE_OUTCOMES
+        } | {"total": len(request_surfaces)},
         "notes": artifact.notes,
     }
 

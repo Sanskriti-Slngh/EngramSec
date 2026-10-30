@@ -49,9 +49,19 @@ class ResourceReference:
     source: str
     relation: str = ""
     confidence: str = "observed_literal"
+    method: str | None = None
 
 
-def _normalized(raw: str, base: str, *, kind: str, source_type: str, source: str, relation: str = "") -> ResourceReference | None:
+# Confidence labels that are recorded but never fetched through the explicit
+# reference channels; they need an explicitly configured speculative budget.
+SPECULATIVE_CONFIDENCE = {"speculative", "conditional_comment"}
+# Request surfaces that are observed only: never fetched by the passive spider,
+# and never re-issued with a substitute method.
+OBSERVED_ONLY_KINDS = {"api", "form_action", "ping", "security_report"}
+
+
+def _normalized(raw: str, base: str, *, kind: str, source_type: str, source: str, relation: str = "",
+                confidence: str = "observed_literal", method: str | None = None) -> ResourceReference | None:
     raw = (raw or "").strip().strip("\"'")
     if not raw or raw.startswith(("#", "data:", "blob:", "javascript:", "mailto:", "tel:", "about:")):
         return None
@@ -63,25 +73,185 @@ def _normalized(raw: str, base: str, *, kind: str, source_type: str, source: str
         normalized = urlunsplit((parts.scheme.lower(), parts.netloc.lower(), parts.path or "/", parts.query, ""))
     except (ValueError, TypeError):
         return None
-    return ResourceReference(normalized, kind, source_type, source[:200], relation[:80])
+    return ResourceReference(normalized, kind, source_type, source[:200], relation[:80], confidence, method)
+
+
+# Conservative URL-like token: absolute/protocol-relative URLs, or root/dot
+# relative paths. Path-like tokens must end in a file extension or "/" so that
+# ordinary prose ("and/or", "1/2") is not treated as a URL.
+_URL_TOKEN = re.compile(r"""(?<![\w@.:/-])((?:https?:)?//[A-Za-z0-9.-]+(?::\d+)?(?:/[^\s"'<>()\[\]{}`,;]*)?|\.{0,2}/[A-Za-z0-9_~%-][^\s"'<>()\[\]{}`,;]*)""")
+_PATH_SHAPE = re.compile(r"^(?:\.{0,2}/)(?:[A-Za-z0-9_~%.-]+/)*(?:[A-Za-z0-9_~%-][A-Za-z0-9_~%.-]*\.[A-Za-z0-9]{1,6}|[A-Za-z0-9_~%.-]*/)$")
+MAX_SPECULATIVE_PER_SOURCE = 32
+
+
+def _url_like(token: str) -> bool:
+    token = token.rstrip(".")
+    if not 2 < len(token) <= 300 or any(ch.isspace() for ch in token):
+        return False
+    if token.startswith(("http://", "https://", "//")):
+        return True
+    return bool(_PATH_SHAPE.match(token)) and token not in {"./", "../", "/"}
+
+
+def speculative_text_candidates(text: str, base: str, *, source_type: str, source: str) -> list[ResourceReference]:
+    """Low-confidence URL-like tokens from prose, comments or non-URL values.
+
+    They are evidence of a possible reference, not a reference: callers record
+    them and fetch them only under an explicit speculative budget."""
+    result: list[ResourceReference] = []
+    for match in _URL_TOKEN.finditer((text or "")[:200_000]):
+        token = match.group(1).rstrip(".")
+        if _url_like(token):
+            item = _normalized(token, base, kind="asset", source_type=source_type, source=source,
+                               relation="url-like-text", confidence="speculative")
+            if item:
+                result.append(item)
+        if len(result) >= MAX_SPECULATIVE_PER_SOURCE:
+            break
+    return result
+
+
+_CONDITIONAL_COMMENT = re.compile(r"^\s*\[if [^\]]{1,80}\]>(.*)<!\[endif\]\s*$", re.S | re.I)
+_CSP_REPORT_URI = re.compile(r"(?:^|;)\s*report-uri\s+([^;]+)", re.I)
+_DOCTYPE_SYSTEM = re.compile(r"""^doctype\s+\S+\s+(?:public\s+(["'])[^"']*\1\s+|system\s+)(["'])([^"']{1,500})\2""", re.I)
+# meta name/property values that are defined to carry a URL.
+URL_META_NAMES = {
+    "og:url", "og:image", "og:image:url", "og:image:secure_url", "og:video", "og:video:url", "og:audio",
+    "twitter:image", "twitter:image:src", "twitter:player", "msapplication-tileimage", "msapplication-config",
+    "msapplication-square70x70logo", "msapplication-square150x150logo", "msapplication-wide310x150logo",
+    "msapplication-square310x310logo", "msapplication-badge", "msapplication-notification",
+}
+# Additional standard or long-standing URL-bearing attributes (HTML Living
+# Standard, HTML 4.01 and widely implemented legacy attributes).
+EXTENDED_URL_ATTRIBUTES: dict[str, tuple[tuple[str, str], ...]] = {
+    "body": (("background", "asset"),),
+    "td": (("background", "asset"),), "th": (("background", "asset"),), "tr": (("background", "asset"),),
+    "img": (("lowsrc", "asset"), ("dynsrc", "asset"), ("longdesc", "navigation")),
+    "iframe": (("longdesc", "navigation"),), "frame": (("longdesc", "navigation"),),
+    "object": (("codebase", "asset"), ("archive", "asset"), ("classid", "asset")),
+    "html": (("manifest", "asset"),),
+    "script": (("xlink:href", "asset"), ("href", "asset")),
+    "import": (("implementation", "asset"),),
+    "head": (("profile", "asset"),),
+    "command": (("icon", "asset"),), "menuitem": (("icon", "asset"),),
+    "input": (("lowsrc", "asset"), ("dynsrc", "asset")),
+    "a": (("xlink:href", "navigation"),),
+    "video": (("src", "asset"),),
+}
+MAX_NESTED_DOCUMENT_DEPTH = 2
 
 
 class _DocumentReferences(HTMLParser):
-    def __init__(self, response_url: str):
+    def __init__(self, response_url: str, *, extended: bool = False, nesting: int = 0,
+                 base_url: str | None = None, source_prefix: str = "", confidence: str = "observed_literal"):
         super().__init__(convert_charrefs=True)
         self.response_url = response_url
-        self.base_url = response_url
+        self.base_url = base_url or response_url
         self.references: list[ResourceReference] = []
         self._base_seen = False
+        self.extended = extended
+        self.nesting = nesting
+        self.source_prefix = source_prefix
+        self.confidence = confidence
+        self._form_method = "GET"
+        self._speculative = 0
         self._raw_script = False
         self._raw_style = False
 
-    def _add(self, raw: str, kind: str, tag: str, attr: str, relation: str = "") -> None:
+    def _add(self, raw: str, kind: str, tag: str, attr: str, relation: str = "", method: str | None = None) -> None:
         if len(self.references) >= MAX_REFERENCES_PER_RESPONSE:
             return
-        item = _normalized(raw, self.base_url, kind=kind, source_type="html", source=f"<{tag}>[{attr}]", relation=relation)
+        item = _normalized(raw, self.base_url, kind=kind, source_type="html", source=f"{self.source_prefix}<{tag}>[{attr}]",
+                           relation=relation, confidence=self.confidence, method=method)
         if item:
             self.references.append(item)
+
+    def _speculate(self, text: str, source: str) -> None:
+        if not self.extended or self._speculative >= MAX_SPECULATIVE_PER_SOURCE:
+            return
+        for item in speculative_text_candidates(text, self.base_url, source_type="html-text", source=self.source_prefix + source):
+            if len(self.references) >= MAX_REFERENCES_PER_RESPONSE or self._speculative >= MAX_SPECULATIVE_PER_SOURCE:
+                return
+            self._speculative += 1
+            self.references.append(item)
+
+    def _nested(self, markup: str, source: str, confidence: str) -> None:
+        if self.nesting >= MAX_NESTED_DOCUMENT_DEPTH:
+            return
+        parser = _DocumentReferences(self.response_url, extended=True, nesting=self.nesting + 1,
+                                     base_url=self.base_url, source_prefix=f"{self.source_prefix}{source}>",
+                                     confidence=confidence)
+        parser.feed(markup[:MAX_TEXT_BYTES])
+        parser.close()
+        for item in parser.references:
+            if len(self.references) >= MAX_REFERENCES_PER_RESPONSE:
+                return
+            self.references.append(item)
+
+    def _extended_starttag(self, tag: str, values: dict[str, str], rels: set[str]) -> bool:
+        """Standards-based additions. Returns True when the tag's default
+        attribute handling must be skipped (re-typed request surfaces)."""
+        for attr, kind in EXTENDED_URL_ATTRIBUTES.get(tag, ()):
+            value = values.get(attr)
+            if value and not (tag == "video" and attr == "src"):
+                for raw in (value.split() if attr in {"archive"} else [value]):
+                    self._add(raw, kind, tag, attr, "extended")
+        if tag in {"a", "area"} and values.get("ping"):
+            for raw in values["ping"].split()[:8]:
+                # Hyperlink-auditing beacons are POSTed by the browser.
+                self._add(raw, "ping", tag, "ping", "hyperlink-auditing", method="POST")
+        if tag == "base" and values.get("href"):
+            self._add(values["href"], "navigation", tag, "href", "base")
+        if tag == "form":
+            self._form_method = (values.get("method") or "GET").upper()
+            if values.get("action"):
+                self._add(values["action"], "form_action", tag, "action", "form", method=self._form_method)
+            return True
+        if tag in {"input", "button"} and values.get("formaction"):
+            method = (values.get("formmethod") or self._form_method or "GET").upper()
+            self._add(values["formaction"], "form_action", tag, "formaction", "form", method=method)
+            if tag == "input" and values.get("src"):
+                self._add(values["src"], "asset", tag, "src", "")
+            return True
+        if tag == "isindex" and values.get("action"):
+            self._add(values["action"], "form_action", tag, "action", "isindex", method="GET")
+        if tag == "iframe" and values.get("srcdoc"):
+            # Per HTML, an iframe srcdoc document resolves URLs against the
+            # parent document's base URL.
+            self._nested(values["srcdoc"], "<iframe>[srcdoc]", self.confidence)
+        if tag == "meta":
+            name = (values.get("name") or values.get("property") or "").lower()
+            equiv = values.get("http-equiv", "").lower()
+            content = values.get("content", "")
+            if equiv in {"content-security-policy", "content-security-policy-report-only"}:
+                for match in _CSP_REPORT_URI.finditer(content):
+                    for raw in match.group(1).split()[:4]:
+                        self._add(raw, "security_report", tag, "content", "csp-report-uri", method="POST")
+            elif name in URL_META_NAMES and name != "msapplication-config" and content:
+                self._add(content, "asset", tag, "content", name)
+            elif content and equiv != "refresh" and name != "msapplication-config":
+                self._speculate(content, f"<meta>[content]")
+        for key, value in values.items():
+            if key.startswith("data-") and value:
+                self._speculate(value, f"<{tag}>[{key}]")
+        return False
+
+    def handle_comment(self, data: str) -> None:
+        if not self.extended:
+            return
+        match = _CONDITIONAL_COMMENT.match(data or "")
+        if match:
+            # Downlevel-hidden conditional comment: markup only legacy IE parses.
+            self._nested(match.group(1), "<!--[if]-->", "conditional_comment")
+        else:
+            self._speculate(data, "<!--comment-->")
+
+    def handle_decl(self, decl: str) -> None:
+        if not self.extended:
+            return
+        match = _DOCTYPE_SYSTEM.match(decl or "")
+        if match:
+            self._add(match.group(3), "asset", "!doctype", "system", "dtd")
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         values = {key.lower(): value or "" for key, value in attrs}
@@ -89,6 +259,8 @@ class _DocumentReferences(HTMLParser):
             self.base_url = urljoin(self.response_url, values["href"])
             self._base_seen = True
         rels = set(values.get("rel", "").lower().split())
+        if self.extended and self._extended_starttag(tag, values, rels):
+            return
         kind = "navigation" if tag in {"a", "area"} else "api" if tag == "form" else "asset"
         attrs_by_tag = {
             "a": ("href",), "area": ("href",), "link": ("href",),
@@ -139,17 +311,19 @@ class _DocumentReferences(HTMLParser):
 
     def handle_data(self, data: str) -> None:
         if self._raw_script:
-            for item in extract_script_references(data[:MAX_TEXT_BYTES], self.base_url):
+            for item in extract_script_references(data[:MAX_TEXT_BYTES], self.base_url, extended=self.extended):
                 if len(self.references) < MAX_REFERENCES_PER_RESPONSE:
                     self.references.append(item)
         elif self._raw_style:
             for item in extract_css_references(data[:MAX_TEXT_BYTES], self.base_url):
                 if len(self.references) < MAX_REFERENCES_PER_RESPONSE:
                     self.references.append(item)
+        elif data and data.strip():
+            self._speculate(data, "text")
 
 
-def extract_html_references(text: str, response_url: str) -> list[ResourceReference]:
-    parser = _DocumentReferences(response_url)
+def extract_html_references(text: str, response_url: str, *, extended: bool = False) -> list[ResourceReference]:
+    parser = _DocumentReferences(response_url, extended=extended)
     parser.feed((text or "")[:MAX_TEXT_BYTES])
     parser.close()
     return _dedupe(parser.references)
@@ -170,7 +344,7 @@ def extract_css_references(text: str, response_url: str) -> list[ResourceReferen
     return _dedupe(values)
 
 
-def extract_script_references(text: str, response_url: str, *, limit: int = 128) -> list[ResourceReference]:
+def extract_script_references(text: str, response_url: str, *, limit: int = 128, extended: bool = False) -> list[ResourceReference]:
     source = (text or "")[:MAX_TEXT_BYTES]
     parser = Parser(Language(tree_sitter_javascript.language()))
     root = parser.parse(source.encode("utf-8", errors="replace")).root_node
@@ -238,6 +412,23 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128)
                         if tag:
                             element_types[node_text(name)] = tag.lower()
 
+    methods: dict[tuple[str, str], str] = {}
+
+    def request_method(options: object | None) -> str:
+        """HTTP method from a fetch()/Request() init object; GET when absent."""
+        if options is None:
+            return "GET"
+        if getattr(options, "type", "") != "object":
+            return "UNKNOWN"
+        for pair in children(options):
+            if getattr(pair, "type", "") != "pair":
+                continue
+            key = node_text(getattr(pair, "child_by_field_name")("key")).strip("'\"")
+            if key == "method":
+                value = literal(getattr(pair, "child_by_field_name")("value"))
+                return value.upper() if value else "UNKNOWN"
+        return "GET"
+
     candidates: list[tuple[str, str, str]] = []
     tags_by_attr = {
         "src": {"script", "img", "iframe", "frame", "audio", "video", "source", "track", "embed"},
@@ -270,10 +461,14 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128)
                 if raw:
                     candidate_kind = "navigation" if name in {"window.open", "open", "location.assign", "location.replace"} else "api"
                     candidates.append((raw, candidate_kind, f"call:{name}"))
+                    if candidate_kind == "api":
+                        methods[(raw, f"call:{name}")] = request_method(arg_nodes[1] if len(arg_nodes) > 1 else None)
             elif name.endswith(".open") and len(arg_nodes) >= 2:
                 raw = literal(arg_nodes[1])
                 if raw:
                     candidates.append((raw, "api", "call:xhr.open"))
+                    verb = literal(arg_nodes[0])
+                    methods[(raw, "call:xhr.open")] = verb.upper() if verb else "UNKNOWN"
             elif name.endswith(".setAttribute") and len(arg_nodes) >= 2:
                 attr, raw = literal(arg_nodes[0]), literal(arg_nodes[1])
                 receiver = node_text(getattr(fn, "child_by_field_name")("object"))
@@ -315,9 +510,33 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128)
 
     result: list[ResourceReference] = []
     for raw, ref_kind, evidence in candidates[:limit]:
-        item = _normalized(raw, response_url, kind=ref_kind, source_type="script-ast", source=evidence)
+        item = _normalized(raw, response_url, kind=ref_kind, source_type="script-ast", source=evidence,
+                           method=methods.get((raw, evidence)) if extended else None)
         if item:
             result.append(item)
+    if extended:
+        # Uncertain references beyond recognized sinks. A literal that is an
+        # argument of a request/navigation sink is never re-emitted here, so a
+        # POST endpoint cannot become a GET candidate.
+        sink_values = {raw for raw, _kind, _evidence in candidates}
+        speculative: list[tuple[str, str]] = []
+        for node in walk(root):
+            node_kind = getattr(node, "type", "")
+            if node_kind in {"string", "template_string"}:
+                value = literal(node)
+                if value and value not in sink_values and _url_like(value.strip()):
+                    speculative.append((value.strip(), "script-literal"))
+            elif node_kind == "comment":
+                for item in speculative_text_candidates(node_text(node), response_url, source_type="script-ast", source="script-comment"):
+                    result.append(item)
+        for name, value in constants.items():
+            if value not in sink_values and _url_like(value.strip()):
+                speculative.append((value.strip(), "script-constant"))
+        for raw, evidence in speculative[:MAX_SPECULATIVE_PER_SOURCE]:
+            item = _normalized(raw, response_url, kind="asset", source_type="script-ast", source=evidence,
+                               relation="url-like-literal", confidence="speculative")
+            if item:
+                result.append(item)
     return _dedupe(result)
 
 
@@ -431,10 +650,18 @@ def _walk_nodes(node: object):
         stack.extend(reversed(getattr(current, "children", [])))
 
 
-def extract_header_references(headers: dict[str, str], response_url: str) -> list[ResourceReference]:
+def extract_header_references(headers: dict[str, str], response_url: str, *, extended: bool = False) -> list[ResourceReference]:
     values: list[ResourceReference] = []
     for key, header_value in headers.items():
         key = key.lower()
+        if extended and key in {"content-security-policy", "content-security-policy-report-only"}:
+            for match in _CSP_REPORT_URI.finditer(header_value[:16_000]):
+                for raw in match.group(1).split()[:4]:
+                    item = _normalized(raw, response_url, kind="security_report", source_type="header",
+                                       source="Content-Security-Policy", relation="csp-report-uri", method="POST")
+                    if item:
+                        values.append(item)
+            continue
         if key == "location":
             item = _normalized(header_value, response_url, kind="navigation", source_type="header", source="Location")
             if item:
@@ -536,18 +763,20 @@ def extract_references(
     content_type: str,
     headers: dict[str, str] | None = None,
     javascript_parser: str = "ast",
+    extraction: str = "baseline",
 ) -> list[ResourceReference]:
     media = (content_type or "").lower().split(";", 1)[0].strip()
-    result = extract_header_references(headers or {}, response_url)
+    extended = extraction == "extended"
+    result = extract_header_references(headers or {}, response_url, extended=extended)
     if media in {"text/html", "application/xhtml+xml", "image/svg+xml"}:
-        result.extend(extract_html_references(text, response_url))
+        result.extend(extract_html_references(text, response_url, extended=extended))
     elif media == "text/css":
         result.extend(extract_css_references(text, response_url))
     elif "javascript" in media or media in {"application/ecmascript", "text/ecmascript"}:
         result.extend(
             _extract_script_references_regex(text, response_url)
             if javascript_parser == "legacy_regex"
-            else extract_script_references(text, response_url)
+            else extract_script_references(text, response_url, extended=extended)
         )
     elif media in {"application/manifest+json", "application/json"}:
         result.extend(extract_manifest_references(text, response_url))
@@ -611,7 +840,38 @@ class TypedResourceSpider:
         random_seed: int = 0,
         class_budgets: dict[str, int | None] | None = None,
         javascript_parser: str = "ast",
+        *,
+        extraction: str = "baseline",
+        allocation: str = "class_caps",
+        passive_document_limit: int | None = None,
+        passive_http_reserve: int = 0,
+        max_speculative_fetches: int = 0,
+        speculative_per_batch: int = 2,
+        dangerous_pattern: re.Pattern[str] | None = None,
     ):
+        if extraction not in {"baseline", "extended"}:
+            raise ValueError(f"unknown extraction mode: {extraction}")
+        if allocation not in {"class_caps", "shared_http"}:
+            raise ValueError(f"unknown resource allocation: {allocation}")
+        if allocation == "shared_http" and budget.http_budget is None:
+            raise ValueError("shared_http allocation requires a shared HTTP budget")
+        self.extraction = extraction
+        self.allocation = allocation
+        self.passive_document_limit = passive_document_limit
+        self.passive_http_reserve = passive_http_reserve
+        self.max_speculative_fetches = max_speculative_fetches
+        self.speculative_per_batch = speculative_per_batch
+        # Only the new, opt-in channels apply the path filter, so the frozen
+        # class-caps baseline keeps its historical behavior.
+        self.dangerous_pattern = dangerous_pattern if (allocation != "class_caps" or extraction != "baseline") else None
+        self.passive_attempted = 0
+        self.speculative_attempted = 0
+        self.speculative_queue: list[tuple[ResourceReference, str, int]] = []
+        # Under shared_http, depth is the minimum over discovery paths: a
+        # reference first seen on a long chain (and capped or queued deep) is
+        # re-admitted when it is rediscovered closer to the observed browser state.
+        self.track_min_depth = allocation == "shared_http"
+        self._capped: dict[str, tuple[ResourceReference, str, int]] = {}
         self.start_url = start_url
         self.aliases = aliases
         self.budget = budget
@@ -684,6 +944,15 @@ class TypedResourceSpider:
                 confidence=str(item.get("confidence", "observed_literal")),
             )
             status = item.get("status")
+            channel = item.get("channel") or "typed_resource"
+            if status in {"fetched", "failed"} and channel != "typed_resource":
+                self.seen.add(safe_url)
+                self.fetched.add(safe_url)
+                if channel == "passive_document":
+                    self.passive_attempted += 1
+                elif channel == "speculative":
+                    self.speculative_attempted += 1
+                continue
             if status in {"fetched", "failed"}:
                 fetched_urls.add(safe_url)
                 self.seen.add(safe_url)
@@ -711,6 +980,8 @@ class TypedResourceSpider:
         self.budget.attempted_by_class.clear()
         class_urls: set[tuple[str, str]] = set()
         for item in items:
+            if (item.get("channel") or "typed_resource") != "typed_resource":
+                continue
             if item.get("status") in {"fetched", "failed"} and isinstance(item.get("url"), str):
                 candidate = ResourceReference(
                     url=str(item["url"]), kind=str(item.get("kind", "asset")),
@@ -798,6 +1069,49 @@ class TypedResourceSpider:
             "queue_decision": status, "confidence": reference.confidence,
         })
 
+    def _decide(self, reference: ResourceReference, safe_url: str, duplicate: bool) -> tuple[str, str]:
+        """Evidence status and queue decision for a newly extracted reference."""
+        in_scope = allowed_origin(self.start_url, reference.url, self.aliases)
+        sensitive = any(SENSITIVE_QUERY_KEYS.search(key) for key, _ in parse_qsl(urlsplit(reference.url).query))
+        if not in_scope:
+            return "out_of_scope", "rejected_scope"
+        if sensitive:
+            return "sensitive_reference", "rejected_sensitive"
+        if reference.kind == "api":
+            return "discovered", "observed_only_api"
+        if reference.kind in OBSERVED_ONLY_KINDS:
+            return "discovered", f"observed_only_{reference.kind}"
+        if self.dangerous_pattern is not None and self.dangerous_pattern.search(urlsplit(reference.url).path):
+            return "discovered", "rejected_dangerous"
+        if duplicate or safe_url in self.seen:
+            return "discovered", "duplicate_candidate"
+        if reference.confidence in SPECULATIVE_CONFIDENCE:
+            return "discovered", "speculative_admitted" if self.max_speculative_fetches > 0 else "observed_only_speculative"
+        return "discovered", "admitted"
+
+    def _readmit_shallower(self, reference: ResourceReference, safe_url: str, source_url: str, depth: int) -> bool:
+        """Lower the depth of a known, never-attempted reference. Returns True if changed."""
+        if not self.track_min_depth or safe_url in self.fetched or depth > self.max_depth:
+            return False
+        capped = self._capped.get(safe_url)
+        if capped is not None and depth < capped[2]:
+            del self._capped[safe_url]
+            self.queue.append((capped[0], source_url, depth))
+            return True
+        for index, (queued, queued_source, queued_depth) in enumerate(self.queue):
+            if queued_depth > depth and _safe_resource_url(queued.url) == safe_url:
+                self.queue[index] = (queued, queued_source, depth)
+                return True
+        return False
+
+    def _admit(self, reference: ResourceReference, safe_url: str, decision: str, source_url: str, depth: int) -> None:
+        if decision == "admitted":
+            self.seen.add(safe_url)
+            self.queue.append((reference, source_url, depth))
+        elif decision == "speculative_admitted":
+            self.seen.add(safe_url)
+            self.speculative_queue.append((reference, source_url, depth))
+
     def observe_response(self, text: str, url: str, content_type: str, headers: dict[str, str]) -> None:
         media = (content_type or "").lower()
         if self.javascript_parser == "ast" and (
@@ -819,13 +1133,14 @@ class TypedResourceSpider:
                     "candidate_prefix": candidate["candidate_prefix"],
                 })
         for reference in extract_references(
-            text, url, content_type, headers, self.javascript_parser
+            text, url, content_type, headers, self.javascript_parser, self.extraction
         ):
             safe_url = _safe_resource_url(reference.url)
-            in_scope = allowed_origin(self.start_url, reference.url, self.aliases)
-            sensitive = any(SENSITIVE_QUERY_KEYS.search(key) for key, _ in parse_qsl(urlsplit(reference.url).query))
             duplicate = safe_url in self.discovered_urls
             self.discovered_urls.add(safe_url)
+            status, decision = self._decide(reference, safe_url, duplicate)
+            if decision == "duplicate_candidate" and self._readmit_shallower(reference, safe_url, url, 1):
+                decision = "readmitted_shallower"
             record: dict[str, object] = {
                 "url": safe_url,
                 "kind": reference.kind,
@@ -834,24 +1149,30 @@ class TypedResourceSpider:
                 "source": reference.source,
                 "relation": reference.relation,
                 "depth": 0,
-                "status": "discovered",
+                "status": status,
                 "confidence": reference.confidence,
+                "queue_decision": decision,
             }
-            if not in_scope:
-                record["status"] = "out_of_scope"
-                record["queue_decision"] = "rejected_scope"
-            elif sensitive:
-                record["status"] = "sensitive_reference"
-                record["queue_decision"] = "rejected_sensitive"
-            elif reference.kind == "api":
-                record["queue_decision"] = "observed_only_api"
-            elif duplicate or safe_url in self.seen:
-                record["queue_decision"] = "duplicate_candidate"
-            else:
-                record["queue_decision"] = "admitted"
-                self.seen.add(safe_url)
-                self.queue.append((reference, url, 1))
+            if reference.method:
+                record["method"] = reference.method
+            self._admit(reference, safe_url, decision, url, 1)
             self._record(record)
+
+    def _channel(self, reference: ResourceReference, candidate_class: str) -> str:
+        if (self.allocation == "shared_http" and candidate_class == "document"
+                and reference.kind in {"navigation", "asset"} and reference.confidence not in SPECULATIVE_CONFIDENCE):
+            return "passive_document"
+        return "typed_resource"
+
+    def _shared_http_available(self) -> bool:
+        """Passive channels together may use at most (limit - reserve) requests,
+        so browser, redirect, replay and typed-resource traffic always keep at
+        least `passive_http_reserve` of the shared budget."""
+        http = self.budget.http_budget
+        if http is None or not http.remaining():  # type: ignore[attr-defined]
+            return False
+        passive_used = http.by_source["passive_document"] + http.by_source["speculative_candidate"]  # type: ignore[attr-defined]
+        return passive_used < http.limit - self.passive_http_reserve  # type: ignore[attr-defined]
 
     def fetch_pending(
         self, request_context: object, max_fetches: int | None = None
@@ -866,123 +1187,170 @@ class TypedResourceSpider:
             if depth > self.max_depth:
                 self._update_unattempted_status(reference, source_url, depth, "depth_limited")
                 continue
-            if self.budget.attempted >= self.budget.limit:
-                self._update_unattempted_status(reference, source_url, depth, "budget_limited")
-                continue
-            if self.budget.http_budget is not None and not self.budget.http_budget.remaining():
-                self._update_unattempted_status(reference, source_url, depth, "budget_limited")
-                continue
-            if not self.budget.remaining(candidate_class):
-                self._update_unattempted_status(reference, source_url, depth, "class_budget_limited")
-                continue
-            if not allowed_origin(self.start_url, reference.url, self.aliases):
-                continue
-            if any(SENSITIVE_QUERY_KEYS.search(key) for key, _ in parse_qsl(urlsplit(reference.url).query)):
-                continue
-            if not self.budget.consume(candidate_class):
-                self._update_unattempted_status(reference, source_url, depth, "budget_limited")
-                continue
+            channel = self._channel(reference, candidate_class)
+            if channel == "passive_document":
+                # Safe, input-free same-origin GET documents draw on the shared
+                # HTTP budget (minus a reserve for browser and replay traffic)
+                # instead of the fixed document class cap.
+                if not allowed_origin(self.start_url, reference.url, self.aliases):
+                    continue
+                if (self.passive_document_limit is not None and self.passive_attempted >= self.passive_document_limit) \
+                        or not self._shared_http_available():
+                    self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                    continue
+                if not self.budget.http_budget.consume("passive_document"):  # type: ignore[union-attr]
+                    self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                    continue
+                self.passive_attempted += 1
+            else:
+                if self.budget.attempted >= self.budget.limit:
+                    self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                    continue
+                if self.budget.http_budget is not None and not self.budget.http_budget.remaining():
+                    self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                    continue
+                if not self.budget.remaining(candidate_class):
+                    self._update_unattempted_status(reference, source_url, depth, "class_budget_limited")
+                    continue
+                if not allowed_origin(self.start_url, reference.url, self.aliases):
+                    continue
+                if any(SENSITIVE_QUERY_KEYS.search(key) for key, _ in parse_qsl(urlsplit(reference.url).query)):
+                    continue
+                if not self.budget.consume(candidate_class):
+                    self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                    continue
             batch_attempts += 1
-            route_bucket = self._route_bucket(reference)
-            self.fetched.add(_safe_resource_url(reference.url))
-            self._fetched_routes.add(route_bucket)
-            self._fetched_classes.add(candidate_class)
-            try:
-                response = request_context.get(reference.url, timeout=5_000, max_redirects=0)  # type: ignore[attr-defined]
-                headers = {str(k).lower(): str(v) for k, v in response.headers.items()}
-                content_type = headers.get("content-type", "")
-                body_size = int(headers.get("content-length", "0") or 0)
-                # Playwright buffers response.body() as a whole.  Require a
-                # declared bounded length rather than pretending slicing the
-                # returned bytes bounds memory use.
-                body = (
-                    response.body()
-                    if 0 < body_size <= self.max_body_bytes
-                    else b""
-                )
-                charset_match = re.search(r"charset\s*=\s*['\"]?([^;\s'\"]+)", content_type, re.I)
-                encoding = charset_match.group(1) if charset_match else "utf-8"
-                try:
-                    text = body.decode(encoding, errors="replace")
-                except LookupError:
-                    text = body.decode("utf-8", errors="replace")
-                final_url = response.url
-                status = int(response.status)
-                location = headers.get("location")
-                redirect_target = urljoin(final_url, location) if location else None
-                record = {
-                    "url": _safe_resource_url(reference.url), "kind": reference.kind,
-                    "source_type": reference.source_type, "source_url": _safe_resource_url(source_url),
-                    "source": reference.source, "relation": reference.relation,
-                    "depth": depth, "status": "fetched" if status < 400 else "failed",
-                    "http_status": status, "content_type": content_type[:160],
-                    "redirected_to": _safe_resource_url(redirect_target) if redirect_target else None,
-                    "error": None if status < 400 else f"HTTP {status}",
-                }
-                if status < 400:
-                    discovered = extract_references(
-                        text, final_url, content_type, headers, self.javascript_parser
-                    )
-                    new_children = 0
-                    queued_children = 0
-                    excluded_children = 0
-                    for child in discovered:
-                        safe = _safe_resource_url(child.url)
-                        in_scope = allowed_origin(self.start_url, child.url, self.aliases)
-                        sensitive = any(SENSITIVE_QUERY_KEYS.search(key) for key, _ in parse_qsl(urlsplit(child.url).query))
-                        duplicate = safe in self.discovered_urls
-                        if not duplicate and in_scope:
-                            new_children += 1
-                            self.budget.new_references += 1
-                        self.discovered_urls.add(safe)
-                        queue_decision = "admitted"
-                        evidence_status = "discovered"
-                        if not in_scope:
-                            queue_decision, evidence_status = "rejected_scope", "out_of_scope"
-                            excluded_children += 1
-                        elif sensitive:
-                            queue_decision, evidence_status = "rejected_sensitive", "sensitive_reference"
-                            excluded_children += 1
-                        elif child.kind == "api":
-                            queue_decision = "observed_only_api"
-                            excluded_children += 1
-                        elif duplicate or safe in self.seen:
-                            queue_decision = "duplicate_candidate"
-                        else:
-                            self.seen.add(safe)
-                            queued_children += 1
-                        self._record({
-                            "url": safe, "kind": child.kind,
-                            "source_type": child.source_type,
-                            "source_url": _safe_resource_url(final_url),
-                            "source": child.source, "relation": child.relation,
-                            "depth": depth, "status": evidence_status,
-                            "queue_decision": queue_decision,
-                            "confidence": child.confidence,
-                        })
-                        if queue_decision == "admitted" and depth < self.max_depth:
-                            self.queue.append((child, final_url, depth + 1))
-                    self.budget.responses += 1
-                    class_yield = self._yield_by_class[candidate_class]
-                    class_yield[0] += new_children
-                    class_yield[1] += 1
-                    record["new_references"] = new_children
-                    record["candidate_class"] = candidate_class
-                    record["response_reference_count"] = len(discovered)
-                    record["queued_references"] = queued_children
-                    record["excluded_references"] = excluded_children
-                self._record(record)
-                fetched.append(record)
-            except Exception as exc:
-                record = {
-                "url": _safe_resource_url(reference.url), "kind": reference.kind,
-                "source_type": reference.source_type, "source_url": _safe_resource_url(source_url),
-                    "source": reference.source, "relation": reference.relation,
-                    "depth": depth, "status": "failed",
-                    "error": type(exc).__name__,
-                }
-                self._record(record)
-                fetched.append(record)
+            fetched.append(self._fetch(request_context, reference, source_url, depth, candidate_class, channel))
+        speculative_batch = 0
+        while self.speculative_queue and speculative_batch < self.speculative_per_batch:
+            reference, source_url, depth = self.speculative_queue.pop(0)
+            if depth > self.max_depth:
+                self._update_unattempted_status(reference, source_url, depth, "depth_limited")
+                continue
+            if self.speculative_attempted >= self.max_speculative_fetches or not self._shared_http_available() \
+                    or self.budget.http_budget is None or not self.budget.http_budget.consume("speculative_candidate"):
+                self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                continue
+            self.speculative_attempted += 1
+            speculative_batch += 1
+            fetched.append(self._fetch(request_context, reference, source_url, depth,
+                                       self._candidate_class(reference), "speculative"))
         drained = self.evidence
         self.evidence = []
         return drained
+
+    def _fetch(self, request_context: object, reference: ResourceReference, source_url: str, depth: int,
+               candidate_class: str, channel: str) -> dict[str, object]:
+        route_bucket = self._route_bucket(reference)
+        self.fetched.add(_safe_resource_url(reference.url))
+        self._fetched_routes.add(route_bucket)
+        self._fetched_classes.add(candidate_class)
+        try:
+            response = request_context.get(reference.url, timeout=5_000, max_redirects=0)  # type: ignore[attr-defined]
+            headers = {str(k).lower(): str(v) for k, v in response.headers.items()}
+            content_type = headers.get("content-type", "")
+            body_size = int(headers.get("content-length", "0") or 0)
+            # Playwright buffers response.body() as a whole.  Require a
+            # declared bounded length rather than pretending slicing the
+            # returned bytes bounds memory use.
+            body = (
+                response.body()
+                if 0 < body_size <= self.max_body_bytes
+                else b""
+            )
+            charset_match = re.search(r"charset\s*=\s*['\"]?([^;\s'\"]+)", content_type, re.I)
+            encoding = charset_match.group(1) if charset_match else "utf-8"
+            try:
+                text = body.decode(encoding, errors="replace")
+            except LookupError:
+                text = body.decode("utf-8", errors="replace")
+            final_url = response.url
+            status = int(response.status)
+            location = headers.get("location")
+            redirect_target = urljoin(final_url, location) if location else None
+            record = {
+                "url": _safe_resource_url(reference.url), "kind": reference.kind,
+                "source_type": reference.source_type, "source_url": _safe_resource_url(source_url),
+                "source": reference.source, "relation": reference.relation,
+                "depth": depth, "status": "fetched" if status < 400 else "failed",
+                "http_status": status, "content_type": content_type[:160],
+                "redirected_to": _safe_resource_url(redirect_target) if redirect_target else None,
+                "error": None if status < 400 else f"HTTP {status}",
+                "channel": channel, "confidence": reference.confidence,
+            }
+            if channel == "passive_document" and redirect_target and 300 <= status < 400:
+                # A redirect hop is the same logical document, not a deeper
+                # reference: follow it at the same depth after a scope check.
+                safe_target = _safe_resource_url(redirect_target)
+                if allowed_origin(self.start_url, redirect_target, self.aliases) and safe_target not in self.seen:
+                    hop = ResourceReference(redirect_target, reference.kind, "header", "Location", "redirect",
+                                            reference.confidence)
+                    status_, decision = self._decide(hop, safe_target, False)
+                    self.discovered_urls.add(safe_target)
+                    self._admit(hop, safe_target, decision, final_url, depth)
+                    self._record({
+                        "url": safe_target, "kind": hop.kind, "source_type": "header",
+                        "source_url": _safe_resource_url(final_url), "source": "Location", "relation": "redirect",
+                        "depth": depth, "status": status_, "queue_decision": decision, "confidence": hop.confidence,
+                    })
+            if status < 400:
+                discovered = extract_references(
+                    text, final_url, content_type, headers, self.javascript_parser, self.extraction
+                )
+                new_children = 0
+                queued_children = 0
+                excluded_children = 0
+                for child in discovered:
+                    safe = _safe_resource_url(child.url)
+                    in_scope = allowed_origin(self.start_url, child.url, self.aliases)
+                    duplicate = safe in self.discovered_urls
+                    if not duplicate and in_scope:
+                        new_children += 1
+                        self.budget.new_references += 1
+                    self.discovered_urls.add(safe)
+                    evidence_status, queue_decision = self._decide(child, safe, duplicate)
+                    if queue_decision == "duplicate_candidate" and self._readmit_shallower(child, safe, final_url, depth + 1):
+                        queue_decision = "readmitted_shallower"
+                    if queue_decision.startswith(("rejected_", "observed_only_")):
+                        excluded_children += 1
+                    elif queue_decision in {"admitted", "speculative_admitted"}:
+                        queued_children += 1
+                    child_record = {
+                        "url": safe, "kind": child.kind,
+                        "source_type": child.source_type,
+                        "source_url": _safe_resource_url(final_url),
+                        "source": child.source, "relation": child.relation,
+                        "depth": depth, "status": evidence_status,
+                        "queue_decision": queue_decision,
+                        "confidence": child.confidence,
+                    }
+                    if child.method:
+                        child_record["method"] = child.method
+                    self._record(child_record)
+                    if depth < self.max_depth:
+                        self._admit(child, safe, queue_decision, final_url, depth + 1)
+                    elif queue_decision in {"admitted", "speculative_admitted"}:
+                        self.seen.add(safe)
+                        if self.track_min_depth and queue_decision == "admitted":
+                            self._capped[safe] = (child, final_url, depth + 1)
+                self.budget.responses += 1
+                class_yield = self._yield_by_class[candidate_class]
+                class_yield[0] += new_children
+                class_yield[1] += 1
+                record["new_references"] = new_children
+                record["candidate_class"] = candidate_class
+                record["response_reference_count"] = len(discovered)
+                record["queued_references"] = queued_children
+                record["excluded_references"] = excluded_children
+            self._record(record)
+            return record
+        except Exception as exc:
+            record = {
+                "url": _safe_resource_url(reference.url), "kind": reference.kind,
+                "source_type": reference.source_type, "source_url": _safe_resource_url(source_url),
+                "source": reference.source, "relation": reference.relation,
+                "depth": depth, "status": "failed",
+                "error": type(exc).__name__, "channel": channel, "confidence": reference.confidence,
+            }
+            self._record(record)
+            return record

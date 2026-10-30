@@ -85,6 +85,11 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--zap-source-origin")
     parser.add_argument("--max-total-http-requests", type=int)
     parser.add_argument("--state-reuse", choices=("root", "prefix"), default="root")
+    parser.add_argument("--resource-allocation", choices=("class_caps", "shared_http"), default="class_caps")
+    parser.add_argument("--passive-document-http-reserve", type=int)
+    parser.add_argument("--max-passive-document-fetches", type=int)
+    parser.add_argument("--html-extraction", choices=("baseline", "extended"), default="baseline")
+    parser.add_argument("--max-speculative-fetches", type=int, default=0)
     parser.add_argument(
         "--search-probe",
         dest="search_probe_primary",
@@ -179,6 +184,11 @@ def main(argv: list[str] | None = None) -> int:
             zap_source_origin=args.zap_source_origin,
             max_total_http_requests=args.max_total_http_requests,
             state_reuse=args.state_reuse,
+            resource_allocation=args.resource_allocation,
+            passive_document_http_reserve=args.passive_document_http_reserve,
+            max_passive_document_fetches=args.max_passive_document_fetches,
+            html_extraction=args.html_extraction,
+            max_speculative_fetches=args.max_speculative_fetches,
             model_provider=args.provider,
             model_name=args.model,
             model_form_assistance=args.model_forms,

@@ -353,6 +353,63 @@ READINESS_SCRIPT = r"""
 """
 
 
+def passive_http_reserve(config: RunConfig) -> int:
+    """Shared-HTTP requests that passive channels (passive documents and
+    speculative candidates) may never use; they remain for browser, redirect,
+    replay and typed-resource traffic."""
+    if config.passive_document_http_reserve is not None:
+        return config.passive_document_http_reserve
+    return (config.max_total_http_requests or 0) // 2
+
+
+def build_resource_spider(config: RunConfig, budget: ResourceBudget) -> TypedResourceSpider:
+    return TypedResourceSpider(
+        config.start_url,
+        config.origin_aliases,
+        budget,
+        config.max_resource_depth,
+        config.max_resource_body_bytes,
+        config.resource_frontier_policy,
+        config.resource_random_seed,
+        {
+            "document": config.max_resource_document_fetches,
+            "script": config.max_resource_script_fetches,
+            "stylesheet": config.max_resource_stylesheet_fetches,
+            "other_asset": config.max_resource_asset_fetches,
+        },
+        config.javascript_reference_parser,
+        extraction=config.html_extraction,
+        allocation=config.resource_allocation,
+        passive_document_limit=config.max_passive_document_fetches,
+        passive_http_reserve=passive_http_reserve(config),
+        max_speculative_fetches=config.max_speculative_fetches,
+        dangerous_pattern=DANGEROUS_ACTION,
+    )
+
+
+def effective_resource_budgets(config: RunConfig) -> dict[str, int | float | str | None]:
+    shared = config.resource_allocation == "shared_http"
+    return {
+        "resource_allocation": config.resource_allocation,
+        "html_extraction": config.html_extraction,
+        "typed_resource_total": config.max_resource_fetches,
+        "document_class_cap": None if shared else config.max_resource_document_fetches,
+        "document_class_cap_configured": config.max_resource_document_fetches,
+        "script_class_cap": config.max_resource_script_fetches,
+        "stylesheet_class_cap": config.max_resource_stylesheet_fetches,
+        "asset_class_cap": config.max_resource_asset_fetches,
+        "passive_document_cap": config.max_passive_document_fetches if shared else 0,
+        "passive_http_reserve": passive_http_reserve(config) if shared or config.max_speculative_fetches else None,
+        "passive_channels_http_share": ((config.max_total_http_requests or 0) - passive_http_reserve(config))
+        if shared or config.max_speculative_fetches else 0,
+        "speculative_fetch_cap": config.max_speculative_fetches,
+        "total_http_requests": config.max_total_http_requests,
+        "max_resource_depth": config.max_resource_depth,
+        "browser_actions": config.max_browser_actions,
+        "seconds": config.max_seconds,
+    }
+
+
 class NetworkRecorder:
     TRACKED_TYPES = {
         "document", "xhr", "fetch", "stylesheet", "script", "image", "media", "font", "manifest"
@@ -369,22 +426,7 @@ class NetworkRecorder:
         self.events: list[NetworkEvent] = []
         self.config = config
         self.run_started_monotonic = run_started_monotonic or time.monotonic()
-        self.spider = resource_spider or TypedResourceSpider(
-            config.start_url,
-            config.origin_aliases,
-            resource_budget,
-            config.max_resource_depth,
-            config.max_resource_body_bytes,
-            config.resource_frontier_policy,
-            config.resource_random_seed,
-            {
-                "document": config.max_resource_document_fetches,
-                "script": config.max_resource_script_fetches,
-                "stylesheet": config.max_resource_stylesheet_fetches,
-                "other_asset": config.max_resource_asset_fetches,
-            },
-            config.javascript_reference_parser,
-        )
+        self.spider = resource_spider or build_resource_spider(config, resource_budget)
         self.request_count = 0
         source.on("response", self._response)
         source.on("requestfailed", self._failed)
@@ -1345,22 +1387,7 @@ class Explorer:
             }, self.http_budget,
         )
         self.resource_spider = (
-            TypedResourceSpider(
-                config.start_url,
-                config.origin_aliases,
-                self.resource_budget,
-                config.max_resource_depth,
-                config.max_resource_body_bytes,
-                config.resource_frontier_policy,
-                config.resource_random_seed,
-                {
-                    "document": config.max_resource_document_fetches,
-                    "script": config.max_resource_script_fetches,
-                    "stylesheet": config.max_resource_stylesheet_fetches,
-                    "other_asset": config.max_resource_asset_fetches,
-                },
-                config.javascript_reference_parser,
-            )
+            build_resource_spider(config, self.resource_budget)
             if config.typed_resource_spider and config.share_resource_frontier
             else None
         )
@@ -1536,6 +1563,15 @@ class Explorer:
         )
         self.artifact.metrics.resource_unresolved_candidates += sum(
             item.status == "unresolved_candidate" for item in records
+        )
+        self.artifact.metrics.passive_document_fetches += sum(
+            item.status in {"fetched", "failed"} and item.channel == "passive_document" for item in records
+        )
+        self.artifact.metrics.speculative_fetches += sum(
+            item.status in {"fetched", "failed"} and item.channel == "speculative" for item in records
+        )
+        self.artifact.metrics.observed_only_request_surfaces += sum(
+            item.queue_decision.startswith("observed_only_") for item in records
         )
 
     def _account_readiness(self, readiness: ReadinessEvidence) -> None:
@@ -3165,6 +3201,7 @@ class Explorer:
         return incorrect
 
     def _finalize(self) -> None:
+        self.artifact.metrics.effective_resource_budgets = effective_resource_budgets(self.config)
         if self.http_budget is not None:
             self.http_budget.export(self.artifact.metrics)
         self.artifact.ended_at = utc_now()

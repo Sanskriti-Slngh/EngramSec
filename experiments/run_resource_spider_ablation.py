@@ -54,6 +54,11 @@ def main() -> int:
     parser.add_argument("--zap-source-origin")
     parser.add_argument("--max-total-http-requests", type=int)
     parser.add_argument("--state-reuse", choices=("root", "prefix"), default="root")
+    parser.add_argument("--resource-allocation", choices=("class_caps", "shared_http"), default="class_caps")
+    parser.add_argument("--passive-document-http-reserve", type=int)
+    parser.add_argument("--max-passive-document-fetches", type=int)
+    parser.add_argument("--html-extraction", choices=("baseline", "extended"), default="baseline")
+    parser.add_argument("--max-speculative-fetches", type=int, default=0)
     parser.add_argument("--exploration-policy", choices=("multidimensional", "hierarchical"), default="multidimensional")
     args = parser.parse_args()
     args.root.mkdir(parents=True, exist_ok=True)
@@ -128,6 +133,11 @@ def main() -> int:
             zap_source_origin=args.zap_source_origin,
             max_total_http_requests=args.max_total_http_requests,
             state_reuse=args.state_reuse,
+            resource_allocation=args.resource_allocation,
+            passive_document_http_reserve=args.passive_document_http_reserve,
+            max_passive_document_fetches=args.max_passive_document_fetches,
+            html_extraction=args.html_extraction,
+            max_speculative_fetches=args.max_speculative_fetches,
             allow_post_forms=args.allow_post_forms,
             model_provider="none",
             paid_calls_enabled=False,
