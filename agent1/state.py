@@ -174,6 +174,9 @@ def signatures(
         }
         for form in forms
     ]
+    # State identity is the visible DOM: listener-observed candidates and
+    # behavior revisions are evidence about behavior, recorded separately.
+    controls = [control for control in controls if getattr(control, "provenance", "snapshot") == "snapshot"]
     control_shapes = sorted(control.signature for control in controls if control.safe)
     content = content_fingerprint(meaningful_text)
     grouped_control_shapes = sorted(
@@ -203,6 +206,14 @@ def signatures(
         }
     )
     return raw, group, pattern
+
+
+def behavior_signature(group_signature: str, revisions: list[str], listener_actions: list[str] | None = None) -> str:
+    """Group identity refined by runtime behavior evidence: active handler
+    revisions and the listener-only actions available. Never by handler code."""
+    if not revisions and not listener_actions:
+        return group_signature
+    return digest([group_signature, sorted(set(revisions)), sorted(set(listener_actions or []))])
 
 
 def feature_key(action_signature: str, outcome_signature: str = "") -> str:

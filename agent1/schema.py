@@ -105,6 +105,20 @@ class RunConfig(BaseModel):
     zap_evidence_path: Path | None = None
     zap_source_origin: str | None = None
     max_total_http_requests: int | None = Field(default=None, ge=1, le=100_000)
+    # Passive (bounded-reader) fetches apply Set-Cookie to the browser context.
+    # False reproduces the b4a9a40 semantics (cookies sent, updates dropped).
+    passive_cookie_sync: bool = True
+    # Share of the total HTTP budget held back for independent replay
+    # (0 reproduces the earlier behavior, where exploration could spend it all).
+    http_verification_reserve_fraction: float = Field(default=0.0, ge=0.0, le=0.8)
+    # Opt-in Chromium DevTools listener observation (agent1/listeners.py):
+    #   observe: listener-bearing elements become candidate controls; handler
+    #            revisions are recorded as evidence only;
+    #   revisit: additionally, a control whose handler changed is re-explored.
+    runtime_listener_observation: Literal["off", "observe", "revisit"] = "off"
+    max_listener_nodes: int = Field(default=300, ge=1, le=5_000)
+    max_listener_candidates: int = Field(default=12, ge=0, le=200)
+    listener_family_limit: int = Field(default=2, ge=1, le=50)
 
     @model_validator(mode="after")
     def paired_search_probes(self) -> "RunConfig":
@@ -246,6 +260,32 @@ class Control(BaseModel):
     component: str = "document"
     frame_index: int = 0
     frame_url: str = ""
+    # "snapshot": recognized by DOM semantics; "observed_listener": a direct
+    # click-family listener reported by Chromium DevTools.
+    provenance: Literal["snapshot", "observed_listener"] = "snapshot"
+    # Evidence-derived behavior revision: set only when a handler change on this
+    # element was observed within the same document (revisit mode).
+    behavior_revision: str | None = None
+    listener_evidence: dict[str, Any] | None = None
+
+
+class ListenerEvidence(BaseModel):
+    """Bounded DevTools listener observation attached to one browser observation."""
+    supported: bool = True
+    document_token: str = ""
+    caused_by_action: str | None = None
+    listener_nodes: int = 0
+    described_nodes: int = 0
+    candidates: list[dict[str, Any]] = Field(default_factory=list)
+    revisions: list[dict[str, Any]] = Field(default_factory=list)
+    active_revisions: list[dict[str, str]] = Field(default_factory=list)
+    skipped: dict[str, int] = Field(default_factory=dict)
+    skipped_examples: list[dict[str, Any]] = Field(default_factory=list)
+    delegation_hosts: int = 0
+    window_click_listeners: int = 0
+    elapsed_ms: float = 0.0
+    cdp_calls: int = 0
+    error: str | None = None
 
 
 class Observation(BaseModel):
@@ -267,6 +307,10 @@ class Observation(BaseModel):
     route_pattern: str
     instance_facts: dict[str, Any] = Field(default_factory=dict)
     readiness: ReadinessEvidence = Field(default_factory=ReadinessEvidence)
+    listener_evidence: ListenerEvidence | None = None
+    # Equal to group_signature unless evidence shows a changed handler behind
+    # the same visible DOM; then it also names the active behavior revisions.
+    behavior_signature: str = ""
 
 
 class NetworkEvent(BaseModel):
@@ -308,6 +352,11 @@ class ResourceEvidence(BaseModel):
     method: str | None = None
     body_status: str | None = None
     body_bytes: int | None = None
+    wire_bytes: int | None = None
+    # Names only (never values) of the cookies sent and set on a passive fetch.
+    session_cookie_names: list[str] | None = None
+    set_cookie_names: list[str] | None = None
+    cookie_updates: dict[str, int] | None = None
 
 
 class ExternalDiscoveryEvidence(BaseModel):
@@ -350,6 +399,8 @@ class ActionDescriptor(BaseModel):
     component: str = "document"
     frame_index: int = 0
     frame_url: str = ""
+    provenance: str = "snapshot"
+    behavior_revision: str | None = None
 
 
 class FormAttempt(BaseModel):
@@ -470,6 +521,7 @@ class ConnectionEvidence(BaseModel):
     claim_type: Literal[
         "advertised_control", "source_action", "action_result", "replay",
         "prerequisite_network", "resource_reference", "external_observation",
+        "listener_candidate", "handler_revision",
     ]
     subject_id: str
     complete: bool
@@ -569,6 +621,20 @@ class RunMetrics(BaseModel):
     effective_resource_budgets: dict[str, int | float | str | None] = Field(default_factory=dict)
     browser_body_status: dict[str, int] = Field(default_factory=dict)
     spider_body_status: dict[str, int] = Field(default_factory=dict)
+    passive_wire_bytes: int = 0
+    replays_untested_http_budget: int = 0
+    passive_cookie_updates: dict[str, int] = Field(default_factory=dict)
+    python_peak_rss_mb: float = 0.0
+    listener_observations: int = 0
+    listener_observation_errors: int = 0
+    listener_observation_ms: float = 0.0
+    listener_cdp_calls: int = 0
+    listener_candidates_distinct: int = 0
+    listener_candidates_executed: int = 0
+    listener_skipped: dict[str, int] = Field(default_factory=dict)
+    handler_revisions_observed: int = 0
+    handler_revisits_executed: int = 0
+    behavior_divergent_groups: int = 0
 
 
 class RunArtifact(BaseModel):

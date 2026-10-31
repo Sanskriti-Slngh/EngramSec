@@ -12,13 +12,14 @@ from agent1.exporter import write_outputs
 from agent1.schema import RunConfig
 from development_apps.js_heavy_lab import STATE, start_js_heavy_lab
 from development_apps.heldout_shop import start_heldout_shop
+from development_apps.transfer_library import STATE as LIBRARY_STATE, start_transfer_library
 from experiments.evaluate_coverage import evaluate
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default="http://127.0.0.1:3460/")
-    parser.add_argument("--app", choices=("crawlmaze", "js-heavy", "heldout-shop"), default="crawlmaze")
+    parser.add_argument("--app", choices=("crawlmaze", "js-heavy", "heldout-shop", "transfer-library"), default="crawlmaze")
     parser.add_argument("--allow-post-forms", action="store_true")
     parser.add_argument("--root", type=Path, required=True)
     parser.add_argument("--tag", default="")
@@ -65,6 +66,11 @@ def main() -> int:
     parser.add_argument("--hard-max-resource-depth", type=int, default=8)
     parser.add_argument("--max-speculative-fetches", type=int, default=0)
     parser.add_argument("--exploration-policy", choices=("multidimensional", "hierarchical"), default="multidimensional")
+    parser.add_argument("--no-passive-cookie-sync", action="store_true")
+    parser.add_argument("--http-verification-reserve", type=float, default=0.0)
+    parser.add_argument("--start-path", default="", help="path appended to a local fixture's start URL")
+    parser.add_argument("--runtime-listener-observation", choices=("off", "observe", "revisit"), default="off")
+    parser.add_argument("--max-listener-nodes", type=int, default=300)
     args = parser.parse_args()
     args.root.mkdir(parents=True, exist_ok=True)
     summary: list[dict[str, object]] = []
@@ -100,6 +106,10 @@ def main() -> int:
             origin_aliases = [f"http://localhost:{server.server_port}"]
         elif args.app == "heldout-shop":
             server, thread, start_url = start_heldout_shop()
+            origin_aliases = []
+        elif args.app == "transfer-library":
+            library_servers, library_threads, start_url = start_transfer_library()
+            start_url = start_url.rstrip("/") + (args.start_path or "/")
             origin_aliases = []
         else:
             start_url = args.url
@@ -149,6 +159,10 @@ def main() -> int:
             budget_aware_deepening=args.budget_aware_deepening,
             hard_max_resource_depth=args.hard_max_resource_depth,
             allow_post_forms=args.allow_post_forms,
+            passive_cookie_sync=not args.no_passive_cookie_sync,
+            http_verification_reserve_fraction=args.http_verification_reserve,
+            runtime_listener_observation=args.runtime_listener_observation,
+            max_listener_nodes=args.max_listener_nodes,
             model_provider="none",
             paid_calls_enabled=False,
         )
@@ -167,7 +181,14 @@ def main() -> int:
                     encoding="utf-8",
                 )
             server_counts = STATE.snapshot() if server and args.app == "js-heavy" else {}
+            if args.app == "transfer-library":
+                # Server-side truth about traffic, recorded after the run; never given to Agent 1.
+                (out / "server_log.json").write_text(json.dumps(LIBRARY_STATE.snapshot(), indent=1) + "\n", encoding="utf-8")
         finally:
+            if args.app == "transfer-library":
+                for item in library_servers:
+                    item.shutdown()
+                    item.server_close()
             if server:
                 server.shutdown()
                 server.server_close()

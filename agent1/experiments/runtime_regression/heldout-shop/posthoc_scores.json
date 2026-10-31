@@ -1,0 +1,44 @@
+{
+  "mode": "coverage",
+  "results": {
+    "adaptive_readiness_C": {
+      "application": "heldout_shop",
+      "counts": {
+        "browser_actions": 137,
+        "covered_areas": 8,
+        "covered_controls": 11,
+        "covered_requests": 8,
+        "elapsed_seconds": 60.827,
+        "graph_connections_missing_evidence": 0,
+        "grouped_states": 18,
+        "incorrect_state_merges_self_audit": 0,
+        "raw_states": 18,
+        "replay_attempts": 16,
+        "replay_successes": 16
+      },
+      "denominators": {
+        "areas": 8,
+        "blocked_areas_excluded": 1,
+        "contexts": 2,
+        "controls": 11,
+        "instances": 2,
+        "outside_areas_excluded": 0,
+        "paths": 8,
+        "requests": 8
+      },
+      "metrics": {
+        "context_recall": 1.0,
+        "control_action_recall": 1.0,
+        "covered_surfaces_per_browser_action": 0.19708029197080293,
+        "covered_surfaces_per_minute": 26.63290972758808,
+        "instance_recall": 1.0,
+        "instances_distinct": true,
+        "prerequisite_path_coverage": 0.75,
+        "replay_reliability": 1.0,
+        "request_precision": 0.9705882352941176,
+        "request_surface_recall": 1.0,
+        "state_interface_recall": 1.0
+      }
+    }
+  }
+}

@@ -88,6 +88,72 @@ def build_request_surfaces(artifact: RunArtifact) -> list[dict[str, Any]]:
     return sorted(result, key=lambda x: (x["url"], x["method"], x["parameter_names"]))
 
 
+def build_behavior_evidence(artifact: RunArtifact) -> dict[str, Any]:
+    """Listener-observed candidates, handler revisions and the requests and
+    states that executing them produced, with replay status. Visible DOM
+    (group signature), handler behavior (behavior signature) and session
+    context are kept as separate fields; none is inferred from another."""
+    from .explorer import action_request_structures
+
+    replays: dict[str, list[Any]] = {}
+    for replay in artifact.replays:
+        replays.setdefault(replay.transition_id, []).append(replay)
+    observations = {item.id: item for item in artifact.observations}
+    listener_observations, candidates, revisions = [], [], []
+    for observation in artifact.observations:
+        evidence = observation.listener_evidence
+        if evidence is None:
+            continue
+        listener_observations.append({
+            "observation_id": observation.id, "group_signature": observation.group_signature,
+            "behavior_signature": observation.behavior_signature or observation.group_signature,
+            "session_context": observation.session_context, "caused_by_action": evidence.caused_by_action,
+            "listener_nodes": evidence.listener_nodes, "described_nodes": evidence.described_nodes,
+            "candidates": len(evidence.candidates), "revisions": len(evidence.revisions),
+            "active_revisions": len(evidence.active_revisions), "skipped": evidence.skipped,
+            "delegation_hosts": evidence.delegation_hosts, "elapsed_ms": evidence.elapsed_ms,
+            "cdp_calls": evidence.cdp_calls, "error": evidence.error, "supported": evidence.supported,
+        })
+        for item in evidence.candidates:
+            candidates.append({"observation_id": observation.id, **{k: item.get(k) for k in (
+                "label", "tag", "css_path", "provenance", "interactions", "handler_locations", "family",
+                "control_ids", "safe", "skip_reason")}})
+        for item in evidence.revisions:
+            revisions.append({"observation_id": observation.id, **{k: item.get(k) for k in (
+                "label", "css_path", "revision", "caused_by_action", "before", "after", "snapshot_control")}})
+    executions = []
+    for transition in artifact.transitions:
+        action = transition.action
+        if action.provenance != "observed_listener" and not action.behavior_revision:
+            continue
+        result = observations.get(transition.result_observation_id or "")
+        attempts = replays.get(transition.id, [])
+        executions.append({
+            "transition_id": transition.id, "status": str(transition.status),
+            "label": action.label, "provenance": action.provenance, "behavior_revision": action.behavior_revision,
+            "source_group_signature": transition.source_group_signature,
+            "result_group_signature": transition.result_group_signature,
+            "result_behavior_signature": (result.behavior_signature or result.group_signature) if result else None,
+            "visible_dom_changed": transition.source_group_signature != transition.result_group_signature,
+            "request_structures": sorted(f"{m} {r} {list(p)}" for m, r, p in action_request_structures(transition.network)),
+            "replays_attempted": len(attempts),
+            "replay_validated": any(str(r.status) == "replay_validated" for r in attempts),
+        })
+    return {
+        "listener_observations": listener_observations,
+        "listener_candidates": candidates,
+        "handler_revisions": revisions,
+        "behavior_executions": executions,
+        "summary": {
+            "listener_observations": len(listener_observations),
+            "candidates_recorded": len(candidates),
+            "handler_revisions_recorded": len(revisions),
+            "executed_listener_or_revision_actions": len(executions),
+            "replay_validated_listener_or_revision_actions": sum(e["replay_validated"] for e in executions),
+        },
+    }
+
+
 def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
     observations = {item.id: item for item in artifact.observations}
     state_nodes = []
@@ -330,6 +396,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
             }
         )
     request_surfaces = build_request_surfaces(artifact)
+    behavior = build_behavior_evidence(artifact)
     return {
         "schema_version": "graph-a-1.1",
         "run": {
@@ -369,6 +436,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
             item.model_dump(mode="json") for item in artifact.connection_evidence
         ],
         "request_surfaces": request_surfaces,
+        "behavior_evidence": behavior,
         "request_surface_summary": {
             outcome: sum(item["outcome"] == outcome for item in request_surfaces) for outcome in SURFACE_OUTCOMES
         } | {"total": len(request_surfaces)},

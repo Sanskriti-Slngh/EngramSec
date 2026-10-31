@@ -1,0 +1,57 @@
+{
+  "mode": "generalization",
+  "results": {
+    "adaptive_readiness_C": {
+      "application": "js_heavy_lab",
+      "base_counts": {
+        "browser_actions": 87,
+        "covered_areas": 9,
+        "covered_controls": 12,
+        "covered_requests": 8,
+        "elapsed_seconds": 60.686,
+        "graph_connections_missing_evidence": 0,
+        "grouped_states": 12,
+        "incorrect_state_merges_self_audit": 1,
+        "raw_states": 15,
+        "replay_attempts": 10,
+        "replay_successes": 10
+      },
+      "base_metrics": {
+        "context_recall": 0.5,
+        "control_action_recall": 0.8571428571428571,
+        "covered_surfaces_per_browser_action": 0.3333333333333333,
+        "covered_surfaces_per_minute": 28.67218139274297,
+        "instance_recall": null,
+        "instances_distinct": false,
+        "prerequisite_path_coverage": 0.45454545454545453,
+        "replay_reliability": 1.0,
+        "request_precision": 0.7692307692307693,
+        "request_surface_recall": 0.6666666666666666,
+        "state_interface_recall": 0.8181818181818182
+      },
+      "generalization_metrics": {
+        "action_network_events": 26,
+        "actions_per_covered_area": 9.666666666666666,
+        "alias_scope_status": "executed",
+        "applicable_area_recall": 0.8181818181818182,
+        "applicable_control_recall": 0.8571428571428571,
+        "browser_actions": 87,
+        "critical_false_merges": 0,
+        "deepest_verified_path": 2,
+        "elapsed_seconds": 60.686,
+        "initial_navigation_events": 54,
+        "readiness_statuses": {
+          "usable": 12
+        },
+        "replay_reliability": 1.0,
+        "request_surface_recall_all_phases": 0.6666666666666666,
+        "restoration_actions": 16,
+        "root_reloads": 27,
+        "sensitive_value_leaks": 0,
+        "startup_readiness_failures": 0,
+        "unique_replayed_prerequisite_paths": 10,
+        "unnecessary_initial_state_splits": 0
+      }
+    }
+  }
+}

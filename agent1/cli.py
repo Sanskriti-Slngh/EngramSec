@@ -93,6 +93,13 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--resource-frontier-model", choices=("legacy", "persistent"), default="legacy")
     parser.add_argument("--passive-document-max-depth", type=int)
     parser.add_argument("--budget-aware-deepening", action="store_true")
+    parser.add_argument("--no-passive-cookie-sync", action="store_true",
+                        help="drop Set-Cookie from bounded passive fetches (b4a9a40 semantics; ablation only)")
+    parser.add_argument("--runtime-listener-observation", choices=("off", "observe", "revisit"), default="off",
+                        help="opt-in Chromium DevTools listener observation")
+    parser.add_argument("--http-verification-reserve", type=float, default=0.0)
+    parser.add_argument("--max-listener-nodes", type=int, default=300)
+    parser.add_argument("--max-listener-candidates", type=int, default=12)
     parser.add_argument("--hard-max-resource-depth", type=int, default=8)
     parser.add_argument("--max-speculative-fetches", type=int, default=0)
     parser.add_argument(
@@ -199,6 +206,11 @@ def main(argv: list[str] | None = None) -> int:
             passive_document_max_depth=args.passive_document_max_depth,
             budget_aware_deepening=args.budget_aware_deepening,
             hard_max_resource_depth=args.hard_max_resource_depth,
+            passive_cookie_sync=not args.no_passive_cookie_sync,
+            http_verification_reserve_fraction=args.http_verification_reserve,
+            runtime_listener_observation=args.runtime_listener_observation,
+            max_listener_nodes=args.max_listener_nodes,
+            max_listener_candidates=args.max_listener_candidates,
             model_provider=args.provider,
             model_name=args.model,
             model_form_assistance=args.model_forms,

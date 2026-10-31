@@ -67,6 +67,7 @@ Kept as-is after review: query-bearing URLs are deduplicated by parameter *names
 - Observed-only request surfaces: no GET substitution for POST/PUT/DELETE, form actions, pings or CSP report endpoints.
 - Same-origin route enforcement (blocks third-party CDN code).
 - Passive fetches never write cookies into the browser session. This is a deliberate semantic change of the bounded reader; the old Playwright request context did store `Set-Cookie`.
+  **Revised in the next milestone** (`DETERMINISTIC_TRANSFER_VALIDATION.md`, defect T1): dropping `Set-Cookie` desynchronizes the browser from a server that renews session identifiers. The bounded reader now applies `Set-Cookie` to the browser context under RFC 6265, as the legacy reader did.
 - Speculative candidates are capped and labelled.
 
 ### 1.5 Testbed and evaluator limitations

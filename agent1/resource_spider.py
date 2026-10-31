@@ -30,6 +30,7 @@ def _safe_resource_url(value: str) -> str:
 
 
 MAX_REFERENCES_PER_RESPONSE = 250
+MAX_REDIRECT_HOPS = 20
 MAX_TEXT_BYTES = 1_000_000
 _URL_PATTERN = re.compile(r"url\(\s*(['\"]?)(.*?)\1\s*\)", re.I | re.S)
 _IMPORT_PATTERN = re.compile(r"@import\s+(?:url\(\s*)?(['\"])(.*?)\1", re.I)
@@ -456,6 +457,11 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128,
         return "GET"
 
     candidates: list[tuple[str, str, str]] = []
+    # Byte spans of request-sink URL arguments (fetch, Request, XHR open). A
+    # literal inside one, e.g. the prefix of fetch('/api/x/' + id, {method:
+    # 'POST'}), is part of a request whose method and full target are runtime
+    # values; it is never re-emitted as a speculative GET.
+    request_target_spans: list[tuple[int, int]] = []
     tags_by_attr = {
         "src": {"script", "img", "iframe", "frame", "audio", "video", "source", "track", "embed"},
         "href": {"link", "a", "area", "image", "use", "script"},
@@ -483,6 +489,8 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128,
                 if raw:
                     candidates.append((raw, "asset", "dynamic-import"))
             elif name in {"fetch", "Request", "window.open", "open", "location.assign", "location.replace"}:
+                if name in {"fetch", "Request"}:
+                    request_target_spans.append((arg_nodes[0].start_byte, arg_nodes[0].end_byte))
                 raw = literal(arg_nodes[0])
                 if raw:
                     candidate_kind = "navigation" if name in {"window.open", "open", "location.assign", "location.replace"} else "api"
@@ -490,6 +498,7 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128,
                     if candidate_kind == "api":
                         methods.setdefault((raw, f"call:{name}"), []).append(request_method(arg_nodes[1] if len(arg_nodes) > 1 else None))
             elif name.endswith(".open") and len(arg_nodes) >= 2:
+                request_target_spans.append((arg_nodes[1].start_byte, arg_nodes[1].end_byte))
                 raw = literal(arg_nodes[1])
                 if raw:
                     candidates.append((raw, "api", "call:xhr.open"))
@@ -506,6 +515,7 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128,
             args = getattr(node, "child_by_field_name")("arguments")
             arg_nodes = [child for child in children(args) if getattr(child, "type", "") not in {"(", ")", ","}] if args else []
             if node_text(constructor) == "Request" and arg_nodes:
+                request_target_spans.append((arg_nodes[0].start_byte, arg_nodes[0].end_byte))
                 raw = literal(arg_nodes[0])
                 if raw:
                     candidates.append((raw, "api", "new:Request"))
@@ -553,7 +563,9 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128,
             node_kind = getattr(node, "type", "")
             if node_kind in {"string", "template_string"}:
                 value = literal(node)
-                if value and value not in sink_values and _url_like(value.strip()):
+                inside_request_target = any(start <= node.start_byte and node.end_byte <= end
+                                            for start, end in request_target_spans)
+                if value and value not in sink_values and not inside_request_target and _url_like(value.strip()):
                     speculative.append((value.strip(), "script-literal"))
             elif node_kind == "comment":
                 for item in speculative_text_candidates(node_text(node), response_url, source_type="script-ast", source="script-comment"):
@@ -932,7 +944,11 @@ class TypedResourceSpider:
         if body_reader not in {"content_length", "bounded_stream"}:
             raise ValueError(f"unknown response body reader: {body_reader}")
         self.body_reader = body_reader
-        self.cookie_source = None  # set per drain by the caller; read-only
+        # Set per drain by the caller (agent1.cookies.context_cookie_bridge):
+        # source(url) -> (Cookie header, names); sink(url, set_cookie_headers).
+        self.cookie_source = None
+        self.cookie_sink = None
+        self._redirect_hops: dict[str, int] = {}
         if extraction not in {"baseline", "extended", "standards"}:
             raise ValueError(f"unknown extraction mode: {extraction}")
         if allocation not in {"class_caps", "shared_http"}:
@@ -1599,11 +1615,24 @@ class TypedResourceSpider:
         self._fetched_routes.add(route_bucket)
         self._fetched_classes.add(candidate_class)
         try:
+            cookie_evidence: dict[str, object] = {}
             if self.body_reader == "bounded_stream":
-                cookie = self.cookie_source(reference.url) if self.cookie_source else None
-                streamed = bounded_get(reference.url, max_body_bytes=self.max_body_bytes, timeout_s=5.0, cookie_header=cookie)
+                cookie, cookie_names = self.cookie_source(reference.url) if self.cookie_source else (None, [])
+                streamed = bounded_get(reference.url, max_body_bytes=self.max_body_bytes, timeout_s=5.0,
+                                       cookie_header=cookie, deadline_s=5.0)
                 headers, body, body_status = streamed.headers, streamed.body, streamed.body_status
                 final_url, status = streamed.url, streamed.status
+                cookie_evidence = {"session_cookie_names": cookie_names, "wire_bytes": streamed.wire_bytes}
+                if streamed.set_cookies:
+                    if self.cookie_sink is not None:
+                        outcome = self.cookie_sink(final_url, streamed.set_cookies)
+                        cookie_evidence["set_cookie_names"] = outcome["names"]
+                        cookie_evidence["cookie_updates"] = {key: value for key, value in (
+                            ("applied", outcome["applied"]), ("deleted", outcome["deleted"]),
+                            *((f"rejected_{reason}", n) for reason, n in outcome["rejected"].items())) if value}
+                    else:
+                        cookie_evidence["set_cookie_names"] = sorted({h.split("=", 1)[0].strip() for h in streamed.set_cookies})
+                        cookie_evidence["cookie_updates"] = {"dropped_no_session": len(streamed.set_cookies)}
             else:
                 response = request_context.get(reference.url, timeout=5_000, max_redirects=0)  # type: ignore[attr-defined]
                 headers = {str(k).lower(): str(v) for k, v in response.headers.items()}
@@ -1642,13 +1671,24 @@ class TypedResourceSpider:
                 "redirected_to": _safe_resource_url(redirect_target) if redirect_target else None,
                 "error": None if status < 400 else f"HTTP {status}",
                 "channel": channel, "confidence": reference.confidence,
-                "body_status": body_status, "body_bytes": len(body),
+                "body_status": body_status, "body_bytes": len(body), **cookie_evidence,
             }
             if channel == "passive_document" and redirect_target and 300 <= status < 400:
                 # A redirect hop is the same logical document, not a deeper
                 # reference: follow it at the same depth after a scope check.
                 safe_target = _safe_resource_url(redirect_target)
-                if allowed_origin(self.start_url, redirect_target, self.aliases) and safe_target not in self.seen:
+                hops = self._redirect_hops.get(_safe_resource_url(reference.url), 0) + 1
+                if hops > MAX_REDIRECT_HOPS and safe_target not in self.seen:
+                    # Same limit as Chromium/Fetch: a chain longer than 20 is a network error.
+                    self.seen.add(safe_target)
+                    self._record({
+                        "url": safe_target, "kind": reference.kind, "source_type": "header",
+                        "source_url": _safe_resource_url(final_url), "source": "Location", "relation": "redirect",
+                        "depth": depth, "status": "discovered", "queue_decision": "rejected_redirect_limit",
+                        "confidence": reference.confidence,
+                    })
+                elif allowed_origin(self.start_url, redirect_target, self.aliases) and safe_target not in self.seen:
+                    self._redirect_hops[safe_target] = hops
                     hop = ResourceReference(redirect_target, reference.kind, "header", "Location", "redirect",
                                             reference.confidence)
                     status_, decision = self._decide(hop, safe_target, False)
@@ -1663,6 +1703,11 @@ class TypedResourceSpider:
                 discovered = extract_references(
                     text, final_url, content_type, headers, self.javascript_parser, self.extraction
                 )
+                if channel == "passive_document" and 300 <= status < 400:
+                    # The redirect target was handled above as a same-depth hop
+                    # (scope, loop and chain-length checks); re-extracting the
+                    # Location header as a deeper link would bypass those checks.
+                    discovered = [c for c in discovered if not (c.source_type == "header" and c.source == "Location")]
                 new_children = 0
                 queued_children = 0
                 excluded_children = 0

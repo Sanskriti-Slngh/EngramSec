@@ -123,6 +123,29 @@ unless `--allow-post-forms` is explicitly supplied for an isolated target.
 
 POST forms are skipped by default. Enable `--allow-post-forms` only for a disposable fixture or when the configured target workflow is explicitly safe to mutate.
 
+## Opt-in deterministic discovery options
+
+Repaired passive pipeline (`DETERMINISTIC_ROOT_CAUSE_AUDIT.md`, `DETERMINISTIC_TRANSFER_VALIDATION.md`):
+
+```bash
+--resource-allocation shared_http --max-total-http-requests 1000 --http-verification-reserve 0.3 \
+--html-extraction standards --response-body-reader bounded_stream --resource-frontier-model persistent \
+--passive-document-max-depth 6 --budget-aware-deepening
+```
+
+- The bounded reader sends the browser context's cookies and applies `Set-Cookie` back (RFC 6265). Evidence records cookie names only. `--no-passive-cookie-sync` exists for ablation only.
+- `--http-verification-reserve` holds a share of the HTTP budget for independent replay.
+
+Runtime listener observation (Chromium only; `RUNTIME_INTERACTION_ABLATION.md`):
+
+```bash
+--runtime-listener-observation observe   # listener-bearing elements become candidate controls
+--runtime-listener-observation revisit   # also re-explore a control whose handler changed
+--max-listener-nodes 300 --max-listener-candidates 12
+```
+
+A listener is never authorization to act: candidates pass the same safety filter, scope routing and action budget as every other control. Delegated listeners are reported, never attributed to descendants.
+
 ## Resume or request deeper exploration
 
 ```bash

@@ -23,6 +23,8 @@ from playwright.sync_api import (
 from playwright.sync_api import sync_playwright
 
 from .providers import DecisionProvider, ModelProviderError, build_provider
+from .cookies import context_cookie_bridge
+from .listeners import ListenerObserver, ListenerSnapshot
 from .resource_spider import ResourceBudget, TypedResourceSpider
 from .revision import code_revision
 from .hierarchical import AreaTourPlanner
@@ -46,6 +48,7 @@ from .schema import (
     FunctionalWorkflow,
     ConnectionEvidence,
     FormField,
+    ListenerEvidence,
     FormObservation,
     FrontierItem,
     InputReference,
@@ -75,6 +78,8 @@ from .state import (
     content_fingerprint,
     outcome_signature,
     allowed_origin,
+    behavior_signature,
+    route_pattern,
     sanitize_url,
     signatures,
 )
@@ -306,6 +311,24 @@ EXTRACT_SCRIPT = r"""
   };
 }
 """
+
+
+# The snapshot's interactive-element selector, shared with the listener
+# observer so that listener nodes already represented by a snapshot control
+# are recognized as such.
+SNAPSHOT_SELECTOR = "".join(re.findall(r"'([^']*)'", re.search(
+    r"const selector = (.*?);\n", EXTRACT_SCRIPT, re.S).group(1)))
+
+
+def action_request_structures(network: list[NetworkEvent]) -> set[tuple[str, str, tuple[str, ...]]]:
+    """Application request structures an action triggered: script-initiated
+    requests (fetch/XHR) and any non-GET request, by method, route shape and
+    parameter names (never values)."""
+    return {
+        (event.method.upper(), route_pattern(event.url), tuple(event.parameter_names))
+        for event in network
+        if event.resource_type in {"xhr", "fetch"} or event.method.upper() not in {"GET", "HEAD"}
+    }
 
 
 READINESS_SCRIPT = r"""
@@ -548,13 +571,16 @@ class NetworkRecorder:
         return current
 
     def drain_resources(self, request_context: Any) -> list[ResourceEvidence]:
-        source = self.source
-        # Read-only cookie view of the current context for the bounded reader;
-        # passive fetches never write cookies back into the browser.
-        self.spider.cookie_source = (
-            (lambda url: "; ".join(f"{c['name']}={c['value']}" for c in source.cookies(url)) or None)
-            if hasattr(source, "cookies") else None
-        )
+        # The bounded reader acts as this browser context's user agent: it sends
+        # the context's cookies and applies Set-Cookie back (RFC 6265), so a
+        # server-side session rotation on a passive fetch cannot desynchronize
+        # the browser's authorized session.
+        if hasattr(self.source, "cookies"):
+            self.spider.cookie_source, self.spider.cookie_sink = context_cookie_bridge(self.source)
+            if not self.config.passive_cookie_sync:
+                self.spider.cookie_sink = None  # b4a9a40 semantics, kept for the ablation
+        else:
+            self.spider.cookie_source = self.spider.cookie_sink = None
         records = self.spider.fetch_pending(
             request_context, self.config.max_resource_fetches_per_observation
         )
@@ -641,8 +667,19 @@ class BrowserSession:
         self.last_navigation_resources: list[ResourceEvidence] = []
         self.last_action_resources: list[ResourceEvidence] = []
         self.last_popup_opened = False
+        self._last_action: str | None = None
+        self.listener_observer: ListenerObserver | None = None
+
+    def _new_listener_observer(self) -> ListenerObserver | None:
+        if self.config.runtime_listener_observation == "off":
+            return None
+        return ListenerObserver(SNAPSHOT_SELECTOR, max_nodes=self.config.max_listener_nodes,
+                                max_candidates=self.config.max_listener_candidates,
+                                family_limit=self.config.listener_family_limit)
 
     def __enter__(self) -> "BrowserSession":
+        self.listener_observer = self._new_listener_observer()
+        self._last_action = None
         self.context = self.browser.new_context()
         if self.http_budget is not None:
             budget, config = self.http_budget, self.config
@@ -735,6 +772,7 @@ class BrowserSession:
 
     def goto_start(self) -> int:
         assert self.page
+        self._last_action = "navigation:start"
         response = self.page.goto(
             self.config.start_url,
             wait_until="domcontentloaded",
@@ -764,6 +802,7 @@ class BrowserSession:
     def go_back(self) -> bool:
         """One browser-history step in the live context; the caller verifies the result."""
         assert self.page
+        self._last_action = "navigation:history"
         try:
             response = self.page.go_back(wait_until="domcontentloaded", timeout=self.config.action_timeout_ms * 2)
         except PlaywrightError:
@@ -1007,6 +1046,11 @@ class BrowserSession:
                         frame_url=safe_frame_url,
                     )
                 )
+        listener_evidence: ListenerEvidence | None = None
+        active_revisions: list[str] = []
+        if self.listener_observer is not None:
+            snapshot = self.listener_observer.observe(self.page, self._last_action)
+            listener_evidence, active_revisions = self._apply_listener_snapshot(snapshot, controls, current_url)
         title = compact_text(self.page.title(), 200)
         session_markers = self._session_markers()
         meaningful_text = compact_text(
@@ -1060,7 +1104,105 @@ class BrowserSession:
                 "frame_count": len(frame_payloads),
             },
             readiness=self.last_readiness,
+            listener_evidence=listener_evidence,
+            behavior_signature=behavior_signature(group_sig, active_revisions, sorted(
+                control.signature for control in controls if control.provenance == "observed_listener" and control.safe)),
         )
+
+    def _frame_for_href(self, href: str) -> tuple[int, str] | None:
+        assert self.page
+        for index, frame in enumerate(self.page.frames):
+            if frame.url == href or (
+                urlsplit(href).scheme in {"http", "https"} and frame.url.startswith(("http://", "https://"))
+                and sanitize_url(frame.url) == sanitize_url(href)
+            ):
+                safe = sanitize_url(frame.url) if urlsplit(frame.url).scheme in {"http", "https"} else compact_text(frame.url, 240)
+                if index > 0 and not (frame.url.startswith("about:") or allowed_origin(
+                        self.config.start_url, frame.url, self.config.origin_aliases)):
+                    return None
+                return index, safe
+        return None
+
+    def _apply_listener_snapshot(
+        self, snapshot: ListenerSnapshot, controls: list[Control], current_url: str
+    ) -> tuple[ListenerEvidence, list[str]]:
+        """Turn bounded DevTools listener evidence into candidate controls.
+
+        A candidate becomes an ordinary control: it passes the same safety
+        filter and is executed only within the action budget. Revisions are
+        attached to controls only in revisit mode; in observe mode they are
+        evidence only.
+        """
+        revisit = self.config.runtime_listener_observation == "revisit"
+        evidence = ListenerEvidence(
+            supported=snapshot.supported, document_token=snapshot.document_token,
+            caused_by_action=self._last_action, listener_nodes=snapshot.listener_nodes,
+            described_nodes=snapshot.described_nodes, skipped=dict(snapshot.skipped),
+            skipped_examples=snapshot.skipped_examples, delegation_hosts=snapshot.delegation_hosts,
+            window_click_listeners=snapshot.window_click_listeners, elapsed_ms=snapshot.elapsed_ms,
+            cdp_calls=snapshot.cdp_calls, error=snapshot.error,
+        )
+        evidence.revisions = [{k: v for k, v in item.items() if k != "backend_node_id"} for item in snapshot.revisions]
+
+        def same_element(control: Control, entry: dict[str, Any], frame_index: int) -> bool:
+            path = entry.get("css_path", "")
+            return control.frame_index == frame_index and (
+                control.css_path == path or control.css_path == path.split(" >> ")[-1])
+
+        active: list[str] = []
+        for entry in snapshot.represented:
+            revision = entry.get("behavior_revision")
+            frame = self._frame_for_href(entry.get("frame_href", ""))
+            if not revision or frame is None:
+                continue
+            active.append(revision)
+            evidence.active_revisions.append({"css_path": entry.get("css_path", ""), "revision": revision})
+            if not revisit:
+                continue
+            for control in controls:
+                if control.provenance == "snapshot" and same_element(control, entry, frame[0]):
+                    control.behavior_revision = revision
+                    control.id = "ctl_" + digest([control.id, revision], 18)
+        allowed = None if self.config.interaction_profile != "basic" else {"click"}
+        for entry in snapshot.candidates:
+            frame = self._frame_for_href(entry.get("frame_href", ""))
+            record = {k: v for k, v in entry.items() if k != "backend_node_id"} | {"control_ids": []}
+            if frame is None:
+                record["skip_reason"] = "frame_not_observable"
+                evidence.skipped["frame_not_observable"] = evidence.skipped.get("frame_not_observable", 0) + 1
+                evidence.candidates.append(record)
+                continue
+            frame_index, frame_url = frame
+            if any(control.provenance == "snapshot" and same_element(control, entry, frame_index) for control in controls):
+                continue
+            revision = entry.get("behavior_revision")
+            if revision:
+                active.append(revision)
+                evidence.active_revisions.append({"css_path": entry.get("css_path", ""), "revision": revision})
+            label = compact_text(entry.get("label", ""), 160) or f"unnamed {entry.get('tag', 'element')}"
+            component = compact_text(entry.get("component", "document"), 160)
+            unsafe_reason = self._unsafe_reason(label, None, None, [])
+            for interaction in entry.get("interactions", ["click"]):
+                if allowed is not None and interaction not in allowed:
+                    continue
+                signature = control_signature("button", "generic", label, None, None, interaction, component)
+                control_revision = revision if revisit else None
+                control = Control(
+                    id="ctl_" + digest([current_url, frame_url, entry["css_path"], signature, "listener", control_revision], 18),
+                    kind="button", label=label, css_path=entry["css_path"], role="generic",
+                    safe=unsafe_reason is None, skip_reason=unsafe_reason, signature=signature,
+                    interaction=interaction, component=component, frame_index=frame_index, frame_url=frame_url,
+                    provenance="observed_listener", behavior_revision=control_revision,
+                    listener_evidence={"provenance": entry.get("provenance"), "family": entry.get("family"),
+                                       "handler_locations": entry.get("handler_locations", []),
+                                       "caused_by_action": self._last_action},
+                )
+                controls.append(control)
+                record["control_ids"].append(control.id)
+                record["safe"] = unsafe_reason is None
+                record["skip_reason"] = unsafe_reason
+            evidence.candidates.append(record)
+        return evidence, active
 
     def _session_markers(self) -> dict[str, list[str]]:
         assert self.page and self.context
@@ -1117,9 +1259,16 @@ class BrowserSession:
             component=control.component,
             frame_index=control.frame_index,
             frame_url=control.frame_url,
+            provenance=control.provenance,
+            behavior_revision=control.behavior_revision,
         )
 
     def find_current(self, observation: Observation, descriptor: ActionDescriptor) -> Control | None:
+        # A recorded action names the handler revision it exercised (None for
+        # the original behavior); only a control in that behavior matches.
+        revision = getattr(descriptor, "behavior_revision", None)
+        observation = observation.model_copy(update={"controls": [
+            control for control in observation.controls if control.behavior_revision == revision]})
         for control in observation.controls:
             if control.id == descriptor.control_id and control.safe:
                 return control
@@ -1188,6 +1337,7 @@ class BrowserSession:
         self.dialogs = []
         self.last_popup_opened = False
         self.last_action_resources = []
+        self._last_action = control.signature + (f"@{control.behavior_revision}" if control.behavior_revision else "")
         input_refs: list[InputReference] = []
         action_count = 0
         if control.kind == "form_submit" and control.form_index is not None:
@@ -1370,26 +1520,43 @@ class HttpBudget:
     ``redirect_overrun`` when they exceed the limit.
     """
 
-    def __init__(self, limit: int):
+    # Sources allowed to spend the verification reserve once replay begins.
+    VERIFICATION_SOURCES = {"browser", "browser_redirect"}
+
+    def __init__(self, limit: int, verification_reserve: int = 0):
         self.limit, self.used, self.blocked = limit, 0, 0
         self.redirect_overrun = 0
         self.redirect_scope_violations = 0
         self.by_source: defaultdict[str, int] = defaultdict(int)
+        # Requests held back for independent replay, mirroring the time and
+        # action replay reserve: discovery (browser exploration and every
+        # passive source) stops at limit - reserve; only browser replay
+        # traffic may spend the reserve.
+        self.verification_reserve = verification_reserve
+        self.phase = "discovery"
 
-    def remaining(self) -> bool:
-        return self.used < self.limit
+    def _cap(self, source: str) -> int:
+        if self.phase == "verification" and source in self.VERIFICATION_SOURCES:
+            return self.limit
+        return self.limit - self.verification_reserve
+
+    def remaining(self, source: str = "browser") -> bool:
+        return self.used < self._cap(source)
+
+    def _label(self, source: str) -> str:
+        return f"{source}_verification" if self.phase == "verification" and source in self.VERIFICATION_SOURCES else source
 
     def consume(self, source: str = "browser") -> bool:
-        if not self.remaining():
+        if not self.remaining(source):
             self.blocked += 1
             return False
         self.used += 1
-        self.by_source[source] += 1
+        self.by_source[self._label(source)] += 1
         return True
 
     def charge_observed(self, source: str) -> None:
         self.used += 1
-        self.by_source[source] += 1
+        self.by_source[self._label(source)] += 1
         if self.used > self.limit:
             self.redirect_overrun += 1
 
@@ -1423,7 +1590,10 @@ class Explorer:
         self.started_monotonic = time.monotonic()
         self.prior_elapsed = 0.0
         self.sequence = 0
-        self.http_budget = HttpBudget(config.max_total_http_requests) if config.max_total_http_requests else None
+        self.http_budget = HttpBudget(
+            config.max_total_http_requests,
+            int(config.max_total_http_requests * config.http_verification_reserve_fraction),
+        ) if config.max_total_http_requests else None
         self.browser_body_status: defaultdict[str, int] = defaultdict(int)
         self.resource_budget = ResourceBudget(
             config.max_resource_fetches,
@@ -1520,9 +1690,7 @@ class Explorer:
             result = self._observation_by_id(transition.result_observation_id or "")
             if result is None:
                 continue
-            destination = digest(
-                [result.url, result.group_signature, transition.action.interaction], 24
-            )
+            destination = self._replay_destination(transition, result)
             if destination in seen_destinations:
                 continue
             seen_destinations.add(destination)
@@ -1554,6 +1722,15 @@ class Explorer:
     def _exploration_deadline(self) -> float:
         reserve_fraction, _ = self._current_replay_reserve()
         return self.config.max_seconds * (1.0 - reserve_fraction)
+
+    def _discovery_http_exhausted(self) -> bool:
+        """Exploration ends cleanly once discovery may not send another browser
+        request; the remaining requests (if any) belong to verification."""
+        if self.http_budget is None or self.http_budget.remaining("browser"):
+            return False
+        if "HTTP discovery budget exhausted; exploration stopped before replay." not in self.artifact.notes:
+            self.artifact.notes.append("HTTP discovery budget exhausted; exploration stopped before replay.")
+        return True
 
     def _fits_exploration_action_budget(self, additional_actions: int) -> bool:
         if self.config.budget_allocation_strategy == "fixed":
@@ -1728,6 +1905,13 @@ class Explorer:
         current = self.artifact.return_paths.get(observation.group_signature)
         if current is None or len(path) < len(current):
             self.artifact.return_paths[observation.group_signature] = list(path)
+        behavior = observation.behavior_signature
+        if behavior and behavior != observation.group_signature:
+            # Same visible DOM, evidenced different handler behavior: the way
+            # back must re-create that behavior, so it is kept separately.
+            current = self.artifact.return_paths.get(behavior)
+            if current is None or len(path) < len(current):
+                self.artifact.return_paths[behavior] = list(path)
         existing_ads = {
             (item.source_observation_id, item.control.id) for item in self.artifact.advertisements
         }
@@ -1791,6 +1975,10 @@ class Explorer:
                 observation.state_signature if self.config.policy == "exact" else observation.group_signature
             )
             tried_key = f"{identity}:{control.signature}"
+            if control.behavior_revision:
+                # Evidence that this control's handler changed: the old action
+                # is not a reason to suppress the new behavior.
+                tried_key += f"@{control.behavior_revision}"
             if tried_key in self.tried:
                 continue
             global_component = bool(
@@ -1819,8 +2007,9 @@ class Explorer:
             if global_component or repeated_view_action:
                 self._scheduled_global_actions.add(global_key)
             kind_score = {"form_submit": 3.0, "button": 2.0, "link": 1.0}[control.kind]
-            globally_novel = control.signature not in self._seen_control_shapes
-            self._seen_control_shapes.add(control.signature)
+            shape_key = control.signature + (f"@{control.behavior_revision}" if control.behavior_revision else "")
+            globally_novel = shape_key not in self._seen_control_shapes
+            self._seen_control_shapes.add(shape_key)
             if self.config.policy == "coverage":
                 # Event-flow novelty: branch on a newly observed control before
                 # repeating shared chrome. A small depth cost accounts for the
@@ -1830,7 +2019,8 @@ class Explorer:
             if self.config.policy in {"multidimensional", "hierarchical"}:
                 target_key = control.target or ""
                 target_novel = bool(target_key and target_key not in self._seen_targets)
-                component_key = f"{control.component}:{control.role}:{control.label}"
+                component_key = f"{control.component}:{control.role}:{control.label}" + (
+                    f"@{control.behavior_revision}" if control.behavior_revision else "")
                 component_novel = component_key not in self._seen_components
                 form_shape = digest(
                     [
@@ -1908,6 +2098,8 @@ class Explorer:
                 break
             if len(self.artifact.transitions) >= self.config.max_transitions:
                 break
+            if self._discovery_http_exhausted():
+                break
             if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
                 break
             item = self.frontier.pop(0)
@@ -1934,6 +2126,8 @@ class Explorer:
                 if self._elapsed() >= self._exploration_deadline():
                     break
                 if len(self.artifact.transitions) >= self.config.max_transitions:
+                    break
+                if self._discovery_http_exhausted():
                     break
                 if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
                     break
@@ -1981,13 +2175,15 @@ class Explorer:
                 )
                 if updated is None:
                     self.artifact.metrics.live_state_stale += 1
+                    if self._discovery_http_exhausted():
+                        break
                     self._navigate_start(session, "persistent_restore")
                     live = session.observe(self._next_sequence())
                     live_path = []
                 else:
                     live, observed_path = updated
                     live_path = list(
-                        self.artifact.return_paths.get(live.group_signature, observed_path)
+                        self.artifact.return_paths.get(live.behavior_signature or live.group_signature, observed_path)
                     )
                 self.save_checkpoint()
 
@@ -2411,6 +2607,8 @@ class Explorer:
         return observation
 
     def _replay(self, browser: Browser) -> None:
+        if self.http_budget is not None:
+            self.http_budget.phase = "verification"
         raw_candidates = [
             transition for transition in self.artifact.transitions if transition.status == EvidenceStatus.OBSERVED
         ]
@@ -2421,9 +2619,7 @@ class Explorer:
             result = self._observation_by_id(transition.result_observation_id)
             if not result:
                 continue
-            key = digest(
-                [result.url, result.group_signature, transition.action.interaction], 24
-            )
+            key = self._replay_destination(transition, result)
             if key in scheduled_destinations:
                 continue
             scheduled_destinations.add(key)
@@ -2436,6 +2632,10 @@ class Explorer:
             if self._elapsed() >= self.config.max_seconds:
                 break
             if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
+                break
+            if self.http_budget is not None and not self.http_budget.remaining("browser"):
+                # A replay that cannot be sent is untested, not failed.
+                self.artifact.notes.append("HTTP verification budget exhausted; remaining transitions left untested.")
                 break
             paired_search = bool(self.config.search_probe_primary) and is_get_search_action(
                 transition.action
@@ -2457,6 +2657,9 @@ class Explorer:
                     if paired_search
                     else self._replay_transition(browser, transition)
                 )
+                if replay.status == EvidenceStatus.NOT_TESTED:
+                    self.artifact.metrics.replays_untested_http_budget += 1
+                    break
                 completed.append(replay)
                 self.artifact.replays.append(replay)
                 self.artifact.metrics.replay_success_denominator += 1
@@ -2468,6 +2671,19 @@ class Explorer:
                 transition.status = EvidenceStatus.REPLAY_VALIDATED
             self._record_progress()
             self.save_checkpoint()
+
+    @staticmethod
+    def _replay_destination(transition: Transition, result: Observation) -> str:
+        """Replay de-duplication key. A transition whose only effect is a
+        request (same visible DOM), or that exercised a revised handler, is a
+        different workflow from another action ending on the same screen."""
+        parts: list[Any] = [result.url, result.group_signature, transition.action.interaction]
+        if transition.action.behavior_revision:
+            parts.append(transition.action.behavior_revision)
+        structures = action_request_structures(transition.network)
+        if structures and transition.source_group_signature == transition.result_group_signature:
+            parts.append(sorted(structures))
+        return digest(parts, 24)
 
     def _diverse_replay_order(self, candidates: list[Transition]) -> list[Transition]:
         """Greedily cover distinct routes/actions/requests/contexts per replay cost."""
@@ -2716,6 +2932,7 @@ class Explorer:
         )
 
     def _replay_transition(self, browser: Browser, transition: Transition) -> ReplayResult:
+        verification: dict[str, Any] = {}
         replay_id = "replay_" + digest([transition.id, len(self.artifact.replays)], 20)
         started_at = utc_now()
         browser_actions = 0
@@ -2727,6 +2944,7 @@ class Explorer:
                 self.artifact.metrics.root_reloads += 1
                 self._record_navigation_evidence(session, "replay")
                 observation = session.observe(self._next_sequence())
+                last_step_network: list[NetworkEvent] = []
                 for descriptor in transition.workflow_path:
                     control = session.find_current(observation, descriptor)
                     if control is None:
@@ -2735,6 +2953,7 @@ class Explorer:
                     _, network, _, count = session.execute(control, plan, descriptor.input_plan_ref)
                     browser_actions += count
                     replay_network.extend(network)
+                    last_step_network = network
                     self.artifact.metrics.observed_http_requests += len(network)
                     self._account_readiness(session.last_readiness)
                     self._collect_resource_evidence(session.last_action_resources)
@@ -2776,13 +2995,27 @@ class Explorer:
                         or checks.get("content_identity", False)
                     )
                 )
+                # An action whose only observable effect is a script-initiated or
+                # non-GET request (same visible DOM, no dialog) is reproduced only
+                # if the replay's final step issues the same request structures.
+                expected_structures = action_request_structures(transition.network)
+                network_only_effect = bool(expected_structures) and (
+                    transition.source_group_signature == transition.result_group_signature
+                    and not transition.dialogs
+                )
+                structures_reproduced = expected_structures <= action_request_structures(last_step_network)
+                if expected_structures:
+                    verification["request_structures_expected"] = len(expected_structures)
+                    verification["request_structures_reproduced"] = structures_reproduced
+                if network_only_effect:
+                    checks["request_structures"] = structures_reproduced
                 dynamic_valid = all(
                     checks[name]
                     for name in (
                         "exact_url", "group_signature", "route_pattern", "title",
                         "content_fingerprint", "outcome_signals",
                     )
-                )
+                ) and (not network_only_effect or structures_reproduced)
                 status = EvidenceStatus.REPLAY_VALIDATED if (
                     navigation_valid or dynamic_valid
                 ) else EvidenceStatus.FAILED
@@ -2799,6 +3032,10 @@ class Explorer:
             checks = {}
             status = EvidenceStatus.FAILED
             error = f"{type(exc).__name__}: {compact_text(str(exc), 300)}"
+            if "ERR_BLOCKED_BY_CLIENT" in error and self.http_budget is not None \
+                    and not self.http_budget.remaining("browser"):
+                status = EvidenceStatus.NOT_TESTED  # budget, not behavior
+                error = "verification HTTP budget exhausted during replay"
             actual_group = None
             actual_observation_id = None
             functional_status = FunctionalStatus.FAILED
@@ -2815,6 +3052,7 @@ class Explorer:
             functional_status=functional_status,
             browser_actions=browser_actions,
             network=replay_network,
+            verification_evidence=verification,
             error=error,
             started_at=started_at,
             ended_at=utc_now(),
@@ -2872,6 +3110,8 @@ class Explorer:
 
     def _feature_key_for_transition(self, transition: Transition) -> str:
         semantic_action = feature_action_signature(transition.action)
+        if transition.action.behavior_revision:
+            semantic_action = digest([semantic_action, transition.action.behavior_revision])
         outcome_signature = ""
         if transition.action.kind != "link":
             target = self._observation_by_id(transition.result_observation_id)
@@ -3080,6 +3320,26 @@ class Explorer:
                     missing=[] if action_present else ["registered action in source observation"],
                 )
             )
+            if transition.action.provenance == "observed_listener" or transition.action.behavior_revision:
+                evidence = source.listener_evidence if source else None
+                if transition.action.provenance == "observed_listener":
+                    listed = bool(evidence) and any(
+                        transition.action.control_id in item.get("control_ids", []) for item in evidence.candidates)
+                    results.append(ConnectionEvidence(
+                        id="conn_" + digest(["listener_candidate", transition.id]),
+                        claim_type="listener_candidate", subject_id=transition.id, complete=listed,
+                        evidence_ids=[transition.source_observation_id] if listed else [],
+                        missing=[] if listed else ["DevTools listener evidence for the executed element"],
+                    ))
+                if transition.action.behavior_revision:
+                    revised = bool(evidence) and any(
+                        item.get("revision") == transition.action.behavior_revision for item in evidence.active_revisions)
+                    results.append(ConnectionEvidence(
+                        id="conn_" + digest(["handler_revision", transition.id]),
+                        claim_type="handler_revision", subject_id=transition.id, complete=revised,
+                        evidence_ids=[transition.source_observation_id] if revised else [],
+                        missing=[] if revised else ["observed handler revision in the source observation"],
+                    ))
             if transition.result_observation_id:
                 result = observations.get(transition.result_observation_id)
                 result_complete = bool(result) and result.state_signature == transition.result_state_signature
@@ -3194,9 +3454,13 @@ class Explorer:
             resource_evidence_id = resource.evidence_id or (
                 "resource_evidence_" + digest(resource.model_dump(mode="json"), 20)
             )
+            # An unresolved candidate has no URL by definition (its target is a
+            # runtime value); its evidence is the expression fingerprint instead.
+            unresolved = resource.status == "unresolved_candidate"
+            target_evidence = resource.expression_fingerprint if unresolved else resource.url
             complete = bool(
                 resource_evidence_id
-                and resource.url
+                and target_evidence
                 and resource.kind
                 and resource.source_url
                 and resource.source_type
@@ -3212,7 +3476,7 @@ class Explorer:
                     missing=[] if complete else [
                         name for name, value in (
                             ("stable evidence id", resource_evidence_id),
-                            ("reference URL", resource.url),
+                            ("expression fingerprint" if unresolved else "reference URL", target_evidence),
                             ("source response URL", resource.source_url),
                             ("source type", resource.source_type),
                             ("source element or header", resource.source),
@@ -3238,6 +3502,7 @@ class Explorer:
                                 group_control_signature(control)
                                 for control in observation.controls
                                 if control.safe and not VOLATILE_CONTROL.match(control.label)
+                                and control.provenance == "snapshot"
                             ),
                             "forms": [form.model_dump(mode="json") for form in observation.forms],
                         },
@@ -3249,7 +3514,52 @@ class Explorer:
                 incorrect += 1
         return incorrect
 
+    def _finalize_listener_metrics(self) -> None:
+        metrics = self.artifact.metrics
+        metrics.listener_observations = metrics.listener_observation_errors = metrics.listener_cdp_calls = 0
+        metrics.listener_observation_ms = 0.0
+        skipped: defaultdict[str, int] = defaultdict(int)
+        candidates: set[str] = set()
+        revisions: set[str] = set()
+        for observation in self.artifact.observations:
+            evidence = observation.listener_evidence
+            if evidence is None:
+                continue
+            metrics.listener_observations += 1
+            metrics.listener_observation_errors += evidence.error is not None
+            metrics.listener_observation_ms += evidence.elapsed_ms
+            metrics.listener_cdp_calls += evidence.cdp_calls
+            for reason, count in evidence.skipped.items():
+                skipped[reason] += count
+            revisions.update(item["revision"] for item in evidence.revisions)
+        for observation in self.artifact.observations:
+            candidates.update(c.signature for c in observation.controls if c.provenance == "observed_listener" and c.safe)
+        metrics.listener_observation_ms = round(metrics.listener_observation_ms, 1)
+        metrics.listener_skipped = dict(skipped)
+        metrics.listener_candidates_distinct = len(candidates)
+        observed = [t for t in self.artifact.transitions if t.status != EvidenceStatus.FAILED]
+        metrics.listener_candidates_executed = len({t.action.signature for t in observed if t.action.provenance == "observed_listener"})
+        metrics.handler_revisions_observed = len(revisions)
+        metrics.handler_revisits_executed = sum(1 for t in observed if t.action.behavior_revision)
+        by_id = {item.id: item for item in self.artifact.observations}
+        metrics.behavior_divergent_groups = sum(
+            1 for members in self.artifact.state_groups.values()
+            if len({by_id[m].behavior_signature or by_id[m].group_signature for m in members if m in by_id}) > 1)
+
     def _finalize(self) -> None:
+        self._finalize_listener_metrics()
+        try:
+            import resource as _resource
+            peak = _resource.getrusage(_resource.RUSAGE_SELF).ru_maxrss
+            self.artifact.metrics.python_peak_rss_mb = round(peak / (1024 * 1024 if os.uname().sysname == "Darwin" else 1024), 1)
+        except (ImportError, AttributeError):
+            pass
+        cookie_updates: defaultdict[str, int] = defaultdict(int)
+        self.artifact.metrics.passive_wire_bytes = sum(item.wire_bytes or 0 for item in self.artifact.resource_evidence)
+        for item in self.artifact.resource_evidence:
+            for key, value in (item.cookie_updates or {}).items():
+                cookie_updates[key] += value
+        self.artifact.metrics.passive_cookie_updates = dict(cookie_updates)
         self.artifact.metrics.effective_resource_budgets = effective_resource_budgets(self.config)
         self.artifact.metrics.browser_body_status = dict(self.browser_body_status)
         spider_status: defaultdict[str, int] = defaultdict(int)
