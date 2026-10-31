@@ -10,7 +10,9 @@ from .schema import Control, FormObservation, OutcomeSignal
 
 SENSITIVE_QUERY_KEYS = re.compile(r"token|secret|password|passwd|auth|session|key|code", re.I)
 INSTANCE_TOKEN = re.compile(
-    r"(?<![A-Za-z])(?:\d+|[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12})(?![A-Za-z])",
+    # UUIDs first: with digits first, a UUID that starts with a digit was cut
+    # into fragments ("{instance}5efb7a-{instance}3b4-...").
+    r"(?<![A-Za-z])(?:[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}|\d+)(?![A-Za-z])",
     re.I,
 )
 WHITESPACE = re.compile(r"\s+")

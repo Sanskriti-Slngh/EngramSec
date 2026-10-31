@@ -20,6 +20,10 @@ Rules this observer follows:
 * Handler identity is the listener's (type, script, line, column) within one
   document lifetime, compared only between observations of the same document.
   Function bodies are never read or hashed.
+* The listener enumeration itself is one native DevTools call whose latency
+  and response size grow with the document's listener count. Documents with
+  more than `max_dom_elements` elements are not enumerated (recorded as
+  `dom_too_large`).
 * Work is bounded: at most `max_nodes` listener-bearing nodes are inspected
   (resolved and described over DevTools) per observation, at most
   `family_limit` candidates per handler location and `max_candidates` per
@@ -61,6 +65,38 @@ ELEMENT_GROUP = "engramsec-elements"
 # DevTools object group, so page scripts cannot reach it.
 ELEMENTS_EXPRESSION = "new WeakSet(document.querySelectorAll('*'))"
 HAS_FN = "function(seen) { return seen.has(this); }"
+# Evidence-only framework probe (opt-in). React 17+ registers its listeners on
+# the root container and keeps each element's handlers in an own property
+# `__reactProps$<id>`; the probe reads only the *names* of function-valued
+# `on*` props on at most `limit` elements. It never calls a handler and never
+# creates a candidate: a root listener plus a prop is evidence for a report,
+# not authorization to act.
+FRAMEWORK_PROBE = r"""
+function(selector, limit) {
+  const all = document.getElementsByTagName('*');
+  const n = Math.min(all.length, limit);
+  const families = {}, examples = [];
+  let elements = 0, outside = 0;
+  for (let i = 0; i < n; i++) {
+    const el = all[i];
+    let key = null;
+    for (const k in el) { if (k.startsWith('__reactProps$')) { key = k; break; } }
+    if (!key) continue;
+    const props = el[key] || {};
+    const names = Object.keys(props).filter(x => /^on[A-Z]/.test(x) && typeof props[x] === 'function');
+    if (!names.length) continue;
+    elements++;
+    for (const x of names) families[x] = (families[x] || 0) + 1;
+    if (!el.matches(selector)) {
+      outside++;
+      if (examples.length < 5) examples.push({tag: el.tagName.toLowerCase(), handlers: names.slice(0, 8),
+        label: (el.getAttribute('aria-label') || el.getAttribute('title') || '').slice(0, 60)});
+    }
+  }
+  return {framework: elements ? 'react' : null, scanned: n, truncated: all.length > limit,
+          handler_elements: elements, outside_snapshot: outside, handler_props: families, examples};
+}
+"""
 
 DESCRIBE_FN = r"""
 function(selector) {
@@ -139,6 +175,8 @@ class ListenerSnapshot:
     listener_nodes: int = 0
     described_nodes: int = 0
     reused_nodes: int = 0  # unchanged nodes whose cached description was reused
+    dom_elements: int = 0  # document element count (light DOM of the top document)
+    framework: dict[str, Any] | None = None  # evidence-only framework handler probe
     changes: dict[str, int] = field(default_factory=dict)  # provenance -> listener-bearing nodes
     truncated: bool = False  # the per-observation inspection limit was reached
     delegation_hosts: int = 0
@@ -157,8 +195,11 @@ class ListenerObserver:
     """Per-browser-session observer; remembers the previous snapshot of each document."""
 
     def __init__(self, snapshot_selector: str, *, max_nodes: int = 300, max_candidates: int = 12,
-                 family_limit: int = 2):
+                 family_limit: int = 2, max_dom_elements: int | None = 20_000,
+                 framework_probe_limit: int = 0):
         self.selector = snapshot_selector
+        self.framework_probe_limit = framework_probe_limit
+        self.max_dom_elements = max_dom_elements
         self.max_nodes = max_nodes
         self.max_candidates = max_candidates
         self.family_limit = family_limit
@@ -200,14 +241,22 @@ class ListenerObserver:
     def _observe(self, page: Any, caused_by: str | None, snapshot: ListenerSnapshot) -> None:
         cdp = self._cdp(page)
         send = lambda method, params: self._send(cdp, snapshot, method, params)  # noqa: E731
-        origin = send("Runtime.evaluate", {"expression": "performance.timeOrigin + '|' + location.href",
-                                           "returnByValue": True})["result"].get("value", "")
+        probe = send("Runtime.evaluate", {
+            "expression": "[performance.timeOrigin + '|' + location.href, document.getElementsByTagName('*').length]",
+            "returnByValue": True})["result"].get("value") or ["", 0]
+        origin, snapshot.dom_elements = probe[0], int(probe[1] or 0)
         token = digest([id(page), origin], 16)
         same_document = token == self._document
         if not same_document:
             self._document, self._previous, self._revisions, self._described = token, {}, {}, {}
             self._elements = None
         snapshot.document_token = token
+        if self.max_dom_elements and snapshot.dom_elements > self.max_dom_elements:
+            # Enumeration cost and response size grow with the document's
+            # listener count (RUNTIME_GENERALIZATION_REPORT.md, large-DOM cost);
+            # above the guard the observation is skipped and recorded.
+            self._skip(snapshot, "dom_too_large", None)
+            return
         send("DOM.getDocument", {"depth": 0})
         document = send("Runtime.evaluate", {"expression": "document", "objectGroup": OBJECT_GROUP})["result"]
         window = send("Runtime.evaluate", {"expression": "window", "objectGroup": OBJECT_GROUP})["result"]
@@ -317,6 +366,11 @@ class ListenerObserver:
                         snapshot.candidates.append(entry)
             self._previous = identities
             self._remember_elements(send, page)
+            if self.framework_probe_limit and snapshot.delegation_hosts:
+                snapshot.framework = send("Runtime.callFunctionOn", {
+                    "objectId": document["objectId"], "functionDeclaration": FRAMEWORK_PROBE,
+                    "arguments": [{"value": self.selector}, {"value": self.framework_probe_limit}],
+                    "returnByValue": True})["result"].get("value")
         finally:
             send("Runtime.releaseObjectGroup", {"objectGroup": OBJECT_GROUP})
 

@@ -164,6 +164,66 @@ def build_behavior_evidence(artifact: RunArtifact) -> dict[str, Any]:
     }
 
 
+def build_replay_evidence(artifact: RunArtifact) -> dict[str, Any]:
+    """One record per distinct observed request structure: the actions that
+    produced it (with their workflow length, provenance and handler revision),
+    every replay that targeted or expected it, and whether an independent
+    replay reproduced it. Structures are normalized (method, route pattern,
+    parameter names, body encoding); values are never stored."""
+    from .replay_scheduler import request_structures
+
+    structures: dict[str, dict[str, Any]] = {}
+    for transition in artifact.transitions:
+        if transition.status == EvidenceStatus.FAILED:
+            continue
+        for key in sorted(request_structures(transition.network)):
+            record = structures.setdefault(key, {"structure": key, "produced_by": [], "replays": [],
+                                                 "status": "not_attempted", "verified_by_replay": None})
+            record["produced_by"].append({
+                "transition_id": transition.id, "label": transition.action.label,
+                "provenance": transition.action.provenance, "behavior_revision": transition.action.behavior_revision,
+                "workflow_length": len(transition.workflow_path),
+                "prerequisites": [d.label for d in transition.workflow_path[:-1]],
+            })
+    for replay in artifact.replays:
+        expected = replay.verification_evidence.get("structures_expected", [])
+        reproduced = set(replay.verification_evidence.get("structures_reproduced", []))
+        for key in expected:
+            record = structures.get(key)
+            if record is None:
+                continue
+            record["replays"].append({"replay_id": replay.id, "transition_id": replay.transition_id,
+                                      "status": str(replay.status), "lane": replay.scheduler_lane,
+                                      "targeted": key in replay.target_structures, "reproduced": key in reproduced,
+                                      "failure_reason": replay.failure_reason, "failed_step": replay.failed_step})
+            if replay.status == EvidenceStatus.REPLAY_VALIDATED and key in reproduced:
+                record["status"] = "verified"
+                record["verified_by_replay"] = record["verified_by_replay"] or replay.id
+            elif record["status"] != "verified":
+                record["status"] = "failed"
+    excluded = set(artifact.metrics.replay_scheduler.get("state_changing_transition_ids", []))
+    for record in structures.values():
+        if record["status"] == "not_attempted" and record["produced_by"] and all(
+                p["transition_id"] in excluded for p in record["produced_by"]):
+            record["not_replayed_reason"] = "state_changing_workflow"
+    items = sorted(structures.values(), key=lambda r: r["structure"])
+    runtime = [r for r in items if any(p["provenance"] == "observed_listener" or p["behavior_revision"]
+                                       for p in r["produced_by"])]
+    return {
+        "request_structures": items,
+        "summary": {
+            "structures_observed": len(items),
+            "structures_verified": sum(r["status"] == "verified" for r in items),
+            "structures_failed": sum(r["status"] == "failed" for r in items),
+            "structures_not_attempted": sum(r["status"] == "not_attempted" for r in items),
+            "runtime_structures": len(runtime),
+            "runtime_structures_verified": sum(r["status"] == "verified" for r in runtime),
+            "failure_reasons": artifact.metrics.replay_failure_reasons,
+            "scheduler": artifact.metrics.replay_scheduler,
+        },
+    }
+
+
 def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
     observations = {item.id: item for item in artifact.observations}
     state_nodes = []
@@ -447,6 +507,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
         ],
         "request_surfaces": request_surfaces,
         "behavior_evidence": behavior,
+        "replay_evidence": build_replay_evidence(artifact),
         "request_surface_summary": {
             outcome: sum(item["outcome"] == outcome for item in request_surfaces) for outcome in SURFACE_OUTCOMES
         } | {"total": len(request_surfaces)},

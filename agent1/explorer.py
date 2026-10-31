@@ -25,6 +25,8 @@ from playwright.sync_api import sync_playwright
 from .providers import DecisionProvider, ModelProviderError, build_provider
 from .cookies import context_cookie_bridge
 from .listeners import ListenerObserver, ListenerSnapshot
+from .replay_scheduler import (ReplayItem, ReplayScheduler, request_structures, state_changing_workflows,
+                               structure_paths, workflow_changes_state)
 from .resource_spider import ResourceBudget, TypedResourceSpider
 from .revision import code_revision
 from .hierarchical import AreaTourPlanner
@@ -86,7 +88,7 @@ from .state import (
 
 
 DANGEROUS_ACTION = re.compile(
-    r"\b(delete|remove|destroy|drop|reset|shutdown|disable|unsubscribe|purge|clear|empty|logout|sign\s*out)\b",
+    r"\b(delete|remove|destroy|drop|reset|shutdown|disable|unsubscribe|purge|clear|empty|log\s*out|sign\s*out)\b",
     re.I,
 )
 AMBIGUOUS_LABEL = re.compile(r"^(|click|submit|go|ok|more|next|button|link)$", re.I)
@@ -683,12 +685,18 @@ class BrowserSession:
             return None
         return ListenerObserver(SNAPSHOT_SELECTOR, max_nodes=self.config.max_listener_nodes,
                                 max_candidates=self.config.max_listener_candidates,
-                                family_limit=self.config.listener_family_limit)
+                                family_limit=self.config.listener_family_limit,
+                                max_dom_elements=self.config.max_listener_dom_elements or None,
+                                framework_probe_limit=self.config.framework_handler_probe)
 
     def __enter__(self) -> "BrowserSession":
         self.listener_observer = self._new_listener_observer()
         self._last_action = None
-        self.context = self.browser.new_context()
+        # An operator-provided, already authenticated session (Playwright storage
+        # state). Agent 1 never enters credentials; every exploration and
+        # replay context starts from the same session identity.
+        self.context = self.browser.new_context(
+            storage_state=str(self.config.storage_state_path) if self.config.storage_state_path else None)
         # The scope router is installed whenever an HTTP budget is configured.
         # Listener candidates have no statically known target, so the
         # cross-origin check on link targets cannot apply to them; with listener
@@ -1152,6 +1160,7 @@ class BrowserSession:
             supported=snapshot.supported, document_token=snapshot.document_token,
             caused_by_action=self._last_action, listener_nodes=snapshot.listener_nodes,
             described_nodes=snapshot.described_nodes, reused_nodes=snapshot.reused_nodes,
+            dom_elements=snapshot.dom_elements, framework=snapshot.framework,
             changes=dict(snapshot.changes), truncated=snapshot.truncated, skipped=dict(snapshot.skipped),
             skipped_examples=snapshot.skipped_examples, delegation_hosts=snapshot.delegation_hosts,
             window_click_listeners=snapshot.window_click_listeners, elapsed_ms=snapshot.elapsed_ms,
@@ -2625,6 +2634,9 @@ class Explorer:
     def _replay(self, browser: Browser) -> None:
         if self.http_budget is not None:
             self.http_budget.phase = "verification"
+        if self.config.replay_policy == "structure":
+            self._replay_by_structure(browser)
+            return
         raw_candidates = [
             transition for transition in self.artifact.transitions if transition.status == EvidenceStatus.OBSERVED
         ]
@@ -2687,6 +2699,91 @@ class Explorer:
                 transition.status = EvidenceStatus.REPLAY_VALIDATED
             self._record_progress()
             self.save_checkpoint()
+
+    def _shallow_replay_order(self) -> list[Transition]:
+        """The legacy candidate list: observed transitions, one per replay
+        destination, shallowest first."""
+        raw = sorted((t for t in self.artifact.transitions if t.status == EvidenceStatus.OBSERVED),
+                     key=lambda t: (len(t.workflow_path), t.id))
+        ordered: list[Transition] = []
+        seen: set[str] = set()
+        for transition in raw:
+            result = self._observation_by_id(transition.result_observation_id)
+            if not result:
+                continue
+            key = self._replay_destination(transition, result)
+            if key not in seen:
+                seen.add(key)
+                ordered.append(transition)
+        return ordered
+
+    def _structure_replay_eligible(self, transition: Transition, structures: set[str]) -> bool:
+        """Only workflows exploration was allowed to execute; a structure lane
+        never prioritizes a state-changing request unless the run opted into
+        non-GET forms."""
+        if any(not s.split(" ", 2)[1] in {"GET", "HEAD"} for s in structures) and not self.config.allow_post_forms:
+            return False
+        return all(not DANGEROUS_ACTION.search(f"{d.label} {urlsplit(d.target).path if d.target else ''}")
+                   for d in transition.workflow_path)
+
+    def _replay_by_structure(self, browser: Browser) -> None:
+        # A workflow that would repeat a step observed issuing a non-GET request
+        # (the action itself or a prerequisite) is not replayed by either lane
+        # unless the run opted into non-GET forms; it stays untested.
+        changing = set() if self.config.allow_post_forms else state_changing_workflows(self.artifact.transitions)
+        excluded: list[Transition] = []
+        pool = []
+        for transition in self.artifact.transitions:
+            if transition.status != EvidenceStatus.OBSERVED or not self._observation_by_id(transition.result_observation_id):
+                continue
+            if workflow_changes_state(transition, changing):
+                excluded.append(transition)
+                continue
+            structures = request_structures(transition.network)
+            if structures:
+                pool.append((transition, structures, 1 + self._path_action_cost(transition.workflow_path),
+                             self._structure_replay_eligible(transition, structures)))
+        excluded_ids = {t.id for t in excluded}
+        shallow = [(t, 1 + self._path_action_cost(t.workflow_path)) for t in self._shallow_replay_order()
+                   if t.id not in excluded_ids]
+        scheduler = ReplayScheduler(pool, shallow, max_attempts=self.config.replay_structure_attempts)
+
+        def structures_of(transition: Transition) -> tuple[set[str], bool]:
+            return request_structures(transition.network), (
+                transition.source_group_signature == transition.result_group_signature and not transition.dialogs)
+
+        while True:
+            if self._elapsed() >= self.config.max_seconds:
+                break
+            if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
+                break
+            if self.http_budget is not None and not self.http_budget.remaining("browser"):
+                self.artifact.notes.append("HTTP verification budget exhausted; remaining transitions left untested.")
+                break
+            item = scheduler.next(structures_of)
+            if item is None:
+                break
+            if not self._fits_action_budget(item.cost):
+                scheduler.skip(item)
+                continue
+            replay = self._replay_transition(browser, item.transition, item)
+            if replay.status == EvidenceStatus.NOT_TESTED:
+                self.artifact.metrics.replays_untested_http_budget += 1
+                break
+            self.artifact.replays.append(replay)
+            self.artifact.metrics.replay_success_denominator += 1
+            validated = replay.status == EvidenceStatus.REPLAY_VALIDATED
+            if validated:
+                self.artifact.metrics.replay_success_numerator += 1
+                item.transition.status = EvidenceStatus.REPLAY_VALIDATED
+            scheduler.record(item, validated, set(replay.verification_evidence.get("structures_reproduced", [])),
+                             replay.browser_actions, replay.failure_reason)
+            self._record_progress()
+            self.save_checkpoint()
+        self.artifact.metrics.replay_scheduler = scheduler.summary() | {
+            "structure_failures": {k: v for k, v in sorted(scheduler.failures.items())},
+            "state_changing_workflows_not_replayed": len(excluded),
+            "state_changing_transition_ids": sorted(excluded_ids)[:50]}
 
     @staticmethod
     def _replay_destination(transition: Transition, result: Observation) -> str:
@@ -2947,8 +3044,30 @@ class Explorer:
             ended_at=utc_now(),
         )
 
-    def _replay_transition(self, browser: Browser, transition: Transition) -> ReplayResult:
+    @staticmethod
+    def _missing_control_reason(observation: Observation, descriptor: ActionDescriptor) -> str:
+        """Why a recorded workflow step has no matching control in the replay."""
+        same = [c for c in observation.controls
+                if c.signature == descriptor.signature and c.interaction == descriptor.interaction]
+        if any(c.safe and c.behavior_revision != descriptor.behavior_revision for c in same):
+            return "handler_revision_not_reproduced"
+        if same and not any(c.safe for c in same):
+            return "control_now_unsafe"
+        if len([c for c in same if c.safe]) > 1:
+            return "control_ambiguous"
+        return "control_missing"
+
+    def _replay_transition(self, browser: Browser, transition: Transition,
+                           item: ReplayItem | None = None) -> ReplayResult:
         verification: dict[str, Any] = {}
+        failure_reason: str | None = None
+        failed_step: int | None = None
+        failure_observation: Observation | None = None
+        structure_policy = self.config.replay_policy == "structure"
+        if request_structures(transition.network):
+            # Recorded before the workflow runs, so a replay that stops at an
+            # earlier step still names the structures it failed to reproduce.
+            verification["structures_expected"] = sorted(request_structures(transition.network))
         replay_id = "replay_" + digest([transition.id, len(self.artifact.replays)], 20)
         started_at = utc_now()
         browser_actions = 0
@@ -2961,9 +3080,12 @@ class Explorer:
                 self._record_navigation_evidence(session, "replay")
                 observation = session.observe(self._next_sequence())
                 last_step_network: list[NetworkEvent] = []
-                for descriptor in transition.workflow_path:
+                for step, descriptor in enumerate(transition.workflow_path, start=1):
                     control = session.find_current(observation, descriptor)
                     if control is None:
+                        failure_reason = self._missing_control_reason(observation, descriptor)
+                        failed_step = step
+                        failure_observation = observation
                         raise RuntimeError(f"replay control missing: {descriptor.signature}")
                     plan = self._resolve_form_plan(descriptor)
                     _, network, _, count = session.execute(control, plan, descriptor.input_plan_ref)
@@ -3032,10 +3154,32 @@ class Explorer:
                         "content_fingerprint", "outcome_signals",
                     )
                 ) and (not network_only_effect or structures_reproduced)
-                status = EvidenceStatus.REPLAY_VALIDATED if (
-                    navigation_valid or dynamic_valid
-                ) else EvidenceStatus.FAILED
-                error = None if status == EvidenceStatus.REPLAY_VALIDATED else "outcome checks did not match"
+                # Request-structure evidence (recorded under every policy; required
+                # under the structure policy): every application request structure
+                # the original action issued must be issued again by the replay's
+                # final step, for the same concrete record (request path).
+                expected_all = request_structures(transition.network)
+                reproduced = expected_all & request_structures(last_step_network)
+                original_paths = structure_paths(transition.network, reproduced)
+                replay_paths = structure_paths(last_step_network, reproduced)
+                record_identity = all(original_paths[key] & replay_paths.get(key, set()) for key in reproduced)
+                if expected_all:
+                    verification["structures_expected"] = sorted(expected_all)
+                    verification["structures_reproduced"] = sorted(reproduced)
+                    verification["structures_missing"] = sorted(expected_all - reproduced)
+                    verification["record_identity"] = record_identity
+                state_valid = navigation_valid or dynamic_valid
+                if not state_valid:
+                    verification["failed_checks"] = sorted(name for name, ok in checks.items() if not ok)
+                    failure_reason = "state_mismatch"
+                elif structure_policy and reproduced != expected_all:
+                    failure_reason = "request_structure_not_reproduced"
+                elif structure_policy and not record_identity:
+                    failure_reason = "record_identity_changed"
+                status = EvidenceStatus.REPLAY_VALIDATED if failure_reason is None else EvidenceStatus.FAILED
+                error = None if status == EvidenceStatus.REPLAY_VALIDATED else (
+                    "outcome checks did not match" if failure_reason == "state_mismatch"
+                    else f"{failure_reason}: {', '.join(verification.get('structures_missing', [])) or 'request path differs'}")
                 actual_group = observation.group_signature
                 self.artifact.replay_observations.append(observation)
                 actual_observation_id = observation.id
@@ -3048,13 +3192,24 @@ class Explorer:
             checks = {}
             status = EvidenceStatus.FAILED
             error = f"{type(exc).__name__}: {compact_text(str(exc), 300)}"
+            if failure_reason is None:
+                failure_reason = "navigation_error" if "net::ERR" in error or "goto" in error.lower() else "exception"
             if "ERR_BLOCKED_BY_CLIENT" in error and self.http_budget is not None \
                     and not self.http_budget.remaining("browser"):
                 status = EvidenceStatus.NOT_TESTED  # budget, not behavior
                 error = "verification HTTP budget exhausted during replay"
+                failure_reason = "http_budget_exhausted"
             actual_group = None
             actual_observation_id = None
             functional_status = FunctionalStatus.FAILED
+            if failure_observation is not None:
+                # The observation in which the recorded step's control was absent
+                # is the evidence for this failure.
+                self.artifact.replay_observations.append(failure_observation)
+                actual_group = failure_observation.group_signature
+                actual_observation_id = failure_observation.id
+                checks = {f"step_{failed_step}_control_present": False}
+                verification["failed_step_observation"] = failure_observation.id
         self.artifact.metrics.browser_actions += browser_actions
         return ReplayResult(
             id=replay_id,
@@ -3070,6 +3225,10 @@ class Explorer:
             network=replay_network,
             verification_evidence=verification,
             error=error,
+            failure_reason=failure_reason,
+            failed_step=failed_step,
+            scheduler_lane=item.lane if item else None,
+            target_structures=item.target_structures if item else [],
             started_at=started_at,
             ended_at=utc_now(),
         )
@@ -3534,7 +3693,8 @@ class Explorer:
         metrics = self.artifact.metrics
         metrics.listener_observations = metrics.listener_observation_errors = metrics.listener_cdp_calls = 0
         metrics.listener_nodes_inspected = metrics.listener_nodes_reused = metrics.listener_bearing_nodes_max = 0
-        metrics.listener_scans_truncated = 0
+        metrics.listener_scans_truncated = metrics.listener_dom_elements_max = 0
+        metrics.framework_handler_elements_max = metrics.framework_handlers_outside_snapshot_max = 0
         metrics.listener_observation_ms = 0.0
         skipped: defaultdict[str, int] = defaultdict(int)
         changes: defaultdict[str, int] = defaultdict(int)
@@ -3555,6 +3715,12 @@ class Explorer:
             metrics.listener_nodes_reused += evidence.reused_nodes
             metrics.listener_bearing_nodes_max = max(metrics.listener_bearing_nodes_max, evidence.listener_nodes)
             metrics.listener_scans_truncated += evidence.truncated
+            metrics.listener_dom_elements_max = max(metrics.listener_dom_elements_max, evidence.dom_elements)
+            if evidence.framework:
+                metrics.framework_handler_elements_max = max(
+                    metrics.framework_handler_elements_max, evidence.framework.get("handler_elements", 0))
+                metrics.framework_handlers_outside_snapshot_max = max(
+                    metrics.framework_handlers_outside_snapshot_max, evidence.framework.get("outside_snapshot", 0))
             for reason, count in evidence.skipped.items():
                 skipped[reason] += count
             for kind, count in evidence.changes.items():
@@ -3594,8 +3760,45 @@ class Explorer:
             1 for members in self.artifact.state_groups.values()
             if len({by_id[m].behavior_signature or by_id[m].group_signature for m in members if m in by_id}) > 1)
 
+    def _finalize_replay_metrics(self) -> None:
+        """Policy-independent replay evidence: which observed request structures
+        and runtime-discovered behaviors an independent replay reproduced."""
+        metrics = self.artifact.metrics
+        observed_transitions = [t for t in self.artifact.transitions if t.status != EvidenceStatus.FAILED]
+        observed = set().union(*(request_structures(t.network) for t in observed_transitions)) if observed_transitions else set()
+        verified: set[str] = set()
+        attempted: set[str] = set()
+        reasons: defaultdict[str, int] = defaultdict(int)
+        validated_ids: set[str] = set()
+        for replay in self.artifact.replays:
+            attempted.update(replay.verification_evidence.get("structures_expected", []))
+            if replay.status == EvidenceStatus.REPLAY_VALIDATED:
+                verified.update(replay.verification_evidence.get("structures_reproduced", []))
+                validated_ids.add(replay.transition_id)
+            elif replay.failure_reason:
+                reasons[replay.failure_reason] += 1
+        metrics.replay_browser_actions = sum(r.browser_actions for r in self.artifact.replays)
+        metrics.replay_structures_observed = len(observed)
+        metrics.replay_structures_verified = len(verified & observed)
+        metrics.replay_structures_failed = len((attempted - verified) & observed)
+        metrics.replay_structures_unattempted = len(observed - attempted - verified)
+        metrics.replay_failure_reasons = dict(reasons)
+        runtime: dict[tuple[str, str], bool] = {}
+        for t in observed_transitions:
+            if (t.action.provenance == "observed_listener" or t.action.behavior_revision) and transition_has_effect(t):
+                key = (t.action.signature, t.action.behavior_revision or "")
+                expected = request_structures(t.network)
+                ok = t.id in validated_ids and any(
+                    r.transition_id == t.id and r.status == EvidenceStatus.REPLAY_VALIDATED
+                    and expected <= set(r.verification_evidence.get("structures_reproduced", []))
+                    for r in self.artifact.replays)
+                runtime[key] = runtime.get(key, False) or ok
+        metrics.runtime_behaviors_observed = len(runtime)
+        metrics.runtime_behaviors_replay_validated = sum(runtime.values())
+
     def _finalize(self) -> None:
         self._finalize_listener_metrics()
+        self._finalize_replay_metrics()
         try:
             import resource as _resource
             peak = _resource.getrusage(_resource.RUSAGE_SELF).ru_maxrss

@@ -51,6 +51,9 @@ class RunConfig(BaseModel):
     action_timeout_ms: int = Field(default=5_000, ge=250)
     settle_ms: int = Field(default=350, ge=0)
     context_label: str = "anonymous"
+    # Optional Playwright storage-state file for an operator-authorized,
+    # pre-authenticated session (cookies/localStorage). Never created by Agent 1.
+    storage_state_path: Path | None = None
     allow_post_forms: bool = False
     model_provider: Literal["none", "ollama", "groq", "openai"] = "none"
     model_name: str | None = None
@@ -89,7 +92,12 @@ class RunConfig(BaseModel):
     javascript_reference_parser: Literal["legacy_regex", "ast"] = "ast"
     share_resource_frontier: bool = True
     budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"
-    replay_policy: Literal["shallow", "diverse"] = "shallow"
+    # "structure": evidence-driven replay (agent1/replay_scheduler.py). Replay
+    # budget is shared by action cost between greedy coverage of unverified
+    # request structures and the shallow order; a workflow that issued
+    # application requests is validated only if replay reproduces them.
+    replay_policy: Literal["shallow", "diverse", "structure"] = "shallow"
+    replay_structure_attempts: int = Field(default=2, ge=1, le=10)
     state_reuse: Literal["root", "prefix"] = "root"
     # Optional discovery changes (defaults keep the frozen baseline behavior).
     resource_allocation: Literal["class_caps", "shared_http"] = "class_caps"
@@ -119,6 +127,11 @@ class RunConfig(BaseModel):
     max_listener_nodes: int = Field(default=300, ge=1, le=5_000)
     max_listener_candidates: int = Field(default=12, ge=0, le=200)
     listener_family_limit: int = Field(default=2, ge=1, le=50)
+    # Skip listener enumeration on documents larger than this (0 = no limit).
+    max_listener_dom_elements: int = Field(default=20_000, ge=0, le=10_000_000)
+    # Evidence-only framework handler probe on pages with a delegation host
+    # (elements scanned; 0 = off). Never creates candidate controls.
+    framework_handler_probe: int = Field(default=0, ge=0, le=20_000)
 
     @model_validator(mode="after")
     def paired_search_probes(self) -> "RunConfig":
@@ -277,6 +290,8 @@ class ListenerEvidence(BaseModel):
     listener_nodes: int = 0
     described_nodes: int = 0
     reused_nodes: int = 0
+    dom_elements: int = 0
+    framework: dict[str, Any] | None = None
     # Listener-bearing nodes by change class against the previous observation
     # of the same document (see agent1/listeners.py).
     changes: dict[str, int] = Field(default_factory=dict)
@@ -487,6 +502,13 @@ class ReplayResult(BaseModel):
     functional_status: FunctionalStatus = FunctionalStatus.NOT_TESTED
     browser_actions: int = 0
     error: str | None = None
+    # Machine-readable failure class (control_missing, handler_revision_not_reproduced,
+    # control_now_unsafe, request_structure_not_reproduced, record_identity_changed,
+    # state_mismatch, navigation_error, http_budget_exhausted, exception).
+    failure_reason: str | None = None
+    failed_step: int | None = None  # 1-based workflow step that could not be executed
+    scheduler_lane: str | None = None  # "structure" | "shallow" under the structure policy
+    target_structures: list[str] = Field(default_factory=list)
     started_at: str = Field(default_factory=utc_now)
     ended_at: str = Field(default_factory=utc_now)
 
@@ -628,6 +650,15 @@ class RunMetrics(BaseModel):
     spider_body_status: dict[str, int] = Field(default_factory=dict)
     passive_wire_bytes: int = 0
     replays_untested_http_budget: int = 0
+    replay_browser_actions: int = 0
+    replay_structures_observed: int = 0
+    replay_structures_verified: int = 0
+    replay_structures_failed: int = 0
+    replay_structures_unattempted: int = 0
+    runtime_behaviors_observed: int = 0          # distinct listener/revision actions with an observable effect
+    runtime_behaviors_replay_validated: int = 0
+    replay_failure_reasons: dict[str, int] = Field(default_factory=dict)
+    replay_scheduler: dict[str, Any] = Field(default_factory=dict)
     passive_cookie_updates: dict[str, int] = Field(default_factory=dict)
     python_peak_rss_mb: float = 0.0
     listener_observations: int = 0
@@ -642,6 +673,9 @@ class RunMetrics(BaseModel):
     listener_nodes_reused: int = 0              # unchanged nodes served from the per-document cache
     listener_bearing_nodes_max: int = 0         # largest click-listener node count in one observation
     listener_scans_truncated: int = 0           # observations that hit the inspection limit
+    listener_dom_elements_max: int = 0          # largest document observed (elements)
+    framework_handler_elements_max: int = 0     # most framework handler-bearing elements in one observation
+    framework_handlers_outside_snapshot_max: int = 0  # ...of which the DOM snapshot did not recognize
     listener_changes: dict[str, int] = Field(default_factory=dict)  # node change classes, summed
     listener_candidates_new: int = 0            # distinct candidates first seen as created/attached after an action
     listener_candidates_deduplicated: int = 0   # candidate sightings that repeated an already-recorded candidate

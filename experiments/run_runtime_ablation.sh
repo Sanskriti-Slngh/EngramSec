@@ -10,6 +10,10 @@
 #   A     E2: repaired deterministic pipeline (passive cookie sync on)
 #   B     A + DevTools listener observation (candidates; revisions as evidence only)
 #   C     A + listener observation + safe handler-revision re-exploration
+# Replay-validation milestone (REPLAY_VALIDATION_REPORT.md); suffix _sN sets --random-seed N:
+#   R0    A: runtime listener discovery off, original (shallow) replay policy
+#   R1    C: runtime listener discovery on (revisit), original replay policy
+#   R2    R1 + request-structure replay scheduling (--replay-policy structure)
 cd "$(dirname "$0")/.."
 APP=$1; ROOT=$2; SECS=$3; shift 3
 E2=(--resource-frontier-model persistent --passive-document-max-depth 6 --budget-aware-deepening
@@ -24,8 +28,13 @@ for ARM in "$@"; do
     A)    extra=($E2);;
     B)    extra=($E2 --runtime-listener-observation observe);;
     C)    extra=($E2 --runtime-listener-observation revisit);;
+    R0)   extra=($E2);;
+    R1)   extra=($E2 --runtime-listener-observation revisit);;
+    R2)   extra=($E2 --runtime-listener-observation revisit --replay-policy structure);;
     *)    echo "unknown arm $ARM"; exit 2;;
   esac
+  seed=0
+  [[ $ARM == *_s* ]] && seed=${ARM##*_s}
   echo "=== $ARM start $(date +%T)"
   start=()
   [[ -n $START_PATH ]] && start=(--start-path $START_PATH)
@@ -34,6 +43,6 @@ for ARM in "$@"; do
     --max-browser-actions 300 --max-resource-fetches 100 --document-budget 70 \
     --script-budget 20 --stylesheet-budget 10 --asset-budget 20 \
     --max-total-http-requests 1000 --exploration-policy multidimensional \
-    --resource-allocation shared_http --max-speculative-fetches 25 --http-verification-reserve 0.3 $extra > $ROOT/log_$ARM.txt 2>&1
+    --resource-allocation shared_http --max-speculative-fetches 25 --http-verification-reserve 0.3 --random-seed $seed $extra > $ROOT/log_$ARM.txt 2>&1
   echo "=== $ARM exit $? $(date +%T)"
 done

@@ -1,0 +1,333 @@
+{
+  "browser": "chromium 156.0.8078.4",
+  "rows": [
+    {
+      "target_elements": 100,
+      "click_listener_share": 0.01,
+      "elements": 107,
+      "click_listener_elements": 1,
+      "listener_records": 14,
+      "enumeration_ms_median": 0.7,
+      "enumeration_ms_max": 5.2,
+      "response_bytes": 6080,
+      "python_alloc_peak_mb": 0.28,
+      "observe_first": {
+        "ms": 8.95,
+        "cdp_calls": 13,
+        "described": 2,
+        "reused": 0,
+        "truncated": false,
+        "listener_nodes": 2,
+        "candidates": 1,
+        "error": null
+      },
+      "observe_unchanged": {
+        "ms": 2.48,
+        "cdp_calls": 9,
+        "described": 0,
+        "reused": 2,
+        "truncated": false,
+        "listener_nodes": 2,
+        "candidates": 1,
+        "error": null
+      },
+      "observe_after_action": {
+        "ms": 20.81,
+        "cdp_calls": 12,
+        "described": 1,
+        "reused": 2,
+        "truncated": false,
+        "listener_nodes": 3,
+        "candidates": 2,
+        "error": null
+      }
+    },
+    {
+      "target_elements": 100,
+      "click_listener_share": 0.1,
+      "elements": 107,
+      "click_listener_elements": 10,
+      "listener_records": 23,
+      "enumeration_ms_median": 0.9,
+      "enumeration_ms_max": 1.0,
+      "response_bytes": 9777,
+      "python_alloc_peak_mb": 0.27,
+      "observe_first": {
+        "ms": 12.56,
+        "cdp_calls": 31,
+        "described": 11,
+        "reused": 0,
+        "truncated": false,
+        "listener_nodes": 11,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_unchanged": {
+        "ms": 2.69,
+        "cdp_calls": 9,
+        "described": 0,
+        "reused": 11,
+        "truncated": false,
+        "listener_nodes": 11,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_after_action": {
+        "ms": 3.92,
+        "cdp_calls": 12,
+        "described": 1,
+        "reused": 11,
+        "truncated": false,
+        "listener_nodes": 12,
+        "candidates": 3,
+        "error": null
+      }
+    },
+    {
+      "target_elements": 1000,
+      "click_listener_share": 0.01,
+      "elements": 1007,
+      "click_listener_elements": 10,
+      "listener_records": 139,
+      "enumeration_ms_median": 3.3,
+      "enumeration_ms_max": 6.1,
+      "response_bytes": 58165,
+      "python_alloc_peak_mb": 0.45,
+      "observe_first": {
+        "ms": 11.09,
+        "cdp_calls": 31,
+        "described": 11,
+        "reused": 0,
+        "truncated": false,
+        "listener_nodes": 11,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_unchanged": {
+        "ms": 3.8,
+        "cdp_calls": 9,
+        "described": 0,
+        "reused": 11,
+        "truncated": false,
+        "listener_nodes": 11,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_after_action": {
+        "ms": 5.26,
+        "cdp_calls": 12,
+        "described": 1,
+        "reused": 11,
+        "truncated": false,
+        "listener_nodes": 12,
+        "candidates": 3,
+        "error": null
+      }
+    },
+    {
+      "target_elements": 1000,
+      "click_listener_share": 0.1,
+      "elements": 1007,
+      "click_listener_elements": 100,
+      "listener_records": 229,
+      "enumeration_ms_median": 4.9,
+      "enumeration_ms_max": 20.6,
+      "response_bytes": 95388,
+      "python_alloc_peak_mb": 0.79,
+      "observe_first": {
+        "ms": 64.22,
+        "cdp_calls": 211,
+        "described": 101,
+        "reused": 0,
+        "truncated": false,
+        "listener_nodes": 101,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_unchanged": {
+        "ms": 4.7,
+        "cdp_calls": 9,
+        "described": 0,
+        "reused": 101,
+        "truncated": false,
+        "listener_nodes": 101,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_after_action": {
+        "ms": 6.37,
+        "cdp_calls": 12,
+        "described": 1,
+        "reused": 101,
+        "truncated": false,
+        "listener_nodes": 102,
+        "candidates": 3,
+        "error": null
+      }
+    },
+    {
+      "target_elements": 10000,
+      "click_listener_share": 0.01,
+      "elements": 10007,
+      "click_listener_elements": 100,
+      "listener_records": 1386,
+      "enumeration_ms_median": 31.0,
+      "enumeration_ms_max": 31.3,
+      "response_bytes": 584189,
+      "python_alloc_peak_mb": 4.46,
+      "observe_first": {
+        "ms": 97.23,
+        "cdp_calls": 211,
+        "described": 101,
+        "reused": 0,
+        "truncated": false,
+        "listener_nodes": 101,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_unchanged": {
+        "ms": 34.55,
+        "cdp_calls": 9,
+        "described": 0,
+        "reused": 101,
+        "truncated": false,
+        "listener_nodes": 101,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_after_action": {
+        "ms": 22.13,
+        "cdp_calls": 12,
+        "described": 1,
+        "reused": 101,
+        "truncated": false,
+        "listener_nodes": 102,
+        "candidates": 3,
+        "error": null
+      }
+    },
+    {
+      "target_elements": 10000,
+      "click_listener_share": 0.1,
+      "elements": 10007,
+      "click_listener_elements": 1000,
+      "listener_records": 2286,
+      "enumeration_ms_median": 50.7,
+      "enumeration_ms_max": 55.4,
+      "response_bytes": 960987,
+      "python_alloc_peak_mb": 7.5,
+      "observe_first": {
+        "ms": 202.05,
+        "cdp_calls": 609,
+        "described": 300,
+        "reused": 0,
+        "truncated": true,
+        "listener_nodes": 1001,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_unchanged": {
+        "ms": 218.86,
+        "cdp_calls": 609,
+        "described": 300,
+        "reused": 300,
+        "truncated": true,
+        "listener_nodes": 1001,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_after_action": {
+        "ms": 218.97,
+        "cdp_calls": 610,
+        "described": 300,
+        "reused": 600,
+        "truncated": true,
+        "listener_nodes": 1002,
+        "candidates": 3,
+        "error": null
+      }
+    },
+    {
+      "target_elements": 50000,
+      "click_listener_share": 0.01,
+      "elements": 50007,
+      "click_listener_elements": 500,
+      "listener_records": 6929,
+      "enumeration_ms_median": 159.7,
+      "enumeration_ms_max": 167.8,
+      "response_bytes": 2923131,
+      "python_alloc_peak_mb": 22.41,
+      "observe_first": {
+        "ms": 311.04,
+        "cdp_calls": 609,
+        "described": 300,
+        "reused": 0,
+        "truncated": true,
+        "listener_nodes": 501,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_unchanged": {
+        "ms": 283.22,
+        "cdp_calls": 411,
+        "described": 201,
+        "reused": 300,
+        "truncated": false,
+        "listener_nodes": 501,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_after_action": {
+        "ms": 92.41,
+        "cdp_calls": 12,
+        "described": 1,
+        "reused": 501,
+        "truncated": false,
+        "listener_nodes": 502,
+        "candidates": 3,
+        "error": null
+      }
+    },
+    {
+      "target_elements": 50000,
+      "click_listener_share": 0.1,
+      "elements": 50007,
+      "click_listener_elements": 5000,
+      "listener_records": 11429,
+      "enumeration_ms_median": 264.6,
+      "enumeration_ms_max": 267.3,
+      "response_bytes": 4829054,
+      "python_alloc_peak_mb": 37.2,
+      "observe_first": {
+        "ms": 317.56,
+        "cdp_calls": 609,
+        "described": 300,
+        "reused": 0,
+        "truncated": true,
+        "listener_nodes": 5001,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_unchanged": {
+        "ms": 331.18,
+        "cdp_calls": 609,
+        "described": 300,
+        "reused": 300,
+        "truncated": true,
+        "listener_nodes": 5001,
+        "candidates": 2,
+        "error": null
+      },
+      "observe_after_action": {
+        "ms": 334.86,
+        "cdp_calls": 610,
+        "described": 300,
+        "reused": 600,
+        "truncated": true,
+        "listener_nodes": 5002,
+        "candidates": 3,
+        "error": null
+      }
+    }
+  ]
+}

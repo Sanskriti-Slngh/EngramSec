@@ -47,6 +47,10 @@ PAGES = {
         d.addEventListener('click',()=>fetch('/api/newer'));document.body.prepend(d)">More</button><table>"""
         + "".join(f"<tr class=r><td>Row {n}</td></tr>" for n in range(400)) + """</table>
         <script>for (const r of document.querySelectorAll('.r')) r.addEventListener('click',()=>fetch('/api/row'))</script>""",
+    "/reactlike": """<div id=root><section><button id=save>Save</button><div id=tile style="padding:4px">Tile</div>
+        <p>Text</p><p>More</p><p>Even more</p><p>a</p><p>b</p><p>c</p><p>d</p><p>e</p><p>f</p><p>g</p></section></div><script>
+        root.addEventListener('click',()=>{});
+        save.__reactProps$abc={onClick(){fetch('/api/save')}};tile.__reactProps$abc={onClick(){},onPointerDown(){}};</script>""",
     "/rows": "<table>" + "".join(f"<tr class=r><td>Row {n}</td></tr>" for n in range(50)) + """</table>
         <script>for (const r of document.querySelectorAll('.r')) r.addEventListener('click',()=>fetch('/api/row'))</script>""",
 }
@@ -335,3 +339,29 @@ def test_navigation_starts_a_new_listener_inventory(browser, base, tmp_path):
         session.page.reload()                                     # same URL, new document
         reloaded = session.observe(4).listener_evidence
         assert reloaded.document_token != evidence.document_token and reloaded.revisions == []
+
+
+def test_dom_size_guard_skips_enumeration_and_keeps_the_snapshot(browser, base, tmp_path):
+    with session_for(browser, base, "/many", tmp_path, max_listener_dom_elements=200) as session:
+        session.goto_start()
+        observation = session.observe(1)
+        evidence = observation.listener_evidence
+        assert evidence.dom_elements > 200 and evidence.skipped == {"dom_too_large": 1}
+        assert evidence.listener_nodes == 0 and evidence.cdp_calls == 1 and evidence.error is None
+        assert listener_controls(observation) == [] and any(c.label == "More" for c in observation.controls)
+
+
+def test_framework_probe_reports_delegated_handlers_without_creating_candidates(browser, base, tmp_path):
+    """React-style delegation: one root listener, handlers as element props."""
+    with session_for(browser, base, "/reactlike", tmp_path, framework_handler_probe=1000) as session:
+        session.goto_start()
+        observation = session.observe(1)
+        framework = observation.listener_evidence.framework
+        assert framework["framework"] == "react" and framework["handler_elements"] == 2
+        assert framework["outside_snapshot"] == 1 and framework["examples"][0]["tag"] == "div"
+        assert framework["handler_props"] == {"onClick": 2, "onPointerDown": 1}
+        assert listener_controls(observation) == []               # never a candidate
+        assert observation.listener_evidence.skipped.get("possible_delegation_host") == 1
+    with session_for(browser, base, "/reactlike", tmp_path) as session:  # off by default
+        session.goto_start()
+        assert session.observe(1).listener_evidence.framework is None

@@ -1,0 +1,230 @@
+# Agent 1 run agent1-20261031T205512Z
+
+- Code revision: `fd7f3e888045c0a0bb9ba7f4102854814384f38a+mapper-59e4d29853ce`
+- Policy: `multidimensional`
+- Target: `http://127.0.0.1:3460/`
+- Elapsed: 169.940 seconds
+- Browser actions (including setup/replay): 298
+- Replay-validated navigation categories: 15
+- Verified functional workflows: 0
+- Reproduced validation failures: 0
+- Functional outcomes unresolved/untested/failed: 88
+- Replay navigation success: 21/21
+- Replay failures / untested paths: 0/82
+- Graph connections with complete evidence: 1856/1856
+- Graph connections missing evidence: 0
+- Incorrect state merges found by audit: 0
+- Redundant raw states: 0
+- Model calls / cost: 0 / $0.000000
+
+## Fully replay-validated navigation categories
+
+- `feature_09b360029d057bf8` — font-face.html opens /css/font-face.html
+- `feature_14ff0e53dc96656c` — frameworks/ opens /javascript/frameworks/
+- `feature_2e19750bfe9e891e` — misc/ opens /javascript/misc/
+- `feature_3531dbd3511a8d44` — content-location/ opens /headers/content-location/
+- `feature_3699dc387e5599e0` — known-files/ opens /misc/known-files/
+- `feature_4719d72f368a294c` — refresh/ opens /headers/refresh/
+- `feature_6f6ffbd2a0199e3e` — CSS opens /css/
+- `feature_7d1756ba5d7cb6e4` — HTML opens /html/
+- `feature_93ea1e291784ce15` — JavaScript opens /javascript/
+- `feature_9fe133e4cf904946` — Misc opens /misc/
+- `feature_bfc743e866906a70` — doctype.html opens /html/doctype.html/
+- `feature_c06bd8289171ed68` — Response headers opens /headers/
+- `feature_db7621f5f224af8f` — body/ opens /html/body/
+- `feature_df5f963876e079ed` — link/ opens /headers/link/
+- `feature_e483f0482c47ab24` — interactive/ opens /javascript/interactive/
+
+## Functional path-instance outcomes
+
+- `workflow_be07063a6d8cdf517f` — Response headers: `navigation_only` (path length 1)
+- `workflow_61ecbb1313cc973c97` — refresh/: `navigation_only` (path length 2)
+- `workflow_1baf5b837ac6d5a470` — Misc: `navigation_only` (path length 1)
+- `workflow_df76f669b6de53ff9b` — known-files/: `navigation_only` (path length 2)
+- `workflow_a4d2b548e894c03114` — sitemap.xml.html: `not_tested` (path length 3)
+- `workflow_b5e293da2cc39dc52f` — JavaScript: `navigation_only` (path length 1)
+- `workflow_411a3f725f4f020b73` — misc/: `navigation_only` (path length 2)
+- `workflow_1beeae9fef03906db0` — string-variable.html: `not_tested` (path length 3)
+- `workflow_0033f31bd6f697e080` — HTML: `navigation_only` (path length 1)
+- `workflow_146f3efef21540a986` — manifest.html: `not_tested` (path length 2)
+- `workflow_c0b3296f8e42c91c8a` — CSS: `navigation_only` (path length 1)
+- `workflow_8cc7cd33f14882de48` — font-face.html: `navigation_only` (path length 2)
+- `workflow_ea6deec802e364fd56` — location/: `not_tested` (path length 2)
+- `workflow_ecef74d3686c2027e0` — interactive/: `navigation_only` (path length 2)
+- `workflow_01ecacd3978e46a541` — two-listeners.html: `not_tested` (path length 3)
+- `workflow_cf6ee1868acd3f30e1` — Submit: `not_tested` (path length 4)
+- `workflow_2d8122c2071dd73f92` — head/: `not_tested` (path length 2)
+- `workflow_2a329f3fb5fe11e1fc` — profile.html: `not_tested` (path length 3)
+- `workflow_249217e4059754e62a` — link/: `navigation_only` (path length 2)
+- `workflow_483f164843edc5d9e8` — doctype.html: `navigation_only` (path length 2)
+- `workflow_e98410a32c7fd2594e` — frameworks/: `navigation_only` (path length 2)
+- `workflow_c7ec023734047e64bd` — react/: `not_tested` (path length 3)
+- `workflow_27f9f971117e190929` — multi-step-request-redefine-event-attribute.html: `not_tested` (path length 3)
+- `workflow_f232cc606d1857f0e5` — Submit: `not_tested` (path length 4)
+- `workflow_b050bdadfcacd75a10` — Submit: `unresolved` (path length 5)
+- `workflow_f5a033c96dc2fea404` — content-location/: `navigation_only` (path length 2)
+- `workflow_2a391ec677b851f1be` — meta/: `not_tested` (path length 3)
+- `workflow_513844b40edc2128f1` — content-redirect.html: `not_tested` (path length 4)
+- `workflow_693de8dd4992242395` — multi-step-request-event-listener.html: `not_tested` (path length 3)
+- `workflow_9ef9db40a5cab37934` — show secret button: `not_tested` (path length 4)
+- `workflow_186d2d7583cfa03559` — click this secret button: `unresolved` (path length 5)
+- `workflow_c8d48601b311c54009` — show secret button: `not_tested` (path length 5)
+- `workflow_682ec53aeb7297220b` — body/: `navigation_only` (path length 2)
+- `workflow_cd54bf2b250f151e64` — video/: `not_tested` (path length 3)
+- `workflow_7b1871afbbe7529930` — track/: `not_tested` (path length 4)
+- `workflow_e648558e993bdc3db7` — src.html: `not_tested` (path length 5)
+- `workflow_f8c20a669a8d23ffe8` — table/: `not_tested` (path length 3)
+- `workflow_0152fe9153aae41628` — td/: `not_tested` (path length 4)
+- `workflow_9f7ead4ae9f270e296` — background.html: `not_tested` (path length 5)
+- `workflow_f1d62c60db35212f67` — svg/: `not_tested` (path length 3)
+- `workflow_b627ef2e0941623cc7` — image/: `not_tested` (path length 4)
+- `workflow_ce4b4be6b04364867d` — xlink.html: `not_tested` (path length 5)
+- `workflow_6f415b98e361a2e68c` — script/: `not_tested` (path length 3)
+- `workflow_ffde05fff24a7e8afe` — src.html: `not_tested` (path length 4)
+- `workflow_d6a67d04f061f5efcd` — object/: `not_tested` (path length 3)
+- `workflow_b4e94c19bbdeabce62` — param/: `not_tested` (path length 4)
+- `workflow_992fb7bea986a1706c` — value.html: `not_tested` (path length 5)
+- `workflow_5307a8127539be6d2e` — polymer/: `not_tested` (path length 3)
+- `workflow_2777023d90846e726c` — string-concat-variable.html: `not_tested` (path length 3)
+- `workflow_fc9a4559b210dfd361` — multi-step-request-event-listener-dom.html: `not_tested` (path length 3)
+- `workflow_5592c73853ca44d822` — show secret button: `not_tested` (path length 4)
+- `workflow_38430b99121f347183` — click this secret button: `unresolved` (path length 5)
+- `workflow_120d7b9d645edf05b1` — show secret button: `not_tested` (path length 5)
+- `workflow_555f8d79d1e501624f` — map/: `not_tested` (path length 3)
+- `workflow_d236a63c8f10693388` — area/: `not_tested` (path length 4)
+- `workflow_4778e2b2a5fa9c44ba` — ping.html: `not_tested` (path length 5)
+- `workflow_678c6e308b9b4812dd` — isindex/: `not_tested` (path length 3)
+- `workflow_104cb6ca91ce290079` — action.html: `not_tested` (path length 4)
+- `workflow_4fdd51d515d5b93244` — multi-step-request-event-listener-div.html: `not_tested` (path length 3)
+- `workflow_789b26fe50805ca149` — show secret button: `not_tested` (path length 4)
+- `workflow_0722900d68142452cd` — click this secret button: `unresolved` (path length 5)
+- `workflow_a36aa32db36c13e1fc` — show secret button: `not_tested` (path length 5)
+- `workflow_7bc99c7df7b133d4f4` — input/: `not_tested` (path length 3)
+- `workflow_4f9b04e6e2eddc8085` — src.html: `not_tested` (path length 4)
+- `workflow_1d1bf216879f57e905` — test: `not_tested` (path length 5)
+- `workflow_fe4b2e7664a4d9cc4d` — img/: `not_tested` (path length 3)
+- `workflow_f91f0c101963966dd7` — srcset.html: `not_tested` (path length 4)
+- `workflow_907ebfec0172bbec94` — multi-step-request-event-listener-div-dom.html: `not_tested` (path length 3)
+- `workflow_87146c672f83f1a18f` — show secret button: `not_tested` (path length 4)
+- `workflow_59aea1897b1d5bfa51` — click this secret button: `unresolved` (path length 5)
+- `workflow_eb45b9eb0a6ada3051` — show secret button: `not_tested` (path length 5)
+- `workflow_2f3bc884d038322498` — iframe/: `not_tested` (path length 3)
+- `workflow_024a01b67122dfbf61` — srcdoc.html: `not_tested` (path length 4)
+- `workflow_6acc9204b73ea248fb` — angularjs/: `not_tested` (path length 3)
+- `workflow_02a0abc371c683c1a8` — comment.html: `not_tested` (path length 3)
+- `workflow_406e6f92f00110d277` — robots.txt.html: `not_tested` (path length 3)
+- `workflow_2d681f81f28bd7a65d` — import/: `not_tested` (path length 3)
+- `workflow_2e2724c611e53f431e` — implementation.html: `not_tested` (path length 4)
+- `workflow_5fe95ab8277118b7e8` — multi-step-request-event-attribute.html: `not_tested` (path length 3)
+- `workflow_5702d081dde1d95396` — show secret button: `not_tested` (path length 4)
+- `workflow_1ce02ad1a9f0c76c1f` — click this secret button: `unresolved` (path length 5)
+- `workflow_734de6467bce695677` — show secret button: `not_tested` (path length 5)
+- `workflow_2ae53239a7e758acdd` — frameset/: `not_tested` (path length 3)
+- `workflow_430550f86a91a54241` — frame/: `not_tested` (path length 4)
+- `workflow_606c269d97a866b488` — src.html: `not_tested` (path length 5)
+- `workflow_c476ebf30fdb456569` — form/: `not_tested` (path length 3)
+- `workflow_eaab05ec711a3b83ad` — button/: `not_tested` (path length 4)
+- `workflow_0d766ebe3c0193c6c7` — formaction.html: `not_tested` (path length 5)
+- `workflow_45024dc14916b3bde5` — CLICKME: `not_tested` (path length 6)
+- `workflow_d66af435ce58e0a726` — listener-and-event-attribute.html: `not_tested` (path length 3)
+- `workflow_d256ec51c8a6c9b93d` — Submit: `not_tested` (path length 4)
+- `workflow_ce62ae10f1b731d7d5` — comment/: `not_tested` (path length 3)
+- `workflow_c96b6f1ca2560be14b` — comment-conditional.html: `not_tested` (path length 4)
+- `workflow_f8f52b4e277c0ec5f6` — embed/: `not_tested` (path length 3)
+- `workflow_1c7567f97caa9ac310` — src.html: `not_tested` (path length 4)
+- `workflow_2263b9aa5ae2a2fa5a` — Scroll viewport: `not_tested` (path length 5)
+- `workflow_bbdbbaced5d82ff839` — blockquote/: `not_tested` (path length 3)
+- `workflow_61d75bd98bc6eb17e6` — cite.html: `not_tested` (path length 4)
+- `workflow_5b5d855d6307de598c` — js-put.html: `not_tested` (path length 3)
+- `workflow_5336503ad1945c6699` — Submit: `not_tested` (path length 4)
+- `workflow_487b219e470db7f007` — angular/: `not_tested` (path length 3)
+- `workflow_b8ff4a14ae20c95820` — automatic-post.html: `not_tested` (path length 3)
+- `workflow_4c8ddce14b8065c31c` — background.html: `not_tested` (path length 3)
+
+## Observed but not replay-validated
+
+- `feature_036529f940abfa58` — image/ opens /html/body/svg/image/
+- `feature_09e55d77c40a1e4c` — blockquote/ opens /html/body/blockquote/
+- `feature_0c5fca5b673a9d2d` — td/ opens /html/body/table/td/
+- `feature_0fcd9d80ee606842` — multi-step-request-event-listener.html opens /javascript/interactive/multi-step-request-event-listener.html/
+- `feature_12568d0eda2c68a5` — embed/ opens /html/body/embed/
+- `feature_1279b6c074418cbb` — show secret button leads to CrawlMaze - Testbed for Web Crawlers - multi-step request with EventListener
+- `feature_168b90e4855edc62` — input/ opens /html/body/input/
+- `feature_17c704e718e5f356` — iframe/ opens /html/body/iframe/
+- `feature_19ab0f02eade4e69` — srcdoc.html opens /html/body/iframe/srcdoc.html/
+- `feature_1b994fa93dbe8b31` — implementation.html opens /html/head/import/implementation.html/
+- `feature_1e9ad45c7719697f` — meta/ opens /html/head/meta/
+- `feature_231cbcf258c66f8e` — robots.txt.html opens /misc/known-files/robots.txt.html/
+- `feature_2901c348379c91b6` — show secret button leads to CrawlMaze - Testbed for Web Crawlers - multi-step request with div EventListener before DOM addition
+- `feature_2fabadfac58bad56` — show secret button leads to CrawlMaze - Testbed for Web Crawlers - multi-step request with event attribute
+- `feature_38052aee88411c54` — comment.html opens /javascript/misc/comment.html/
+- `feature_3e3e4af92104f84f` — show secret button leads to CrawlMaze - Testbed for Web Crawlers - multi-step request with EventListener before DOM addition
+- `feature_41ba3209725933d5` — manifest.html opens /html/manifest.html/
+- `feature_420c4957c820f430` — content-redirect.html opens /html/head/meta/content-redirect.html/
+- `feature_45645fce49a608d6` — automatic-post.html opens /javascript/misc/automatic-post.html/
+- `feature_4566040f90fb3db3` — map/ opens /html/body/map/
+- `feature_4ef942630b06fd2b` — object/ opens /html/body/object/
+- `feature_4f48554801804ce5` — location/ opens /test/headers/location.found
+- `feature_504d367dc799960e` — multi-step-request-event-listener-dom.html opens /javascript/interactive/multi-step-request-event-listener-dom.html/
+- `feature_516bab7aa46f9686` — js-put.html opens /javascript/interactive/js-put.html/
+- `feature_58e137b19a0e53a7` — area/ opens /html/body/map/area/
+- `feature_5948979f1136ede8` — two-listeners.html opens /javascript/interactive/two-listeners.html/
+- `feature_64d2bab31d8e6f39` — Submit leads to CrawlMaze - Testbed for Web Crawlers - JS PUT
+- `feature_6ca510d8fd5aa42d` — Submit leads to CrawlMaze - Testbed for Web Crawlers - POST with EventListener and event attribute
+- `feature_7612ac371200f1dd` — multi-step-request-redefine-event-attribute.html opens /javascript/interactive/multi-step-request-redefine-event-attribute.html/
+- `feature_7cf4c36b91c728e0` — formaction.html opens /html/body/form/button/formaction.html/
+- `feature_807aa56a6e29d871` — react/ opens /javascript/frameworks/react/
+- `feature_83e6c54fbb203956` — src.html opens /html/body/video/track/src.html/
+- `feature_84fddce64b64d95b` — script/ opens /html/body/script/
+- `feature_8642a36519231cc6` — background.html opens /html/body/table/td/background.html/
+- `feature_86b3ae774ddf6db7` — angular/ opens /javascript/frameworks/angular/
+- `feature_8751b0e546498d3b` — video/ opens /html/body/video/
+- `feature_88875bfdd2019f0b` — img/ opens /html/body/img/
+- `feature_89888152fcf197fe` — listener-and-event-attribute.html opens /javascript/interactive/listener-and-event-attribute.html/
+- `feature_8a897fb2dc653214` — polymer/ opens /javascript/frameworks/polymer/
+- `feature_8a9329805cd770e0` — button/ opens /html/body/form/button/
+- `feature_8e52cf008483366a` — show secret button leads to CrawlMaze - Testbed for Web Crawlers - multi-step request with div EventListener before DOM addition
+- `feature_94838b8343d3b7af` — comment-conditional.html opens /html/head/comment/comment-conditional.html/
+- `feature_9ae1c3fdfb74c17e` — CLICKME leads to /test/html/body/form/button/formaction.found
+- `feature_a18f93d5feb33327` — action.html opens /html/body/isindex/action.html/
+- `feature_a272edaa1ef4a316` — sitemap.xml.html opens /misc/known-files/sitemap.xml.html/
+- `feature_a4bc6f51408cf7c6` — ping.html opens /html/body/map/area/ping.html/
+- `feature_aa5aeaa75307becf` — form/ opens /html/body/form/
+- `feature_aaf62ebf560d1799` — svg/ opens /html/body/svg/
+- `feature_ac208a25ad1633b2` — value.html opens /html/body/object/param/value.html/
+- `feature_ad2417dc50a267de` — xlink.html opens /html/body/svg/image/xlink.html/
+- `feature_b168f4194ed85086` — param/ opens /html/body/object/param/
+- `feature_b7abbe75891b3c48` — background.html opens /html/body/background.html/
+- `feature_b807f584928be6e8` — srcset.html opens /html/body/img/srcset.html/
+- `feature_bf52dfcdbf7d0b39` — profile.html opens /html/head/profile.html/
+- `feature_c31a67b4e402254b` — Submit leads to CrawlMaze - Testbed for Web Crawlers - two EventListeners on same action
+- `feature_ccaaf2ae7c7b0f01` — string-concat-variable.html opens /javascript/misc/string-concat-variable.html/
+- `feature_d2df75ab462f0800` — multi-step-request-event-attribute.html opens /javascript/interactive/multi-step-request-event-attribute.html/
+- `feature_d5900ebcd4ba5cb3` — cite.html opens /html/body/blockquote/cite.html/
+- `feature_d70122afa6c690f7` — comment/ opens /html/head/comment/
+- `feature_da905de89522a14c` — angularjs/ opens /javascript/frameworks/angularjs/
+- `feature_dbe385d0def1e2eb` — import/ opens /html/head/import/
+- `feature_e0963d36923c26b6` — isindex/ opens /html/body/isindex/
+- `feature_e13ce1b4a3293239` — src.html opens /html/body/embed/src.html/
+- `feature_e1efb4ee365f95fc` — string-variable.html opens /javascript/misc/string-variable.html/
+- `feature_e3aa63ca65bf32de` — src.html opens /html/body/frameset/frame/src.html/
+- `feature_e8ff1ad523b81a41` — multi-step-request-event-listener-div-dom.html opens /javascript/interactive/multi-step-request-event-listener-div-dom.html/
+- `feature_e99112739916eb03` — frame/ opens /html/body/frameset/frame/
+- `feature_ea33cd5216b1d1fd` — frameset/ opens /html/body/frameset/
+- `feature_ebd7f6cbe24dc89c` — src.html opens /html/body/input/src.html/
+- `feature_ec82d30050a88157` — head/ opens /html/head/
+- `feature_ee054aa9c31d2457` — table/ opens /html/body/table/
+- `feature_ef0a12f09a52f535` — multi-step-request-event-listener-div.html opens /javascript/interactive/multi-step-request-event-listener-div.html/
+- `feature_ef56eeb5fdfd2965` — track/ opens /html/body/video/track/
+- `feature_f21e6a36519495a7` — src.html opens /html/body/script/src.html/
+
+## Failed or blocked transitions
+
+- `tr_7004e2432f339f6434ca` — unnamed link: TimeoutError: Locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator("body > map > area").first - locator resolved to <area href="#" shape="rect" coords="0,0,150,150" ping="/test/html/body/map/area/ping.found"/> - attempting click action 2 × waiting for element to be visible, enabled and stable -
+
+## Notes
+
+- Website-only browser evidence; target source and verifier internals were not inspected.
+- A browser-observed edge is not counted as a validated feature until its complete path replays.
+- Query values with sensitive-looking keys are redacted from stored network evidence.
+- unsupported_connections is retained only as a backwards-compatible failed-replay alias; use replay_failures and graph_connections_missing_evidence for distinct claims.

@@ -80,7 +80,7 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--javascript-reference-parser", choices=("legacy_regex", "ast"), default="ast")
     parser.add_argument("--no-shared-resource-frontier", dest="share_resource_frontier", action="store_false", default=True)
     parser.add_argument("--budget-allocation-strategy", choices=("fixed", "adaptive"), default="fixed")
-    parser.add_argument("--replay-policy", choices=("shallow", "diverse"), default="shallow")
+    parser.add_argument("--replay-policy", choices=("shallow", "diverse", "structure"), default="shallow")
     parser.add_argument("--zap-evidence", type=Path)
     parser.add_argument("--zap-source-origin")
     parser.add_argument("--max-total-http-requests", type=int)

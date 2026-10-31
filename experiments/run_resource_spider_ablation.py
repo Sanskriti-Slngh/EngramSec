@@ -18,7 +18,7 @@ from development_apps.transfer_library import STATE as LIBRARY_STATE, start_tran
 from experiments.evaluate_coverage import evaluate
 
 
-def reproduction_record(app: str, artifact) -> dict[str, object]:
+def reproduction_record(app: str, artifact, target_dir: str | None = None) -> dict[str, object]:
     """Everything needed to rerun this arm: the exact command line, the target
     revision and the browser build. Source revision is recorded separately; a
     `+mapper-<hash>` suffix means it ran from an uncommitted working tree."""
@@ -32,7 +32,8 @@ def reproduction_record(app: str, artifact) -> dict[str, object]:
         except (OSError, subprocess.SubprocessError):
             return None
 
-    target = {"crawlmaze": git(os.environ.get("CRAWLMAZE_DIR", "/private/tmp/security-crawl-maze"))}.get(app)
+    target = {"crawlmaze": git(os.environ.get("CRAWLMAZE_DIR", "/private/tmp/security-crawl-maze")),
+              "external": git(target_dir) if target_dir else None}.get(app)
     return {
         "argv": sys.argv[1:],
         "target_revision": target or ("in-repo fixture: development_apps" if app != "crawlmaze" else None),
@@ -54,7 +55,8 @@ def importlib_version(package: str) -> str | None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default="http://127.0.0.1:3460/")
-    parser.add_argument("--app", choices=("crawlmaze", "js-heavy", "heldout-shop", "transfer-library"), default="crawlmaze")
+    parser.add_argument("--app", choices=("crawlmaze", "js-heavy", "heldout-shop", "transfer-library", "external"), default="crawlmaze")
+    parser.add_argument("--target-dir", help="external app: source checkout whose git revision is recorded")
     parser.add_argument("--allow-post-forms", action="store_true")
     parser.add_argument("--root", type=Path, required=True)
     parser.add_argument("--tag", default="")
@@ -106,6 +108,12 @@ def main() -> int:
     parser.add_argument("--start-path", default="", help="path appended to a local fixture's start URL")
     parser.add_argument("--runtime-listener-observation", choices=("off", "observe", "revisit"), default="off")
     parser.add_argument("--max-listener-nodes", type=int, default=300)
+    parser.add_argument("--storage-state", type=Path, help="operator-provided authenticated Playwright storage state")
+    parser.add_argument("--context-label", default="anonymous")
+    parser.add_argument("--max-listener-dom-elements", type=int, default=20_000)
+    parser.add_argument("--framework-handler-probe", type=int, default=0)
+    parser.add_argument("--replay-policy", choices=("shallow", "diverse", "structure"),
+                        help="override the variant's replay policy")
     args = parser.parse_args()
     args.root.mkdir(parents=True, exist_ok=True)
     summary: list[dict[str, object]] = []
@@ -178,7 +186,7 @@ def main() -> int:
             javascript_reference_parser=args.javascript_reference_parser,
             share_resource_frontier=not args.no_shared_frontier,
             budget_allocation_strategy=budget_strategy,
-            replay_policy="diverse" if diverse else "shallow",
+            replay_policy=args.replay_policy or ("diverse" if diverse else "shallow"),
             zap_evidence_path=args.zap_evidence,
             zap_source_origin=args.zap_source_origin,
             max_total_http_requests=args.max_total_http_requests,
@@ -198,6 +206,10 @@ def main() -> int:
             http_verification_reserve_fraction=args.http_verification_reserve,
             runtime_listener_observation=args.runtime_listener_observation,
             max_listener_nodes=args.max_listener_nodes,
+            max_listener_dom_elements=args.max_listener_dom_elements,
+            framework_handler_probe=args.framework_handler_probe,
+            storage_state_path=args.storage_state,
+            context_label=args.context_label,
             model_provider="none",
             paid_calls_enabled=False,
         )
@@ -238,7 +250,7 @@ def main() -> int:
                 {
                     "app": args.app,
                     "target": start_url,
-                    "reproduction": reproduction_record(args.app, artifact),
+                    "reproduction": reproduction_record(args.app, artifact, args.target_dir),
                     "variant": name,
                     "source_revision": artifact.code_revision,
                     "run_config": config.model_dump(mode="json", exclude={"output_dir"}),

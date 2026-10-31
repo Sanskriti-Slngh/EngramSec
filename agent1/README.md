@@ -168,6 +168,22 @@ How it works (`agent1/listeners.py`, design and results in `RUNTIME_LISTENER_DIS
 
   Graph A `behavior_evidence` links each candidate to the observation, cause and transitions that executed it. Handler source code is never stored.
 
+Replay and generalization options (`REPLAY_VALIDATION_REPORT.md`, `RUNTIME_GENERALIZATION_REPORT.md`):
+
+```bash
+--replay-policy structure              # replay distinct unverified request structures first, sharing the replay budget with the shallow order
+--max-listener-dom-elements 20000      # skip listener enumeration on larger documents (recorded as dom_too_large)
+--framework-handler-probe 5000         # evidence only: count React-style delegated handlers; never creates candidates
+--storage-state state.json             # operator-provided authenticated session (Playwright storage state)
+```
+
+Under `structure`:
+- A replay that issued application requests is validated only if it reproduces every request structure, for the same record.
+- Each failure carries a reason and the step at which it failed.
+- Workflows with a state-changing step are not replayed without `--allow-post-forms`.
+
+Graph A `replay_evidence` lists each observed request structure with its producing actions, its replays and its status.
+
 ## Resume or request deeper exploration
 
 ```bash
