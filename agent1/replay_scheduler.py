@@ -88,6 +88,9 @@ def workflow_changes_state(transition: Any, changing: set[tuple]) -> bool:
     """True when replaying the workflow would repeat a step that was observed
     changing application state (the step itself or any prerequisite)."""
     path = list(transition.workflow_path)
+    if any(event.method.upper() not in {"GET", "HEAD"}
+           for step in getattr(transition, "prerequisite_network", []) for event in step.network):
+        return True
     return any(workflow_key(path[:k]) in changing for k in range(1, len(path) + 1))
 
 

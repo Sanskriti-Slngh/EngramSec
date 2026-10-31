@@ -58,6 +58,8 @@ def main() -> int:
     parser.add_argument("--app", choices=("crawlmaze", "js-heavy", "heldout-shop", "transfer-library", "external"), default="crawlmaze")
     parser.add_argument("--target-dir", help="external app: source checkout whose git revision is recorded")
     parser.add_argument("--allow-post-forms", action="store_true")
+    parser.add_argument("--no-state-aware-exploration", action="store_true")
+    parser.add_argument("--no-record-aware-graph", action="store_true")
     parser.add_argument("--root", type=Path, required=True)
     parser.add_argument("--tag", default="")
     parser.add_argument(
@@ -202,6 +204,8 @@ def main() -> int:
             budget_aware_deepening=args.budget_aware_deepening,
             hard_max_resource_depth=args.hard_max_resource_depth,
             allow_post_forms=args.allow_post_forms,
+            state_aware_exploration=not args.no_state_aware_exploration,
+            record_aware_graph=not args.no_record_aware_graph,
             passive_cookie_sync=not args.no_passive_cookie_sync,
             http_verification_reserve_fraction=args.http_verification_reserve,
             runtime_listener_observation=args.runtime_listener_observation,

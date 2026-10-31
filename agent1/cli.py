@@ -31,6 +31,10 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--max-form-retries", type=int, default=1, choices=(0, 1, 2))
     parser.add_argument("--headed", action="store_true")
     parser.add_argument("--allow-post-forms", action="store_true")
+    parser.add_argument("--no-state-aware-exploration", action="store_true",
+                        help="use historical exploration ordering and restoration behavior")
+    parser.add_argument("--no-record-aware-graph", action="store_true",
+                        help="omit experimental template and record-instance nodes")
     parser.add_argument("--context-label", default="anonymous")
     parser.add_argument(
         "--robust-readiness",
@@ -168,6 +172,8 @@ def main(argv: list[str] | None = None) -> int:
             max_browser_actions=args.max_browser_actions,
             headless=not args.headed,
             allow_post_forms=args.allow_post_forms,
+            state_aware_exploration=not args.no_state_aware_exploration,
+            record_aware_graph=not args.no_record_aware_graph,
             context_label=args.context_label,
             robust_readiness=args.robust_readiness,
             readiness_timeout_ms=args.readiness_timeout_ms,

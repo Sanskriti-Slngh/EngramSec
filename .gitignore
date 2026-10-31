@@ -57,3 +57,17 @@ agent1/experiments/readiness_ablation/
 agent1/experiments/readiness_repeats/
 agent1/experiments/replay_ablation/
 agent1/experiments/serious_budget/
+
+# Stateful whiteboard runs can contain session-linked traces and record IDs;
+# commit only aggregate measurements, never browser state or raw traces.
+agent1/experiments/state_aware_whiteboard_20261031/**
+!agent1/experiments/state_aware_whiteboard_20261031/summary.json
+agent1/experiments/state_aware_whiteboard_final_20261031/**
+!agent1/experiments/state_aware_whiteboard_final_20261031/summary.json
+agent1/experiments/state_aware_crawlmaze_20261031/**
+!agent1/experiments/state_aware_crawlmaze_20261031/summary.json
+!agent1/experiments/state_aware_whiteboard_final_20261031/posthoc_reanalysis.json
+!agent1/experiments/stateful_fixture_example/graph_a.json
+agent1/experiments/state_aware_whiteboard_repeat_20261031/**
+!agent1/experiments/state_aware_whiteboard_repeat_20261031/summary.json
+!agent1/experiments/state_aware_whiteboard_repeat_20261031/posthoc_reanalysis.json

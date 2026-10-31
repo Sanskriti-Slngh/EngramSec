@@ -23,10 +23,11 @@ from playwright.sync_api import (
 from playwright.sync_api import sync_playwright
 
 from .providers import DecisionProvider, ModelProviderError, build_provider
+from .action_behavior import action_identity, classify_behavior, record_instance
 from .cookies import context_cookie_bridge
 from .listeners import ListenerObserver, ListenerSnapshot
 from .replay_scheduler import (ReplayItem, ReplayScheduler, request_structures, state_changing_workflows,
-                               structure_paths, workflow_changes_state)
+                               structure_paths, workflow_changes_state, workflow_key)
 from .resource_spider import ResourceBudget, TypedResourceSpider
 from .revision import code_revision
 from .hierarchical import AreaTourPlanner
@@ -95,6 +96,10 @@ AMBIGUOUS_LABEL = re.compile(r"^(|click|submit|go|ok|more|next|button|link)$", r
 LOW_VALUE_REPORT = re.compile(
     r"^(?:view\s+)?(?:results?|score(?:board)?|reports?|status|exports?)(?:\s|$)", re.I
 )
+
+
+class UnsafeRestoration(RuntimeError):
+    """A previously observed write-capable action cannot be repeated safely."""
 
 
 EXTRACT_SCRIPT = r"""
@@ -1930,6 +1935,12 @@ class Explorer:
         current = self.artifact.return_paths.get(observation.group_signature)
         if current is None or len(path) < len(current):
             self.artifact.return_paths[observation.group_signature] = list(path)
+        instance = record_instance(observation)
+        if instance:
+            key = f"instance:{instance}:{observation.behavior_signature or observation.group_signature}"
+            current = self.artifact.return_paths.get(key)
+            if current is None or len(path) < len(current):
+                self.artifact.return_paths[key] = list(path)
         behavior = observation.behavior_signature
         if behavior and behavior != observation.group_signature:
             # Same visible DOM, evidenced different handler behavior: the way
@@ -1999,6 +2010,11 @@ class Explorer:
             identity = (
                 observation.state_signature if self.config.policy == "exact" else observation.group_signature
             )
+            if self.config.state_aware_exploration and record_instance(observation):
+                identity += ":" + record_instance(observation)
+            if self.config.state_aware_exploration and self._known_write(observation, control):
+                self.artifact.metrics.repeat_write_actions_suppressed += 1
+                continue
             tried_key = f"{identity}:{control.signature}"
             if control.behavior_revision:
                 # Evidence that this control's handler changed: the old action
@@ -2032,6 +2048,13 @@ class Explorer:
             if global_component or repeated_view_action:
                 self._scheduled_global_actions.add(global_key)
             kind_score = {"form_submit": 3.0, "button": 2.0, "link": 1.0}[control.kind]
+            if (self.config.state_aware_exploration and control.kind == "form_submit"
+                    and not is_get_search_action(control)
+                    and any(other.safe and other.kind != "form_submit" for other in observation.controls)):
+                # Leave links and other controls at the existing policy's
+                # priority, but defer an untested non-search submission when
+                # there are other visible ways to explore this screen.
+                kind_score -= 45.0
             shape_key = control.signature + (f"@{control.behavior_revision}" if control.behavior_revision else "")
             globally_novel = shape_key not in self._seen_control_shapes
             self._seen_control_shapes.add(shape_key)
@@ -2207,8 +2230,11 @@ class Explorer:
                     live_path = []
                 else:
                     live, observed_path = updated
+                    instance = record_instance(live) if self.config.state_aware_exploration else None
+                    key = (f"instance:{instance}:{live.behavior_signature or live.group_signature}"
+                           if instance else live.behavior_signature or live.group_signature)
                     live_path = list(
-                        self.artifact.return_paths.get(live.behavior_signature or live.group_signature, observed_path)
+                        self.artifact.return_paths.get(key, observed_path)
                     )
                 self.save_checkpoint()
 
@@ -2235,6 +2261,10 @@ class Explorer:
             action_network: list[NetworkEvent] = []
             try:
                 expected_observation = self._observation_by_id(item.source_observation_id)
+                if (self.config.state_aware_exploration and expected_observation
+                        and self._known_write(expected_observation, item.action)):
+                    self.artifact.metrics.repeat_write_actions_suppressed += 1
+                    return (live_source, list(live_path or [])) if live_source else None
                 expected = (
                     item.expected_source_signature
                     if self.config.policy == "exact"
@@ -2252,7 +2282,9 @@ class Explorer:
                     if live_source is not None
                     else None
                 )
-                if live_source is not None and live_actual == expected and current_live_control:
+                same_instance = (not self.config.state_aware_exploration or not expected_observation
+                                 or record_instance(live_source) == record_instance(expected_observation)) if live_source else False
+                if live_source is not None and live_actual == expected and current_live_control and same_instance:
                     source = live_source
                     source_path = list(live_path if live_path is not None else item.path)
                     self.artifact.metrics.live_state_reuses += 1
@@ -2315,6 +2347,9 @@ class Explorer:
                         "Restoration content signature differed, but the independently compared "
                         f"interaction shape remained usable for {item.action.signature}."
                     )
+                if (self.config.state_aware_exploration and expected_observation
+                        and record_instance(expected_observation) != record_instance(source)):
+                    raise RuntimeError("saved return path restored a different record instance")
                 current_control = session.find_current(source, item.action)
                 if current_control is None:
                     raise RuntimeError("registered control was not present in the current observation")
@@ -2374,6 +2409,7 @@ class Explorer:
                     current_control.kind == "form_submit"
                     and self.config.model_form_assistance
                     and retry_count < self.config.max_form_retries
+                    and not any(e.method.upper() not in {"GET", "HEAD", "OPTIONS"} for e in action_network)
                     and any(item.kind == "validation_error" for item in result.outcome_signals)
                 ):
                     retry_control = session.find_current(result, descriptor)
@@ -2425,6 +2461,7 @@ class Explorer:
                     result_group_signature=result.group_signature,
                     status=EvidenceStatus.OBSERVED,
                     network=action_network,
+                    behavior=classify_behavior(source, descriptors[0], result, action_network),
                     restoration_attempted=restoration_attempted,
                     reused_prefix_steps=reused_prefix_steps,
                     prerequisite_network=prerequisite_network,
@@ -2446,7 +2483,7 @@ class Explorer:
                     source_group_signature=item.expected_source_group,
                     action=item.action,
                     workflow_path=list(item.path) + [item.action],
-                    status=EvidenceStatus.FAILED,
+                    status=EvidenceStatus.NOT_TESTED if isinstance(exc, UnsafeRestoration) else EvidenceStatus.FAILED,
                     network=action_network,
                     restoration_attempted=restoration_attempted,
                     reused_prefix_steps=reused_prefix_steps,
@@ -2457,7 +2494,8 @@ class Explorer:
                     run_id=self.run_id,
                 )
                 self.artifact.transitions.append(transition)
-                self.artifact.metrics.transitions_failed += 1
+                if not isinstance(exc, UnsafeRestoration):
+                    self.artifact.metrics.transitions_failed += 1
                 self._record_progress()
                 return None
 
@@ -2610,6 +2648,9 @@ class Explorer:
     ) -> Observation:
         observation = initial or session.observe(self._next_sequence())
         for step_index, descriptor in enumerate(path, start=start_index):
+            if self.config.state_aware_exploration and self._known_write(observation, descriptor):
+                self.artifact.metrics.unsafe_restorations_suppressed += 1
+                raise UnsafeRestoration("return path contains an observed write-capable action without isolated reset")
             control = session.find_current(observation, descriptor)
             if control is None:
                 raise RuntimeError(f"return-path control missing: {descriptor.signature}")
@@ -2631,6 +2672,28 @@ class Explorer:
             observation = session.observe(self._next_sequence())
         return observation
 
+    def _known_write(self, observation: Observation, action: Any) -> bool:
+        key = action_identity(observation, action)
+        for transition in self.artifact.transitions:
+            behavior = transition.behavior
+            if not behavior:
+                # Old checkpoints predate action classification. Reconstruct
+                # only from their saved source/result and recorded requests.
+                old_source = self._observation_by_id(transition.source_observation_id)
+                old_result = self._observation_by_id(transition.result_observation_id)
+                if old_source and old_result:
+                    behavior = classify_behavior(old_source, transition.action, old_result, transition.network)
+                elif old_source:
+                    behavior = {"action_identity": action_identity(old_source, transition.action),
+                                "write_capable_request_observed": any(
+                                    event.method.upper() not in {"GET", "HEAD", "OPTIONS"}
+                                    for event in transition.network)}
+            if (behavior.get("action_identity") == key and
+                    (behavior.get("write_capable_request_observed") or
+                     behavior.get("possible_state_change"))):
+                return True
+        return False
+
     def _replay(self, browser: Browser) -> None:
         if self.http_budget is not None:
             self.http_budget.phase = "verification"
@@ -2640,6 +2703,13 @@ class Explorer:
         raw_candidates = [
             transition for transition in self.artifact.transitions if transition.status == EvidenceStatus.OBSERVED
         ]
+        changing = state_changing_workflows(self.artifact.transitions) | {
+            workflow_key(t.workflow_path) for t in self.artifact.transitions if t.behavior.get("possible_state_change")}
+        excluded = [t for t in raw_candidates if workflow_changes_state(t, changing)]
+        raw_candidates = [t for t in raw_candidates if t not in excluded]
+        if excluded:
+            self.artifact.metrics.replay_scheduler["state_changing_workflows_not_replayed"] = len(excluded)
+            self.artifact.metrics.replay_scheduler["state_changing_transition_ids"] = [t.id for t in excluded]
         raw_candidates.sort(key=lambda transition: (len(transition.workflow_path), transition.id))
         candidates: list[Transition] = []
         scheduled_destinations: set[str] = set()
@@ -2730,7 +2800,8 @@ class Explorer:
         # A workflow that would repeat a step observed issuing a non-GET request
         # (the action itself or a prerequisite) is not replayed by either lane
         # unless the run opted into non-GET forms; it stays untested.
-        changing = set() if self.config.allow_post_forms else state_changing_workflows(self.artifact.transitions)
+        changing = state_changing_workflows(self.artifact.transitions) | {
+            workflow_key(t.workflow_path) for t in self.artifact.transitions if t.behavior.get("possible_state_change")}
         excluded: list[Transition] = []
         pool = []
         for transition in self.artifact.transitions:
@@ -3532,7 +3603,14 @@ class Explorer:
                 expected_steps = max(0, len(transition.workflow_path) - 1)
                 # Steps before reused_prefix_steps ran earlier in the same live
                 # context and are evidenced by their own transitions.
-                expected_range = list(range(transition.reused_prefix_steps, expected_steps))
+                # A restoration that stopped early has evidence only for its
+                # executed prefix and the recorded error. It must not claim the
+                # unexecuted suffix occurred, or count its absence as missing.
+                blocked = (transition.status in {EvidenceStatus.NOT_TESTED, EvidenceStatus.FAILED}
+                           and bool(transition.error))
+                expected_range = list(range(transition.reused_prefix_steps,
+                                           transition.reused_prefix_steps + len(transition.prerequisite_network)
+                                           if blocked else expected_steps))
                 indexes = [item.step_index for item in transition.prerequisite_network]
                 restore_complete = indexes == expected_range
                 results.append(
@@ -3541,7 +3619,7 @@ class Explorer:
                         claim_type="prerequisite_network",
                         subject_id=transition.id,
                         complete=restore_complete,
-                        evidence_ids=[
+                        evidence_ids=([transition.id] if blocked else []) + [
                             f"{transition.id}:prerequisite:{item.step_index}"
                             for item in transition.prerequisite_network
                         ],

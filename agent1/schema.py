@@ -55,6 +55,8 @@ class RunConfig(BaseModel):
     # pre-authenticated session (cookies/localStorage). Never created by Agent 1.
     storage_state_path: Path | None = None
     allow_post_forms: bool = False
+    state_aware_exploration: bool = True
+    record_aware_graph: bool = True
     model_provider: Literal["none", "ollama", "groq", "openai"] = "none"
     model_name: str | None = None
     paid_calls_enabled: bool = False
@@ -452,6 +454,7 @@ class Transition(BaseModel):
     result_group_signature: str | None = None
     status: EvidenceStatus
     network: list[NetworkEvent] = Field(default_factory=list)
+    behavior: dict[str, Any] = Field(default_factory=dict)
     restoration_attempted: bool = False
     reused_prefix_steps: int = Field(default=0, ge=0)
     prerequisite_network: list[PrerequisiteStepEvidence] = Field(default_factory=list)
@@ -607,6 +610,8 @@ class RunMetrics(BaseModel):
     navigation_network_events_recorded: int = 0
     ineffective_transitions: int = 0
     duplicate_controls_suppressed: int = 0
+    repeat_write_actions_suppressed: int = 0
+    unsafe_restorations_suppressed: int = 0
     static_navigation_actions: int = 0
     dynamic_interaction_actions: int = 0
     frame_observations: int = 0

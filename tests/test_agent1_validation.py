@@ -43,32 +43,34 @@ def run_case(server, tmp_path: Path, case: str, *, transitions: int = 1):
     return artifact, server.state.snapshot()
 
 
-def test_same_url_result_change_fails_content_sensitive_replay(interactive_server, tmp_path: Path) -> None:
+def test_post_search_result_is_observed_but_not_replayed_without_reset(interactive_server, tmp_path: Path) -> None:
     artifact, events = run_case(interactive_server, tmp_path, "search")
-    assert {item["result"] for item in events if item.get("kind") == "search_result"} == {
-        "Result Alpha",
-        "Result Beta",
-    }
+    assert [item["result"] for item in events if item.get("kind") == "search_result"] == ["Result Alpha"]
     assert len({item.group_signature for item in artifact.observations}) == 2
-    assert artifact.metrics.replay_failures == 1
+    assert artifact.metrics.replay_attempts == 0
+    assert artifact.transitions[0].behavior["write_capable_request_observed"]
+    assert artifact.functional_workflows[0].status == FunctionalStatus.NOT_TESTED
     assert artifact.metrics.functional_workflows_verified == 0
 
 
-def test_observed_constraints_enable_verified_form_success(interactive_server, tmp_path: Path) -> None:
+def test_observed_form_success_is_not_replayed_without_reset(interactive_server, tmp_path: Path) -> None:
     artifact, events = run_case(interactive_server, tmp_path, "form")
     submissions = [item["success"] for item in events if item.get("kind") == "form_submission"]
     assert submissions and all(submissions)
-    assert artifact.metrics.functional_workflows_verified == 1
-    assert artifact.functional_workflows[0].status == FunctionalStatus.VERIFIED
+    assert artifact.metrics.functional_workflows_verified == 0
+    assert artifact.metrics.replay_attempts == 0
+    assert artifact.transitions[0].behavior["write_capable_request_observed"]
+    assert artifact.functional_workflows[0].status == FunctionalStatus.NOT_TESTED
 
 
-def test_multistep_replay_reproduces_prerequisite(interactive_server, tmp_path: Path) -> None:
+def test_multistep_write_prerequisite_is_not_repeated_without_reset(interactive_server, tmp_path: Path) -> None:
     artifact, events = run_case(interactive_server, tmp_path, "multi", transitions=8)
     completions = [item for item in events if item.get("kind") == "completion"]
-    assert completions
-    assert all(item["success"] and item["prerequisite"] for item in completions)
-    assert artifact.metrics.functional_workflows_verified >= 1
-    assert any(item.path_length >= 2 for item in artifact.functional_workflows)
+    assert not completions
+    assert artifact.metrics.functional_workflows_verified == 0
+    assert artifact.metrics.unsafe_restorations_suppressed >= 1
+    assert any(item.status == EvidenceStatus.NOT_TESTED and "UnsafeRestoration" in (item.error or "")
+               for item in artifact.transitions)
 
 
 def test_wrong_record_instance_is_not_accepted(interactive_server, tmp_path: Path) -> None:

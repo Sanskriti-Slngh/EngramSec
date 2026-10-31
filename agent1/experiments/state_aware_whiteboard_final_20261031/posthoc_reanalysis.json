@@ -1,0 +1,50 @@
+[
+  {
+    "arm": "A_baseline",
+    "recorded_missing_evidence": 0,
+    "reanalysis_missing_evidence": 0,
+    "write_capable_actions": 4,
+    "resource_gets": 30,
+    "replay_failure_reasons": {}
+  },
+  {
+    "arm": "B_state",
+    "recorded_missing_evidence": 0,
+    "reanalysis_missing_evidence": 0,
+    "write_capable_actions": 4,
+    "resource_gets": 30,
+    "replay_failure_reasons": {
+      "state_mismatch": 4
+    }
+  },
+  {
+    "arm": "C_state_record_1",
+    "recorded_missing_evidence": 1,
+    "reanalysis_missing_evidence": 0,
+    "write_capable_actions": 4,
+    "resource_gets": 30,
+    "replay_failure_reasons": {
+      "state_mismatch": 4
+    }
+  },
+  {
+    "arm": "C_state_record_2",
+    "recorded_missing_evidence": 0,
+    "reanalysis_missing_evidence": 0,
+    "write_capable_actions": 4,
+    "resource_gets": 30,
+    "replay_failure_reasons": {
+      "state_mismatch": 4
+    }
+  },
+  {
+    "arm": "C_state_record_3",
+    "recorded_missing_evidence": 0,
+    "reanalysis_missing_evidence": 0,
+    "write_capable_actions": 4,
+    "resource_gets": 30,
+    "replay_failure_reasons": {
+      "state_mismatch": 4
+    }
+  }
+]

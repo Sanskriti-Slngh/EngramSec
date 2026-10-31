@@ -205,7 +205,7 @@ def build_replay_evidence(artifact: RunArtifact) -> dict[str, Any]:
     for record in structures.values():
         if record["status"] == "not_attempted" and record["produced_by"] and all(
                 p["transition_id"] in excluded for p in record["produced_by"]):
-            record["not_replayed_reason"] = "state_changing_workflow"
+            record["not_replayed_reason"] = "write_capable_or_ambiguous_workflow_without_verified_reset"
     items = sorted(structures.values(), key=lambda r: r["structure"])
     runtime = [r for r in items if any(p["provenance"] == "observed_listener" or p["behavior_revision"]
                                        for p in r["produced_by"])]
@@ -225,7 +225,34 @@ def build_replay_evidence(artifact: RunArtifact) -> dict[str, Any]:
 
 
 def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
+    from .action_behavior import record_instance, template_identity
     observations = {item.id: item for item in artifact.observations}
+    instances: dict[str, dict[str, Any]] = {}
+    templates: dict[str, dict[str, Any]] = {}
+    instance_edges = []
+    for observation in artifact.observations:
+        if not artifact.config.get("record_aware_graph", True):
+            break
+        instance = record_instance(observation)
+        if not instance:
+            continue
+        template = template_identity(observation)
+        template_node = templates.setdefault(template, {"id": f"template_{template}", "type": "page_template_hypothesis",
+                                                       "route_pattern": observation.route_pattern, "observation_ids": []})
+        template_node["observation_ids"].append(observation.id)
+        node = instances.setdefault(instance, {
+            "id": f"instance_{instance}", "type": "record_instance_reference",
+            "url": observation.url, "session_context": observation.session_context,
+            "observation_ids": [], "template_groups": [],
+        })
+        node["observation_ids"].append(observation.id)
+        if observation.group_signature not in node["template_groups"]:
+            node["template_groups"].append(observation.group_signature)
+            instance_edges.append({"source": node["id"], "target": f"state_{observation.group_signature}",
+                                   "type": "instance_has_observed_state", "evidence_observation_id": observation.id})
+        if not any(edge["source"] == node["id"] and edge["target"] == template_node["id"] for edge in instance_edges):
+            instance_edges.append({"source": node["id"], "target": template_node["id"],
+                                   "type": "observed_with_template", "evidence_observation_id": observation.id})
     state_nodes = []
     for group, member_ids in sorted(artifact.state_groups.items()):
         members = [observations[item] for item in member_ids if item in observations]
@@ -337,6 +364,11 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
                 "frame_index": transition.action.frame_index,
                 "frame_url": transition.action.frame_url,
                 "status": transition.status,
+                "behavior": transition.behavior,
+                "source_instance_id": ("instance_" + record_instance(observations[transition.source_observation_id])
+                                       if transition.source_observation_id in observations and record_instance(observations[transition.source_observation_id]) else None),
+                "result_instance_id": ("instance_" + record_instance(observations[transition.result_observation_id])
+                                       if transition.result_observation_id in observations and record_instance(observations[transition.result_observation_id]) else None),
                 "workflow_path_length": len(transition.workflow_path),
                 "workflow_path": [
                     descriptor.model_dump(mode="json")
@@ -480,6 +512,8 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
         "nodes": {
             "features": feature_nodes,
             "states": state_nodes,
+            "record_instances": list(instances.values()),
+            "page_templates": list(templates.values()),
             "actions_evidence": action_nodes,
             "functional_workflows": workflow_nodes,
             "advertised_actions": advertised_nodes,
@@ -489,7 +523,7 @@ def build_graph_a(artifact: RunArtifact) -> dict[str, Any]:
             "external_discovery_runs": list(external_runs.values()),
             "external_discoveries": external_nodes,
         },
-        "edges": evidence_edges + feature_edges + workflow_edges + resource_edges + external_edges,
+        "edges": evidence_edges + feature_edges + workflow_edges + resource_edges + external_edges + instance_edges,
         "advertised_unexecuted": advertised,
         "replays": [item.model_dump(mode="json") for item in artifact.replays],
         "replay_observations": [

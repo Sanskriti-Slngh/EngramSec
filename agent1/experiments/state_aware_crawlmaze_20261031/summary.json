@@ -1,0 +1,20 @@
+{
+  "pinned_revision": "2a0dd0a",
+  "seconds_limit": 180,
+  "actions_limit": 300,
+  "http_limit": 1000,
+  "independently_fetched": 61,
+  "expected": 91,
+  "referenced": 75,
+  "replay_requested": 7,
+  "replay_successes": 23,
+  "replay_attempts": 23,
+  "untested_paths": 79,
+  "browser_actions": 300,
+  "elapsed_seconds": 174.467,
+  "observed_transitions": 102,
+  "runtime_behaviors_observed": 2,
+  "runtime_behaviors_replay_validated": 2,
+  "missing_evidence": 0,
+  "external_cost_usd": 0.0
+}

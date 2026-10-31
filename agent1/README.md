@@ -118,10 +118,11 @@ correction (control ranking remains deterministic):
 
 Model proposals may reference only observed non-sensitive field IDs. Actual
 values stay in the ignored decision cache; run artifacts contain protected
-references, observed feedback, and every executed attempt. POST remains disabled
-unless `--allow-post-forms` is explicitly supplied for an isolated target.
+references, observed feedback, and every executed attempt. Explicit HTML POST
+forms are skipped unless `--allow-post-forms` is enabled. JavaScript can still
+issue writes from a form that appears to use GET.
 
-POST forms are skipped by default. Enable `--allow-post-forms` only for a disposable fixture or when the configured target workflow is explicitly safe to mutate.
+Enable `--allow-post-forms` only for an authorized disposable target. It does not authorize replaying write-capable workflows.
 
 ## Opt-in deterministic discovery options
 
@@ -180,9 +181,11 @@ Replay and generalization options (`REPLAY_VALIDATION_REPORT.md`, `RUNTIME_GENER
 Under `structure`:
 - A replay that issued application requests is validated only if it reproduces every request structure, for the same record.
 - Each failure carries a reason and the step at which it failed.
-- Workflows with a state-changing step are not replayed without `--allow-post-forms`.
+- Workflows with an observed write-capable request or an ambiguous GET navigation that returns to a changed starting page are left untested for replay, including when `--allow-post-forms` is enabled. A request method does not prove a mutation.
 
 Graph A `replay_evidence` lists each observed request structure with its producing actions, its replays and its status.
+
+State-aware exploration is enabled by default. It records request-method and visible-change evidence, suppresses repeated observed risky actions in the same context, and refuses unsafe restoration. Use `--no-state-aware-exploration` only for historical comparisons on disposable targets. `page_templates` are structural hypotheses; `record_instances` retain recognized concrete record paths and do not establish behavioral equivalence. See `STATE_AWARE_EXPLORATION_REPORT.md` and `RECORD_IDENTITY_REPORT.md` for limits and reproducible fixtures. No verified server-reset adapter is implemented; an invisible GET mutation or delayed request can escape browser-only detection.
 
 ## Resume or request deeper exploration
 
