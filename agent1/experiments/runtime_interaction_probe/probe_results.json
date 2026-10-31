@@ -1,0 +1,139 @@
+{
+  "creates_button": {
+    "snapshot_new_controls": [
+      "button:Open details:click"
+    ],
+    "cdp_new_or_changed_click_listeners": [
+      {
+        "target": "button",
+        "type": "click",
+        "script": "19",
+        "line": 2,
+        "column": 18
+      }
+    ],
+    "cdp_ancestor_listeners": [],
+    "mutation_added_elements": [
+      "html:creates_buttonShow",
+      "head:creates_button",
+      "title:creates_button",
+      "body:Show",
+      "button:Show",
+      "button:Open details"
+    ],
+    "state_signature_changed": true,
+    "group_signature_changed": true
+  },
+  "creates_div_listener": {
+    "snapshot_new_controls": [],
+    "cdp_new_or_changed_click_listeners": [
+      {
+        "target": "div",
+        "type": "click",
+        "script": "19",
+        "line": 2,
+        "column": 35
+      }
+    ],
+    "cdp_ancestor_listeners": [],
+    "mutation_added_elements": [
+      "html:creates_div_listenerShow",
+      "head:creates_div_listener",
+      "title:creates_div_listener",
+      "body:Show",
+      "button:Show",
+      "div:Open details"
+    ],
+    "state_signature_changed": true,
+    "group_signature_changed": true
+  },
+  "redefines_handler": {
+    "snapshot_new_controls": [],
+    "cdp_new_or_changed_click_listeners": [
+      {
+        "target": "button#go",
+        "type": "click",
+        "script": "19",
+        "line": 0,
+        "column": 128
+      }
+    ],
+    "cdp_ancestor_listeners": [],
+    "mutation_added_elements": [
+      "html:redefines_handlerStep",
+      "head:redefines_handler",
+      "title:redefines_handler",
+      "body:Step",
+      "button:Step"
+    ],
+    "state_signature_changed": false,
+    "group_signature_changed": false
+  },
+  "delegation": {
+    "snapshot_new_controls": [],
+    "cdp_new_or_changed_click_listeners": [],
+    "cdp_ancestor_listeners": [
+      {
+        "target": "document",
+        "type": "click",
+        "script": "5",
+        "line": 2,
+        "column": 50
+      }
+    ],
+    "mutation_added_elements": [
+      "html:delegationAlphaBeta\n        More\n       ",
+      "head:delegation",
+      "title:delegation",
+      "body:AlphaBeta\n        More\n        document.",
+      "ul:AlphaBeta",
+      "li:Alpha",
+      "span:Alpha",
+      "li:Beta",
+      "span:Beta",
+      "button:More"
+    ],
+    "state_signature_changed": true,
+    "group_signature_changed": true
+  },
+  "listener_removed": {
+    "snapshot_new_controls": [],
+    "cdp_new_or_changed_click_listeners": [],
+    "cdp_ancestor_listeners": [],
+    "mutation_added_elements": [
+      "html:listener_removedShow",
+      "head:listener_removed",
+      "title:listener_removed",
+      "body:Show",
+      "button:Show",
+      "button:Temporary"
+    ],
+    "state_signature_changed": false,
+    "group_signature_changed": false
+  },
+  "delayed_control": {
+    "snapshot_new_controls": [
+      "button:Late action:click"
+    ],
+    "cdp_new_or_changed_click_listeners": [
+      {
+        "target": "button",
+        "type": "click",
+        "script": "19",
+        "line": 2,
+        "column": 18
+      }
+    ],
+    "cdp_ancestor_listeners": [],
+    "mutation_added_elements": [
+      "html:delayed_controlArm",
+      "head:delayed_control",
+      "title:delayed_control",
+      "body:Arm",
+      "button:Arm",
+      "button:Late action"
+    ],
+    "state_signature_changed": true,
+    "group_signature_changed": true
+  }
+}

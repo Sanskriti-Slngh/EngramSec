@@ -57,7 +57,12 @@ def main() -> int:
     parser.add_argument("--resource-allocation", choices=("class_caps", "shared_http"), default="class_caps")
     parser.add_argument("--passive-document-http-reserve", type=int)
     parser.add_argument("--max-passive-document-fetches", type=int)
-    parser.add_argument("--html-extraction", choices=("baseline", "extended"), default="baseline")
+    parser.add_argument("--html-extraction", choices=("baseline", "extended", "standards"), default="baseline")
+    parser.add_argument("--response-body-reader", choices=("content_length", "bounded_stream"), default="content_length")
+    parser.add_argument("--resource-frontier-model", choices=("legacy", "persistent"), default="legacy")
+    parser.add_argument("--passive-document-max-depth", type=int)
+    parser.add_argument("--budget-aware-deepening", action="store_true")
+    parser.add_argument("--hard-max-resource-depth", type=int, default=8)
     parser.add_argument("--max-speculative-fetches", type=int, default=0)
     parser.add_argument("--exploration-policy", choices=("multidimensional", "hierarchical"), default="multidimensional")
     args = parser.parse_args()
@@ -138,6 +143,11 @@ def main() -> int:
             max_passive_document_fetches=args.max_passive_document_fetches,
             html_extraction=args.html_extraction,
             max_speculative_fetches=args.max_speculative_fetches,
+            response_body_reader=args.response_body_reader,
+            resource_frontier_model=args.resource_frontier_model,
+            passive_document_max_depth=args.passive_document_max_depth,
+            budget_aware_deepening=args.budget_aware_deepening,
+            hard_max_resource_depth=args.hard_max_resource_depth,
             allow_post_forms=args.allow_post_forms,
             model_provider="none",
             paid_calls_enabled=False,

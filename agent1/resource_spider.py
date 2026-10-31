@@ -19,6 +19,7 @@ from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
 from tree_sitter import Language, Parser
 import tree_sitter_javascript
 
+from .bounded_http import bounded_get
 from .state import SENSITIVE_QUERY_KEYS, allowed_origin, compact_text, digest
 
 
@@ -142,8 +143,15 @@ MAX_NESTED_DOCUMENT_DEPTH = 2
 
 
 class _DocumentReferences(HTMLParser):
+    # Hyperlink-type attributes are resolved when used (activation or
+    # submission), i.e. against the document's final base URL; subresources are
+    # resolved when the element is inserted, i.e. against the base at that point.
+    LAZY_ATTRIBUTES = {"href", "ping", "cite", "longdesc", "action", "formaction"}
+    EAGER_HREF_TAGS = {"link", "image", "use", "script"}
+
     def __init__(self, response_url: str, *, extended: bool = False, nesting: int = 0,
-                 base_url: str | None = None, source_prefix: str = "", confidence: str = "observed_literal"):
+                 base_url: str | None = None, source_prefix: str = "", confidence: str = "observed_literal",
+                 lazy_base: bool = False):
         super().__init__(convert_charrefs=True)
         self.response_url = response_url
         self.base_url = base_url or response_url
@@ -155,16 +163,33 @@ class _DocumentReferences(HTMLParser):
         self.confidence = confidence
         self._form_method = "GET"
         self._speculative = 0
+        self.lazy_base = lazy_base
+        self._lazy: list[tuple[int, str, str, str, str, str, str | None]] = []
         self._raw_script = False
         self._raw_style = False
 
     def _add(self, raw: str, kind: str, tag: str, attr: str, relation: str = "", method: str | None = None) -> None:
         if len(self.references) >= MAX_REFERENCES_PER_RESPONSE:
             return
+        if self.lazy_base and attr in self.LAZY_ATTRIBUTES and not (attr == "href" and tag in self.EAGER_HREF_TAGS) \
+                and tag != "base":
+            self._lazy.append((len(self.references), raw, kind, tag, attr, relation, method))
+            return
         item = _normalized(raw, self.base_url, kind=kind, source_type="html", source=f"{self.source_prefix}<{tag}>[{attr}]",
                            relation=relation, confidence=self.confidence, method=method)
         if item:
             self.references.append(item)
+
+    def close(self) -> None:
+        super().close()
+        # Re-insert lazily resolved references at their document positions.
+        for offset, (position, raw, kind, tag, attr, relation, method) in enumerate(self._lazy):
+            item = _normalized(raw, self.base_url, kind=kind, source_type="html",
+                               source=f"{self.source_prefix}<{tag}>[{attr}]", relation=relation,
+                               confidence=self.confidence, method=method)
+            if item:
+                self.references.insert(min(position + offset, len(self.references)), item)
+        self._lazy = []
 
     def _speculate(self, text: str, source: str) -> None:
         if not self.extended or self._speculative >= MAX_SPECULATIVE_PER_SOURCE:
@@ -180,7 +205,7 @@ class _DocumentReferences(HTMLParser):
             return
         parser = _DocumentReferences(self.response_url, extended=True, nesting=self.nesting + 1,
                                      base_url=self.base_url, source_prefix=f"{self.source_prefix}{source}>",
-                                     confidence=confidence)
+                                     confidence=confidence, lazy_base=self.lazy_base)
         parser.feed(markup[:MAX_TEXT_BYTES])
         parser.close()
         for item in parser.references:
@@ -322,8 +347,9 @@ class _DocumentReferences(HTMLParser):
             self._speculate(data, "text")
 
 
-def extract_html_references(text: str, response_url: str, *, extended: bool = False) -> list[ResourceReference]:
-    parser = _DocumentReferences(response_url, extended=extended)
+def extract_html_references(text: str, response_url: str, *, extended: bool = False,
+                            lazy_base: bool = False) -> list[ResourceReference]:
+    parser = _DocumentReferences(response_url, extended=extended, lazy_base=lazy_base)
     parser.feed((text or "")[:MAX_TEXT_BYTES])
     parser.close()
     return _dedupe(parser.references)
@@ -412,7 +438,7 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128,
                         if tag:
                             element_types[node_text(name)] = tag.lower()
 
-    methods: dict[tuple[str, str], str] = {}
+    methods: dict[tuple[str, str], list[str]] = {}
 
     def request_method(options: object | None) -> str:
         """HTTP method from a fetch()/Request() init object; GET when absent."""
@@ -462,13 +488,13 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128,
                     candidate_kind = "navigation" if name in {"window.open", "open", "location.assign", "location.replace"} else "api"
                     candidates.append((raw, candidate_kind, f"call:{name}"))
                     if candidate_kind == "api":
-                        methods[(raw, f"call:{name}")] = request_method(arg_nodes[1] if len(arg_nodes) > 1 else None)
+                        methods.setdefault((raw, f"call:{name}"), []).append(request_method(arg_nodes[1] if len(arg_nodes) > 1 else None))
             elif name.endswith(".open") and len(arg_nodes) >= 2:
                 raw = literal(arg_nodes[1])
                 if raw:
                     candidates.append((raw, "api", "call:xhr.open"))
                     verb = literal(arg_nodes[0])
-                    methods[(raw, "call:xhr.open")] = verb.upper() if verb else "UNKNOWN"
+                    methods.setdefault((raw, "call:xhr.open"), []).append(verb.upper() if verb else "UNKNOWN")
             elif name.endswith(".setAttribute") and len(arg_nodes) >= 2:
                 attr, raw = literal(arg_nodes[0]), literal(arg_nodes[1])
                 receiver = node_text(getattr(fn, "child_by_field_name")("object"))
@@ -510,8 +536,11 @@ def extract_script_references(text: str, response_url: str, *, limit: int = 128,
 
     result: list[ResourceReference] = []
     for raw, ref_kind, evidence in candidates[:limit]:
+        # One method per sink occurrence, in source order.
+        queued_methods = methods.get((raw, evidence))
+        method = queued_methods.pop(0) if queued_methods else None
         item = _normalized(raw, response_url, kind=ref_kind, source_type="script-ast", source=evidence,
-                           method=methods.get((raw, evidence)) if extended else None)
+                           method=method if extended else None)
         if item:
             result.append(item)
     if extended:
@@ -650,10 +679,18 @@ def _walk_nodes(node: object):
         stack.extend(reversed(getattr(current, "children", [])))
 
 
-def extract_header_references(headers: dict[str, str], response_url: str, *, extended: bool = False) -> list[ResourceReference]:
+def extract_header_references(headers: dict[str, str], response_url: str, *, extended: bool = False,
+                              corrections: bool = False) -> list[ResourceReference]:
     values: list[ResourceReference] = []
     for key, header_value in headers.items():
         key = key.lower()
+        if corrections and key == "content-location":
+            # RFC 9110 8.7: identifies a resource corresponding to the enclosed
+            # representation; a GET-able reference, resolved against the request URL.
+            item = _normalized(header_value, response_url, kind="asset", source_type="header", source="Content-Location")
+            if item:
+                values.append(item)
+            continue
         if extended and key in {"content-security-policy", "content-security-policy-report-only"}:
             for match in _CSP_REPORT_URI.finditer(header_value[:16_000]):
                 for raw in match.group(1).split()[:4]:
@@ -757,6 +794,14 @@ def _extract_script_references_regex(text: str, response_url: str) -> list[Resou
     return _dedupe(values)
 
 
+_HTML_SNIFF = re.compile(
+    rb"^\s*<(?:!doctype\s+html|html|head|script|iframe|h1|div|font|table|a|style|title|b|body|br|p|!--)[\s>]", re.I)
+
+
+def _sniffs_as_html(text: str) -> bool:
+    return bool(_HTML_SNIFF.match((text or "")[:512].encode("utf-8", errors="ignore")))
+
+
 def extract_references(
     text: str,
     response_url: str,
@@ -766,10 +811,15 @@ def extract_references(
     extraction: str = "baseline",
 ) -> list[ResourceReference]:
     media = (content_type or "").lower().split(";", 1)[0].strip()
-    extended = extraction == "extended"
-    result = extract_header_references(headers or {}, response_url, extended=extended)
+    extended = extraction in {"extended", "standards"}
+    corrections = extraction == "standards"
+    if corrections and not media and _sniffs_as_html(text):
+        # WHATWG MIME Sniffing: only a response with no Content-Type is
+        # sniffed; an explicit type (even text/plain) is honored.
+        media = "text/html"
+    result = extract_header_references(headers or {}, response_url, extended=extended, corrections=corrections)
     if media in {"text/html", "application/xhtml+xml", "image/svg+xml"}:
-        result.extend(extract_html_references(text, response_url, extended=extended))
+        result.extend(extract_html_references(text, response_url, extended=extended, lazy_base=corrections))
     elif media == "text/css":
         result.extend(extract_css_references(text, response_url))
     elif "javascript" in media or media in {"application/ecmascript", "text/ecmascript"}:
@@ -789,9 +839,9 @@ def extract_references(
 
 def _dedupe(items: list[ResourceReference]) -> list[ResourceReference]:
     result: list[ResourceReference] = []
-    seen: set[tuple[str, str, str]] = set()
+    seen: set[tuple[str, str, str, str | None]] = set()
     for item in items:
-        key = (item.url, item.kind, item.source_type)
+        key = (item.url, item.kind, item.source_type, item.method)
         if key not in seen:
             seen.add(key)
             result.append(item)
@@ -818,8 +868,11 @@ class ResourceBudget:
             and (self.http_budget is None or self.http_budget.remaining())
         )
 
-    def consume(self, candidate_class: str) -> bool:
-        if not self.remaining(candidate_class):
+    def consume(self, candidate_class: str, ignore_class_cap: bool = False) -> bool:
+        if ignore_class_cap:
+            if self.attempted >= self.limit or (self.http_budget is not None and not self.http_budget.remaining()):
+                return False
+        elif not self.remaining(candidate_class):
             return False
         if self.http_budget is not None and not self.http_budget.consume("resource_spider"):  # type: ignore[attr-defined]
             return False
@@ -848,8 +901,39 @@ class TypedResourceSpider:
         max_speculative_fetches: int = 0,
         speculative_per_batch: int = 2,
         dangerous_pattern: re.Pattern[str] | None = None,
+        body_reader: str = "content_length",
+        frontier_model: str = "legacy",
+        passive_document_max_depth: int | None = None,
+        budget_aware_deepening: bool = False,
+        hard_max_depth: int = 8,
     ):
-        if extraction not in {"baseline", "extended"}:
+        if frontier_model not in {"legacy", "persistent"}:
+            raise ValueError(f"unknown frontier model: {frontier_model}")
+        if (budget_aware_deepening or passive_document_max_depth is not None) and frontier_model != "persistent":
+            raise ValueError("depth alternatives require the persistent frontier")
+        self.frontier_model = frontier_model
+        self.persistent = frontier_model == "persistent"
+        self.passive_document_max_depth = passive_document_max_depth
+        self.budget_aware_deepening = budget_aware_deepening
+        self.hard_max_depth = hard_max_depth
+        # Persistent frontier: explicit per-URL state instead of one "seen" set.
+        # pending_main | pending_spec | fetched | rejected | observed_only |
+        # deferred_depth | deferred_class | deferred_budget
+        self.url_state: dict[str, str] = {}
+        self.deferred_class: dict[str, str] = {}
+        self._deepened: set[str] = set()
+        # Shortest known queue depth per URL and the extracted-child edges of
+        # fetched responses, for shortest-path relaxation when a page is later
+        # reached by a shorter route.
+        self.best_depth: dict[str, int] = {}
+        self.children_of: dict[str, set[str]] = defaultdict(set)
+        self._class_deferred: dict[str, tuple[ResourceReference, str, int]] = {}
+        self._reclaimed: set[str] = set()
+        if body_reader not in {"content_length", "bounded_stream"}:
+            raise ValueError(f"unknown response body reader: {body_reader}")
+        self.body_reader = body_reader
+        self.cookie_source = None  # set per drain by the caller; read-only
+        if extraction not in {"baseline", "extended", "standards"}:
             raise ValueError(f"unknown extraction mode: {extraction}")
         if allocation not in {"class_caps", "shared_http"}:
             raise ValueError(f"unknown resource allocation: {allocation}")
@@ -870,7 +954,7 @@ class TypedResourceSpider:
         # Under shared_http, depth is the minimum over discovery paths: a
         # reference first seen on a long chain (and capped or queued deep) is
         # re-admitted when it is rediscovered closer to the observed browser state.
-        self.track_min_depth = allocation == "shared_http"
+        self.track_min_depth = allocation == "shared_http" or frontier_model == "persistent"
         self._capped: dict[str, tuple[ResourceReference, str, int]] = {}
         self.start_url = start_url
         self.aliases = aliases
@@ -926,8 +1010,93 @@ class TypedResourceSpider:
             self._evidence_seen.add(key)
             self.evidence.append(record)
 
+    REQUEUE_DECISIONS = {"admitted", "readmitted_shallower", "readmitted_class", "promoted_explicit",
+                         "upgraded_kind", "budget_deepened", "speculative_admitted", "readmitted_propagated",
+                         "budget_reclaimed"}
+
+    def _restore_persistent(self, items: list[dict[str, object]]) -> None:
+        """Lossless rebuild of the persistent frontier from evidence records.
+
+        Record depth is the parent's depth for extracted children (queued one
+        level deeper) but the item's own depth for redirect hops and deepened
+        re-admissions."""
+        pending: dict[str, tuple[ResourceReference, str, int, str]] = {}
+        for item in items:
+            raw_url = item.get("url")
+            if not isinstance(raw_url, str) or not raw_url:
+                continue
+            safe = _safe_resource_url(raw_url)
+            self.discovered_urls.add(safe)
+            reference = ResourceReference(
+                url=raw_url, kind=str(item.get("kind", "asset")), source_type=str(item.get("source_type", "unknown")),
+                source=str(item.get("source", "")), relation=str(item.get("relation", "")),
+                confidence=str(item.get("confidence") or "observed_literal"), method=item.get("method"),  # type: ignore[arg-type]
+            )
+            status, decision = item.get("status"), str(item.get("queue_decision") or "")
+            depth = int(item.get("depth") or 0)
+            parent = item.get("source_url")
+            if isinstance(parent, str) and depth > 0 and status not in {"fetched", "failed"}:
+                self.children_of[_safe_resource_url(parent)].add(safe)
+            if status in {"fetched", "failed"}:
+                self.best_depth[safe] = min(depth, self.best_depth.get(safe, depth))
+                pending.pop(safe, None)
+                self._capped.pop(safe, None)
+                self.url_state[safe] = "fetched"
+                self.seen.add(safe)
+                self.fetched.add(safe)
+                channel = item.get("channel") or "typed_resource"
+                if channel == "passive_document":
+                    self.passive_attempted += 1
+                elif channel == "speculative":
+                    self.speculative_attempted += 1
+                else:
+                    candidate_class = str(item.get("candidate_class") or self._candidate_class(reference))
+                    self.budget.attempted += 1
+                    self.budget.attempted_by_class[candidate_class] += 1
+                continue
+            if self.url_state.get(safe) == "fetched":
+                continue
+            if decision.startswith("rejected_") or status in {"out_of_scope", "sensitive_reference"}:
+                self.url_state[safe] = "rejected"
+                pending.pop(safe, None)
+            elif decision.startswith("observed_only_"):
+                self.url_state.setdefault(safe, "observed_only")
+            elif status in {"depth_limited", "class_budget_limited", "budget_limited"}:
+                pending.pop(safe, None)
+                if status == "depth_limited":
+                    self.url_state[safe] = "deferred_depth"
+                    self._capped[safe] = (reference, str(item.get("source_url") or ""), depth)
+                elif status == "class_budget_limited":
+                    self.url_state[safe] = "deferred_class"
+                    self.deferred_class[safe] = self._candidate_class(reference)
+                    self._class_deferred[safe] = (reference, str(item.get("source_url") or ""), depth)
+                else:
+                    self.url_state[safe] = "deferred_budget"
+            elif decision in self.REQUEUE_DECISIONS and status == "discovered":
+                own_depth = item.get("relation") == "redirect" or decision in {"budget_deepened", "readmitted_propagated", "budget_reclaimed"}
+                queued_depth = depth if own_depth else depth + 1
+                lane = "spec" if decision == "speculative_admitted" else "main"
+                previous = pending.get(safe)
+                if previous is None or queued_depth < previous[2] or (lane == "main" and previous[3] == "spec"):
+                    pending[safe] = (reference, str(item.get("source_url") or ""), queued_depth, lane)
+                if decision == "budget_deepened":
+                    self._deepened.add(safe)
+                if decision == "budget_reclaimed":
+                    self._reclaimed.add(safe)
+                    self._class_deferred.pop(safe, None)
+        for safe, (reference, source_url, depth, lane) in pending.items():
+            if depth > self._depth_limit(reference) and safe not in self._deepened:
+                self.url_state[safe] = "deferred_depth"
+                self._capped[safe] = (reference, source_url, depth)
+                continue
+            self.url_state[safe] = "pending_spec" if lane == "spec" else "pending_main"
+            (self.speculative_queue if lane == "spec" else self.queue).append((reference, source_url, depth))
+
     def restore_from_evidence(self, items: list[dict[str, object]]) -> None:
         """Rebuild the frontier after checkpoint resume from evidence only."""
+        if self.persistent:
+            self._restore_persistent(items)
+            return
         fetched_urls: set[str] = set()
         for item in items:
             raw_url = item.get("url")
@@ -1071,6 +1240,8 @@ class TypedResourceSpider:
 
     def _decide(self, reference: ResourceReference, safe_url: str, duplicate: bool) -> tuple[str, str]:
         """Evidence status and queue decision for a newly extracted reference."""
+        if self.persistent:
+            return self._decide_persistent(reference, safe_url)
         in_scope = allowed_origin(self.start_url, reference.url, self.aliases)
         sensitive = any(SENSITIVE_QUERY_KEYS.search(key) for key, _ in parse_qsl(urlsplit(reference.url).query))
         if not in_scope:
@@ -1089,14 +1260,26 @@ class TypedResourceSpider:
             return "discovered", "speculative_admitted" if self.max_speculative_fetches > 0 else "observed_only_speculative"
         return "discovered", "admitted"
 
+    def _depth_limit(self, reference: ResourceReference) -> int:
+        """Maximum queue depth for a candidate. With a separately bounded passive
+        depth, documents may chain to that depth and their leaf resources one
+        level further; everything else keeps the typed-resource depth."""
+        if self.passive_document_max_depth is not None and self.allocation == "shared_http" \
+                and reference.confidence not in SPECULATIVE_CONFIDENCE:
+            return self.passive_document_max_depth + (0 if self._candidate_class(reference) == "document" else 1)
+        return self.max_depth
+
     def _readmit_shallower(self, reference: ResourceReference, safe_url: str, source_url: str, depth: int) -> bool:
         """Lower the depth of a known, never-attempted reference. Returns True if changed."""
-        if not self.track_min_depth or safe_url in self.fetched or depth > self.max_depth:
+        if not (self.track_min_depth or self.persistent) or safe_url in self.fetched or depth > self._depth_limit(reference):
             return False
         capped = self._capped.get(safe_url)
         if capped is not None and depth < capped[2]:
             del self._capped[safe_url]
-            self.queue.append((capped[0], source_url, depth))
+            if self.persistent:
+                self._requeue(safe_url, capped[0], source_url, depth)
+            else:
+                self.queue.append((capped[0], source_url, depth))
             return True
         for index, (queued, queued_source, queued_depth) in enumerate(self.queue):
             if queued_depth > depth and _safe_resource_url(queued.url) == safe_url:
@@ -1104,7 +1287,125 @@ class TypedResourceSpider:
                 return True
         return False
 
+    def _decide_persistent(self, reference: ResourceReference, safe_url: str) -> tuple[str, str]:
+        """State-machine admission. Rejections that depend on the URL itself
+        (scope, sensitive query, dangerous path) are permanent; a reference's
+        *kind* (observed-only, speculative) does not make the URL ineligible
+        for later explicit evidence."""
+        state = self.url_state.get(safe_url)
+        if not allowed_origin(self.start_url, reference.url, self.aliases):
+            self.url_state.setdefault(safe_url, "rejected")
+            return "out_of_scope", "rejected_scope"
+        if any(SENSITIVE_QUERY_KEYS.search(key) for key, _ in parse_qsl(urlsplit(reference.url).query)):
+            self.url_state[safe_url] = "rejected"
+            return "sensitive_reference", "rejected_sensitive"
+        if reference.kind in OBSERVED_ONLY_KINDS:
+            self.url_state.setdefault(safe_url, "observed_only")
+            return "discovered", "observed_only_api" if reference.kind == "api" else f"observed_only_{reference.kind}"
+        if self.dangerous_pattern is not None and self.dangerous_pattern.search(urlsplit(reference.url).path):
+            self.url_state[safe_url] = "rejected"
+            return "discovered", "rejected_dangerous"
+        if state in {"fetched", "rejected"}:
+            return "discovered", "duplicate_candidate"
+        if reference.confidence in SPECULATIVE_CONFIDENCE:
+            if state in {None, "observed_only"}:
+                return "discovered", "speculative_admitted" if self.max_speculative_fetches > 0 else "observed_only_speculative"
+            return "discovered", "duplicate_candidate"
+        if state in {None, "observed_only", "speculative_exhausted"}:
+            return "discovered", "admitted"
+        if state == "pending_spec":
+            return "discovered", "promoted_explicit"
+        if state == "pending_main":
+            queued = next((ref for ref, _src, _d in self.queue if _safe_resource_url(ref.url) == safe_url), None)
+            if queued is not None and self._candidate_class(queued) != "document" and self._candidate_class(reference) == "document":
+                return "discovered", "upgraded_kind"
+            return "discovered", "duplicate_candidate"
+        if state == "deferred_class":
+            new_class = self._candidate_class(reference)
+            if new_class != self.deferred_class.get(safe_url) and (
+                    self._channel(reference, new_class) == "passive_document" or self.budget.remaining(new_class)):
+                return "discovered", "readmitted_class"
+        return "discovered", "duplicate_candidate"
+
+    def _requeue(self, safe_url: str, reference: ResourceReference, source_url: str, depth: int) -> None:
+        """Return a deferred candidate to the lane its evidence allows."""
+        if reference.confidence in SPECULATIVE_CONFIDENCE:
+            self.url_state[safe_url] = "pending_spec"
+            self.speculative_queue.append((reference, source_url, depth))
+        else:
+            self.url_state[safe_url] = "pending_main"
+            self.queue.append((reference, source_url, depth))
+
+    def _relax(self, safe_url: str, depth: int) -> int:
+        """Propagate a shorter depth for an already-fetched URL to its known
+        descendants (BFS edge relaxation). Returns the number of re-admissions."""
+        readmitted = 0
+        stack = [(safe_url, depth)]
+        while stack:
+            url, d = stack.pop()
+            if self.best_depth.get(url, 1 << 30) <= d:
+                continue
+            self.best_depth[url] = d
+            for child in self.children_of.get(url, ()):
+                child_depth = d + 1
+                state = self.url_state.get(child)
+                if state == "fetched":
+                    stack.append((child, child_depth))
+                elif child in self._capped and child_depth < self._capped[child][2]:
+                    reference, source_url, _old = self._capped[child]
+                    if child_depth <= self._depth_limit(reference):
+                        del self._capped[child]
+                        self.best_depth[child] = child_depth
+                        self._requeue(child, reference, source_url, child_depth)
+                        self._record({
+                            "url": child, "kind": reference.kind, "source_type": reference.source_type,
+                            "source_url": _safe_resource_url(source_url), "source": reference.source,
+                            "relation": reference.relation, "depth": child_depth, "status": "discovered",
+                            "queue_decision": "readmitted_propagated", "confidence": reference.confidence,
+                        })
+                        readmitted += 1
+                    else:
+                        self._capped[child] = (reference, source_url, child_depth)
+                elif state == "pending_main":
+                    for index, (queued, queued_source, queued_depth) in enumerate(self.queue):
+                        if queued_depth > child_depth and _safe_resource_url(queued.url) == child:
+                            self.queue[index] = (queued, queued_source, child_depth)
+                            self.best_depth[child] = child_depth
+        return readmitted
+
+    def _shorter_route(self, reference: ResourceReference, safe_url: str, source_url: str, depth: int) -> str | None:
+        """Handle a duplicate reference seen at `depth`; returns a decision label if it helped."""
+        if self._readmit_shallower(reference, safe_url, source_url, depth):
+            if self.persistent:
+                self.best_depth[safe_url] = min(depth, self.best_depth.get(safe_url, depth))
+            return "readmitted_shallower"
+        if self.persistent and self.url_state.get(safe_url) == "fetched" and depth < self.best_depth.get(safe_url, 1 << 30):
+            self._relax(safe_url, depth)
+            return "relaxed_shallower"
+        return None
+
     def _admit(self, reference: ResourceReference, safe_url: str, decision: str, source_url: str, depth: int) -> None:
+        if self.persistent:
+            if decision in {"admitted", "readmitted_class", "speculative_admitted", "promoted_explicit"}:
+                self.best_depth[safe_url] = min(depth, self.best_depth.get(safe_url, depth))
+            if decision in {"admitted", "readmitted_class"}:
+                self.url_state[safe_url] = "pending_main"
+                self.queue.append((reference, source_url, depth))
+            elif decision == "speculative_admitted":
+                self.url_state[safe_url] = "pending_spec"
+                self.speculative_queue.append((reference, source_url, depth))
+            elif decision == "promoted_explicit":
+                previous = [item for item in self.speculative_queue if _safe_resource_url(item[0].url) == safe_url]
+                self.speculative_queue = [item for item in self.speculative_queue if _safe_resource_url(item[0].url) != safe_url]
+                best = min([depth] + [item[2] for item in previous])
+                self.url_state[safe_url] = "pending_main"
+                self.queue.append((reference, source_url, best))
+            elif decision == "upgraded_kind":
+                for index, (queued, queued_source, queued_depth) in enumerate(self.queue):
+                    if _safe_resource_url(queued.url) == safe_url:
+                        self.queue[index] = (reference, source_url, min(depth, queued_depth))
+                        break
+            return
         if decision == "admitted":
             self.seen.add(safe_url)
             self.queue.append((reference, source_url, depth))
@@ -1139,8 +1440,8 @@ class TypedResourceSpider:
             duplicate = safe_url in self.discovered_urls
             self.discovered_urls.add(safe_url)
             status, decision = self._decide(reference, safe_url, duplicate)
-            if decision == "duplicate_candidate" and self._readmit_shallower(reference, safe_url, url, 1):
-                decision = "readmitted_shallower"
+            if decision == "duplicate_candidate":
+                decision = self._shorter_route(reference, safe_url, url, 1) or decision
             record: dict[str, object] = {
                 "url": safe_url,
                 "kind": reference.kind,
@@ -1157,6 +1458,10 @@ class TypedResourceSpider:
                 record["method"] = reference.method
             self._admit(reference, safe_url, decision, url, 1)
             self._record(record)
+
+    def _defer(self, safe_url: str, state: str) -> None:
+        if self.persistent:
+            self.url_state[safe_url] = state
 
     def _channel(self, reference: ResourceReference, candidate_class: str) -> str:
         if (self.allocation == "shared_http" and candidate_class == "document"
@@ -1184,8 +1489,14 @@ class TypedResourceSpider:
                 break
             reference, source_url, depth = self._pop_next()
             candidate_class = self._candidate_class(reference)
-            if depth > self.max_depth:
+            safe_url = _safe_resource_url(reference.url)
+            if depth > self._depth_limit(reference) and safe_url not in self._deepened:
                 self._update_unattempted_status(reference, source_url, depth, "depth_limited")
+                if self.persistent:
+                    self.url_state[safe_url] = "deferred_depth"
+                    self._capped.setdefault(safe_url, (reference, source_url, depth))
+                continue
+            if self.persistent and self.url_state.get(safe_url) == "fetched":
                 continue
             channel = self._channel(reference, candidate_class)
             if channel == "passive_document":
@@ -1197,39 +1508,78 @@ class TypedResourceSpider:
                 if (self.passive_document_limit is not None and self.passive_attempted >= self.passive_document_limit) \
                         or not self._shared_http_available():
                     self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                    self._defer(safe_url, "deferred_budget")
                     continue
                 if not self.budget.http_budget.consume("passive_document"):  # type: ignore[union-attr]
                     self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                    self._defer(safe_url, "deferred_budget")
                     continue
                 self.passive_attempted += 1
             else:
                 if self.budget.attempted >= self.budget.limit:
                     self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                    self._defer(safe_url, "deferred_budget")
                     continue
                 if self.budget.http_budget is not None and not self.budget.http_budget.remaining():
                     self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                    self._defer(safe_url, "deferred_budget")
                     continue
-                if not self.budget.remaining(candidate_class):
+                reclaimed = safe_url in self._reclaimed
+                if not reclaimed and not self.budget.remaining(candidate_class):
                     self._update_unattempted_status(reference, source_url, depth, "class_budget_limited")
+                    self._defer(safe_url, "deferred_class")
+                    self.deferred_class[safe_url] = candidate_class
+                    if self.persistent:
+                        self._class_deferred[safe_url] = (reference, source_url, depth)
                     continue
                 if not allowed_origin(self.start_url, reference.url, self.aliases):
                     continue
                 if any(SENSITIVE_QUERY_KEYS.search(key) for key, _ in parse_qsl(urlsplit(reference.url).query)):
                     continue
-                if not self.budget.consume(candidate_class):
+                if not self.budget.consume(candidate_class, ignore_class_cap=reclaimed):
                     self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                    self._defer(safe_url, "deferred_budget")
                     continue
             batch_attempts += 1
             fetched.append(self._fetch(request_context, reference, source_url, depth, candidate_class, channel))
+        if self.budget_aware_deepening and not self.queue and (self._class_deferred or self._capped) \
+                and (max_fetches is None or batch_attempts < max_fetches):
+            # Budget-aware frontier: only when nothing better is pending, spend
+            # remaining capacity on deferred work, shallowest first. Class-deferred
+            # candidates may exceed their class cap but never the typed-resource
+            # total or the shared HTTP budget; depth-deferred candidates are
+            # deepened up to hard_max_depth. Safety rejections are never revisited.
+            room = (max_fetches or 10) - batch_attempts
+            pool = [("budget_reclaimed", k, v) for k, v in self._class_deferred.items()] + \
+                   [("budget_deepened", k, v) for k, v in self._capped.items() if v[2] <= self.hard_max_depth]
+            for decision, safe_url, (reference, source_url, depth) in sorted(pool, key=lambda x: (x[2][2], x[0], x[1]))[:room]:
+                (self._class_deferred if decision == "budget_reclaimed" else self._capped).pop(safe_url, None)
+                self._record({
+                    "url": safe_url, "kind": reference.kind, "source_type": reference.source_type,
+                    "source_url": _safe_resource_url(source_url), "source": reference.source,
+                    "relation": reference.relation, "depth": depth, "status": "discovered",
+                    "queue_decision": decision, "confidence": reference.confidence,
+                })
+                (self._reclaimed if decision == "budget_reclaimed" else self._deepened).add(safe_url)
+                self._requeue(safe_url, reference, source_url, depth)
         speculative_batch = 0
         while self.speculative_queue and speculative_batch < self.speculative_per_batch:
             reference, source_url, depth = self.speculative_queue.pop(0)
-            if depth > self.max_depth:
+            safe_spec = _safe_resource_url(reference.url)
+            if depth > self._depth_limit(reference) and safe_spec not in self._deepened:
                 self._update_unattempted_status(reference, source_url, depth, "depth_limited")
+                if self.persistent:
+                    # Defer rather than drop: shorter routes or budget-aware
+                    # deepening may re-admit it.
+                    self.url_state[safe_spec] = "deferred_depth"
+                    self._capped.setdefault(safe_spec, (reference, source_url, depth))
                 continue
             if self.speculative_attempted >= self.max_speculative_fetches or not self._shared_http_available() \
                     or self.budget.http_budget is None or not self.budget.http_budget.consume("speculative_candidate"):
                 self._update_unattempted_status(reference, source_url, depth, "budget_limited")
+                # Exhausting the speculative lane says nothing about the URL;
+                # later explicit evidence may still admit it.
+                self._defer(_safe_resource_url(reference.url), "speculative_exhausted")
                 continue
             self.speculative_attempted += 1
             speculative_batch += 1
@@ -1243,29 +1593,44 @@ class TypedResourceSpider:
                candidate_class: str, channel: str) -> dict[str, object]:
         route_bucket = self._route_bucket(reference)
         self.fetched.add(_safe_resource_url(reference.url))
+        if self.persistent:
+            self.url_state[_safe_resource_url(reference.url)] = "fetched"
+            self.best_depth[_safe_resource_url(reference.url)] = min(depth, self.best_depth.get(_safe_resource_url(reference.url), depth))
         self._fetched_routes.add(route_bucket)
         self._fetched_classes.add(candidate_class)
         try:
-            response = request_context.get(reference.url, timeout=5_000, max_redirects=0)  # type: ignore[attr-defined]
-            headers = {str(k).lower(): str(v) for k, v in response.headers.items()}
+            if self.body_reader == "bounded_stream":
+                cookie = self.cookie_source(reference.url) if self.cookie_source else None
+                streamed = bounded_get(reference.url, max_body_bytes=self.max_body_bytes, timeout_s=5.0, cookie_header=cookie)
+                headers, body, body_status = streamed.headers, streamed.body, streamed.body_status
+                final_url, status = streamed.url, streamed.status
+            else:
+                response = request_context.get(reference.url, timeout=5_000, max_redirects=0)  # type: ignore[attr-defined]
+                headers = {str(k).lower(): str(v) for k, v in response.headers.items()}
+                # Legacy reader: Playwright buffers the body before Python sees
+                # it, so only bodies with a declared, in-bound Content-Length are
+                # copied. Bodies without one (chunked, close-delimited) are
+                # skipped; the skip is now recorded instead of silent.
+                try:
+                    body_size = int(headers.get("content-length", "") or -1)
+                except ValueError:
+                    body_size = -1
+                if body_size < 0:
+                    body, body_status = b"", "skipped_unknown_length"
+                elif body_size == 0:
+                    body, body_status = b"", "empty"
+                elif body_size > self.max_body_bytes:
+                    body, body_status = b"", "skipped_oversized"
+                else:
+                    body, body_status = response.body(), "complete"
+                final_url, status = response.url, int(response.status)
             content_type = headers.get("content-type", "")
-            body_size = int(headers.get("content-length", "0") or 0)
-            # Playwright buffers response.body() as a whole.  Require a
-            # declared bounded length rather than pretending slicing the
-            # returned bytes bounds memory use.
-            body = (
-                response.body()
-                if 0 < body_size <= self.max_body_bytes
-                else b""
-            )
             charset_match = re.search(r"charset\s*=\s*['\"]?([^;\s'\"]+)", content_type, re.I)
             encoding = charset_match.group(1) if charset_match else "utf-8"
             try:
                 text = body.decode(encoding, errors="replace")
             except LookupError:
                 text = body.decode("utf-8", errors="replace")
-            final_url = response.url
-            status = int(response.status)
             location = headers.get("location")
             redirect_target = urljoin(final_url, location) if location else None
             record = {
@@ -1277,6 +1642,7 @@ class TypedResourceSpider:
                 "redirected_to": _safe_resource_url(redirect_target) if redirect_target else None,
                 "error": None if status < 400 else f"HTTP {status}",
                 "channel": channel, "confidence": reference.confidence,
+                "body_status": body_status, "body_bytes": len(body),
             }
             if channel == "passive_document" and redirect_target and 300 <= status < 400:
                 # A redirect hop is the same logical document, not a deeper
@@ -1309,8 +1675,10 @@ class TypedResourceSpider:
                         self.budget.new_references += 1
                     self.discovered_urls.add(safe)
                     evidence_status, queue_decision = self._decide(child, safe, duplicate)
-                    if queue_decision == "duplicate_candidate" and self._readmit_shallower(child, safe, final_url, depth + 1):
-                        queue_decision = "readmitted_shallower"
+                    if self.persistent:
+                        self.children_of[_safe_resource_url(reference.url)].add(safe)
+                    if queue_decision == "duplicate_candidate":
+                        queue_decision = self._shorter_route(child, safe, final_url, depth + 1) or queue_decision
                     if queue_decision.startswith(("rejected_", "observed_only_")):
                         excluded_children += 1
                     elif queue_decision in {"admitted", "speculative_admitted"}:
@@ -1327,11 +1695,14 @@ class TypedResourceSpider:
                     if child.method:
                         child_record["method"] = child.method
                     self._record(child_record)
-                    if depth < self.max_depth:
+                    if depth + 1 <= self._depth_limit(child):
                         self._admit(child, safe, queue_decision, final_url, depth + 1)
-                    elif queue_decision in {"admitted", "speculative_admitted"}:
+                    elif queue_decision in {"admitted", "speculative_admitted", "readmitted_class", "promoted_explicit"}:
                         self.seen.add(safe)
-                        if self.track_min_depth and queue_decision == "admitted":
+                        if self.persistent:
+                            self.url_state[safe] = "deferred_depth"
+                            self._capped.setdefault(safe, (child, final_url, depth + 1))
+                        elif self.track_min_depth and queue_decision == "admitted":
                             self._capped[safe] = (child, final_url, depth + 1)
                 self.budget.responses += 1
                 class_yield = self._yield_by_class[candidate_class]

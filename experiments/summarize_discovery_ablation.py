@@ -76,7 +76,24 @@ def summarize(run_dir: Path, expected: list[str]) -> tuple[dict, dict]:
             1 for r in refs if str(r.get("queue_decision", "")).startswith("observed_only_")
             and any(a.get("url") == r.get("url") for a in spider_attempts)),
     }
+    parsed = [r for r in spider_attempts if r.get("response_reference_count") is not None]
+    row_frontier = {
+        "decisions": dict(Counter(str(r.get("queue_decision")) for r in refs)),
+        "depth_limited": sum(1 for r in refs if r.get("status") == "depth_limited"),
+        "budget_limited": sum(1 for r in refs if r.get("status") == "budget_limited"),
+        "class_budget_limited": sum(1 for r in refs if r.get("status") == "class_budget_limited"),
+        "admitted_never_attempted": len({r["url"] for r in refs if r.get("queue_decision") in {"admitted", "readmitted_shallower",
+                                         "readmitted_propagated", "budget_deepened", "promoted_explicit", "readmitted_class"}
+                                         and r.get("status") == "discovered"} - {a["url"] for a in spider_attempts}),
+        "fetched_or_failed": len(spider_attempts),
+    }
     row = {
+        "frontier": row_frontier,
+        "spider_body_status": metrics.get("spider_body_status"),
+        "browser_body_status": metrics.get("browser_body_status"),
+        "references_per_parsed_response": round(sum(r["response_reference_count"] for r in parsed) / len(parsed), 2) if parsed else None,
+        "successful_spider_paths": len({r["url"] for r in spider_attempts if r.get("status") == "fetched" and ok(r.get("http_status"))}),
+        "distinct_ui_states": metrics.get("grouped_states"),
         "evidence_audit": evidence_audit,
         "raw_2xx_91": len(hits),
         "supported_2xx_84": len(hits & set(supported)),

@@ -95,8 +95,13 @@ class RunConfig(BaseModel):
     resource_allocation: Literal["class_caps", "shared_http"] = "class_caps"
     passive_document_http_reserve: int | None = Field(default=None, ge=0, le=100_000)
     max_passive_document_fetches: int | None = Field(default=None, ge=0, le=100_000)
-    html_extraction: Literal["baseline", "extended"] = "baseline"
+    html_extraction: Literal["baseline", "extended", "standards"] = "baseline"
     max_speculative_fetches: int = Field(default=0, ge=0, le=10_000)
+    response_body_reader: Literal["content_length", "bounded_stream"] = "content_length"
+    resource_frontier_model: Literal["legacy", "persistent"] = "legacy"
+    passive_document_max_depth: int | None = Field(default=None, ge=1, le=12)
+    budget_aware_deepening: bool = False
+    hard_max_resource_depth: int = Field(default=8, ge=1, le=12)
     zap_evidence_path: Path | None = None
     zap_source_origin: str | None = None
     max_total_http_requests: int | None = Field(default=None, ge=1, le=100_000)
@@ -108,6 +113,9 @@ class RunConfig(BaseModel):
         if self.resource_allocation == "shared_http" and (
                 self.max_total_http_requests is None or not self.typed_resource_spider):
             raise ValueError("shared_http allocation requires the typed-resource spider and a total HTTP budget")
+        if (self.passive_document_max_depth is not None or self.budget_aware_deepening) \
+                and self.resource_frontier_model != "persistent":
+            raise ValueError("depth alternatives require the persistent resource frontier")
         if self.max_speculative_fetches and self.max_total_http_requests is None:
             raise ValueError("speculative fetches require a total HTTP budget")
         if self.zap_evidence_path and (not self.typed_resource_spider or not self.share_resource_frontier):
@@ -298,6 +306,8 @@ class ResourceEvidence(BaseModel):
     error: str | None = None
     channel: str | None = None
     method: str | None = None
+    body_status: str | None = None
+    body_bytes: int | None = None
 
 
 class ExternalDiscoveryEvidence(BaseModel):
@@ -557,6 +567,8 @@ class RunMetrics(BaseModel):
     speculative_fetches: int = 0
     observed_only_request_surfaces: int = 0
     effective_resource_budgets: dict[str, int | float | str | None] = Field(default_factory=dict)
+    browser_body_status: dict[str, int] = Field(default_factory=dict)
+    spider_body_status: dict[str, int] = Field(default_factory=dict)
 
 
 class RunArtifact(BaseModel):

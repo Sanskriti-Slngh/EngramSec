@@ -384,6 +384,11 @@ def build_resource_spider(config: RunConfig, budget: ResourceBudget) -> TypedRes
         passive_http_reserve=passive_http_reserve(config),
         max_speculative_fetches=config.max_speculative_fetches,
         dangerous_pattern=DANGEROUS_ACTION,
+        body_reader=config.response_body_reader,
+        frontier_model=config.resource_frontier_model,
+        passive_document_max_depth=config.passive_document_max_depth,
+        budget_aware_deepening=config.budget_aware_deepening,
+        hard_max_depth=config.hard_max_resource_depth,
     )
 
 
@@ -407,6 +412,11 @@ def effective_resource_budgets(config: RunConfig) -> dict[str, int | float | str
         "max_resource_depth": config.max_resource_depth,
         "browser_actions": config.max_browser_actions,
         "seconds": config.max_seconds,
+        "response_body_reader": config.response_body_reader,
+        "resource_frontier_model": config.resource_frontier_model,
+        "passive_document_max_depth": config.passive_document_max_depth,
+        "budget_aware_deepening": config.budget_aware_deepening,
+        "hard_max_resource_depth": config.hard_max_resource_depth if config.budget_aware_deepening else None,
     }
 
 
@@ -422,12 +432,15 @@ class NetworkRecorder:
         resource_budget: ResourceBudget,
         resource_spider: TypedResourceSpider | None = None,
         run_started_monotonic: float | None = None,
+        body_status: defaultdict[str, int] | None = None,
     ):
+        self.source = source
         self.events: list[NetworkEvent] = []
         self.config = config
         self.run_started_monotonic = run_started_monotonic or time.monotonic()
         self.spider = resource_spider or build_resource_spider(config, resource_budget)
         self.request_count = 0
+        self.body_status: defaultdict[str, int] = body_status if body_status is not None else defaultdict(int)
         source.on("response", self._response)
         source.on("requestfailed", self._failed)
 
@@ -461,15 +474,8 @@ class NetworkRecorder:
             is_robots = "text/plain" in media and "robots.txt" in urlsplit(response.url).path.lower()
             if is_robots or any(kind in media for kind in ("html", "css", "javascript", "ecmascript", "manifest+json", "image/svg+xml", "application/xml")):
                 try:
-                    body_size = int(response.headers.get("content-length", "0") or 0)
-                    # Response.body() is fully buffered by Playwright before
-                    # Python can slice it; skip unknown/oversized bodies to
-                    # keep extraction memory bounded.
-                    body = (
-                        response.body()
-                        if 0 < body_size <= self.config.max_resource_body_bytes
-                        else b""
-                    )
+                    body, body_status = self._browser_body(response)
+                    self.body_status[body_status] += 1
                     charset = re.search(r"charset\s*=\s*['\"]?([^;\s'\"]+)", content_type, re.I)
                     try:
                         text = body.decode(charset.group(1) if charset else "utf-8", errors="replace")
@@ -483,6 +489,37 @@ class NetworkRecorder:
                     )
                 except (PlaywrightError, UnicodeError, ValueError, LookupError):
                     pass
+
+    def _browser_body(self, response: Any) -> tuple[bytes, str]:
+        """Copy a browser-received body into Python only when its size is known
+        to be within bounds before copying. Chromium already holds the body;
+        the bound is on what Agent 1 copies, not on what the browser received."""
+        limit = self.config.max_resource_body_bytes
+        raw = response.headers.get("content-length")
+        try:
+            declared = int(raw) if raw not in (None, "") else None
+        except ValueError:
+            if self.config.response_body_reader != "bounded_stream":
+                raise  # legacy behavior: the whole response is skipped
+            declared = None
+        if self.config.response_body_reader == "bounded_stream" and declared is None:
+            try:
+                declared = int(response.request.sizes().get("responseBodySize", -1))
+            except (PlaywrightError, ValueError, TypeError):
+                declared = None
+            if declared is not None and declared < 0:
+                declared = None
+            if declared is not None and response.headers.get("content-encoding", "").lower() not in {"", "identity"}:
+                # The reported size is the encoded transfer size; allow a bounded
+                # expansion before copying the decoded body.
+                declared *= 8
+        if declared is None:
+            return b"", "skipped_unknown_length"
+        if declared == 0:
+            return b"", "empty"
+        if declared > limit:
+            return b"", "skipped_oversized"
+        return response.body(), "complete"
 
     def _failed(self, request: Any) -> None:
         self.request_count += 1
@@ -511,6 +548,13 @@ class NetworkRecorder:
         return current
 
     def drain_resources(self, request_context: Any) -> list[ResourceEvidence]:
+        source = self.source
+        # Read-only cookie view of the current context for the bounded reader;
+        # passive fetches never write cookies back into the browser.
+        self.spider.cookie_source = (
+            (lambda url: "; ".join(f"{c['name']}={c['value']}" for c in source.cookies(url)) or None)
+            if hasattr(source, "cookies") else None
+        )
         records = self.spider.fetch_pending(
             request_context, self.config.max_resource_fetches_per_observation
         )
@@ -570,7 +614,9 @@ class BrowserSession:
         resource_spider: TypedResourceSpider | None = None,
         run_started_monotonic: float | None = None,
         http_budget: Any | None = None,
+        body_status: defaultdict[str, int] | None = None,
     ):
+        self.body_status = body_status
         self.browser = browser
         self.config = config
         self.resource_budget = resource_budget or ResourceBudget(
@@ -646,6 +692,7 @@ class BrowserSession:
             self.resource_budget,
             self.resource_spider,
             self.run_started_monotonic,
+            self.body_status,
         )
         self.context.on("page", self._attach_page)
         self.page = self.context.new_page()
@@ -1377,6 +1424,7 @@ class Explorer:
         self.prior_elapsed = 0.0
         self.sequence = 0
         self.http_budget = HttpBudget(config.max_total_http_requests) if config.max_total_http_requests else None
+        self.browser_body_status: defaultdict[str, int] = defaultdict(int)
         self.resource_budget = ResourceBudget(
             config.max_resource_fetches,
             {
@@ -1433,6 +1481,7 @@ class Explorer:
             self.resource_spider,
             self.started_monotonic,
             self.http_budget,
+            self.browser_body_status,
         )
 
     def _revision(self) -> str:
@@ -3202,6 +3251,12 @@ class Explorer:
 
     def _finalize(self) -> None:
         self.artifact.metrics.effective_resource_budgets = effective_resource_budgets(self.config)
+        self.artifact.metrics.browser_body_status = dict(self.browser_body_status)
+        spider_status: defaultdict[str, int] = defaultdict(int)
+        for item in self.artifact.resource_evidence:
+            if item.status in {"fetched", "failed"}:
+                spider_status[item.body_status or ("error" if item.error and not item.http_status else "unrecorded")] += 1
+        self.artifact.metrics.spider_body_status = dict(spider_status)
         if self.http_budget is not None:
             self.http_budget.export(self.artifact.metrics)
         self.artifact.ended_at = utc_now()
