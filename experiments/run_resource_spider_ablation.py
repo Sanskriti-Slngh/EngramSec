@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import sys
 from pathlib import Path
 
 from agent1.explorer import Explorer
@@ -14,6 +16,39 @@ from development_apps.js_heavy_lab import STATE, start_js_heavy_lab
 from development_apps.heldout_shop import start_heldout_shop
 from development_apps.transfer_library import STATE as LIBRARY_STATE, start_transfer_library
 from experiments.evaluate_coverage import evaluate
+
+
+def reproduction_record(app: str, artifact) -> dict[str, object]:
+    """Everything needed to rerun this arm: the exact command line, the target
+    revision and the browser build. Source revision is recorded separately; a
+    `+mapper-<hash>` suffix means it ran from an uncommitted working tree."""
+    import platform
+    import subprocess
+
+    def git(path: str) -> str | None:
+        try:
+            out = subprocess.run(["git", "-C", path, "rev-parse", "HEAD"], capture_output=True, text=True, timeout=5)
+            return out.stdout.strip() or None
+        except (OSError, subprocess.SubprocessError):
+            return None
+
+    target = {"crawlmaze": git(os.environ.get("CRAWLMAZE_DIR", "/private/tmp/security-crawl-maze"))}.get(app)
+    return {
+        "argv": sys.argv[1:],
+        "target_revision": target or ("in-repo fixture: development_apps" if app != "crawlmaze" else None),
+        "source_tree_clean": "+" not in artifact.code_revision,
+        "browser": artifact.browser_version,
+        "python": platform.python_version(),
+        "playwright": importlib_version("playwright"),
+    }
+
+
+def importlib_version(package: str) -> str | None:
+    from importlib.metadata import PackageNotFoundError, version
+    try:
+        return version(package)
+    except PackageNotFoundError:
+        return None
 
 
 def main() -> int:
@@ -203,6 +238,7 @@ def main() -> int:
                 {
                     "app": args.app,
                     "target": start_url,
+                    "reproduction": reproduction_record(args.app, artifact),
                     "variant": name,
                     "source_revision": artifact.code_revision,
                     "run_config": config.model_dump(mode="json", exclude={"output_dir"}),

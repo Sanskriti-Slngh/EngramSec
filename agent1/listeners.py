@@ -20,9 +20,24 @@ Rules this observer follows:
 * Handler identity is the listener's (type, script, line, column) within one
   document lifetime, compared only between observations of the same document.
   Function bodies are never read or hashed.
-* Work is bounded: at most `max_nodes` listener-bearing nodes are described per
-  observation, at most `family_limit` candidates per handler location and
-  `max_candidates` per observation. Everything skipped is counted by reason.
+* Work is bounded: at most `max_nodes` listener-bearing nodes are inspected
+  (resolved and described over DevTools) per observation, at most
+  `family_limit` candidates per handler location and `max_candidates` per
+  observation. Everything skipped is counted by reason. Inspection is
+  incremental within one document: a node whose handler identities did not
+  change and that was already described is reused without another DevTools
+  call, and nodes new or changed since the previous observation are inspected
+  first, so the budget is spent where an action changed something.
+* Change classification, within one document, against the previous
+  observation: `created_after_action` (the element did not exist before),
+  `listener_attached_after_action` (the element existed without a click-family
+  listener), `listener_appeared_after_action` (history unknown: the element is
+  inside a shadow root or a frame), `handler_changed` (the click-family
+  listener set of the node changed: a handler revision), and `unchanged`.
+  Before the first observation of a document everything is
+  `present_at_first_observation`. Element history uses a weak set of the main
+  document's elements held by the DevTools session itself (not a page global);
+  it is never read by page code.
 
 Chromium only. Firefox and WebKit do not expose this DevTools domain through
 Playwright, so the observer reports itself as unsupported there.
@@ -41,6 +56,11 @@ CLICK_FAMILY = {
 }
 DELEGATION_TAGS = {"#document", "html", "body", "main"}
 OBJECT_GROUP = "engramsec-listeners"
+ELEMENT_GROUP = "engramsec-elements"
+# A weak set of the main document's current elements; held only by the
+# DevTools object group, so page scripts cannot reach it.
+ELEMENTS_EXPRESSION = "new WeakSet(document.querySelectorAll('*'))"
+HAS_FN = "function(seen) { return seen.has(this); }"
 
 DESCRIBE_FN = r"""
 function(selector) {
@@ -118,6 +138,9 @@ class ListenerSnapshot:
     skipped_examples: list[dict[str, Any]] = field(default_factory=list)
     listener_nodes: int = 0
     described_nodes: int = 0
+    reused_nodes: int = 0  # unchanged nodes whose cached description was reused
+    changes: dict[str, int] = field(default_factory=dict)  # provenance -> listener-bearing nodes
+    truncated: bool = False  # the per-observation inspection limit was reached
     delegation_hosts: int = 0
     window_click_listeners: int = 0
     elapsed_ms: float = 0.0
@@ -144,6 +167,8 @@ class ListenerObserver:
         self._previous: dict[int, tuple[str, ...]] = {}  # backendNodeId -> handler identities
         self._revisions: dict[int, str] = {}
         self._described: dict[int, dict[str, Any]] = {}
+        self._elements: str | None = None  # objectId of the previous observation's element weak set
+        self._element_generation = 0
 
     def _cdp(self, page: Any) -> Any:
         key = id(page)
@@ -181,6 +206,7 @@ class ListenerObserver:
         same_document = token == self._document
         if not same_document:
             self._document, self._previous, self._revisions, self._described = token, {}, {}, {}
+            self._elements = None
         snapshot.document_token = token
         send("DOM.getDocument", {"depth": 0})
         document = send("Runtime.evaluate", {"expression": "document", "objectGroup": OBJECT_GROUP})["result"]
@@ -205,30 +231,52 @@ class ListenerObserver:
             if other_nodes - set(by_node):
                 snapshot.skipped["non_click_listener_nodes"] = len(other_nodes - set(by_node))
             identities = {node: tuple(sorted(_location(item, False) for item in items)) for node, items in by_node.items()}
+
+            def priority(node: int) -> int:
+                if same_document and (node not in self._previous or self._previous[node] != identities[node]):
+                    return 0  # new or changed since the previous observation
+                if node in self._described:
+                    return 1  # unchanged and already described: reused without DevTools calls
+                return 2      # never inspected in this document
+            order = sorted(by_node, key=priority)  # stable: document order within a priority
             families: dict[str, int] = {}
-            for index, (node, items) in enumerate(by_node.items()):
-                if index >= self.max_nodes:
-                    self._skip(snapshot, "node_budget", None)
-                    continue
+            for node in order:
+                items = by_node[node]
                 changed = same_document and node in self._previous and self._previous[node] != identities[node]
                 new = same_document and node not in self._previous
                 info = self._described.get(node)
                 if info is None or changed or new or not info.get("rendered"):
+                    if snapshot.described_nodes >= self.max_nodes:
+                        snapshot.truncated = True
+                        self._skip(snapshot, "node_budget", None)
+                        continue
                     resolved = send("DOM.resolveNode", {"backendNodeId": node, "objectGroup": OBJECT_GROUP})["object"]
                     info = send("Runtime.callFunctionOn", {
                         "objectId": resolved["objectId"], "functionDeclaration": DESCRIBE_FN,
                         "arguments": [{"value": self.selector}], "returnByValue": True,
                     })["result"].get("value") or {"tag": "#unknown"}
+                    if new:
+                        info["existed_before"] = self._existed_before(send, resolved["objectId"], info, page)
                     self._described[node] = info
                     snapshot.described_nodes += 1
+                else:
+                    snapshot.reused_nodes += 1
                 portable = sorted({_location(item, True) for item in items})
                 interactions = sorted({CLICK_FAMILY[item["type"]] for item in items})
+                if not same_document:
+                    provenance = "present_at_first_observation"
+                elif new:
+                    provenance = {True: "listener_attached_after_action", False: "created_after_action"}.get(
+                        info.get("existed_before"), "listener_appeared_after_action")
+                else:
+                    provenance = "handler_changed" if changed else "unchanged"
+                snapshot.changes[provenance] = snapshot.changes.get(provenance, 0) + 1
                 entry = {"backend_node_id": node, "tag": info.get("tag"), "label": info.get("label", ""),
                          "css_path": info.get("css_path", ""), "frame_href": info.get("frame_href", ""),
                          "role": info.get("role", ""), "component": info.get("component", "document"),
                          "interactions": interactions, "handler_locations": portable,
-                         "provenance": ("created_after_action" if new else
-                                        "present_at_first_observation" if not same_document else "unchanged")}
+                         "listener_count": len(items),
+                         "provenance": provenance}
                 if changed:
                     revision = digest([info.get("css_path"), caused_by, portable], 16)
                     self._revisions[node] = revision
@@ -268,8 +316,39 @@ class ListenerObserver:
                     else:
                         snapshot.candidates.append(entry)
             self._previous = identities
+            self._remember_elements(send, page)
         finally:
             send("Runtime.releaseObjectGroup", {"objectGroup": OBJECT_GROUP})
+
+    def _existed_before(self, send: Any, object_id: str, info: dict[str, Any], page: Any) -> bool | None:
+        """Whether a node that just gained a click listener was already in the
+        main document at the previous observation; None when that cannot be
+        known (shadow tree, frame, or no previous element set)."""
+        if self._elements is None or info.get("shadow") != "none" or info.get("frame_href") != page.url:
+            return None
+        try:
+            return bool(send("Runtime.callFunctionOn", {
+                "objectId": object_id, "functionDeclaration": HAS_FN,
+                "arguments": [{"objectId": self._elements}], "returnByValue": True,
+            })["result"].get("value"))
+        except Exception:  # different execution context or a released set
+            return None
+
+    def _remember_elements(self, send: Any, page: Any) -> None:
+        """Hold a weak set of the main document's elements for the next
+        observation's created-vs-attached classification. One native call."""
+        previous_group = f"{ELEMENT_GROUP}-{self._element_generation}"
+        self._element_generation += 1
+        try:
+            result = send("Runtime.evaluate", {"expression": ELEMENTS_EXPRESSION,
+                                               "objectGroup": f"{ELEMENT_GROUP}-{self._element_generation}"})["result"]
+            self._elements = result.get("objectId")
+        except Exception:
+            self._elements = None
+        try:
+            send("Runtime.releaseObjectGroup", {"objectGroup": previous_group})
+        except Exception:
+            pass
 
     @staticmethod
     def _skip(snapshot: ListenerSnapshot, reason: str, entry: dict[str, Any] | None) -> None:

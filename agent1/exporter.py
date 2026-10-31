@@ -99,6 +99,10 @@ def build_behavior_evidence(artifact: RunArtifact) -> dict[str, Any]:
     for replay in artifact.replays:
         replays.setdefault(replay.transition_id, []).append(replay)
     observations = {item.id: item for item in artifact.observations}
+    executed_by_control: dict[str, list[str]] = {}
+    for transition in artifact.transitions:
+        if transition.status != EvidenceStatus.FAILED:
+            executed_by_control.setdefault(transition.action.control_id, []).append(transition.id)
     listener_observations, candidates, revisions = [], [], []
     for observation in artifact.observations:
         evidence = observation.listener_evidence
@@ -109,6 +113,7 @@ def build_behavior_evidence(artifact: RunArtifact) -> dict[str, Any]:
             "behavior_signature": observation.behavior_signature or observation.group_signature,
             "session_context": observation.session_context, "caused_by_action": evidence.caused_by_action,
             "listener_nodes": evidence.listener_nodes, "described_nodes": evidence.described_nodes,
+            "reused_nodes": evidence.reused_nodes, "changes": evidence.changes, "truncated": evidence.truncated,
             "candidates": len(evidence.candidates), "revisions": len(evidence.revisions),
             "active_revisions": len(evidence.active_revisions), "skipped": evidence.skipped,
             "delegation_hosts": evidence.delegation_hosts, "elapsed_ms": evidence.elapsed_ms,
@@ -116,8 +121,10 @@ def build_behavior_evidence(artifact: RunArtifact) -> dict[str, Any]:
         })
         for item in evidence.candidates:
             candidates.append({"observation_id": observation.id, **{k: item.get(k) for k in (
-                "label", "tag", "css_path", "provenance", "interactions", "handler_locations", "family",
-                "control_ids", "safe", "skip_reason")}})
+                "label", "tag", "css_path", "provenance", "interactions", "handler_locations", "listener_count",
+                "family", "behavior_revision", "control_ids", "safe", "skip_reason")},
+                "caused_by_action": evidence.caused_by_action,
+                "executed_transition_ids": sorted({t for c in item.get("control_ids") or [] for t in executed_by_control.get(c, [])})})
         for item in evidence.revisions:
             revisions.append({"observation_id": observation.id, **{k: item.get(k) for k in (
                 "label", "css_path", "revision", "caused_by_action", "before", "after", "snapshot_control")}})
@@ -147,6 +154,9 @@ def build_behavior_evidence(artifact: RunArtifact) -> dict[str, Any]:
         "summary": {
             "listener_observations": len(listener_observations),
             "candidates_recorded": len(candidates),
+            "candidates_by_change": {k: sum(1 for c in candidates if c["provenance"] == k)
+                                     for k in sorted({c["provenance"] or "unknown" for c in candidates})},
+            "candidate_records_executed": sum(1 for c in candidates if c["executed_transition_ids"]),
             "handler_revisions_recorded": len(revisions),
             "executed_listener_or_revision_actions": len(executions),
             "replay_validated_listener_or_revision_actions": sum(e["replay_validated"] for e in executions),

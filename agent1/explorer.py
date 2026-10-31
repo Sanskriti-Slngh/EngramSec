@@ -331,6 +331,14 @@ def action_request_structures(network: list[NetworkEvent]) -> set[tuple[str, str
     }
 
 
+def transition_has_effect(transition: Any) -> bool:
+    """Observable functional effect of one action: a different visible state,
+    a dialog, a document navigation, or an application request."""
+    return (transition.source_group_signature != transition.result_group_signature or bool(transition.dialogs)
+            or bool(action_request_structures(transition.network))
+            or any(event.resource_type == "document" for event in transition.network))
+
+
 READINESS_SCRIPT = r"""
 () => {
   if (!window.__engramReadiness) {
@@ -681,8 +689,14 @@ class BrowserSession:
         self.listener_observer = self._new_listener_observer()
         self._last_action = None
         self.context = self.browser.new_context()
-        if self.http_budget is not None:
-            budget, config = self.http_budget, self.config
+        # The scope router is installed whenever an HTTP budget is configured.
+        # Listener candidates have no statically known target, so the
+        # cross-origin check on link targets cannot apply to them; with listener
+        # observation on, the router is installed even without a budget and
+        # then enforces scope only.
+        if self.http_budget is not None or self.config.runtime_listener_observation != "off":
+            budget = self.http_budget if self.http_budget is not None else HttpBudget(10**9)
+            config = self.config
 
             def bounded_route(route: Any, request: Any) -> None:
                 # Playwright routes only the first request of a redirect chain.
@@ -1137,7 +1151,8 @@ class BrowserSession:
         evidence = ListenerEvidence(
             supported=snapshot.supported, document_token=snapshot.document_token,
             caused_by_action=self._last_action, listener_nodes=snapshot.listener_nodes,
-            described_nodes=snapshot.described_nodes, skipped=dict(snapshot.skipped),
+            described_nodes=snapshot.described_nodes, reused_nodes=snapshot.reused_nodes,
+            changes=dict(snapshot.changes), truncated=snapshot.truncated, skipped=dict(snapshot.skipped),
             skipped_examples=snapshot.skipped_examples, delegation_hosts=snapshot.delegation_hosts,
             window_click_listeners=snapshot.window_click_listeners, elapsed_ms=snapshot.elapsed_ms,
             cdp_calls=snapshot.cdp_calls, error=snapshot.error,
@@ -1870,6 +1885,7 @@ class Explorer:
                     self.resource_spider.seed_external(item.mapped_url)
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(headless=self.config.headless)
+            self.artifact.browser_version = f"chromium {browser.version}"
             try:
                 if self.config.resume_from:
                     self._load_checkpoint(self.config.resume_from)
@@ -3517,10 +3533,16 @@ class Explorer:
     def _finalize_listener_metrics(self) -> None:
         metrics = self.artifact.metrics
         metrics.listener_observations = metrics.listener_observation_errors = metrics.listener_cdp_calls = 0
+        metrics.listener_nodes_inspected = metrics.listener_nodes_reused = metrics.listener_bearing_nodes_max = 0
+        metrics.listener_scans_truncated = 0
         metrics.listener_observation_ms = 0.0
         skipped: defaultdict[str, int] = defaultdict(int)
+        changes: defaultdict[str, int] = defaultdict(int)
         candidates: set[str] = set()
         revisions: set[str] = set()
+        sightings = 0
+        seen: dict[tuple[str, str], tuple[bool, str | None]] = {}  # (signature, revision) -> (safe, first provenance)
+        new_classes = {"created_after_action", "listener_attached_after_action", "listener_appeared_after_action"}
         for observation in self.artifact.observations:
             evidence = observation.listener_evidence
             if evidence is None:
@@ -3529,16 +3551,42 @@ class Explorer:
             metrics.listener_observation_errors += evidence.error is not None
             metrics.listener_observation_ms += evidence.elapsed_ms
             metrics.listener_cdp_calls += evidence.cdp_calls
+            metrics.listener_nodes_inspected += evidence.described_nodes
+            metrics.listener_nodes_reused += evidence.reused_nodes
+            metrics.listener_bearing_nodes_max = max(metrics.listener_bearing_nodes_max, evidence.listener_nodes)
+            metrics.listener_scans_truncated += evidence.truncated
             for reason, count in evidence.skipped.items():
                 skipped[reason] += count
+            for kind, count in evidence.changes.items():
+                changes[kind] += count
             revisions.update(item["revision"] for item in evidence.revisions)
+            for control in observation.controls:
+                if control.provenance != "observed_listener":
+                    continue
+                sightings += 1
+                key = (control.signature, control.behavior_revision or "")
+                if key not in seen:
+                    seen[key] = (control.safe, (control.listener_evidence or {}).get("provenance"))
+            for record in evidence.candidates:
+                if record.get("skip_reason") == "frame_not_observable":
+                    seen.setdefault(("frame:" + str(record.get("css_path")), ""), (False, record.get("provenance")))
         for observation in self.artifact.observations:
             candidates.update(c.signature for c in observation.controls if c.provenance == "observed_listener" and c.safe)
         metrics.listener_observation_ms = round(metrics.listener_observation_ms, 1)
         metrics.listener_skipped = dict(skipped)
+        metrics.listener_changes = dict(changes)
         metrics.listener_candidates_distinct = len(candidates)
+        metrics.listener_candidates_new = sum(1 for _, first in seen.values() if first in new_classes)
+        metrics.listener_candidates_deduplicated = max(0, sightings - sum(1 for k in seen if not k[0].startswith("frame:")))
+        metrics.listener_candidates_safe = sum(1 for safe, _ in seen.values() if safe)
+        metrics.listener_candidates_rejected = sum(1 for safe, _ in seen.values() if not safe)
         observed = [t for t in self.artifact.transitions if t.status != EvidenceStatus.FAILED]
-        metrics.listener_candidates_executed = len({t.action.signature for t in observed if t.action.provenance == "observed_listener"})
+        listener_actions = [t for t in observed if t.action.provenance == "observed_listener"]
+        metrics.listener_candidates_executed = len({t.action.signature for t in listener_actions})
+        metrics.listener_actions_executed = len(listener_actions)
+        metrics.listener_transitions_with_effect = sum(1 for t in listener_actions if transition_has_effect(t))
+        metrics.handler_revision_candidates = len({
+            (c.signature, c.behavior_revision) for o in self.artifact.observations for c in o.controls if c.behavior_revision})
         metrics.handler_revisions_observed = len(revisions)
         metrics.handler_revisits_executed = sum(1 for t in observed if t.action.behavior_revision)
         by_id = {item.id: item for item in self.artifact.observations}

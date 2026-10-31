@@ -276,6 +276,11 @@ class ListenerEvidence(BaseModel):
     caused_by_action: str | None = None
     listener_nodes: int = 0
     described_nodes: int = 0
+    reused_nodes: int = 0
+    # Listener-bearing nodes by change class against the previous observation
+    # of the same document (see agent1/listeners.py).
+    changes: dict[str, int] = Field(default_factory=dict)
+    truncated: bool = False
     candidates: list[dict[str, Any]] = Field(default_factory=list)
     revisions: list[dict[str, Any]] = Field(default_factory=list)
     active_revisions: list[dict[str, str]] = Field(default_factory=list)
@@ -632,6 +637,19 @@ class RunMetrics(BaseModel):
     listener_candidates_distinct: int = 0
     listener_candidates_executed: int = 0
     listener_skipped: dict[str, int] = Field(default_factory=dict)
+    # Bounded instrumentation of runtime listener discovery (all 0 when off).
+    listener_nodes_inspected: int = 0           # DevTools describe calls (<= max_listener_nodes per observation)
+    listener_nodes_reused: int = 0              # unchanged nodes served from the per-document cache
+    listener_bearing_nodes_max: int = 0         # largest click-listener node count in one observation
+    listener_scans_truncated: int = 0           # observations that hit the inspection limit
+    listener_changes: dict[str, int] = Field(default_factory=dict)  # node change classes, summed
+    listener_candidates_new: int = 0            # distinct candidates first seen as created/attached after an action
+    listener_candidates_deduplicated: int = 0   # candidate sightings that repeated an already-recorded candidate
+    listener_candidates_safe: int = 0           # distinct candidates accepted by the existing safety filter
+    listener_candidates_rejected: int = 0       # distinct candidates rejected by it (or not in an observable frame)
+    listener_actions_executed: int = 0          # transitions whose action came from a listener candidate
+    listener_transitions_with_effect: int = 0   # ...that changed state, navigated, showed a dialog or issued a request
+    handler_revision_candidates: int = 0        # distinct (element, revision) pairs offered to the frontier
     handler_revisions_observed: int = 0
     handler_revisits_executed: int = 0
     behavior_divergent_groups: int = 0
@@ -642,6 +660,7 @@ class RunArtifact(BaseModel):
     run_id: str
     code_revision: str
     config: dict[str, Any]
+    browser_version: str | None = None
     started_at: str
     ended_at: str | None = None
     observations: list[Observation] = Field(default_factory=list)

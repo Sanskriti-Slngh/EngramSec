@@ -32,6 +32,21 @@ PAGES = {
     "/frame": """<iframe src="/frame-inner" width=300 height=80></iframe>""",
     "/frame-inner": """<span id=c style="display:inline-block;padding:4px">Cite</span>
         <script>c.addEventListener('click',()=>fetch('/api/cite'))</script>""",
+    "/attach": """<div id=note style="padding:4px">Renew card</div><button id=wire
+        onclick="document.getElementById('note').addEventListener('click',()=>fetch('/api/renew'))">Enable renewals</button>""",
+    "/repeat": """<div id=fav style="padding:4px">Add to favourites</div>
+        <script>fav.addEventListener('click',()=>fetch('/api/fav'))</script>""",
+    "/disabled": """<div id=off aria-disabled=true style="padding:4px">Renew (unavailable)</div>
+        <script>off.addEventListener('click',()=>fetch('/api/off'))</script>""",
+    "/multi": """<div id=m style="padding:4px">Open map</div><script>
+        m.addEventListener('click',()=>fetch('/api/map'));m.addEventListener('click',()=>fetch('/api/map-log'));
+        m.addEventListener('mousedown',()=>{});m.addEventListener('pointerup',()=>{});</script>""",
+    "/plain": """<a href="/div">Details</a> <button onclick="fetch('/api/plain')">Refresh</button>
+        <form action="/plain"><input name=q><button>Search</button></form>""",
+    "/many": """<button id=more onclick="var d=document.createElement('div');d.textContent='Load newer rows';
+        d.addEventListener('click',()=>fetch('/api/newer'));document.body.prepend(d)">More</button><table>"""
+        + "".join(f"<tr class=r><td>Row {n}</td></tr>" for n in range(400)) + """</table>
+        <script>for (const r of document.querySelectorAll('.r')) r.addEventListener('click',()=>fetch('/api/row'))</script>""",
     "/rows": "<table>" + "".join(f"<tr class=r><td>Row {n}</td></tr>" for n in range(50)) + """</table>
         <script>for (const r of document.querySelectorAll('.r')) r.addEventListener('click',()=>fetch('/api/row'))</script>""",
 }
@@ -204,3 +219,119 @@ def test_observer_is_off_by_default_and_reports_unsupported_engines(browser, bas
 
     snapshot = ListenerObserver(SNAPSHOT_SELECTOR).observe(FakePage(), None)
     assert not snapshot.supported and snapshot.error == "unsupported_engine:firefox"
+
+
+# --- Focused runtime-discovery regression tests (development brief, Phase 3) ---
+
+def test_existing_element_with_a_newly_attached_listener_is_distinguished_from_a_created_one(browser, base, tmp_path):
+    with session_for(browser, base, "/attach", tmp_path) as session:
+        session.goto_start()
+        before = session.observe(1)
+        assert listener_controls(before) == []
+        session.execute(next(c for c in before.controls if c.label == "Enable renewals"))
+        [control] = listener_controls(session.observe(2))
+        assert control.label == "Renew card"
+        assert control.listener_evidence["provenance"] == "listener_attached_after_action"
+
+
+def test_unchanged_listener_is_deduplicated_and_not_reinspected(browser, base, tmp_path):
+    with session_for(browser, base, "/repeat", tmp_path) as session:
+        session.goto_start()
+        observations = [session.observe(n) for n in (1, 2, 3)]
+        ids = [[c.id for c in listener_controls(o)] for o in observations]
+        assert ids[0] and ids[0] == ids[1] == ids[2]                      # one control, stable identity
+        first, second, third = (o.listener_evidence for o in observations)
+        assert first.changes == {"present_at_first_observation": 1}
+        assert second.changes == {"unchanged": 1} and third.changes == {"unchanged": 1}
+        assert second.described_nodes == 0 and second.reused_nodes == 1   # incremental: cached description
+        assert second.revisions == [] and third.revisions == []
+        assert observations[1].behavior_signature == observations[0].behavior_signature
+
+
+def test_disabled_listener_element_is_not_promoted(browser, base, tmp_path):
+    with session_for(browser, base, "/disabled", tmp_path) as session:
+        session.goto_start()
+        observation = session.observe(1)
+        assert listener_controls(observation) == []
+        assert observation.listener_evidence.skipped["disabled"] == 1
+
+
+def test_default_inspection_limit_on_a_large_page_prioritizes_new_nodes(browser, base, tmp_path):
+    """400 listener rows (>300 DOM elements with listeners) at the default limit."""
+    with session_for(browser, base, "/many", tmp_path) as session:
+        assert session.config.max_listener_nodes == 300
+        session.goto_start()
+        first = session.observe(1)
+        evidence = first.listener_evidence
+        # 400 rows plus the inline onclick of the "More" button.
+        assert evidence.listener_nodes == 401 and evidence.described_nodes == 300
+        assert evidence.truncated and evidence.skipped["node_budget"] == 101
+        session.execute(next(c for c in first.controls if c.label == "More"))
+        second = session.observe(2).listener_evidence
+        assert second.described_nodes <= 300
+        # The node created by the action is inspected first, ahead of the 101
+        # nodes never inspected before; cached nodes cost no DevTools calls.
+        assert second.changes.get("created_after_action") == 1
+        assert any(c["label"] == "Load newer rows" and c["provenance"] == "created_after_action" for c in second.candidates)
+        assert second.reused_nodes == 300 and second.described_nodes == 102 and not second.truncated
+
+
+def test_multiple_listeners_on_one_element_yield_one_control(browser, base, tmp_path):
+    with session_for(browser, base, "/multi", tmp_path) as session:
+        session.goto_start()
+        observation = session.observe(1)
+        [control] = listener_controls(observation)
+        assert control.label == "Open map" and control.interaction == "click"
+        [record] = observation.listener_evidence.candidates
+        assert record["listener_count"] == 4 and len(record["handler_locations"]) == 4
+
+
+def test_page_without_listeners_is_unchanged_by_the_observer(browser, base, tmp_path):
+    results = {}
+    for mode in ("off", "observe", "revisit"):
+        with session_for(browser, base, "/plain", tmp_path, mode=mode) as session:
+            session.goto_start()
+            observation = session.observe(1)
+            results[mode] = observation
+            assert listener_controls(observation) == []
+    for mode in ("observe", "revisit"):
+        assert [c.id for c in results[mode].controls] == [c.id for c in results["off"].controls]
+        assert results[mode].group_signature == results["off"].group_signature
+        assert results[mode].behavior_signature == results[mode].group_signature
+
+
+def test_devtools_failure_falls_back_to_the_snapshot(browser, base, tmp_path):
+    with session_for(browser, base, "/div", tmp_path, mode="off") as session:
+        session.goto_start()
+        baseline = session.observe(1)
+    with session_for(browser, base, "/div", tmp_path, mode="revisit") as session:
+        session.goto_start()
+
+        def broken(_page):
+            raise RuntimeError("Target closed: DevTools session unavailable")
+        session.listener_observer._cdp = broken
+        observation = session.observe(1)
+        assert observation.listener_evidence.error.startswith("RuntimeError")
+        assert listener_controls(observation) == []
+        assert [c.id for c in observation.controls] == [c.id for c in baseline.controls]
+        assert observation.behavior_signature == observation.group_signature
+        session.execute(next(c for c in observation.controls if c.label == "Show"))  # exploration continues
+
+
+def test_navigation_starts_a_new_listener_inventory(browser, base, tmp_path):
+    with session_for(browser, base, "/div", tmp_path, mode="revisit") as session:
+        session.goto_start()
+        first = session.observe(1)
+        session.execute(next(c for c in first.controls if c.label == "Show"))
+        on_div = session.observe(2)
+        assert [c.label for c in listener_controls(on_div)] == ["Open details"]
+        session.page.goto(base + "/repeat")
+        on_repeat = session.observe(3)
+        evidence = on_repeat.listener_evidence
+        assert evidence.document_token != on_div.listener_evidence.document_token
+        assert evidence.changes == {"present_at_first_observation": 1} and evidence.revisions == []
+        assert [c.label for c in listener_controls(on_repeat)] == ["Add to favourites"]
+        assert all(c.frame_url.endswith("/repeat") for c in listener_controls(on_repeat))
+        session.page.reload()                                     # same URL, new document
+        reloaded = session.observe(4).listener_evidence
+        assert reloaded.document_token != evidence.document_token and reloaded.revisions == []

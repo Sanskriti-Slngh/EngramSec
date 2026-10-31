@@ -8,8 +8,14 @@
 #   PC  P + separately bounded passive document depth (6)
 #   PB  P + budget-aware deepening (hard max depth 8)
 #   E   best depth option + standards extraction + bounded streaming reader; E2 = E after the speculative-lane fix
+#   E/E2 depth flags: E_DEPTH_FLAGS was previously read from the caller's
+#   environment and was undefined in a clean shell. The default below is the
+#   value recorded in the saved E2 run (root_cause_ablation/adaptive_readiness_E2_r1
+#   experiment_config.json); override it explicitly if needed.
 cd "$(dirname "$0")/.."
 ROOT=$1; SECS=$2; shift 2
+: ${E_DEPTH_FLAGS:="--passive-document-max-depth 6 --budget-aware-deepening --hard-max-resource-depth 8"}
+echo "E_DEPTH_FLAGS=$E_DEPTH_FLAGS"
 for ARM in "$@"; do
   base=${ARM%%_*}
   extra=()

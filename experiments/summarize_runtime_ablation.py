@@ -15,6 +15,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from summarize_discovery_ablation import summarize as crawlmaze_summary  # offline scorer
+from audit_crawlmaze_missing import norm, ok
 
 NON_EFFECT = {"xhr", "fetch"}
 
@@ -79,6 +80,12 @@ def behavior(run_dir: Path) -> dict:
         "python_peak_rss_mb": metrics.get("python_peak_rss_mb"),
         "http_total": metrics.get("total_http_budget_used"),
         "integrity": integrity,
+        "instrumentation": {k: metrics.get(k) for k in (
+            "listener_nodes_inspected", "listener_nodes_reused", "listener_bearing_nodes_max",
+            "listener_scans_truncated", "listener_changes", "listener_candidates_new",
+            "listener_candidates_deduplicated", "listener_candidates_safe", "listener_candidates_rejected",
+            "listener_actions_executed", "listener_transitions_with_effect", "handler_revision_candidates",
+            "handler_revisions_observed", "handler_revisits_executed")},
     }
 
 
@@ -124,6 +131,35 @@ def audit(run_dir: Path, run: dict, observed: list, validated: set, listener: li
     }
 
 
+def runtime_attribution(run_dir: Path, expected: list[str]) -> dict:
+    """Markers whose 2xx request was issued by a runtime-discovered action
+    (listener candidate or handler revisit) or by its replay; `exclusive` are
+    those no other action, navigation, restoration, replay or passive fetch
+    reached in the same run."""
+    graph = json.loads((run_dir / "graph_a.json").read_text())
+    run = json.loads((run_dir / "run.json").read_text())
+    runtime_ids = {t["id"] for t in run["transitions"]
+                   if t["action"].get("provenance") == "observed_listener" or t["action"].get("behavior_revision")}
+    runtime, other = set(), set()
+
+    def add(target: set, events: list) -> None:
+        target.update(norm(urlsplit(e["url"]).path) for e in events if e.get("url") and ok(e.get("status")))
+
+    for nav in graph.get("navigation_evidence", []):
+        add(other, nav.get("network", []))
+    for action in graph["nodes"].get("actions_evidence", []):
+        add(runtime if action["id"].removeprefix("action_") in runtime_ids else other, action.get("network", []))
+        for step in action.get("prerequisite_network", []):
+            add(other, step.get("network", []))
+    for replay in graph.get("replays", []):
+        add(runtime if replay["transition_id"] in runtime_ids else other, replay.get("network", []))
+    other.update(norm(urlsplit(r["url"]).path) for r in graph.get("resource_evidence", [])
+                 if r.get("url") and r.get("status") == "fetched" and ok(r.get("http_status")))
+    via_runtime = sorted(p for p in expected if norm(p) in runtime)
+    return {"via_runtime_actions": via_runtime,
+            "exclusive_to_runtime_actions": sorted(p for p in via_runtime if norm(p) not in other)}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", type=Path, required=True)
@@ -142,6 +178,7 @@ def main() -> int:
             rows[name]["supported_2xx_84"] = row["supported_2xx_84"]
             rows[name]["request_surface_any_status_91"] = row["request_surface_any_status_91"]
             rows[name]["evidence_audit"] = row["evidence_audit"]
+            rows[name]["markers_runtime"] = runtime_attribution(run_dir, expected)
             hits[name] = set(detail["hits"])
     baseline = next((n for n in rows if n.startswith("A")), None)
     if args.crawlmaze and baseline:

@@ -146,6 +146,28 @@ Runtime listener observation (Chromium only; `RUNTIME_INTERACTION_ABLATION.md`):
 
 A listener is never authorization to act: candidates pass the same safety filter, scope routing and action budget as every other control. Delegated listeners are reported, never attributed to descendants.
 
+How it works (`agent1/listeners.py`, design and results in `RUNTIME_LISTENER_DISCOVERY.md`):
+
+- After each browser observation, one `DOMDebugger.getEventListeners(document, depth -1, pierce)` call lists click-family listeners by node. At most `--max-listener-nodes` nodes are inspected (resolved and described) per observation. Nodes that are new or changed since the previous observation of the same document go first. Unchanged nodes reuse their cached description at no DevTools cost. A truncated scan is recorded.
+- Each listener-bearing node is classified against the previous inventory of the same document:
+  - `created_after_action`
+  - `listener_attached_after_action` (an existing element gained a listener)
+  - `listener_appeared_after_action` (history unknown: shadow tree or frame)
+  - `handler_changed`
+  - `unchanged`
+  - `present_at_first_observation`
+
+  A navigation or reload starts a new inventory.
+- Handler identity is the listener's source location, never its code. A changed handler gives the control a behavior revision, so in `revisit` mode the frontier may reconsider it once per revision. An unchanged handler is not re-executed.
+- With listener observation on, the browser scope router is installed even without an HTTP budget. Listener candidates have no static target, so only the router can stop an off-scope navigation.
+- Run metrics `listener_*` and `handler_revision_*` count:
+  - nodes inspected and reused;
+  - truncated scans;
+  - new, deduplicated, safe and rejected candidates;
+  - executed listener actions and those with an observable effect.
+
+  Graph A `behavior_evidence` links each candidate to the observation, cause and transitions that executed it. Handler source code is never stored.
+
 ## Resume or request deeper exploration
 
 ```bash

@@ -1,0 +1,185 @@
+{
+  "A": {
+    "action_request_structures": 9,
+    "action_request_structures_replay_validated": 0,
+    "behavior_divergent_groups": 0,
+    "browser_actions": 297,
+    "cdp_calls": 0,
+    "cdp_ms_per_observation": 0.0,
+    "cdp_ms_total": 0.0,
+    "cdp_share_of_runtime": 0.0,
+    "elapsed_seconds": 163.802,
+    "evidence_audit": {
+      "observed_only_records_with_spider_attempt": 0,
+      "passive_only_documents_as_ui_transitions": 0,
+      "replay_validated_transitions": 24,
+      "spider_attempts_without_channel_label": 0,
+      "spider_get_for_observed_only_non_get_surface": 0,
+      "surfaces_marked_replay_verified": 39
+    },
+    "gained_vs_A": [],
+    "graph_connections_missing_evidence": 0,
+    "graph_connections_total": 1863,
+    "handler_revisions_observed": 0,
+    "http_total": 679,
+    "incorrect_state_merges": 0,
+    "instrumentation": {
+      "handler_revision_candidates": 0,
+      "handler_revisions_observed": 0,
+      "handler_revisits_executed": 0,
+      "listener_actions_executed": 0,
+      "listener_bearing_nodes_max": 0,
+      "listener_candidates_deduplicated": 0,
+      "listener_candidates_new": 0,
+      "listener_candidates_rejected": 0,
+      "listener_candidates_safe": 0,
+      "listener_changes": {},
+      "listener_nodes_inspected": 0,
+      "listener_nodes_reused": 0,
+      "listener_scans_truncated": 0,
+      "listener_transitions_with_effect": 0
+    },
+    "integrity": {
+      "cookie_values_in_resource_evidence": 0,
+      "listener_actions_without_candidate_claim": 0,
+      "listener_or_revision_claims_incomplete": 0,
+      "observations_with_mixed_session_context": 0,
+      "replays_validated_in_exploration_context": 0,
+      "revisits_in_observe_mode": 0,
+      "revisits_without_revision_claim": 0,
+      "same_dom_different_behavior_transitions (informational)": 0,
+      "skipped_listener_elements_executed": 0,
+      "unsafe_listener_actions_executed": 0,
+      "validated_network_only_replays_without_request_check": 0
+    },
+    "listener_actions_executed": 0,
+    "listener_actions_replay_validated": 0,
+    "listener_actions_without_observable_effect": [],
+    "listener_candidates_recorded": 0,
+    "listener_candidates_unsafe": [],
+    "listener_executed_labels": [],
+    "listener_observation_errors": 0,
+    "listener_skipped": {},
+    "lost_vs_A": [],
+    "markers_runtime": {
+      "exclusive_to_runtime_actions": [],
+      "via_runtime_actions": []
+    },
+    "new_structures_from_listener_or_revisit": [],
+    "python_peak_rss_mb": 66.3,
+    "raw_2xx_91": 58,
+    "replays": "24/24",
+    "request_structures_per_100_actions": 3.03,
+    "request_surface_any_status_91": 64,
+    "revisit_actions_executed": 0,
+    "revisit_actions_replay_validated": 0,
+    "revisit_labels": [],
+    "supported_2xx_84": 58,
+    "transitions_observed": 102
+  },
+  "C": {
+    "action_request_structures": 11,
+    "action_request_structures_replay_validated": 0,
+    "behavior_divergent_groups": 1,
+    "browser_actions": 299,
+    "cdp_calls": 1376,
+    "cdp_ms_per_observation": 6.62,
+    "cdp_ms_total": 986.4,
+    "cdp_share_of_runtime": 0.0059,
+    "elapsed_seconds": 167.403,
+    "evidence_audit": {
+      "observed_only_records_with_spider_attempt": 0,
+      "passive_only_documents_as_ui_transitions": 0,
+      "replay_validated_transitions": 25,
+      "spider_attempts_without_channel_label": 0,
+      "spider_get_for_observed_only_non_get_surface": 0,
+      "surfaces_marked_replay_verified": 42
+    },
+    "gained_vs_A": [
+      "/test/javascript/interactive/multi-step-request-event-listener-div-dom.found",
+      "/test/javascript/interactive/multi-step-request-event-listener-div.found",
+      "/test/javascript/interactive/multi-step-request-redefine-event-attribute.found"
+    ],
+    "graph_connections_missing_evidence": 0,
+    "graph_connections_total": 1860,
+    "handler_revisions_observed": 1,
+    "http_total": 683,
+    "incorrect_state_merges": 0,
+    "instrumentation": {
+      "handler_revision_candidates": 1,
+      "handler_revisions_observed": 1,
+      "handler_revisits_executed": 1,
+      "listener_actions_executed": 2,
+      "listener_bearing_nodes_max": 2,
+      "listener_candidates_deduplicated": 5,
+      "listener_candidates_new": 1,
+      "listener_candidates_rejected": 0,
+      "listener_candidates_safe": 1,
+      "listener_changes": {
+        "created_after_action": 5,
+        "handler_changed": 1,
+        "present_at_first_observation": 9,
+        "unchanged": 29
+      },
+      "listener_nodes_inspected": 15,
+      "listener_nodes_reused": 29,
+      "listener_scans_truncated": 0,
+      "listener_transitions_with_effect": 2
+    },
+    "integrity": {
+      "cookie_values_in_resource_evidence": 0,
+      "listener_actions_without_candidate_claim": 0,
+      "listener_or_revision_claims_incomplete": 0,
+      "observations_with_mixed_session_context": 0,
+      "replays_validated_in_exploration_context": 0,
+      "revisits_in_observe_mode": 0,
+      "revisits_without_revision_claim": 0,
+      "same_dom_different_behavior_transitions (informational)": 1,
+      "skipped_listener_elements_executed": 0,
+      "unsafe_listener_actions_executed": 0,
+      "validated_network_only_replays_without_request_check": 0
+    },
+    "listener_actions_executed": 2,
+    "listener_actions_replay_validated": 0,
+    "listener_actions_without_observable_effect": [],
+    "listener_candidates_recorded": 1,
+    "listener_candidates_unsafe": [],
+    "listener_executed_labels": [
+      "click this secret button"
+    ],
+    "listener_observation_errors": 0,
+    "listener_skipped": {
+      "represented_by_snapshot": 38
+    },
+    "lost_vs_A": [],
+    "markers_runtime": {
+      "exclusive_to_runtime_actions": [
+        "/test/javascript/interactive/multi-step-request-event-listener-div-dom.found",
+        "/test/javascript/interactive/multi-step-request-event-listener-div.found",
+        "/test/javascript/interactive/multi-step-request-redefine-event-attribute.found"
+      ],
+      "via_runtime_actions": [
+        "/test/javascript/interactive/multi-step-request-event-listener-div-dom.found",
+        "/test/javascript/interactive/multi-step-request-event-listener-div.found",
+        "/test/javascript/interactive/multi-step-request-redefine-event-attribute.found"
+      ]
+    },
+    "new_structures_from_listener_or_revisit": [
+      "GET /test/javascript/interactive/multi-step-request-event-listener-div-dom.found",
+      "GET /test/javascript/interactive/multi-step-request-event-listener-div.found",
+      "GET /test/javascript/interactive/multi-step-request-redefine-event-attribute.found"
+    ],
+    "python_peak_rss_mb": 66.4,
+    "raw_2xx_91": 61,
+    "replays": "25/25",
+    "request_structures_per_100_actions": 3.68,
+    "request_surface_any_status_91": 66,
+    "revisit_actions_executed": 1,
+    "revisit_actions_replay_validated": 0,
+    "revisit_labels": [
+      "Submit"
+    ],
+    "supported_2xx_84": 61,
+    "transitions_observed": 103
+  }
+}
