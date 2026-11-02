@@ -88,6 +88,9 @@ class TourScheduler:
         self.uniform_global = mode in {"no_global", "v2"}
         self.verif_log: list[tuple[str, str, int, bool]] = []
         self.global_suppressed: set[str] = set()
+        # Questions the real executor's safety layer refused (populated only by the live adapter;
+        # empty in the simulator): blocked with the executor's reason instead of being re-proposed.
+        self.external_blocked: dict[str, str] = {}
         self.unrestorable: set[str] = set()
         self.no_oracle: set[str] = set()
         self.no_reproduce: set[str] = set()
@@ -355,6 +358,9 @@ class TourScheduler:
         self._scan_availability()
         self._update_mode()
         qs = generate(self.k, self.st, self.iso) + self._revisits()
+        for q in qs:
+            if q.id in self.external_blocked and not q.blocked_reason:
+                q.blocked_reason = self.external_blocked[q.id]
         if self.variant == "v2":
             qs = self._dedupe_global(qs)
             for q in qs:
@@ -397,7 +403,8 @@ class TourScheduler:
                  "considered": considered, "open_discovery": len(disc), "open_verification": len(verif),
                  "verification_share": round(self.verif_actions / max(1, self.used), 4)}
         self.log.append(entry)
-        self.pending = {"q": q, "entry": entry, "caps_before": set(self.k.caps), "steps": steps}
+        self.pending = {"q": q, "entry": entry, "caps_before": set(self.k.caps), "steps": steps,
+                        "target_obs": r.target if r is not None else self.live}
         return ExperimentPlan(question_id=q.id, kind=q.kind, steps=steps, oracle=extra.get("oracle"),
                               oracle_action=extra.get("oracle_action"))
 

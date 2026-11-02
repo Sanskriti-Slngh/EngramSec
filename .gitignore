@@ -84,3 +84,7 @@ evaluation/results/t2v_runs.json
 
 # Phase 2 live shadow runs: raw per-run evidence stays local; only summary.json and analysis.json are committed
 agent1/experiments/live_shadow_*/*/**
+
+# Phase 3 active A/B and diagnostics: raw per-trial runs stay local (aggregates live in evaluation/results)
+agent1/experiments/active_ab_*/
+agent1/experiments/active_posthoc_*/

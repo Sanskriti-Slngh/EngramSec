@@ -228,3 +228,71 @@ class ShadowRunner:
         }
         (output_dir / "shadow_summary.json").write_text(json.dumps(summary, indent=1, default=str))
         return summary
+
+
+class ActiveTourRunner(ShadowRunner):
+    """Same decision path as shadow mode, but the scheduler keeps its pending question so the
+    executed result can be resolved, and the plan is returned for execution."""
+
+    def __init__(self, config: Any, sink: Any) -> None:
+        super().__init__(config, sink)
+        self.sched = TourScheduler(self.iso, Costs(), config.max_browser_actions, seed=config.tour_seed, mode="v2")
+        self.sched.started = True
+        self._seen_records: set[str] = set()
+
+    def propose(self, artifact: Any, live_obs_id: str, used: int):
+        self.live.sync(artifact)
+        acg = self.live.export()
+        records = self.live.records()
+        self._seen_records = {r.id for r in records}
+        self.sched.k = self._knowledge(records, artifact)
+        self.sched._last_obs_seen = 0
+        if live_obs_id not in self.sched.k.obs:
+            self.counters["live_state_not_recorded"] += 1
+            return None, None
+        view = AgentView.model_construct(records=records, acg=acg, live_obs=live_obs_id,
+                                         remaining=max(0, self.config.max_browser_actions - used), used=used,
+                                         isolation=self.iso, costs=Costs())
+        start = time.perf_counter()
+        plan = self.sched.next(view)
+        self.decide_ms.append(round((time.perf_counter() - start) * 1000, 2))
+        entry = self.sched.log[-1] if self.sched.log else {}
+        record = {"t": len(self.proposals), "live_obs": live_obs_id, "used": used}
+        record.update({"proposal": None, "feasibility": "no_feasible_question"} if plan is None
+                      else self._describe(plan, entry, live_obs_id, artifact))
+        self.proposals.append(record)
+        target = (self.sched.pending or {}).get("target_obs")
+        return plan, target
+
+    def complete(self, result: Any) -> None:
+        if self.sched.pending is not None:
+            self.sched.pending["result"] = result
+            if self.sched.pending["q"].kind in {"reproduce", "verify_effect", "test_dependency", "test_equivalence"}:
+                self.sched.verif_actions += result.actions      # same accounting as TourScheduler.update
+            if result.refused and result.actions == 0:
+                self.sched.external_blocked[self.sched.pending["q"].id] = "executor_refused:" + result.refused[0]
+        if self.proposals:
+            self.proposals[-1]["executed"] = {"actions": result.actions, "completed": result.completed,
+                                              "abort": result.abort_reason, "refused": result.refused}
+
+    def raw_url(self, pseudo: str | None) -> str | None:
+        if not pseudo:
+            return None
+        if pseudo == self.iso.start_url:
+            return self.config.start_url                 # the scheduler's name for the configured start page
+        art = self._artifact
+        for o in list(art.observations) + list(art.replay_observations):
+            if self.live._pseudo(o.url) == pseudo:
+                return o.url
+            for c in o.controls:
+                if c.target and self.live._pseudo(c.target) == pseudo:
+                    return c.target
+        return None
+
+    def gate_check(self, step: Any, live: Any) -> str | None:
+        return self.sched.gate.check(step, self.live._pseudo(live.url), False)
+
+    def sync_new(self, artifact: Any, before_t: int, before_r: int):
+        self.live.sync(artifact)
+        records = [r for r in self.live.records() if r.id not in self._seen_records]
+        return records, [t.id for t in artifact.transitions[before_t:]], [r.id for r in artifact.replays[before_r:]]

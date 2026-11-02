@@ -140,3 +140,15 @@ def test_pseudonymization_preserves_acg_semantics(runs) -> None:
     assert sorted(t.route for t in raw.templates) == sorted(t.route for t in live.templates)
     assert sorted(str(c.status) for c in raw.capabilities) == sorted(str(c.status) for c in live.capabilities)
     assert sorted(len(c.action_ids) for c in raw.capabilities) == sorted(len(c.action_ids) for c in live.capabilities)
+
+
+
+def test_websockets_work_under_the_http_router_with_scope_enforced() -> None:
+    out = Path(tempfile.mkdtemp())
+    explorer, artifact, log = _run(True, out, start="live", max_transitions=3, max_browser_actions=8, max_seconds=40,
+                                   settle_ms=150, websocket_local_access=True)   # BUDGETED keeps the HTTP router on
+    counters = explorer.evidence_sink.summary()["counters"]
+    assert counters.get("lna_granted_origins", 0) >= 1
+    assert counters.get("ws_out_of_scope_refused", 0) >= 1               # out-of-scope socket never connected
+    assert counters.get("ws_frames_sent", 0) >= 1 and counters.get("ws_frames_received", 0) >= 1
+    assert any(p == "/ws" for _, p in log) and explorer.http_budget.redirect_scope_violations == 0

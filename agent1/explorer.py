@@ -779,6 +779,17 @@ class BrowserSession:
                     # out-of-scope server is ever made. (route.close() deadlocks the sync API.)
                     sink.counters["ws_out_of_scope_refused"] += 1
             self.context.route_web_socket(lambda _url: True, scoped_ws)
+            # Under the HTTP router, documents arrive via route.fulfill and Chromium's local-network-
+            # access check then blocks every WebSocket to a local address. Granting that permission to
+            # the configured origins only restores in-scope sockets; scope stays enforced above.
+            from urllib.parse import urlsplit as _split
+            for origin in ([config.start_url] + list(config.origin_aliases or [])) if config.websocket_local_access else []:
+                parts = _split(origin if "://" in origin else "http://" + origin)
+                try:
+                    self.context.grant_permissions(["local-network-access"], origin=f"{parts.scheme}://{parts.netloc}")
+                    sink.counters["lna_granted_origins"] += 1
+                except PlaywrightError:
+                    sink.counters["lna_grant_unsupported"] += 1
         self.network = NetworkRecorder(
             self.context,
             self.config,
@@ -849,6 +860,28 @@ class BrowserSession:
             self.last_readiness = self._wait_for_readiness(
                 response.status if response else None
             )
+        elif self.config.settle_ms:
+            self.page.wait_for_timeout(self.config.settle_ms)
+            self.last_readiness = ReadinessEvidence()
+        else:
+            self.last_readiness = ReadinessEvidence()
+        if self.network:
+            if self.config.typed_resource_spider:
+                self.last_navigation_resources = self.network.drain_resources(self.context.request)
+            self.last_navigation_network = self.network.drain()
+        return 1
+
+    def goto(self, url: str) -> int:
+        """In-scope direct navigation for tour plans (same readiness and evidence handling as goto_start)."""
+        assert self.page
+        if not allowed_origin(self.config.start_url, url, self.config.origin_aliases):
+            raise RuntimeError("direct navigation target is out of scope")
+        self._last_action = "navigation:direct"
+        response = self.page.goto(url, wait_until="domcontentloaded", timeout=self.config.action_timeout_ms * 2)
+        if not allowed_origin(self.config.start_url, self.page.url, self.config.origin_aliases):
+            raise RuntimeError("direct navigation left the configured origin")
+        if self.config.robust_readiness:
+            self.last_readiness = self._wait_for_readiness(response.status if response else None)
         elif self.config.settle_ms:
             self.page.wait_for_timeout(self.config.settle_ms)
             self.last_readiness = ReadinessEvidence()
@@ -1718,7 +1751,9 @@ class Explorer:
         self._observation_ids: set[str] = set()
         self.evidence_sink = None
         self.shadow = None
-        if config.acg_evidence or config.shadow_tours:
+        self.action_ledger: dict[str, list[float]] = {}
+        self.tour_summary: dict[str, Any] | None = None
+        if config.acg_evidence or config.shadow_tours or config.exploration_policy == "tours":
             from .live.capture import EvidenceSink
             self.evidence_sink = EvidenceSink(config.max_resource_body_bytes)
         if config.shadow_tours:
@@ -1728,9 +1763,12 @@ class Explorer:
 
     def _safe_config(self) -> dict[str, Any]:
         data = self.config.model_dump(mode="json")
-        for key in ("acg_evidence", "shadow_tours"):     # opt-in keys stay absent when off
+        for key in ("acg_evidence", "shadow_tours", "action_ledger", "tour_seed",
+                    "websocket_local_access"):  # opt-in keys stay absent when off
             if not data.get(key):
                 data.pop(key, None)
+        if data.get("exploration_policy") == "legacy":
+            data.pop("exploration_policy", None)
         data["output_dir"] = str(self.output_dir)
         if data.get("resume_from"):
             data["resume_from"] = str(data["resume_from"])
@@ -1974,13 +2012,19 @@ class Explorer:
                         )
                 else:
                     self._initialize(browser)
-                self._explore(browser)
-                self._replay(browser)
+                if self.config.exploration_policy == "tours":
+                    self._explore_tours(browser)      # verification is part of the tour agenda
+                else:
+                    self._explore(browser)
+                    self._replay(browser)
             finally:
                 browser.close()
         self._finalize()
         if self.shadow is not None:
             self.shadow_summary = self.shadow.finish(self.artifact, self.output_dir)
+        if self.config.action_ledger:
+            self._stamp_ledger()
+            (self.output_dir / "action_ledger.json").write_text(json.dumps(self.action_ledger))
         self.save_checkpoint()
         return self.artifact
 
@@ -4069,7 +4113,59 @@ class Explorer:
         if not self.artifact.metrics.progress or self.artifact.metrics.progress[-1] != point:
             self.artifact.metrics.progress.append(point)
 
+    def _stamp_ledger(self) -> None:
+        """Instrumentation only: when each evidence item was first stored (browser actions, seconds)."""
+        now = [self.artifact.metrics.browser_actions, round(self._elapsed(), 3)]
+        for collection in (self.artifact.observations, self.artifact.replay_observations,
+                           self.artifact.transitions, self.artifact.replays):
+            for item in collection:
+                self.action_ledger.setdefault(item.id, now)
+
+    def _explore_tours(self, browser: Browser) -> None:
+        """tour_v2 selects and executes plans through the thin adapter (agent1/live/executor.py)."""
+        from .live.executor import TourExecutor
+        from .live.shadow import ActiveTourRunner
+        runner = ActiveTourRunner(self.config, self.evidence_sink)
+        runner._artifact = self.artifact
+        executor = TourExecutor(self, runner)
+        with self._browser_session(browser) as session:
+            self._navigate_start(session, "persistent_restore")
+            live = session.observe(self._next_sequence())
+            live_path: list[ActionDescriptor] = []
+            self._record_observation(live, [])
+            self.save_checkpoint()
+            while True:
+                if self._elapsed() >= self.config.max_seconds or self._discovery_http_exhausted():
+                    break
+                if len(self.artifact.transitions) >= self.config.max_transitions:
+                    break
+                if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
+                    break
+                plan, target = runner.propose(self.artifact, live.id, self.artifact.metrics.browser_actions)
+                if plan is None:
+                    break
+                result, live, live_path = executor.run(browser, session, plan, live, live_path, target)
+                runner.complete(result)
+                self.save_checkpoint()
+                if result.actions == 0 and not result.completed:
+                    runner.counters["zero_action_aborts"] += 1
+                    if runner.counters["zero_action_aborts"] >= 25:
+                        break
+                else:
+                    runner.counters["zero_action_aborts"] = 0
+        self.tour_summary = {"executor": executor.counters, "runner": dict(runner.counters),
+                             "decisions": len(runner.proposals),
+                             "decide_ms_mean": round(sum(runner.decide_ms) / len(runner.decide_ms), 2)
+                             if runner.decide_ms else None,
+                             "acg_update_ms_mean": round(sum(runner.live.latencies_ms) / len(runner.live.latencies_ms), 2)
+                             if runner.live.latencies_ms else None,
+                             "scheduler": runner.sched.summary()}
+        (self.output_dir / "tour_decisions.jsonl").write_text(
+            "".join(json.dumps(p, sort_keys=True, default=str) + "\n" for p in runner.proposals))
+
     def save_checkpoint(self) -> None:
+        if self.config.action_ledger:
+            self._stamp_ledger()
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.artifact.metrics.elapsed_seconds = round(self.prior_elapsed + self._elapsed(), 3)
         if self.http_budget is not None:

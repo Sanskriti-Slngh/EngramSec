@@ -68,6 +68,16 @@ class RunConfig(BaseModel):
     # Capability Tour Scheduler that proposes but never executes actions.
     acg_evidence: bool = False
     shadow_tours: bool = False
+    # Phase 3 (opt-in): "tours" lets tour_v2 select and execute actions through the thin adapter;
+    # "legacy" (default) is the unchanged frontier. The action ledger stamps evidence items with the
+    # browser-action count and elapsed time at which they were stored (instrumentation only).
+    exploration_policy: Literal["legacy", "tours"] = "legacy"
+    tour_seed: int = 0
+    action_ledger: bool = False
+    # Opt-in: grant Chromium's local-network-access permission to the configured origins so in-scope
+    # WebSockets work under the HTTP budget router. Behavior-changing for apps with local WebSockets,
+    # so separate from evidence capture; requires acg_evidence (WebSocket scope enforcement).
+    websocket_local_access: bool = False
     resume_from: Path | None = None
     focus_query: str | None = None
     model_form_assistance: bool = False
