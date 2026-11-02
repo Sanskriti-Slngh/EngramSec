@@ -80,3 +80,4 @@ agent1/experiments/acg_m1_*/**/score.json
 # Phase 1b per-run simulator records (regenerable; aggregates are committed)
 evaluation/results/t2_runs.json
 evaluation/results/t2r_runs.json
+evaluation/results/t2v_runs.json
