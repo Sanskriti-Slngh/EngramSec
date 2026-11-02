@@ -88,6 +88,8 @@ def restore(k: Knowledge, live: str, targets: list[str], iso: Isolation, costs: 
         info = k.obs.get(s)
         if info is None:
             continue
+        if info.epoch < 0 and s != live:
+            continue                       # no executed trail is known for this state (live ledger only)
         role = info.record.role
         same_context = live_info.epoch == info.epoch and live_info.record.role == role
         if s == live:
@@ -115,7 +117,7 @@ def restore(k: Knowledge, live: str, targets: list[str], iso: Isolation, costs: 
                       [_replay(t) for t in suffix if not t.sent], s, False)
             if any(t.writes for t in suffix):
                 continue
-            if not any(t.stateful for t in trail[:j + 1]):
+            if not any(t.stateful for t in trail[:j + 1]) and ("fresh", s) not in k.blocked_restorations:
                 offer("fresh", [Step(op="fresh", role=role, purpose="restore")] + head + [_replay(t) for t in suffix],
                       s, True)
         if any(t.writes for t in trail) and iso.snapshot and iso.level >= 3:

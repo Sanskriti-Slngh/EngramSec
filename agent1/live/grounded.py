@@ -392,6 +392,8 @@ class GroundedTourRunner(ActiveTourRunner):
                 target = e.intended.get("restore_target")
                 if e.op == "back" and target:
                     k.blocked_restorations.add(("back", target))
+                if e.op == "fresh" and target:
+                    k.blocked_restorations.add(("fresh", target))
                 if e.op == "goto" and e.intended.get("url"):
                     k.blocked_restorations.add(("goto", e.intended["url"]))
         return k
@@ -438,4 +440,6 @@ class GroundedTourRunner(ActiveTourRunner):
         if (result.abort_reason or "").startswith(("restoration_mismatch", "arrived_at_wrong_state",
                                                     "control_not_found")):
             self.sched.st.minimal_failed.add(q.id)
+            # a failed restoration is evidence too: not retried under the same conditions
+            self.refusals.setdefault(q.id, set()).add(self.condition(result.live_obs))
 

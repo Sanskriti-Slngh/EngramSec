@@ -302,3 +302,24 @@ def test_12_role_and_session_identity_with_cookie_markers():
         g.runner.propose(g.ex.artifact, g.live.id, g.ex.artifact.metrics.browser_actions)
         assert g.runner.sched.st.entered_roles == {"anonymous"}
         assert not [q for q in generate(g.knowledge(), g.runner.sched.st, g.runner.iso) if q.kind == "find_entry_point"]
+
+
+
+def test_13_failed_route_and_untraceable_states_are_not_retried():
+    """Post-evaluation fix: a failed fresh-context route is remembered, and a state with no executed
+    trail is never offered as a restoration target (the A/B fixture repeated one 41 times)."""
+    from agent1.live.ledger import StepExecution
+    with grounded() as g:
+        g.click("Records"); g.click("Quarry ledger")
+        target = g.live
+        g.click("Records")
+        assert g.restoration(target.id).kind == "fresh"
+        g.runner.ledger.append(StepExecution(plan_id="pX", step_index=0, op="fresh", purpose="restoration",
+                                             intended={"restore_target": target.id}, session=g.executor.session_ref(g.live),
+                                             stage="observed", outcome="failed", result_obs=g.live.id,
+                                             reason="restoration_mismatch:route"))
+        r = g.restoration(target.id)
+        assert r is None or r.kind != "fresh"
+        k = g.knowledge()
+        k.obs[target.id].epoch = -1                                          # as if never reached by a ledger step
+        assert restore(k, g.live.id, [target.id], g.runner.iso, Costs(), independent=True) is None
