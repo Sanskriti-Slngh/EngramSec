@@ -346,6 +346,13 @@ def transition_has_effect(transition: Any) -> bool:
             or any(event.resource_type == "document" for event in transition.network))
 
 
+_ENABLED_FILTER = """&& !el.disabled &&
+      el.getAttribute('aria-disabled') !== 'true';"""
+assert _ENABLED_FILTER in EXTRACT_SCRIPT
+# Same structural extraction, selecting only disabled / aria-disabled controls (acg_evidence only).
+DISABLED_EXTRACT_SCRIPT = EXTRACT_SCRIPT.replace(
+    _ENABLED_FILTER, """&& (el.disabled || el.getAttribute('aria-disabled') === 'true');""")
+
 READINESS_SCRIPT = r"""
 () => {
   if (!window.__engramReadiness) {
@@ -471,9 +478,11 @@ class NetworkRecorder:
         resource_spider: TypedResourceSpider | None = None,
         run_started_monotonic: float | None = None,
         body_status: defaultdict[str, int] | None = None,
+        evidence_sink: Any = None,
     ):
         self.source = source
         self.events: list[NetworkEvent] = []
+        self.evidence_sink = evidence_sink
         self.config = config
         self.run_started_monotonic = run_started_monotonic or time.monotonic()
         self.spider = resource_spider or build_resource_spider(config, resource_budget)
@@ -503,6 +512,8 @@ class NetworkRecorder:
                 elapsed_ms=int((time.monotonic() - self.run_started_monotonic) * 1_000),
             )
         )
+        if self.evidence_sink is not None:
+            self.evidence_sink.on_http(self.events[-1], request, response, self._browser_body)
         content_type = response.headers.get("content-type", "")
         if self.config.typed_resource_spider and (
             request.resource_type in {"document", "stylesheet", "script", "manifest"}
@@ -579,6 +590,8 @@ class NetworkRecorder:
                 elapsed_ms=int((time.monotonic() - self.run_started_monotonic) * 1_000),
             )
         )
+        if self.evidence_sink is not None:
+            self.evidence_sink.on_http(self.events[-1], request, None, None)
 
     def drain(self) -> list[NetworkEvent]:
         current = self.events
@@ -656,8 +669,10 @@ class BrowserSession:
         run_started_monotonic: float | None = None,
         http_budget: Any | None = None,
         body_status: defaultdict[str, int] | None = None,
+        evidence_sink: Any = None,
     ):
         self.body_status = body_status
+        self.evidence_sink = evidence_sink
         self.browser = browser
         self.config = config
         self.resource_budget = resource_budget or ResourceBudget(
@@ -750,6 +765,20 @@ class BrowserSession:
 
             self.context.route("**/*", bounded_route)
             self.context.on("request", charge_redirect_hop)
+        if self.evidence_sink is not None:
+            # WebSockets bypass the HTTP scope router; with ACG evidence on, out-of-scope
+            # connections are refused (and counted) instead of silently allowed.
+            from .live.capture import ws_in_scope
+            sink, config = self.evidence_sink, self.config
+
+            def scoped_ws(route: Any) -> None:
+                if ws_in_scope(config.start_url, route.url, config.origin_aliases, allowed_origin):
+                    route.connect_to_server()
+                else:
+                    # Not connecting keeps the socket inside the browser: no connection to the
+                    # out-of-scope server is ever made. (route.close() deadlocks the sync API.)
+                    sink.counters["ws_out_of_scope_refused"] += 1
+            self.context.route_web_socket(lambda _url: True, scoped_ws)
         self.network = NetworkRecorder(
             self.context,
             self.config,
@@ -757,6 +786,7 @@ class BrowserSession:
             self.resource_spider,
             self.run_started_monotonic,
             self.body_status,
+            self.evidence_sink,
         )
         self.context.on("page", self._attach_page)
         self.page = self.context.new_page()
@@ -768,6 +798,10 @@ class BrowserSession:
             return
         self._attached_pages.add(id(page))
         page.on("dialog", self._dialog)
+        if self.evidence_sink is not None:
+            from .live.capture import ws_in_scope
+            page.on("websocket", lambda ws: self.evidence_sink.attach_websocket(
+                ws, ws_in_scope(self.config.start_url, ws.url, self.config.origin_aliases, allowed_origin)))
 
     def __exit__(self, *_: Any) -> None:
         if self.context:
@@ -945,60 +979,8 @@ class BrowserSession:
             samples=samples,
         )
 
-    def observe(self, sequence: int) -> Observation:
-        assert self.page
-        frame_payloads: list[tuple[int, str, dict[str, Any]]] = []
-        for frame_index, frame in enumerate(self.page.frames):
-            frame_url_raw = frame.url or self.page.url
-            if frame is not self.page.main_frame and not (
-                frame_url_raw.startswith("about:")
-                or allowed_origin(
-                    self.config.start_url, frame_url_raw, self.config.origin_aliases
-                )
-            ):
-                continue
-            try:
-                frame_payloads.append((frame_index, frame_url_raw, frame.evaluate(EXTRACT_SCRIPT)))
-            except PlaywrightError:
-                continue
-        if not frame_payloads:
-            raise RuntimeError("no observable same-scope browser frame")
-        current_url = sanitize_url(self.page.url)
-        forms: list[FormObservation] = []
-        forms_by_frame: dict[tuple[int, int], FormObservation] = {}
-        for frame_index, frame_url_raw, extracted in frame_payloads:
-            safe_frame_url = (
-                sanitize_url(frame_url_raw)
-                if urlsplit(frame_url_raw).scheme in {"http", "https"}
-                else compact_text(frame_url_raw, 240)
-            )
-            for item in extracted["forms"]:
-                item = dict(item)
-                local_index = item["index"]
-                item["action"] = sanitize_url(
-                    item.get("action") or frame_url_raw, frame_url_raw
-                )
-                fields = []
-                for field_index, raw_field in enumerate(item.get("fields", [])):
-                    raw_field = dict(raw_field)
-                    raw_field["id"] = "fld_" + digest(
-                        [
-                            current_url,
-                            safe_frame_url,
-                            local_index,
-                            raw_field.get("css_path"),
-                            raw_field.get("name"),
-                            field_index,
-                        ],
-                        18,
-                    )
-                    fields.append(raw_field)
-                item["fields"] = fields
-                item["frame_index"] = frame_index
-                item["frame_url"] = safe_frame_url
-                observed_form = FormObservation.model_validate(item)
-                forms.append(observed_form)
-                forms_by_frame[(frame_index, local_index)] = observed_form
+    def _build_controls(self, frame_payloads: list[tuple[int, str, dict[str, Any]]],
+                        forms_by_frame: dict[tuple[int, int], FormObservation], current_url: str) -> list[Control]:
         controls: list[Control] = []
         for frame_index, frame_url_raw, extracted in frame_payloads:
             safe_frame_url = (
@@ -1073,6 +1055,74 @@ class BrowserSession:
                         frame_url=safe_frame_url,
                     )
                 )
+        return controls
+
+    def observe(self, sequence: int) -> Observation:
+        assert self.page
+        frame_payloads: list[tuple[int, str, dict[str, Any]]] = []
+        for frame_index, frame in enumerate(self.page.frames):
+            frame_url_raw = frame.url or self.page.url
+            if frame is not self.page.main_frame and not (
+                frame_url_raw.startswith("about:")
+                or allowed_origin(
+                    self.config.start_url, frame_url_raw, self.config.origin_aliases
+                )
+            ):
+                continue
+            try:
+                frame_payloads.append((frame_index, frame_url_raw, frame.evaluate(EXTRACT_SCRIPT)))
+            except PlaywrightError:
+                continue
+        if not frame_payloads:
+            raise RuntimeError("no observable same-scope browser frame")
+        current_url = sanitize_url(self.page.url)
+        forms: list[FormObservation] = []
+        forms_by_frame: dict[tuple[int, int], FormObservation] = {}
+        for frame_index, frame_url_raw, extracted in frame_payloads:
+            safe_frame_url = (
+                sanitize_url(frame_url_raw)
+                if urlsplit(frame_url_raw).scheme in {"http", "https"}
+                else compact_text(frame_url_raw, 240)
+            )
+            for item in extracted["forms"]:
+                item = dict(item)
+                local_index = item["index"]
+                item["action"] = sanitize_url(
+                    item.get("action") or frame_url_raw, frame_url_raw
+                )
+                fields = []
+                for field_index, raw_field in enumerate(item.get("fields", [])):
+                    raw_field = dict(raw_field)
+                    raw_field["id"] = "fld_" + digest(
+                        [
+                            current_url,
+                            safe_frame_url,
+                            local_index,
+                            raw_field.get("css_path"),
+                            raw_field.get("name"),
+                            field_index,
+                        ],
+                        18,
+                    )
+                    fields.append(raw_field)
+                item["fields"] = fields
+                item["frame_index"] = frame_index
+                item["frame_url"] = safe_frame_url
+                observed_form = FormObservation.model_validate(item)
+                forms.append(observed_form)
+                forms_by_frame[(frame_index, local_index)] = observed_form
+        controls = self._build_controls(frame_payloads, forms_by_frame, current_url)
+        disabled_controls: list[Control] = []
+        if self.evidence_sink is not None:
+            disabled_payloads = []
+            for frame_index, frame_url_raw, _ in frame_payloads:
+                try:
+                    disabled_payloads.append((frame_index, frame_url_raw,
+                                              self.page.frames[frame_index].evaluate(DISABLED_EXTRACT_SCRIPT)))
+                except (PlaywrightError, IndexError):
+                    continue
+            disabled_controls = [c for c in self._build_controls(disabled_payloads, forms_by_frame, current_url)
+                                 if not c.interaction.startswith('scroll_')]
         listener_evidence: ListenerEvidence | None = None
         active_revisions: list[str] = []
         if self.listener_observer is not None:
@@ -1108,6 +1158,8 @@ class BrowserSession:
             " ".join(payload.get("body_text", "") for _, _, payload in frame_payloads),
             2_000,
         )
+        if self.evidence_sink is not None:
+            self.evidence_sink.disabled[observation_id] = disabled_controls
         return Observation(
             id=observation_id,
             sequence=sequence,
@@ -1664,9 +1716,21 @@ class Explorer:
             ],
         )
         self._observation_ids: set[str] = set()
+        self.evidence_sink = None
+        self.shadow = None
+        if config.acg_evidence or config.shadow_tours:
+            from .live.capture import EvidenceSink
+            self.evidence_sink = EvidenceSink(config.max_resource_body_bytes)
+        if config.shadow_tours:
+            from .live.shadow import ShadowRunner
+            self.shadow = ShadowRunner(config, self.evidence_sink)
+        self.shadow_summary: dict[str, Any] | None = None
 
     def _safe_config(self) -> dict[str, Any]:
         data = self.config.model_dump(mode="json")
+        for key in ("acg_evidence", "shadow_tours"):     # opt-in keys stay absent when off
+            if not data.get(key):
+                data.pop(key, None)
         data["output_dir"] = str(self.output_dir)
         if data.get("resume_from"):
             data["resume_from"] = str(data["resume_from"])
@@ -1681,6 +1745,7 @@ class Explorer:
             self.started_monotonic,
             self.http_budget,
             self.browser_body_status,
+            self.evidence_sink,
         )
 
     def _revision(self) -> str:
@@ -1914,6 +1979,8 @@ class Explorer:
             finally:
                 browser.close()
         self._finalize()
+        if self.shadow is not None:
+            self.shadow_summary = self.shadow.finish(self.artifact, self.output_dir)
         self.save_checkpoint()
         return self.artifact
 
@@ -2156,7 +2223,13 @@ class Explorer:
             ):
                 self.frontier.insert(0, item)
                 break
+            before = len(self.artifact.transitions)
+            if self.shadow is not None and self.artifact.observations:
+                self.shadow.decide(self.artifact, self.artifact.observations[-1].id,
+                                   self.artifact.metrics.browser_actions)
             self._attempt_frontier(browser, item)
+            if self.shadow is not None:
+                self.shadow.after_action(self.artifact, before)
             self.save_checkpoint()
 
     def _explore_persistent(self, browser: Browser) -> None:
@@ -2182,6 +2255,9 @@ class Explorer:
                 if live.group_signature != burst_group:
                     burst_group = live.group_signature
                     local_burst = 0
+                transitions_before = len(self.artifact.transitions)
+                if self.shadow is not None:
+                    self.shadow.decide(self.artifact, live.id, self.artifact.metrics.browser_actions)
                 local_index = None
                 selected_index = None
                 if planner:
@@ -2221,6 +2297,8 @@ class Explorer:
                     live_source=live,
                     live_path=live_path,
                 )
+                if self.shadow is not None:
+                    self.shadow.after_action(self.artifact, transitions_before)
                 if updated is None:
                     self.artifact.metrics.live_state_stale += 1
                     if self._discovery_http_exhausted():

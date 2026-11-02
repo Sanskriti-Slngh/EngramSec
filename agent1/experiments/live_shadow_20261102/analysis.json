@@ -1,0 +1,80 @@
+{
+ "js_heavy_lab": {
+  "decisions": 30,
+  "proposals": 30,
+  "open_discovery_questions_per_decision": 3.27,
+  "discovery_questions_blocked_or_unreachable_fraction": 0.109,
+  "blocked_verification_reasons": {},
+  "legacy_unmatched_ground_truth_capabilities": [
+   "alias_area",
+   "alias_data"
+  ],
+  "entity_identity": {
+   "incorrect_entity_merges": [],
+   "entity_splits": {},
+   "entity_instances": 0,
+   "true_instances_observed": 0
+  },
+  "context_dependent_controls": 0,
+  "establishes_claims": 0,
+  "learned_predicates": 0,
+  "gaps": [
+   "instance_fields_not_captured",
+   "visual_regions_not_captured"
+  ],
+  "unsupported_or_blocked_affordances": 4
+ },
+ "replay_lab": {
+  "decisions": 34,
+  "proposals": 34,
+  "open_discovery_questions_per_decision": 11.06,
+  "discovery_questions_blocked_or_unreachable_fraction": 0.0,
+  "blocked_verification_reasons": {},
+  "legacy_unmatched_ground_truth_capabilities": [
+   "wipe_records"
+  ],
+  "entity_identity": {
+   "incorrect_entity_merges": [],
+   "entity_splits": {
+    "record:3": [
+     "ei_27862d161fe4",
+     "ei_5bffa16b50a9"
+    ]
+   },
+   "entity_instances": 7,
+   "true_instances_observed": 7
+  },
+  "context_dependent_controls": 0,
+  "establishes_claims": 0,
+  "learned_predicates": 1,
+  "gaps": [
+   "instance_fields_not_captured",
+   "visual_regions_not_captured"
+  ],
+  "unsupported_or_blocked_affordances": 1
+ },
+ "stateful_lab": {
+  "decisions": 31,
+  "proposals": 28,
+  "open_discovery_questions_per_decision": 2.07,
+  "discovery_questions_blocked_or_unreachable_fraction": 0.0,
+  "blocked_verification_reasons": {},
+  "legacy_unmatched_ground_truth_capabilities": [
+   "delete_all"
+  ],
+  "entity_identity": {
+   "incorrect_entity_merges": [],
+   "entity_splits": {},
+   "entity_instances": 4,
+   "true_instances_observed": 4
+  },
+  "context_dependent_controls": 0,
+  "establishes_claims": 0,
+  "learned_predicates": 0,
+  "gaps": [
+   "instance_fields_not_captured",
+   "visual_regions_not_captured"
+  ],
+  "unsupported_or_blocked_affordances": 1
+ }
+}

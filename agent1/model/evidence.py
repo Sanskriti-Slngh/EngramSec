@@ -75,6 +75,11 @@ class RequestEvidence(BaseModel):
     failure: str | None = None
     message_skeleton: str | None = None        # websocket: key-path skeleton digest
     message_discriminator: str | None = None   # websocket: pseudonymous token
+    # Phase 2 live capture (None = not captured): structure-only digests and per-run keyed tokens.
+    request_shape: str | None = None
+    response_shape: str | None = None
+    content_class: str | None = None
+    id_tokens: list[str] | None = None
 
 
 class MessageEvidence(BaseModel):

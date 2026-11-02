@@ -81,3 +81,6 @@ agent1/experiments/acg_m1_*/**/score.json
 evaluation/results/t2_runs.json
 evaluation/results/t2r_runs.json
 evaluation/results/t2v_runs.json
+
+# Phase 2 live shadow runs: raw per-run evidence stays local; only summary.json and analysis.json are committed
+agent1/experiments/live_shadow_*/*/**

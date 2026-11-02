@@ -64,6 +64,10 @@ class RunConfig(BaseModel):
     paid_stop_usd: float = Field(default=18.0, ge=0, le=18.0)
     replay_reserve_fraction: float = Field(default=0.30, ge=0, le=0.8)
     run_id: str | None = None
+    # Phase 2 (opt-in, off by default): privacy-preserving ACG evidence capture and a shadow
+    # Capability Tour Scheduler that proposes but never executes actions.
+    acg_evidence: bool = False
+    shadow_tours: bool = False
     resume_from: Path | None = None
     focus_query: str | None = None
     model_form_assistance: bool = False

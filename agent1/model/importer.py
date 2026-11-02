@@ -61,55 +61,65 @@ def _status(transition: dict[str, Any]) -> str:
     return "observed" if transition.get("result_observation_id") and not transition.get("error") else "failed"
 
 
+def observation_item(obs: dict[str, Any], index: int, context: str, collection: str,
+                     artifact_name: str) -> tuple[tuple, Record]:
+    markers = obs.get("session_markers")
+    record = Record(
+        id=f"ev:{collection}:{obs['id']}", seq=0, kind="observation",
+        source=Source(artifact=artifact_name, pointer=f"/{collection}/{index}"),
+        obs_id=obs["id"], context=context, url=obs.get("url"), role=_role(obs.get("session_context"), markers),
+        storage_keys=_storage(markers), affordances=[_affordance(c) for c in obs.get("controls") or []],
+        title=obs.get("title", "") or "")
+    return (obs.get("recorded_at", ""), int(obs.get("sequence", 0)), record.id), record
+
+
+def action_item(t: dict[str, Any], index: int, artifact_name: str) -> tuple[tuple, Record]:
+    filled = [ref.get("field_name", "") for ref in t.get("input_references") or []]
+    record = Record(
+        id=f"ev:transitions:{t['id']}", seq=0, kind="action",
+        source=Source(artifact=artifact_name, pointer=f"/transitions/{index}"),
+        action_id=t["id"], source_obs=t.get("source_observation_id"), result_obs=t.get("result_observation_id"),
+        affordance=_affordance(t.get("action") or {}), status=_status(t),
+        requests=_requests(t.get("network"), filled), error=t.get("error"),
+        workflow_length=max(1, len(t.get("workflow_path") or [])))
+    return (t.get("ended_at") or t.get("started_at") or "", 10**9, record.id), record
+
+
+def replay_item(r: dict[str, Any], index: int, artifact_name: str) -> tuple[tuple, Record]:
+    record = Record(
+        id=f"ev:replays:{r['id']}", seq=0, kind="replay",
+        source=Source(artifact=artifact_name, pointer=f"/replays/{index}"),
+        replay_id=r["id"], action_id=r.get("transition_id"), result_obs=r.get("actual_observation_id"),
+        status=str(r.get("status", "")), verification_kind=r.get("verification_kind") or "standard",
+        requests=_requests(r["network"], []) if "network" in r else None,
+        verification={k: v for k, v in {
+            "functional_status": r.get("functional_status"), "failure_reason": r.get("failure_reason"),
+            "primary_only_targets": len((r.get("verification_evidence") or {}).get("primary_only_targets") or []),
+            "contrast_only_targets": len((r.get("verification_evidence") or {}).get("contrast_only_targets") or []),
+            "verification_observation_ids": r.get("verification_observation_ids") or [],
+        }.items() if v is not None})
+    return (r.get("ended_at") or r.get("started_at") or "", 2 * 10**9, record.id), record
+
+
+def assemble(items: list[tuple[tuple, Record]], capture: Capture, artifact_name: str, application: str,
+             synthetic: bool = False) -> list[Record]:
+    ordered = [record for _, record in sorted(items, key=lambda item: item[0])]
+    manifest = Record(id="ev:manifest", seq=0, kind="capture_manifest",
+                      source=Source(artifact=artifact_name, pointer="/"), capture=capture, application=application,
+                      synthetic=synthetic)
+    return [record.model_copy(update={"seq": index}) for index, record in enumerate([manifest] + ordered)]
+
+
 def import_run_artifact(artifact: dict[str, Any], artifact_name: str, application: str) -> list[Record]:
     """Import a RunArtifact (run.json or checkpoint['artifact'])."""
     replay_network = any("network" in r for r in artifact.get("replays") or [])
-    capture = Capture(replay_requests=replay_network)
-    items: list[tuple[str, int, str, Record]] = []
-
-    def observation(obs: dict[str, Any], index: int, context: str, collection: str) -> None:
-        markers = obs.get("session_markers")
-        record = Record(
-            id=f"ev:{collection}:{obs['id']}", seq=0, kind="observation",
-            source=Source(artifact=artifact_name, pointer=f"/{collection}/{index}"),
-            obs_id=obs["id"], context=context, url=obs.get("url"), role=_role(obs.get("session_context"), markers),
-            storage_keys=_storage(markers), affordances=[_affordance(c) for c in obs.get("controls") or []],
-            title=obs.get("title", "") or "")
-        items.append((obs.get("recorded_at", ""), int(obs.get("sequence", 0)), record.id, record))
-
-    for i, obs in enumerate(artifact.get("observations") or []):
-        observation(obs, i, "exploration", "observations")
-    for i, obs in enumerate(artifact.get("replay_observations") or []):
-        observation(obs, i, "replay", "replay_observations")
-    for i, t in enumerate(artifact.get("transitions") or []):
-        filled = [ref.get("field_name", "") for ref in t.get("input_references") or []]
-        record = Record(
-            id=f"ev:transitions:{t['id']}", seq=0, kind="action",
-            source=Source(artifact=artifact_name, pointer=f"/transitions/{i}"),
-            action_id=t["id"], source_obs=t.get("source_observation_id"), result_obs=t.get("result_observation_id"),
-            affordance=_affordance(t.get("action") or {}), status=_status(t),
-            requests=_requests(t.get("network"), filled), error=t.get("error"),
-            workflow_length=max(1, len(t.get("workflow_path") or [])))
-        items.append((t.get("ended_at") or t.get("started_at") or "", 10**9, record.id, record))
-    for i, r in enumerate(artifact.get("replays") or []):
-        record = Record(
-            id=f"ev:replays:{r['id']}", seq=0, kind="replay",
-            source=Source(artifact=artifact_name, pointer=f"/replays/{i}"),
-            replay_id=r["id"], action_id=r.get("transition_id"), result_obs=r.get("actual_observation_id"),
-            status=str(r.get("status", "")), verification_kind=r.get("verification_kind") or "standard",
-            requests=_requests(r["network"], []) if "network" in r else None,
-            verification={k: v for k, v in {
-                "functional_status": r.get("functional_status"), "failure_reason": r.get("failure_reason"),
-                "primary_only_targets": len((r.get("verification_evidence") or {}).get("primary_only_targets") or []),
-                "contrast_only_targets": len((r.get("verification_evidence") or {}).get("contrast_only_targets") or []),
-                "verification_observation_ids": r.get("verification_observation_ids") or [],
-            }.items() if v is not None})
-        items.append((r.get("ended_at") or r.get("started_at") or "", 2 * 10**9, record.id, record))
-    items.sort(key=lambda item: (item[0], item[1], item[2]))
-    manifest = Record(id="ev:manifest", seq=0, kind="capture_manifest",
-                      source=Source(artifact=artifact_name, pointer="/"), capture=capture, application=application)
-    records = [manifest] + [item[3] for item in items]
-    return [record.model_copy(update={"seq": index}) for index, record in enumerate(records)]
+    items = [observation_item(o, i, "exploration", "observations", artifact_name)
+             for i, o in enumerate(artifact.get("observations") or [])]
+    items += [observation_item(o, i, "replay", "replay_observations", artifact_name)
+              for i, o in enumerate(artifact.get("replay_observations") or [])]
+    items += [action_item(t, i, artifact_name) for i, t in enumerate(artifact.get("transitions") or [])]
+    items += [replay_item(r, i, artifact_name) for i, r in enumerate(artifact.get("replays") or [])]
+    return assemble(items, Capture(replay_requests=replay_network), artifact_name, application)
 
 
 def import_graph_a(graph: dict[str, Any], artifact_name: str, application: str) -> list[Record]:
