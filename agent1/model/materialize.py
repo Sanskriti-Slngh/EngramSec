@@ -27,7 +27,7 @@ from .schema import (ACGExport, Affordance, BehavioralClass, Binding, Capability
                      EntityType, Gap, Label, LearnedPredicate, Operation, Status, Template, ViewState, STATUS_RANK)
 from .tokens import token
 
-RESOLVER_VERSION = "acg-resolvers/1"
+RESOLVER_VERSION = "acg-resolvers/2"
 STATIC_RESOURCES = {"script", "stylesheet", "image", "font", "media", "manifest", "texttrack", "ping"}
 READ_METHODS = {"GET", "HEAD", "OPTIONS"}
 # Experiment channels (EXPLORATION_PLANNER_DESIGN.md §5.2 table C).
@@ -343,7 +343,9 @@ def _resolve(records: list[Record], namespace: str | None) -> ACGExport:
             shared = comps_s & comps_r
             fam_s, fam_r = defaultdict(set), defaultdict(set)
             plain_s, plain_r = set(), set()
-            for o, fam, plain in ((source, fam_s, plain_s), (result, fam_r, plain_r)):
+            dis_s: dict[tuple, bool | None] = {}
+            dis_r: dict[tuple, bool | None] = {}
+            for o, fam, plain, dis in ((source, fam_s, plain_s, dis_s), (result, fam_r, plain_r, dis_r)):
                 for a in o.affordances:
                     if a.component not in shared:
                         continue
@@ -352,6 +354,7 @@ def _resolve(records: list[Record], namespace: str | None) -> ACGExport:
                         fam[aff_id(key)] |= tokens_in(a.target or "")
                     else:
                         plain.add(key)
+                        dis[key] = a.disabled
             for fid in set(fam_s) | set(fam_r):
                 if _bucket(len(fam_s.get(fid, set()))) != _bucket(len(fam_r.get(fid, set()))):
                     out.add(("collection_size_changed", fid))
@@ -362,6 +365,11 @@ def _resolve(records: list[Record], namespace: str | None) -> ACGExport:
             changed: dict[str, list[str]] = defaultdict(list)
             for key in plain_s ^ plain_r:
                 changed[key[4]].append(("+" if key in plain_r else "-") + aff_id(key))
+            # A control that became enabled or disabled is a component state change
+            # (only when both observations captured the flag).
+            for key in plain_s & plain_r:
+                if dis_s[key] is not None and dis_r[key] is not None and dis_s[key] != dis_r[key]:
+                    changed[key[4]].append(("d" if dis_r[key] else "e") + aff_id(key))
             for component, keys in changed.items():
                 out.add(("component_state_changed", component + "/" + _digest(sorted(keys), 8)))
         if source.storage_keys is not None and result.storage_keys is not None and source.storage_keys != result.storage_keys:
@@ -507,8 +515,10 @@ def _resolve(records: list[Record], namespace: str | None) -> ACGExport:
     def note_aff(tid: str, aff, record: Record) -> str:
         aid = aff_id(aff_key(tid, aff))
         node = aff_nodes.setdefault(aid, {"template": tid, "key": aff_key(tid, aff), "labels": {}, "evidence": set(),
-                                          "actions": [], "blocked": None})
+                                          "actions": [], "blocked": None, "disabled": set(), "enabled": set()})
         node["evidence"].add(record.id)
+        if record.kind == "observation" and aff.disabled is not None:
+            node["disabled" if aff.disabled else "enabled"].add(record.id)
         if aff.label.strip() and aff.label not in node["labels"]:
             node["labels"][aff.label] = record.id
         if not aff.safe and node["blocked"] is None:
@@ -682,6 +692,8 @@ def _resolve(records: list[Record], namespace: str | None) -> ACGExport:
             claim(aid, "no_observable_effect", "", Status.OBSERVED, [a.id for a in executed], reason=reason)
         elif any(a.status == "failed" for a in node["actions"]):
             status, reason = "failed", "every execution failed"
+        elif node["disabled"] and not node["enabled"] and not node["actions"]:
+            status, reason = "blocked", "disabled"
         elif node["blocked"] or any(a.status in {"not_tested", "blocked"} for a in node["actions"]):
             status = "blocked"
             reason = node["blocked"] or next((a.error or a.status for a in node["actions"]), "not_tested")
@@ -697,6 +709,30 @@ def _resolve(records: list[Record], namespace: str | None) -> ACGExport:
             capability_ids=caps, action_ids=sorted(a.action_id for a in node["actions"]),
             evidence_ids=sorted(node["evidence"]), reason=reason))
 
+    # Conditions (minimal, evidence-backed): a control observed disabled, and an
+    # executed capability after which a disabled control on the same page became
+    # enabled (or the reverse). Nothing is inferred from co-occurrence.
+    for aid, node in sorted(aff_nodes.items()):
+        if node["disabled"]:
+            claim(aid, "observed_disabled", "", Status.OBSERVED, node["disabled"], rule="disabled_control/1")
+    conditions: dict[tuple[str, str, str], set[str]] = defaultdict(set)
+    for a in actions:
+        cap = cap_of_action.get(a.action_id)
+        src, res = ctx.obs.get(a.source_obs or ""), ctx.obs.get(a.result_obs or "")
+        if not cap or src is None or res is None or src.affordances is None or res.affordances is None:
+            continue
+        tid = tpl_of_obs[src.obs_id]
+        if tpl_of_obs[res.obs_id] != tid:
+            continue
+        before = {aff_id(aff_key(tid, x)): x.disabled for x in src.affordances}
+        for x in res.affordances:
+            xid = aff_id(aff_key(tid, x))
+            if before.get(xid) is True and x.disabled is False:
+                conditions[(cap, "establishes", "enabled:" + xid)] |= {a.id, src.id, res.id}
+            elif before.get(xid) is False and x.disabled is True:
+                conditions[(cap, "invalidates", "enabled:" + xid)] |= {a.id, src.id, res.id}
+    for (cap, predicate, obj), ev in sorted(conditions.items()):
+        claim(cap, predicate, obj, Status.OBSERVED, ev, rule="enablement/1")
     for pred in predicates:
         claim(pred.affordance_id, "behavior_depends_on", pred.kind, Status.OBSERVED, pred.evidence_ids,
               rule="context_split/1")

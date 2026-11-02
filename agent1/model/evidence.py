@@ -59,6 +59,7 @@ class AffordanceEvidence(BaseModel):
     frame: int = 0
     safe: bool = True
     skip_reason: str | None = None
+    disabled: bool | None = None               # None = not captured; True = observed disabled/aria-disabled
     label: str = ""                            # display text: annotation only
 
 
