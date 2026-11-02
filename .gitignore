@@ -76,3 +76,6 @@ agent1/experiments/state_aware_whiteboard_repeat_20261031/**
 agent1/experiments/**/acg_evidence.jsonl
 agent1/experiments/**/acg.json
 agent1/experiments/acg_m1_*/**/score.json
+
+# Phase 1b per-run simulator records (regenerable; aggregates are committed)
+evaluation/results/t2_runs.json
