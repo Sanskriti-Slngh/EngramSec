@@ -71,7 +71,7 @@ class RunConfig(BaseModel):
     # Phase 3 (opt-in): "tours" lets tour_v2 select and execute actions through the thin adapter;
     # "legacy" (default) is the unchanged frontier. The action ledger stamps evidence items with the
     # browser-action count and elapsed time at which they were stored (instrumentation only).
-    exploration_policy: Literal["legacy", "tours"] = "legacy"
+    exploration_policy: Literal["legacy", "tours", "tours_grounded"] = "legacy"
     tour_seed: int = 0
     action_ledger: bool = False
     # Opt-in: grant Chromium's local-network-access permission to the configured origins so in-scope

@@ -86,6 +86,10 @@ class Knowledge:
     reproduced_templates: set[str] = field(default_factory=set)
     obs_of_template: dict[str, list[str]] = field(default_factory=dict)
     _fam_index: dict[tuple, str] = field(default_factory=dict)
+    # Recorded actions whose replay failed deterministically or changes state (live ledger only;
+    # always empty in the simulator): restoration never plans through them.
+    blocked_actions: set[str] = field(default_factory=set)
+    blocked_restorations: set[tuple[str, str]] = field(default_factory=set)   # ("back", target) / ("goto", url)
     _occ_cache: dict[tuple[str, str], list[tuple[str, AffordanceEvidence]]] = field(default_factory=dict)
 
     # evidence ---------------------------------------------------------------------------
@@ -98,6 +102,11 @@ class Knowledge:
 
     def ingest(self, plan: ExperimentPlan, result: ExperimentResult, prev_live: str) -> None:
         steps = list(plan.steps)
+        observed = sum(1 for r in result.records if r.kind == "observation")
+        if result.completed and observed != len(steps):
+            # Observations are associated with steps by position; with any step's observation missing,
+            # a later state would be credited to an earlier step. Refuse rather than guess.
+            raise ValueError(f"execution association: {observed} observations for {len(steps)} executed steps")
         i, prev = 0, prev_live
         pending: tuple[str, Step] | None = None
         for r in result.records:

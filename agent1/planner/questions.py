@@ -77,7 +77,7 @@ def generate(k: Knowledge, st: Any, iso: Isolation) -> list[Question]:
     """`st` is the planner's run-local state (counts and posteriors); see planner.py."""
     qs: list[Question] = []
     # A role's identity is its session context; evidence may append cookie names after "+".
-    observed_roles = {(i.record.role or "").split("+")[0] for i in k.obs.values()}
+    observed_roles = getattr(st, "entered_roles", None) or {(i.record.role or "").split("+")[0] for i in k.obs.values()}
 
     # bind_affordance (and blocked binds) -- one per affordance node; repeated
     # families of distinct nodes (e.g. rows without identifiers) open one member at a time

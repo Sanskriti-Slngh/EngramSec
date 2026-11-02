@@ -45,6 +45,7 @@ class Step(BaseModel):
     replay_of: str | None = None                   # click: recorded action id this step re-executes
     input: str | None = None                       # click on a form: input variant ("primary", "contrast", ...)
     oracle_capture: Literal["before_after", "after"] | None = None
+    expect_obs: str | None = None                  # observation this restoration step should reproduce
     purpose: Literal["restore", "experiment", "oracle"] = "experiment"
 
 

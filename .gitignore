@@ -88,3 +88,6 @@ agent1/experiments/live_shadow_*/*/**
 # Phase 3 active A/B and diagnostics: raw per-trial runs stay local (aggregates live in evaluation/results)
 agent1/experiments/active_ab_*/
 agent1/experiments/active_posthoc_*/
+
+# Grounded A/B raw per-trial runs (aggregates live in evaluation/results)
+agent1/experiments/grounded_ab_*/

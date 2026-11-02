@@ -52,10 +52,10 @@ def minimal_trail(trail: list[TrailStep]) -> list[TrailStep]:
 
 def _replay(ts: TrailStep) -> Step:
     if ts.op == "goto":
-        return Step(op="goto", url=ts.url, purpose="restore")
+        return Step(op="goto", url=ts.url, purpose="restore", expect_obs=ts.obs)
     if ts.op == "back":
-        return Step(op="back", purpose="restore")
-    return Step(op="click", affordance=ts.aff, replay_of=ts.action, purpose="restore")
+        return Step(op="back", purpose="restore", expect_obs=ts.obs)
+    return Step(op="click", affordance=ts.aff, replay_of=ts.action, purpose="restore", expect_obs=ts.obs)
 
 
 def _cost(steps: list[Step], costs: Costs) -> int:
@@ -94,13 +94,17 @@ def restore(k: Knowledge, live: str, targets: list[str], iso: Isolation, costs: 
             offer("stay", [], s, False)
             continue
         if live_info.prev == s and same_context and live_info.input_free_read and \
-                live_info.via is not None and not live_info.via.stateful:
+                live_info.via is not None and not live_info.via.stateful and ("back", s) not in k.blocked_restorations:
             offer("back", [Step(op="back", purpose="restore")], s, False)
         trail = minimal_trail(list(info.trail)) if minimal else list(info.trail)
+        if k.blocked_actions and any(t.action in k.blocked_actions for t in trail):
+            continue                       # a recorded failed or state-changing step: never replayed
         # entry points: the start URL, any goto, and any page load whose template is directly addressable
         entries = [(-1, iso.start_url)] + [(j, t.url) for j, t in enumerate(trail)
                                            if t.url and (t.op == "goto" or _gotoable(k, t.obs))]
         for j, url in entries:
+            if ("goto", url) in k.blocked_restorations:
+                continue
             suffix = trail[j + 1:]
             head = [Step(op="goto", url=url, purpose="restore")] if j >= 0 else []
             if same_context:

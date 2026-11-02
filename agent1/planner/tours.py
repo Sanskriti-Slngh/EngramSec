@@ -91,6 +91,8 @@ class TourScheduler:
         # Questions the real executor's safety layer refused (populated only by the live adapter;
         # empty in the simulator): blocked with the executor's reason instead of being re-proposed.
         self.external_blocked: dict[str, str] = {}
+        self.external_conditional: dict[str, set] = {}     # question -> live conditions it was refused under
+        self.condition: tuple | None = None
         self.unrestorable: set[str] = set()
         self.no_oracle: set[str] = set()
         self.no_reproduce: set[str] = set()
@@ -361,6 +363,9 @@ class TourScheduler:
         for q in qs:
             if q.id in self.external_blocked and not q.blocked_reason:
                 q.blocked_reason = self.external_blocked[q.id]
+            elif self.condition is not None and self.condition in self.external_conditional.get(q.id, ()) \
+                    and not q.blocked_reason:
+                q.blocked_reason = "executor_refused_under_current_conditions"
         if self.variant == "v2":
             qs = self._dedupe_global(qs)
             for q in qs:

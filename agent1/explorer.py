@@ -2012,7 +2012,7 @@ class Explorer:
                         )
                 else:
                     self._initialize(browser)
-                if self.config.exploration_policy == "tours":
+                if self.config.exploration_policy in {"tours", "tours_grounded"}:
                     self._explore_tours(browser)      # verification is part of the tour agenda
                 else:
                     self._explore(browser)
@@ -4123,11 +4123,19 @@ class Explorer:
 
     def _explore_tours(self, browser: Browser) -> None:
         """tour_v2 selects and executes plans through the thin adapter (agent1/live/executor.py)."""
-        from .live.executor import TourExecutor
-        from .live.shadow import ActiveTourRunner
-        runner = ActiveTourRunner(self.config, self.evidence_sink)
-        runner._artifact = self.artifact
-        executor = TourExecutor(self, runner)
+        grounded = self.config.exploration_policy == "tours_grounded"
+        if grounded:
+            from .live.grounded import GroundedExecutor, GroundedTourRunner
+            runner = GroundedTourRunner(self.config, self.evidence_sink)
+            runner._artifact = self.artifact
+            executor = GroundedExecutor(self, runner)
+            runner.executor = executor
+        else:
+            from .live.executor import TourExecutor
+            from .live.shadow import ActiveTourRunner
+            runner = ActiveTourRunner(self.config, self.evidence_sink)
+            runner._artifact = self.artifact
+            executor = TourExecutor(self, runner)
         with self._browser_session(browser) as session:
             self._navigate_start(session, "persistent_restore")
             live = session.observe(self._next_sequence())
@@ -4160,6 +4168,20 @@ class Explorer:
                              "acg_update_ms_mean": round(sum(runner.live.latencies_ms) / len(runner.live.latencies_ms), 2)
                              if runner.live.latencies_ms else None,
                              "scheduler": runner.sched.summary()}
+        if grounded:
+            from .live.reachability import ReachabilityModel
+            model = ReachabilityModel.from_ledger(runner.ledger)
+            runner.ledger.save(self.output_dir / "execution_ledger.jsonl")
+            (self.output_dir / "reachability.json").write_text(json.dumps(model.dump(), indent=1))
+            self.tour_summary.update({
+                "ledger_steps": len(runner.ledger.entries), "ledger_integrity": runner.ledger.integrity(),
+                "restorations": dict(executor.restorations), "repeated_blocked_proposals": runner.repeated_blocked,
+                "reachability": model.summary(),
+                "verification_actions": sum(e.browser_actions for e in runner.ledger.entries
+                                            if e.plan_kind in {"reproduce", "verify_effect", "test_dependency", "test_equivalence"}),
+                "restoration_actions": sum(e.browser_actions for e in runner.ledger.entries if e.purpose == "restoration"),
+                "step_outcomes": {o: sum(e.outcome == o for e in runner.ledger.entries)
+                                  for o in ("succeeded", "refused", "failed", "stale", "unsupported", "not_attempted")}})
         (self.output_dir / "tour_decisions.jsonl").write_text(
             "".join(json.dumps(p, sort_keys=True, default=str) + "\n" for p in runner.proposals))
 
