@@ -83,7 +83,14 @@ class TourScheduler:
 
     def __init__(self, isolation, costs, budget: int, seed: int = 0, mode: str = "full") -> None:
         self.iso, self.costs, self.budget, self.seed, self.variant = isolation, costs, budget, seed, mode
-        self.name = {"full": "tour_full", "no_local": "tour_no_local", "no_global": "tour_no_global"}[mode]
+        self.name = {"full": "tour_full", "no_local": "tour_no_local", "no_global": "tour_no_global",
+                     "v2": "tour_v2"}[mode]
+        self.uniform_global = mode in {"no_global", "v2"}
+        self.verif_log: list[tuple[str, str, int, bool]] = []
+        self.global_suppressed: set[str] = set()
+        self.unrestorable: set[str] = set()
+        self.no_oracle: set[str] = set()
+        self.no_reproduce: set[str] = set()
         self.k = Knowledge()
         self.st = TourState()
         self.gate = RiskGate(isolation)
@@ -348,6 +355,15 @@ class TourScheduler:
         self._scan_availability()
         self._update_mode()
         qs = generate(self.k, self.st, self.iso) + self._revisits()
+        if self.variant == "v2":
+            qs = self._dedupe_global(qs)
+            for q in qs:
+                if q.kind in VERIFICATION and not q.blocked_reason and self._unrestorable(q):
+                    q.blocked_reason = "blocked_unrestorable_context"
+                elif q.id in self.no_oracle and not q.blocked_reason:
+                    q.blocked_reason = "oracle_not_applicable"
+                elif q.id in self.no_reproduce and not q.blocked_reason:
+                    q.blocked_reason = "not_reproduced_independently"
         disc = [q for q in qs if q.kind in DISCOVERY and not q.blocked_reason]
         verif = [q for q in qs if q.kind in VERIFICATION]
         for q in verif:
@@ -497,14 +513,14 @@ class TourScheduler:
                 remote = same_ctx
         best_local = min(locals_, key=key) if locals_ else None
         if remote:
-            best_remote = self._uniform(remote) if self.variant == "no_global" else min(remote, key=key)
+            best_remote = self._uniform(remote) if self.uniform_global else min(remote, key=key)
         else:
             best_remote = None
         considered["top"] = [(q.id, cls((q, d)), round(value((q, d)), 3), self._cost(d))
                              for q, d in sorted(feasible, key=key)[:3]]
         if best_local is not None:
             length = self.tour["length"] if self.tour else 0
-            interrupt = best_remote is not None and self.variant != "no_global" and cls(best_local) == 2 and \
+            interrupt = best_remote is not None and not self.uniform_global and cls(best_local) == 2 and \
                 value(best_remote) >= TOUR["material"] * value(best_local)
             if (length < TOUR["max_length"] or cls(best_local) == 0) and not interrupt:
                 return best_local, ("continue:" if self.tour else "start:") + \
@@ -515,7 +531,7 @@ class TourScheduler:
             self._end_tour("max_length" if not interrupt else "remote_materially_better")
         self._end_tour("no_local_questions")
         return best_remote, "move:" + ("protected_context" if protect else "cost_aware_coverage"
-                                       if self.variant != "no_global" else "uniform")
+                                       if not self.uniform_global else "uniform")
 
     def _first_seen(self, q: Question) -> int:
         evidence = [self.k.order.index(o) for o in self.k.obs_of_template.get(
@@ -596,6 +612,20 @@ class TourScheduler:
                 self.st.inconclusive[q.id] += 1
         elif q.kind in VERIFICATION:
             outcome = "executed" if result.completed else "inconclusive"
+            self.verif_log.append((q.kind, q.subject_ids[0] if q.subject_ids else "", result.actions,
+                                   result.completed))
+            if self.variant == "v2" and result.abort_reason in {"control_not_found", "control_disabled"}:
+                self.unrestorable.add(q.id)      # the session state it needs could not be rebuilt
+            if self.variant == "v2" and q.kind == "verify_effect" and result.completed and \
+                    q.extra.get("oracle") == "paired_search" and not self._differential(result):
+                self.no_oracle.add(q.id)         # observed: the contrast pair adds no distinguishable results
+            if self.variant == "v2" and q.kind == "reproduce" and result.completed:
+                rep = next((r for r in reversed(result.records) if r.kind == "replay"
+                            and r.action_id == q.extra.get("action")), None)
+                cap = k.caps.get(q.subject_ids[0])
+                if rep is not None and rep.status == "replay_validated" and cap is not None and \
+                        STATUS_RANK.get(cap.status, -1) < STATUS_RANK[Status.REPRODUCED]:
+                    self.no_reproduce.add(q.id)  # a conclusive mismatch, not noise: do not retry
             # At most two attempts per verification item: an item that is still open afterwards is
             # recorded as blocked (inconclusive) with its evidence, not retried indefinitely.
             self.st.inconclusive[q.id] += 1
@@ -623,14 +653,92 @@ class TourScheduler:
             "verification_blocked_reasons": dict(Counter(self.blocked_q.values())),
             "snapshot_failed": self.snapshot_failed,
             "bind_outcomes": dict(self.binds), "chains": chains[:20],
+            "verification_wasted_actions": self._wasted(),
+            "global_navigation_suppressed": len(self.global_suppressed),
         }
 
     def decisions(self) -> list[dict[str, Any]]:
         return self.log
 
+    # ------------------------------------------------------------ v2 additions
+    def _wasted(self) -> int:
+        """Verification actions spent on items that did not reach their target status by the end."""
+        goal = {"reproduce": Status.REPRODUCED, "verify_effect": Status.VERIFIED}
+        out = 0
+        for kind, subject, actions, completed in self.verif_log:
+            cap = self.k.caps.get(subject)
+            if kind in goal:
+                reached = cap is not None and STATUS_RANK.get(cap.status, -1) >= STATUS_RANK[goal[kind]]
+            else:
+                reached = completed
+            out += 0 if reached else actions
+        return out
+
+    def _differential(self, result: ExperimentResult) -> bool:
+        """Whether a paired-search experiment showed results that differ between the two inputs."""
+        rep = next((r for r in result.records if r.kind == "replay" and r.verification_kind == "paired_search"), None)
+        ids = (rep.verification or {}).get("verification_observation_ids", []) if rep else []
+        obs = {r.obs_id: r for r in result.records if r.kind == "observation"}
+        if len(ids) != 4 or not all(i in obs for i in ids):
+            return False
+        t = lambda o: {a.target for a in o.affordances or [] if a.target}
+        b1, r1, b2, r2 = (obs[i] for i in ids)
+        primary, contrast = t(r1) - t(b1), t(r2) - t(b2)
+        return primary != contrast and bool(primary or contrast)
+
+    def _global_key(self, aff) -> tuple | None:
+        f = aff.family
+        route = f["target_route"].split("?")[0]
+        if not route:
+            return None          # untargeted controls are never assumed global
+        role = self.k.templates[aff.template_id].role if aff.template_id in self.k.templates else ""
+        return (role, f["kind"], f["interaction"], f["component"], f["locator"].split(":nth")[0], route, f["method"],
+                tuple(tuple(x) for x in f["fields"]))
+
+    def _dedupe_global(self, qs: list[Question]) -> list[Question]:
+        """One binding question per globally available control family (seen on >= 2 templates).
+
+        Equivalence across templates is a recorded, reversible hypothesis: once any member is
+        bound, the other members' binding questions are suppressed, not marked bound.
+        """
+        groups: dict[tuple, set[str]] = defaultdict(set)
+        bound: set[tuple] = set()
+        for a in self.k.affs.values():
+            key = self._global_key(a)
+            if key is None:
+                continue
+            groups[key].add(a.template_id)
+            if a.status in {"bound", "executed_no_effect"}:
+                bound.add(key)
+        out = []
+        for q in qs:
+            if q.kind == "bind_affordance" and not q.blocked_reason:
+                key = self._global_key(self.k.affs[q.subject_ids[0]])
+                if key is not None and len(groups[key]) >= 2 and key in bound:
+                    self.global_suppressed.add(q.id)
+                    continue
+            out.append(q)
+        return out
+
+    def _unrestorable(self, q: Question) -> bool:
+        """Independent replay would need session state that cannot be rebuilt safely."""
+        if q.id in self.unrestorable:
+            return True
+        if not q.targets or q.targets[0][0] not in self.k.obs:
+            return False
+        subject = q.subject_ids[0] if q.subject_ids else ""
+        if subject in self.k.caps and self.k.cap_writes(subject):
+            return False         # write verification is governed by snapshot availability, reported separately
+        trail = self.k.obs[q.targets[0][0]].trail
+        snapshot = self.iso.snapshot and self.iso.level >= 3 and not self.snapshot_failed
+        acts = [q.extra["action"]] if "action" in q.extra else []
+        affs = [self.k.aff_of_action[a] for a in acts if a in self.k.aff_of_action]
+        dependent = any(c.subject in affs for c in self.k.claims.get("observed_disabled", []))
+        return dependent and any(t.writes for t in trail) and not snapshot
+
 
 def make_tour(name: str):
-    mode = {"tour_full": "full", "tour_no_local": "no_local", "tour_no_global": "no_global"}[name]
+    mode = {"tour_full": "full", "tour_no_local": "no_local", "tour_no_global": "no_global", "tour_v2": "v2"}[name]
 
     def factory(isolation, costs, budget, seed=0):
         return TourScheduler(isolation, costs, budget, seed, mode=mode)
