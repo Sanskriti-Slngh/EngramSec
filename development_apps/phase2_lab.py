@@ -114,7 +114,9 @@ def start_phase2_lab():
                 return self._send(_page("Review", f'<button id="finish" {"" if ready else "disabled"}>Finish setup'
                                         '</button>', "document.getElementById('finish').onclick=()=>fetch('/api/setup/finish');"))
             if path == "/api/setup/finish":
-                return self._json({"done": "setup" in sessions[sid]})
+                done = "setup" in sessions[sid]
+                state["setup_finished"] = state.get("setup_finished", 0) + int(done)   # chain completed (server side)
+                return self._json({"done": done})
             if path == "/search":
                 return self._send(_page("Search", '<form action="/search/results" method="get">'
                                         '<input type="search" name="q" required><button>Find</button></form>'))
