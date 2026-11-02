@@ -281,7 +281,16 @@ def _resolve(records: list[Record], namespace: str | None) -> ACGExport:
             if o.id in item["records"] and o.url and value in urlsplit(o.url).path.split("/"):
                 item["obs"].add(o.obs_id)
 
-    def tokens_in(url: str) -> set[tuple[str, str]]:
+    token_cache: dict[str, frozenset[tuple[str, str]]] = {}
+
+    def tokens_in(url: str) -> frozenset[tuple[str, str]]:
+        # Pure function of the URL once entity types are fixed; memoized per resolve.
+        hit = token_cache.get(url)
+        if hit is None:
+            hit = token_cache[url] = frozenset(_tokens_in(url))
+        return hit
+
+    def _tokens_in(url: str) -> set[tuple[str, str]]:
         path, pairs, _ = split(url)
         out = {(type_of_position[f"{route}#{i}"], v) for route, i, v in identifier_segments(path)
                if f"{route}#{i}" in type_of_position}
