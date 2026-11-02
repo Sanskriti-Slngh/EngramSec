@@ -246,3 +246,25 @@ def observation_paths(records: list[Record]) -> dict[str, str]:
 
 def query_values(url: str) -> dict[str, str]:
     return dict(parse_qsl(urlsplit(url).query, keep_blank_values=True))
+
+
+def role_aware_precision(gt: GroundTruth, export: dict[str, Any], frozen: dict[str, Any]) -> dict[str, Any]:
+    """Secondary diagnostic, not the frozen M1a: an unmatched ACG capability whose
+    operations match an already-matched ground-truth capability but whose role
+    differs is a role-scoped duplicate (design: capabilities are per role)."""
+    ops = {o["id"]: o for o in export["operations"]}
+    caps = {c["id"]: c for c in export["capabilities"]}
+    by_id = {c.id: c for c in gt.capabilities}
+    duplicates = 0
+    for cid in frozen["unmatched_acg"]:
+        c = caps[cid]
+        for gid, mid in frozen["matches"].items():
+            g = by_id[gid]
+            if c["role"] != caps[mid]["role"] and g.operations and any(
+                    _op_matches(o, ops[x]) for o in g.operations for x in c["operation_ids"]):
+                duplicates += 1
+                break
+    total = frozen["m1a_precision"]["denominator"]
+    matched = frozen["m1a_precision"]["matched"] + duplicates
+    return {"role_scoped_duplicates": duplicates, "matched": matched, "denominator": total,
+            "value": matched / total if total else None}

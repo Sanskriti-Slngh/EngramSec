@@ -3,7 +3,7 @@
  "annotation": {
   "annotator": "Claude (Agent 1 engine developer)",
   "independent": false,
-  "method": "Read from fixture source before any ACG resolver existed (Phase 0 commit); not adjudicated by a second annotator.",
+  "method": "Read from fixture source before any ACG resolver existed (Phase 0 commit); not adjudicated by a second annotator. CORRECTED after the Phase 0 commit: the original annotation misremembered the route as /canvas/{id}; the archived URLs use /canvases/{id}. Only the route string changed; no ACG expectation depends on it.",
   "sources": [
    "URL identity only: canvas UUID path segments; application source not read"
   ],
@@ -17,13 +17,13 @@
  ],
  "templates": [
   "/",
-  "/canvas/{id}"
+  "/canvases/{id}"
  ],
  "entity_types": [
   {
    "id": "canvas",
    "identity": [
-    "/canvas/{id}"
+    "/canvases/{id}"
    ]
   }
  ]

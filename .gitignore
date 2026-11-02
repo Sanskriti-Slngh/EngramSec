@@ -71,3 +71,8 @@ agent1/experiments/state_aware_crawlmaze_20261031/**
 agent1/experiments/state_aware_whiteboard_repeat_20261031/**
 !agent1/experiments/state_aware_whiteboard_repeat_20261031/summary.json
 !agent1/experiments/state_aware_whiteboard_repeat_20261031/posthoc_reanalysis.json
+
+# Offline ACG runs: evidence logs and exports can carry record identifiers.
+agent1/experiments/**/acg_evidence.jsonl
+agent1/experiments/**/acg.json
+agent1/experiments/acg_m1_*/**/score.json

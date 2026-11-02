@@ -86,4 +86,4 @@ def test_scorer_partition_quality_and_identity() -> None:
     assert route_matches("/records/{id}", "/records/12") and route_matches("/topics/{slug}", "/topics/music")
     assert not route_matches("/records/{id}", "/records/12/edit")
     gt = load_ground_truth(ROOT / "evaluation" / "annotations" / "whiteboard.json")
-    assert true_instance(gt, "/canvas/abc") == ("canvas", "abc") and true_instance(gt, "/") is None
+    assert true_instance(gt, "/canvases/abc") == ("canvas", "abc") and true_instance(gt, "/") is None

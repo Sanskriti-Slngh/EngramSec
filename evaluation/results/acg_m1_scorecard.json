@@ -1,0 +1,1973 @@
+{
+ "datasets": {
+  "crawl_maze": {
+   "role": "diagnostic",
+   "runs": [
+    {
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 0
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "multi_step_prerequisites": {
+       "actions": 84,
+       "reproduced": 6,
+       "with_capability": 74
+      },
+      "no_backend_request": {
+       "actions_without_capability": 10,
+       "capabilities": 3
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 91,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 88
+     },
+     "provenance": {
+      "capabilities": 92,
+      "capabilities_with_grounded_evidence": 92,
+      "claims": 300,
+      "claims_with_complete_provenance": 300,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 10,
+      "affordances_by_status": {
+       "blocked": 4,
+       "bound": 92,
+       "executed_no_effect": 5,
+       "failed": 1,
+       "unbound": 24
+      },
+      "capabilities": 92,
+      "capabilities_by_status": {
+       "observed": 68,
+       "reproduced": 24
+      },
+      "classified_capabilities": 24,
+      "entity_instances": 0,
+      "entity_types": 0,
+      "equivalent_interface_groupings": 0,
+      "executed_actions": 102,
+      "learned_predicates": 0,
+      "page_templates": 83,
+      "reproduction_prior": 0.961538,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 68,
+      "view_states": 86
+     }
+    },
+    {
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 1
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "multi_step_prerequisites": {
+       "actions": 85,
+       "reproduced": 7,
+       "with_capability": 77
+      },
+      "no_backend_request": {
+       "actions_without_capability": 8,
+       "capabilities": 5
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 89,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 87
+     },
+     "provenance": {
+      "capabilities": 95,
+      "capabilities_with_grounded_evidence": 95,
+      "claims": 304,
+      "claims_with_complete_provenance": 304,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 8,
+      "affordances_by_status": {
+       "blocked": 4,
+       "bound": 95,
+       "executed_no_effect": 2,
+       "failed": 1,
+       "unbound": 25
+      },
+      "capabilities": 95,
+      "capabilities_by_status": {
+       "observed": 70,
+       "reproduced": 25
+      },
+      "classified_capabilities": 25,
+      "entity_instances": 0,
+      "entity_types": 0,
+      "equivalent_interface_groupings": 0,
+      "executed_actions": 103,
+      "learned_predicates": 1,
+      "page_templates": 82,
+      "reproduction_prior": 0.962963,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 70,
+      "view_states": 88
+     }
+    },
+    {
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 1
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "multi_step_prerequisites": {
+       "actions": 85,
+       "reproduced": 6,
+       "with_capability": 77
+      },
+      "no_backend_request": {
+       "actions_without_capability": 8,
+       "capabilities": 5
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 89,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 87
+     },
+     "provenance": {
+      "capabilities": 95,
+      "capabilities_with_grounded_evidence": 95,
+      "claims": 294,
+      "claims_with_complete_provenance": 294,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 8,
+      "affordances_by_status": {
+       "blocked": 4,
+       "bound": 95,
+       "executed_no_effect": 2,
+       "failed": 1,
+       "unbound": 25
+      },
+      "capabilities": 95,
+      "capabilities_by_status": {
+       "observed": 74,
+       "reproduced": 21
+      },
+      "classified_capabilities": 15,
+      "entity_instances": 0,
+      "entity_types": 0,
+      "equivalent_interface_groupings": 0,
+      "executed_actions": 103,
+      "learned_predicates": 1,
+      "page_templates": 82,
+      "reproduction_prior": 0.956522,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 80,
+      "view_states": 88
+     }
+    },
+    {
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 1
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "multi_step_prerequisites": {
+       "actions": 84,
+       "reproduced": 6,
+       "with_capability": 76
+      },
+      "no_backend_request": {
+       "actions_without_capability": 8,
+       "capabilities": 5
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 88,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 86
+     },
+     "provenance": {
+      "capabilities": 94,
+      "capabilities_with_grounded_evidence": 94,
+      "claims": 293,
+      "claims_with_complete_provenance": 293,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 8,
+      "affordances_by_status": {
+       "blocked": 4,
+       "bound": 94,
+       "executed_no_effect": 2,
+       "failed": 1,
+       "unbound": 26
+      },
+      "capabilities": 94,
+      "capabilities_by_status": {
+       "observed": 71,
+       "reproduced": 23
+      },
+      "classified_capabilities": 17,
+      "entity_instances": 0,
+      "entity_types": 0,
+      "equivalent_interface_groupings": 0,
+      "executed_actions": 102,
+      "learned_predicates": 1,
+      "page_templates": 81,
+      "reproduction_prior": 0.96,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 77,
+      "view_states": 87
+     }
+    }
+   ]
+  },
+  "js_heavy_lab": {
+   "role": "primary",
+   "runs": [
+    {
+     "archive": "agent1/experiments/js_heavy_p2_r1/run.json",
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 0
+     },
+     "capabilities": {
+      "m1a_precision": {
+       "denominator": 15,
+       "matched": 14,
+       "value": 0.9333333333333333
+      },
+      "m1a_recall": {
+       "denominator": 14,
+       "matched": 14,
+       "value": 1.0
+      },
+      "m1b_precision": {
+       "asserted": 0,
+       "correct": 0,
+       "value": null
+      },
+      "m1b_recall": {
+       "correct": 0,
+       "denominator_matched_observable": 9,
+       "observable_in_ground_truth": 9,
+       "value": 0.0
+      },
+      "matches": {
+       "alias_area": "cap_e7597b14fe04",
+       "alias_data": "cap_5136f4e32f2c",
+       "continue_setup": "cap_88655b587f03",
+       "enter_member_mode": "cap_6507bfd1b2ae",
+       "load_late_reports": "cap_a8d8b9fb11d3",
+       "load_preferences": "cap_5060cc38bb46",
+       "member_preferences": "cap_a724e4b67398",
+       "nav_home": "cap_0621ebab98c6",
+       "nav_news": "cap_dfec3992e28a",
+       "nav_overview": "cap_7f226b0510f9",
+       "open_reports": "cap_ecae0c7b4a21",
+       "open_workflow": "cap_9469f4b8edbb",
+       "open_workspace": "cap_c2ec47b58736",
+       "workspace_detail": "cap_0530ab9be033"
+      },
+      "merges": {
+       "correct": 6,
+       "incorrect": [],
+       "indistinguishable": [],
+       "splits": {
+        "enter_member_mode": [
+         "cap_6507bfd1b2ae",
+         "cap_ef4c019751af"
+        ]
+       }
+      },
+      "role_aware_precision_secondary": {
+       "denominator": 15,
+       "matched": 15,
+       "role_scoped_duplicates": 1,
+       "value": 1.0
+      },
+      "unmapped_actions": 0,
+      "unmatched_acg_count": 1,
+      "unmatched_gt": []
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "multi_step_prerequisites": {
+       "actions": 13,
+       "reproduced": 0,
+       "with_capability": 13
+      },
+      "no_backend_request": {
+       "actions_without_capability": 2,
+       "capabilities": 1
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [
+        [
+         [
+          "enter_member_mode"
+         ],
+         [
+          "enter_member_mode"
+         ]
+        ]
+       ],
+       "groups": 1
+      },
+      "same_route_multiple_roles": {
+       "routes": 4
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "fair_comparison_action_based": {
+      "acg": {
+       "capabilities": 15,
+       "correct_merges": 6,
+       "denominator": 14,
+       "gt_capabilities_reached": 14,
+       "incorrect_merges": 0,
+       "splits": 1
+      },
+      "graph_a_features": {
+       "correct_merges": 6,
+       "denominator": 14,
+       "features": 12,
+       "gt_capabilities_reached": 12,
+       "incorrect_merges": 0,
+       "splits": 0
+      }
+     },
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "replay_requests_not_captured": 15,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 0,
+      "entity_instances": 0,
+      "entity_splits": 0,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 0,
+      "templates": 13,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 0
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 12,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 13
+     },
+     "provenance": {
+      "capabilities": 15,
+      "capabilities_with_grounded_evidence": 15,
+      "claims": 58,
+      "claims_with_complete_provenance": 58,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 2,
+      "affordances_by_status": {
+       "blocked": 2,
+       "bound": 24,
+       "executed_no_effect": 1,
+       "unbound": 35
+      },
+      "capabilities": 15,
+      "capabilities_by_status": {
+       "observed": 15
+      },
+      "classified_capabilities": 0,
+      "entity_instances": 0,
+      "entity_types": 0,
+      "equivalent_interface_groupings": 3,
+      "executed_actions": 30,
+      "learned_predicates": 0,
+      "page_templates": 13,
+      "reproduction_prior": 0.125,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 15,
+      "view_states": 19
+     }
+    },
+    {
+     "archive": "agent1/experiments/js_heavy_p2_r2/run.json",
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 0
+     },
+     "capabilities": {
+      "m1a_precision": {
+       "denominator": 18,
+       "matched": 14,
+       "value": 0.7777777777777778
+      },
+      "m1a_recall": {
+       "denominator": 14,
+       "matched": 14,
+       "value": 1.0
+      },
+      "m1b_precision": {
+       "asserted": 1,
+       "correct": 1,
+       "value": 1.0
+      },
+      "m1b_recall": {
+       "correct": 1,
+       "denominator_matched_observable": 9,
+       "observable_in_ground_truth": 9,
+       "value": 0.1111111111111111
+      },
+      "matches": {
+       "alias_area": "cap_6db2332b54b8",
+       "alias_data": "cap_5136f4e32f2c",
+       "continue_setup": "cap_4ba4632bd260",
+       "enter_member_mode": "cap_6507bfd1b2ae",
+       "load_late_reports": "cap_f7057a5d67e3",
+       "load_preferences": "cap_5060cc38bb46",
+       "member_preferences": "cap_a724e4b67398",
+       "nav_home": "cap_0621ebab98c6",
+       "nav_news": "cap_038816fb6d7a",
+       "nav_overview": "cap_7f226b0510f9",
+       "open_reports": "cap_c893b2affc0e",
+       "open_workflow": "cap_e60b99c67c7a",
+       "open_workspace": "cap_bd82e04aad6b",
+       "workspace_detail": "cap_ef5ae2d4b424"
+      },
+      "merges": {
+       "correct": 4,
+       "incorrect": [],
+       "indistinguishable": [],
+       "splits": {
+        "enter_member_mode": [
+         "cap_6507bfd1b2ae",
+         "cap_ef4c019751af"
+        ],
+        "nav_home": [
+         "cap_0621ebab98c6",
+         "cap_dedc1f66c6cd"
+        ],
+        "nav_news": [
+         "cap_038816fb6d7a",
+         "cap_dfec3992e28a"
+        ],
+        "nav_overview": [
+         "cap_7f226b0510f9",
+         "cap_be02b23a898e"
+        ]
+       }
+      },
+      "role_aware_precision_secondary": {
+       "denominator": 18,
+       "matched": 18,
+       "role_scoped_duplicates": 4,
+       "value": 1.0
+      },
+      "unmapped_actions": 0,
+      "unmatched_acg_count": 4,
+      "unmatched_gt": []
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "multi_step_prerequisites": {
+       "actions": 15,
+       "reproduced": 0,
+       "with_capability": 15
+      },
+      "no_backend_request": {
+       "actions_without_capability": 1,
+       "capabilities": 1
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [
+        [
+         [
+          "nav_news"
+         ],
+         [
+          "nav_news"
+         ]
+        ],
+        [
+         [
+          "nav_home"
+         ],
+         [
+          "nav_home"
+         ]
+        ],
+        [
+         [
+          "enter_member_mode"
+         ],
+         [
+          "enter_member_mode"
+         ]
+        ],
+        [
+         [
+          "nav_overview"
+         ],
+         [
+          "nav_overview"
+         ]
+        ]
+       ],
+       "groups": 4
+      },
+      "same_route_multiple_roles": {
+       "routes": 3
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "fair_comparison_action_based": {
+      "acg": {
+       "capabilities": 18,
+       "correct_merges": 4,
+       "denominator": 14,
+       "gt_capabilities_reached": 14,
+       "incorrect_merges": 0,
+       "splits": 4
+      },
+      "graph_a_features": {
+       "correct_merges": 4,
+       "denominator": 14,
+       "features": 12,
+       "gt_capabilities_reached": 12,
+       "incorrect_merges": 0,
+       "splits": 0
+      }
+     },
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "replay_requests_not_captured": 22,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 0,
+      "entity_instances": 0,
+      "entity_splits": 0,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 0,
+      "templates": 12,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 0
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 12,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 15
+     },
+     "provenance": {
+      "capabilities": 18,
+      "capabilities_with_grounded_evidence": 18,
+      "claims": 67,
+      "claims_with_complete_provenance": 67,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 1,
+      "affordances_by_status": {
+       "blocked": 2,
+       "bound": 29,
+       "executed_no_effect": 1,
+       "unbound": 23
+      },
+      "capabilities": 18,
+      "capabilities_by_status": {
+       "observed": 17,
+       "reproduced": 1
+      },
+      "classified_capabilities": 1,
+      "entity_instances": 0,
+      "entity_types": 0,
+      "equivalent_interface_groupings": 4,
+      "executed_actions": 30,
+      "learned_predicates": 0,
+      "page_templates": 12,
+      "reproduction_prior": 0.666667,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 17,
+      "view_states": 15
+     }
+    },
+    {
+     "archive": "agent1/experiments/js_heavy_p2_r3/run.json",
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 0
+     },
+     "capabilities": {
+      "m1a_precision": {
+       "denominator": 18,
+       "matched": 14,
+       "value": 0.7777777777777778
+      },
+      "m1a_recall": {
+       "denominator": 14,
+       "matched": 14,
+       "value": 1.0
+      },
+      "m1b_precision": {
+       "asserted": 1,
+       "correct": 1,
+       "value": 1.0
+      },
+      "m1b_recall": {
+       "correct": 1,
+       "denominator_matched_observable": 9,
+       "observable_in_ground_truth": 9,
+       "value": 0.1111111111111111
+      },
+      "matches": {
+       "alias_area": "cap_6db2332b54b8",
+       "alias_data": "cap_5136f4e32f2c",
+       "continue_setup": "cap_4ba4632bd260",
+       "enter_member_mode": "cap_6507bfd1b2ae",
+       "load_late_reports": "cap_f7057a5d67e3",
+       "load_preferences": "cap_5060cc38bb46",
+       "member_preferences": "cap_a724e4b67398",
+       "nav_home": "cap_0621ebab98c6",
+       "nav_news": "cap_038816fb6d7a",
+       "nav_overview": "cap_7f226b0510f9",
+       "open_reports": "cap_c893b2affc0e",
+       "open_workflow": "cap_e60b99c67c7a",
+       "open_workspace": "cap_bd82e04aad6b",
+       "workspace_detail": "cap_ef5ae2d4b424"
+      },
+      "merges": {
+       "correct": 4,
+       "incorrect": [],
+       "indistinguishable": [],
+       "splits": {
+        "enter_member_mode": [
+         "cap_6507bfd1b2ae",
+         "cap_ef4c019751af"
+        ],
+        "nav_home": [
+         "cap_0621ebab98c6",
+         "cap_dedc1f66c6cd"
+        ],
+        "nav_news": [
+         "cap_038816fb6d7a",
+         "cap_dfec3992e28a"
+        ],
+        "nav_overview": [
+         "cap_7f226b0510f9",
+         "cap_be02b23a898e"
+        ]
+       }
+      },
+      "role_aware_precision_secondary": {
+       "denominator": 18,
+       "matched": 18,
+       "role_scoped_duplicates": 4,
+       "value": 1.0
+      },
+      "unmapped_actions": 0,
+      "unmatched_acg_count": 4,
+      "unmatched_gt": []
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "multi_step_prerequisites": {
+       "actions": 15,
+       "reproduced": 0,
+       "with_capability": 15
+      },
+      "no_backend_request": {
+       "actions_without_capability": 1,
+       "capabilities": 1
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [
+        [
+         [
+          "nav_news"
+         ],
+         [
+          "nav_news"
+         ]
+        ],
+        [
+         [
+          "nav_home"
+         ],
+         [
+          "nav_home"
+         ]
+        ],
+        [
+         [
+          "enter_member_mode"
+         ],
+         [
+          "enter_member_mode"
+         ]
+        ],
+        [
+         [
+          "nav_overview"
+         ],
+         [
+          "nav_overview"
+         ]
+        ]
+       ],
+       "groups": 4
+      },
+      "same_route_multiple_roles": {
+       "routes": 3
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "fair_comparison_action_based": {
+      "acg": {
+       "capabilities": 18,
+       "correct_merges": 4,
+       "denominator": 14,
+       "gt_capabilities_reached": 14,
+       "incorrect_merges": 0,
+       "splits": 4
+      },
+      "graph_a_features": {
+       "correct_merges": 4,
+       "denominator": 14,
+       "features": 12,
+       "gt_capabilities_reached": 12,
+       "incorrect_merges": 0,
+       "splits": 0
+      }
+     },
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "replay_requests_not_captured": 22,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 0,
+      "entity_instances": 0,
+      "entity_splits": 0,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 0,
+      "templates": 12,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 0
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 12,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 15
+     },
+     "provenance": {
+      "capabilities": 18,
+      "capabilities_with_grounded_evidence": 18,
+      "claims": 67,
+      "claims_with_complete_provenance": 67,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 1,
+      "affordances_by_status": {
+       "blocked": 2,
+       "bound": 29,
+       "executed_no_effect": 1,
+       "unbound": 23
+      },
+      "capabilities": 18,
+      "capabilities_by_status": {
+       "observed": 17,
+       "reproduced": 1
+      },
+      "classified_capabilities": 1,
+      "entity_instances": 0,
+      "entity_types": 0,
+      "equivalent_interface_groupings": 4,
+      "executed_actions": 30,
+      "learned_predicates": 0,
+      "page_templates": 12,
+      "reproduction_prior": 0.666667,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 17,
+      "view_states": 15
+     }
+    },
+    {
+     "archive": "agent1/experiments/js_heavy_p2_r4/run.json",
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 0
+     },
+     "capabilities": {
+      "m1a_precision": {
+       "denominator": 18,
+       "matched": 14,
+       "value": 0.7777777777777778
+      },
+      "m1a_recall": {
+       "denominator": 14,
+       "matched": 14,
+       "value": 1.0
+      },
+      "m1b_precision": {
+       "asserted": 1,
+       "correct": 1,
+       "value": 1.0
+      },
+      "m1b_recall": {
+       "correct": 1,
+       "denominator_matched_observable": 9,
+       "observable_in_ground_truth": 9,
+       "value": 0.1111111111111111
+      },
+      "matches": {
+       "alias_area": "cap_6db2332b54b8",
+       "alias_data": "cap_5136f4e32f2c",
+       "continue_setup": "cap_4ba4632bd260",
+       "enter_member_mode": "cap_6507bfd1b2ae",
+       "load_late_reports": "cap_f7057a5d67e3",
+       "load_preferences": "cap_5060cc38bb46",
+       "member_preferences": "cap_a724e4b67398",
+       "nav_home": "cap_0621ebab98c6",
+       "nav_news": "cap_038816fb6d7a",
+       "nav_overview": "cap_7f226b0510f9",
+       "open_reports": "cap_c893b2affc0e",
+       "open_workflow": "cap_e60b99c67c7a",
+       "open_workspace": "cap_bd82e04aad6b",
+       "workspace_detail": "cap_ef5ae2d4b424"
+      },
+      "merges": {
+       "correct": 4,
+       "incorrect": [],
+       "indistinguishable": [],
+       "splits": {
+        "enter_member_mode": [
+         "cap_6507bfd1b2ae",
+         "cap_ef4c019751af"
+        ],
+        "nav_home": [
+         "cap_0621ebab98c6",
+         "cap_dedc1f66c6cd"
+        ],
+        "nav_news": [
+         "cap_038816fb6d7a",
+         "cap_dfec3992e28a"
+        ],
+        "nav_overview": [
+         "cap_7f226b0510f9",
+         "cap_be02b23a898e"
+        ]
+       }
+      },
+      "role_aware_precision_secondary": {
+       "denominator": 18,
+       "matched": 18,
+       "role_scoped_duplicates": 4,
+       "value": 1.0
+      },
+      "unmapped_actions": 0,
+      "unmatched_acg_count": 4,
+      "unmatched_gt": []
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "multi_step_prerequisites": {
+       "actions": 15,
+       "reproduced": 0,
+       "with_capability": 15
+      },
+      "no_backend_request": {
+       "actions_without_capability": 1,
+       "capabilities": 1
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [
+        [
+         [
+          "nav_news"
+         ],
+         [
+          "nav_news"
+         ]
+        ],
+        [
+         [
+          "nav_home"
+         ],
+         [
+          "nav_home"
+         ]
+        ],
+        [
+         [
+          "enter_member_mode"
+         ],
+         [
+          "enter_member_mode"
+         ]
+        ],
+        [
+         [
+          "nav_overview"
+         ],
+         [
+          "nav_overview"
+         ]
+        ]
+       ],
+       "groups": 4
+      },
+      "same_route_multiple_roles": {
+       "routes": 3
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "fair_comparison_action_based": {
+      "acg": {
+       "capabilities": 18,
+       "correct_merges": 4,
+       "denominator": 14,
+       "gt_capabilities_reached": 14,
+       "incorrect_merges": 0,
+       "splits": 4
+      },
+      "graph_a_features": {
+       "correct_merges": 4,
+       "denominator": 14,
+       "features": 12,
+       "gt_capabilities_reached": 12,
+       "incorrect_merges": 0,
+       "splits": 0
+      }
+     },
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "replay_requests_not_captured": 22,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 0,
+      "entity_instances": 0,
+      "entity_splits": 0,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 0,
+      "templates": 12,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 0
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 12,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 15
+     },
+     "provenance": {
+      "capabilities": 18,
+      "capabilities_with_grounded_evidence": 18,
+      "claims": 67,
+      "claims_with_complete_provenance": 67,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 1,
+      "affordances_by_status": {
+       "blocked": 2,
+       "bound": 29,
+       "executed_no_effect": 1,
+       "unbound": 23
+      },
+      "capabilities": 18,
+      "capabilities_by_status": {
+       "observed": 17,
+       "reproduced": 1
+      },
+      "classified_capabilities": 1,
+      "entity_instances": 0,
+      "entity_types": 0,
+      "equivalent_interface_groupings": 4,
+      "executed_actions": 30,
+      "learned_predicates": 0,
+      "page_templates": 12,
+      "reproduction_prior": 0.666667,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 17,
+      "view_states": 15
+     }
+    }
+   ]
+  },
+  "replay_lab": {
+   "role": "primary",
+   "runs": [
+    {
+     "archive": "agent1/experiments/replay_lab_probe_20261031/structure/checkpoint.json",
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 1
+     },
+     "capabilities": {
+      "m1a_precision": {
+       "denominator": 30,
+       "matched": 24,
+       "value": 0.8
+      },
+      "m1a_recall": {
+       "denominator": 25,
+       "matched": 24,
+       "value": 0.96
+      },
+      "m1b_precision": {
+       "asserted": 8,
+       "correct": 7,
+       "value": 0.875
+      },
+      "m1b_recall": {
+       "correct": 7,
+       "denominator_matched_observable": 14,
+       "observable_in_ground_truth": 14,
+       "value": 0.5
+      },
+      "matches": {
+       "check_loans_first": "cap_c55b676273a9",
+       "check_loans_second": "cap_447b9f8e7600",
+       "claim_voucher": "cap_9978674ced82",
+       "home": "cap_e59e0b550590",
+       "load_details": "cap_de10a43b00be",
+       "load_reviews": "cap_4e44421ca2df",
+       "load_stock": "cap_6609547c58b5",
+       "open_cart": "cap_8488e007271d",
+       "open_lab_claim": "cap_30018fbda484",
+       "open_lab_danger": "cap_571e5bc6cca3",
+       "open_lab_div": "cap_f812523abacd",
+       "open_lab_multi": "cap_52284b17901b",
+       "open_lab_pair": "cap_90330e16ed81",
+       "open_lab_redefine": "cap_419d828e5522",
+       "open_lab_twins": "cap_de08f41e3096",
+       "record_history": "cap_38b3042ff306",
+       "refresh_cart": "cap_a5dd59b79609",
+       "reveal_details": "cap_7bb11eb1e97d",
+       "save_item": "cap_9b71fa2e030a",
+       "view_record": "cap_fdef56e14db5",
+       "view_topic": "cap_164664caed17",
+       "wizard_begin": "cap_456aa6351354",
+       "wizard_continue": "cap_5fc781b47472",
+       "wizard_finish": "cap_1f73e30d03c9"
+      },
+      "merges": {
+       "correct": 1,
+       "incorrect": [],
+       "indistinguishable": [],
+       "splits": {
+        "view_topic": [
+         "cap_164664caed17",
+         "cap_7d23562d638c",
+         "cap_976df4dd2757",
+         "cap_c38395be7473",
+         "cap_d7af0ea2e145",
+         "cap_f23d92019e7e"
+        ],
+        "wizard_begin": [
+         "cap_456aa6351354",
+         "cap_e9a64a9d0da6"
+        ]
+       }
+      },
+      "role_aware_precision_secondary": {
+       "denominator": 30,
+       "matched": 24,
+       "role_scoped_duplicates": 0,
+       "value": 0.8
+      },
+      "unmapped_actions": 0,
+      "unmatched_acg_count": 6,
+      "unmatched_gt": [
+       "wipe_records"
+      ]
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "multi_step_prerequisites": {
+       "actions": 8,
+       "reproduced": 0,
+       "with_capability": 5
+      },
+      "no_backend_request": {
+       "actions_without_capability": 3,
+       "capabilities": 4
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "fair_comparison_action_based": {
+      "acg": {
+       "capabilities": 30,
+       "correct_merges": 1,
+       "denominator": 25,
+       "gt_capabilities_reached": 24,
+       "incorrect_merges": 0,
+       "splits": 2
+      },
+      "graph_a_features": {
+       "correct_merges": 1,
+       "denominator": 25,
+       "features": 18,
+       "gt_capabilities_reached": 13,
+       "incorrect_merges": 0,
+       "splits": 1
+      }
+     },
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 3,
+      "entity_instances": 7,
+      "entity_splits": 1,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 1,
+      "templates": 16,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 7
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 18,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 19
+     },
+     "provenance": {
+      "capabilities": 30,
+      "capabilities_with_grounded_evidence": 30,
+      "claims": 95,
+      "claims_with_complete_provenance": 95,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 3,
+      "affordances_by_status": {
+       "blocked": 1,
+       "bound": 29,
+       "unbound": 15
+      },
+      "capabilities": 30,
+      "capabilities_by_status": {
+       "observed": 17,
+       "reproduced": 13
+      },
+      "classified_capabilities": 8,
+      "entity_instances": 7,
+      "entity_types": 5,
+      "equivalent_interface_groupings": 1,
+      "executed_actions": 34,
+      "learned_predicates": 1,
+      "page_templates": 16,
+      "reproduction_prior": 0.777778,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 22,
+      "view_states": 21
+     }
+    }
+   ]
+  },
+  "stateful_lab": {
+   "role": "primary",
+   "runs": [
+    {
+     "archive": "agent1/experiments/stateful_fixture_example/graph_a.json",
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": null
+     },
+     "capabilities": {
+      "m1a_precision": {
+       "denominator": 6,
+       "matched": 6,
+       "value": 1.0
+      },
+      "m1a_recall": {
+       "denominator": 7,
+       "matched": 6,
+       "value": 0.8571428571428571
+      },
+      "m1b_precision": {
+       "asserted": 0,
+       "correct": 0,
+       "value": null
+      },
+      "m1b_recall": {
+       "correct": 0,
+       "denominator_matched_observable": 5,
+       "observable_in_ground_truth": 6,
+       "value": 0.0
+      },
+      "matches": {
+       "counter_get_insert": "cap_5774d8b1acc8",
+       "create_record": "cap_119ab50cfbd5",
+       "home": "cap_b30b62c5f2aa",
+       "query_records": "cap_7f6c90225cee",
+       "update_record": "cap_7307cdaee046",
+       "view_record": "cap_5dff8107162c"
+      },
+      "merges": {
+       "correct": 3,
+       "incorrect": [],
+       "indistinguishable": [],
+       "splits": {}
+      },
+      "role_aware_precision_secondary": {
+       "denominator": 6,
+       "matched": 6,
+       "role_scoped_duplicates": 0,
+       "value": 1.0
+      },
+      "unmapped_actions": 0,
+      "unmatched_acg_count": 0,
+      "unmatched_gt": [
+       "delete_all"
+      ]
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [
+        [
+         [
+          "create_record"
+         ],
+         [
+          "view_record"
+         ],
+         [
+          "update_record"
+         ]
+        ],
+        [
+         [
+          "counter_get_insert"
+         ],
+         [
+          "home"
+         ]
+        ]
+       ],
+       "groups": 2
+      },
+      "multi_step_prerequisites": {
+       "actions": 12,
+       "reproduced": 0,
+       "with_capability": 12
+      },
+      "no_backend_request": {
+       "actions_without_capability": 0,
+       "capabilities": 0
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [],
+       "groups": 0
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "fair_comparison_action_based": {
+      "acg": {
+       "capabilities": 6,
+       "correct_merges": 3,
+       "denominator": 7,
+       "gt_capabilities_reached": 6,
+       "incorrect_merges": 0,
+       "splits": 0
+      },
+      "graph_a_features": {
+       "correct_merges": 3,
+       "denominator": 7,
+       "features": 6,
+       "gt_capabilities_reached": 6,
+       "incorrect_merges": 0,
+       "splits": 0
+      }
+     },
+     "gaps": {
+      "dom_affordances_not_captured": 1,
+      "group_representative_urls": 17,
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 4,
+      "entity_instances": 4,
+      "entity_splits": 0,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 0,
+      "templates": 2,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 4
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 6,
+      "page_templates": 1,
+      "record_instances": 4,
+      "state_groups": 13
+     },
+     "provenance": {
+      "capabilities": 6,
+      "capabilities_with_grounded_evidence": 6,
+      "claims": 20,
+      "claims_with_complete_provenance": 20,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 0,
+      "affordances_by_status": {
+       "blocked": 1,
+       "bound": 6,
+       "unbound": 1
+      },
+      "capabilities": 6,
+      "capabilities_by_status": {
+       "observed": 6
+      },
+      "classified_capabilities": 0,
+      "entity_instances": 4,
+      "entity_types": 1,
+      "equivalent_interface_groupings": 0,
+      "executed_actions": 26,
+      "learned_predicates": 0,
+      "page_templates": 2,
+      "reproduction_prior": 0.25,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 6,
+      "view_states": 3
+     }
+    }
+   ]
+  },
+  "whiteboard": {
+   "role": "identity",
+   "runs": [
+    {
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 0
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [
+        []
+       ],
+       "groups": 1
+      },
+      "multi_step_prerequisites": {
+       "actions": 4,
+       "reproduced": 0,
+       "with_capability": 4
+      },
+      "no_backend_request": {
+       "actions_without_capability": 6,
+       "capabilities": 0
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [
+        []
+       ],
+       "groups": 1
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 2,
+      "entity_instances": 7,
+      "entity_splits": 0,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 0,
+      "templates": 2,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 7
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 4,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 8
+     },
+     "provenance": {
+      "capabilities": 5,
+      "capabilities_with_grounded_evidence": 5,
+      "claims": 33,
+      "claims_with_complete_provenance": 33,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 6,
+      "affordances_by_status": {
+       "blocked": 2,
+       "bound": 4,
+       "executed_no_effect": 6,
+       "failed": 2,
+       "unbound": 9
+      },
+      "capabilities": 5,
+      "capabilities_by_status": {
+       "observed": 5
+      },
+      "classified_capabilities": 0,
+      "entity_instances": 7,
+      "entity_types": 1,
+      "equivalent_interface_groupings": 0,
+      "executed_actions": 13,
+      "learned_predicates": 0,
+      "page_templates": 2,
+      "reproduction_prior": 0.5,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 5,
+      "view_states": 6
+     }
+    },
+    {
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 0
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [
+        []
+       ],
+       "groups": 1
+      },
+      "multi_step_prerequisites": {
+       "actions": 8,
+       "reproduced": 3,
+       "with_capability": 8
+      },
+      "no_backend_request": {
+       "actions_without_capability": 26,
+       "capabilities": 0
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [
+        []
+       ],
+       "groups": 1
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 3,
+      "entity_instances": 3,
+      "entity_splits": 0,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 0,
+      "templates": 2,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 3
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 13,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 10
+     },
+     "provenance": {
+      "capabilities": 5,
+      "capabilities_with_grounded_evidence": 5,
+      "claims": 32,
+      "claims_with_complete_provenance": 32,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 26,
+      "affordances_by_status": {
+       "blocked": 2,
+       "bound": 6,
+       "executed_no_effect": 6
+      },
+      "capabilities": 5,
+      "capabilities_by_status": {
+       "observed": 4,
+       "reproduced": 1
+      },
+      "classified_capabilities": 0,
+      "entity_instances": 3,
+      "entity_types": 1,
+      "equivalent_interface_groupings": 1,
+      "executed_actions": 43,
+      "learned_predicates": 0,
+      "page_templates": 2,
+      "reproduction_prior": 0.4,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 5,
+      "view_states": 3
+     }
+    },
+    {
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 0
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [
+        []
+       ],
+       "groups": 1
+      },
+      "multi_step_prerequisites": {
+       "actions": 8,
+       "reproduced": 3,
+       "with_capability": 8
+      },
+      "no_backend_request": {
+       "actions_without_capability": 26,
+       "capabilities": 0
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [
+        []
+       ],
+       "groups": 1
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 3,
+      "entity_instances": 3,
+      "entity_splits": 0,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 0,
+      "templates": 2,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 3
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 13,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 10
+     },
+     "provenance": {
+      "capabilities": 5,
+      "capabilities_with_grounded_evidence": 5,
+      "claims": 32,
+      "claims_with_complete_provenance": 32,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 26,
+      "affordances_by_status": {
+       "blocked": 2,
+       "bound": 6,
+       "executed_no_effect": 6
+      },
+      "capabilities": 5,
+      "capabilities_by_status": {
+       "observed": 4,
+       "reproduced": 1
+      },
+      "classified_capabilities": 0,
+      "entity_instances": 3,
+      "entity_types": 1,
+      "equivalent_interface_groupings": 1,
+      "executed_actions": 43,
+      "learned_predicates": 0,
+      "page_templates": 2,
+      "reproduction_prior": 0.4,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 5,
+      "view_states": 3
+     }
+    },
+    {
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 0
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [
+        []
+       ],
+       "groups": 1
+      },
+      "multi_step_prerequisites": {
+       "actions": 9,
+       "reproduced": 3,
+       "with_capability": 8
+      },
+      "no_backend_request": {
+       "actions_without_capability": 26,
+       "capabilities": 0
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [
+        []
+       ],
+       "groups": 1
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 3,
+      "entity_instances": 3,
+      "entity_splits": 0,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 0,
+      "templates": 2,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 3
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 12,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 10
+     },
+     "provenance": {
+      "capabilities": 5,
+      "capabilities_with_grounded_evidence": 5,
+      "claims": 32,
+      "claims_with_complete_provenance": 32,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 26,
+      "affordances_by_status": {
+       "blocked": 2,
+       "bound": 6,
+       "executed_no_effect": 6
+      },
+      "capabilities": 5,
+      "capabilities_by_status": {
+       "observed": 4,
+       "reproduced": 1
+      },
+      "classified_capabilities": 0,
+      "entity_instances": 3,
+      "entity_types": 1,
+      "equivalent_interface_groupings": 1,
+      "executed_actions": 43,
+      "learned_predicates": 0,
+      "page_templates": 2,
+      "reproduction_prior": 0.4,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 5,
+      "view_states": 3
+     }
+    },
+    {
+     "behavioral_divergence": {
+      "acg_view_state_divergences": 0,
+      "legacy_group_divergences": 0
+     },
+     "counterexamples": {
+      "different_operations_same_effects": {
+       "ground_truth": [
+        []
+       ],
+       "groups": 1
+      },
+      "multi_step_prerequisites": {
+       "actions": 8,
+       "reproduced": 3,
+       "with_capability": 8
+      },
+      "no_backend_request": {
+       "actions_without_capability": 26,
+       "capabilities": 0
+      },
+      "record_dependent_behavior": {
+       "learned_record_predicates": 0,
+       "underdetermined": 0
+      },
+      "same_operations_different_effects": {
+       "ground_truth": [
+        []
+       ],
+       "groups": 1
+      },
+      "same_route_multiple_roles": {
+       "routes": 0
+      }
+     },
+     "deterministic_full_rebuild": true,
+     "gaps": {
+      "instance_fields_not_captured": 1,
+      "response_shapes_not_captured": 1,
+      "visual_regions_not_captured": 1,
+      "websocket_not_captured": 1
+     },
+     "identity": {
+      "correct_entity_merges": 3,
+      "entity_instances": 3,
+      "entity_splits": 0,
+      "incorrect_entity_merges": 0,
+      "template_splits_vs_ground_truth": 0,
+      "templates": 2,
+      "templates_without_ground_truth_route": 0,
+      "true_instances_observed": 3
+     },
+     "incremental_equals_full": true,
+     "legacy": {
+      "features": 13,
+      "page_templates": null,
+      "record_instances": null,
+      "state_groups": 10
+     },
+     "provenance": {
+      "capabilities": 5,
+      "capabilities_with_grounded_evidence": 5,
+      "claims": 32,
+      "claims_with_complete_provenance": 32,
+      "fraction": 1.0
+     },
+     "summary": {
+      "actions_without_capability": 26,
+      "affordances_by_status": {
+       "blocked": 2,
+       "bound": 6,
+       "executed_no_effect": 6
+      },
+      "capabilities": 5,
+      "capabilities_by_status": {
+       "observed": 4,
+       "reproduced": 1
+      },
+      "classified_capabilities": 0,
+      "entity_instances": 3,
+      "entity_types": 1,
+      "equivalent_interface_groupings": 1,
+      "executed_actions": 43,
+      "learned_predicates": 0,
+      "page_templates": 2,
+      "reproduction_prior": 0.4,
+      "underdetermined_behaviors": 0,
+      "unidentified_operations": 5,
+      "view_states": 3
+     }
+    }
+   ]
+  }
+ },
+ "milestone": "ACG M1 (Phase 1, offline)"
+}
