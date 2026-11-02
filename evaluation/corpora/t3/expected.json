@@ -1,0 +1,25 @@
+{
+  "_contract": "Frozen in the Phase 0 commit, before any ACG resolver existed. Do not edit to make an implementation pass.",
+  "classes": {
+    "a1": {"class": "navigation", "min_status": "reproduced"},
+    "a2": {"class": "collection_query", "min_status": "verified"},
+    "a3": {"class": "instance_creation", "min_status": "verified"},
+    "a4": {"class": "client_view_change", "min_status": "reproduced"},
+    "a5": {"class": "server_job_submission", "min_status": "reproduced"},
+    "a6": {"class": "instance_view", "min_status": "reproduced"}
+  },
+  "unclassified_actions": ["a6x", "a6y"],
+  "ablations": [
+    {"remove": ["ev:replay:r1"], "action": "a1"},
+    {"remove": ["ev:replay:r22"], "action": "a2"},
+    {"remove": ["ev:replay:r3"], "action": "a3"},
+    {"remove": ["ev:obs:ro3c"], "action": "a3"},
+    {"remove": ["ev:replay:r4"], "action": "a4"},
+    {"remove": ["ev:replay:r5"], "action": "a5"},
+    {"remove": ["ev:replay:r6"], "action": "a6"}
+  ],
+  "ablation_rule": "After removing the listed records, the capability of 'action' must have no behavioral class, and every other expected class must be unchanged.",
+  "text_invariance": "Rewriting every affordance label and observation title (random per occurrence, and a zh-CN rendering) must leave partitions, classes, claim statuses and learned predicates unchanged across all T1 and T3 logs; only display labels may differ.",
+  "random_subsets": {"seeds": 1000, "rule": "On random record subsets (manifest kept), every asserted class must cite its rule and evidence ids that exist in the log and satisfy the rule's minimum status."},
+  "label_provenance": "Every display label in the export must occur verbatim in a record it cites."
+}

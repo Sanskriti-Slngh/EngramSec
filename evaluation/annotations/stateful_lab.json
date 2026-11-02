@@ -1,0 +1,191 @@
+{
+ "application": "stateful_lab",
+ "annotation": {
+  "annotator": "Claude (Agent 1 engine developer)",
+  "independent": false,
+  "method": "Read from fixture source before any ACG resolver existed (Phase 0 commit); not adjudicated by a second annotator.",
+  "sources": [
+   "development_apps/stateful_lab.py"
+  ],
+  "frozen_at": "2026-11-01"
+ },
+ "roles": [
+  {
+   "id": "anonymous"
+  }
+ ],
+ "templates": [
+  "/",
+  "/records/{id}"
+ ],
+ "entity_types": [
+  {
+   "id": "record",
+   "identity": [
+    "/records/{id}",
+    "/api/records/{id}"
+   ]
+  }
+ ],
+ "capabilities": [
+  {
+   "id": "view_record",
+   "behavioral_class": "instance_view",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/records/{id}"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/records/{id}"
+    }
+   ],
+   "class_target": "record",
+   "entity": "record"
+  },
+  {
+   "id": "home",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/"
+    }
+   ],
+   "class_target": "/"
+  },
+  {
+   "id": "create_record",
+   "behavioral_class": "instance_creation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "POST",
+     "route": "/api/records"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "form_submit",
+     "label": "Create record"
+    }
+   ],
+   "class_target": "record",
+   "entity": "record",
+   "effect_risk": "server_write"
+  },
+  {
+   "id": "query_records",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "POST",
+     "route": "/api/search"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "form_submit",
+     "source_route": "/",
+     "label": "Submit"
+    }
+   ],
+   "note": "read-only POST whose response is constant; no observable collection membership change"
+  },
+  {
+   "id": "update_record",
+   "behavioral_class": "instance_modification",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "POST",
+     "route": "/api/records/{id}"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "form_submit",
+     "source_route": "/records/{id}"
+    }
+   ],
+   "class_target": "record",
+   "entity": "record",
+   "effect_risk": "server_write",
+   "note": "name change is visible to the role, but historical runs did not capture per-field digests"
+  },
+  {
+   "id": "counter_get_insert",
+   "behavioral_class": "instance_creation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/counter"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/counter"
+    }
+   ],
+   "class_target": "record",
+   "entity": "record",
+   "effect_risk": "server_write",
+   "note": "GET that inserts a record, then redirects to /"
+  },
+  {
+   "id": "delete_all",
+   "behavioral_class": "instance_removal",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "POST",
+     "route": "/api/delete"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "button",
+     "label": "Delete all records"
+    }
+   ],
+   "class_target": "record",
+   "entity": "record",
+   "effect_risk": "destructive"
+  }
+ ]
+}

@@ -1,0 +1,52 @@
+{
+  "_contract": "Frozen in the Phase 0 commit, before any ACG resolver existed. Do not edit to make an implementation pass. 'partition' lists every executed action with a capability; actions in 'no_effect_actions' must not belong to any capability. 'classes' maps action ids to the expected behavioral class of their capability; no T1 log contains reproduction or oracle evidence, so no class may be asserted.",
+  "t1_1_dispatch": {
+    "partition": [["a1", "a3"], ["a2"]],
+    "classes": {},
+    "why": "Same endpoint and parameter names; the 'controller' value is constant per affordance and differs across affordances, so it dispatches."
+  },
+  "t1_2_labels": {
+    "partition": [["a1", "a2"]],
+    "classes": {},
+    "bindings_of": {"a1": 2},
+    "unbound_affordances": 1,
+    "why": "Identical request and effect signatures behind 'Save' and '保存' are one capability with two bindings; 'Export' was never executed."
+  },
+  "t1_3_client": {
+    "partition": [["a1"], ["a2"]],
+    "no_effect_actions": ["a3"],
+    "classes": {},
+    "why": "No requests; different component regions change. a3 changes nothing observable and is not a capability."
+  },
+  "t1_4_websocket": {
+    "partition": [["a1", "a3"], ["a2"]],
+    "classes": {},
+    "why": "Sent WebSocket message classes are operations; two distinct discriminators, one shared by two affordances."
+  },
+  "t1_5_canvas": {
+    "partition": [["a1", "a2"]],
+    "classes": {},
+    "unidentified": ["a1"],
+    "why": "Two different gestures with only a canvas-region digest change: one unidentified operation family (documented limit)."
+  },
+  "t1_6_revision": {
+    "partition": [["a1"], ["a2", "a3"]],
+    "classes": {},
+    "learned_predicates": [{"template_route": "/loans", "kind": "behavior_revision"}],
+    "why": "Same visible affordance, different operation after a handler revision; the split is explained by a learned context predicate."
+  },
+  "t1_7_entry_points": {
+    "partition": [["a0"], ["a1", "a2"], ["b1", "b2"]],
+    "classes": {},
+    "equivalent_interfaces": [["a1", "a2"]],
+    "entity_instances": 3,
+    "templates": ["/", "/canvas/{id}"],
+    "why": "Form and empty-state button share one signature (two entry points). Three canvases are three instances of one template."
+  },
+  "t1_8_indistinguishable": {
+    "partition": [["a1", "a2"]],
+    "classes": {},
+    "indistinguishable_by_design": true,
+    "why": "Two different settings through one endpoint with identical parameters and no dispatch value: indistinguishable from this evidence."
+  }
+}

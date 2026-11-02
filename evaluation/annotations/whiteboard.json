@@ -1,0 +1,30 @@
+{
+ "application": "whiteboard",
+ "annotation": {
+  "annotator": "Claude (Agent 1 engine developer)",
+  "independent": false,
+  "method": "Read from fixture source before any ACG resolver existed (Phase 0 commit); not adjudicated by a second annotator.",
+  "sources": [
+   "URL identity only: canvas UUID path segments; application source not read"
+  ],
+  "frozen_at": "2026-11-01"
+ },
+ "capabilities_annotated": false,
+ "roles": [
+  {
+   "id": "authenticated"
+  }
+ ],
+ "templates": [
+  "/",
+  "/canvas/{id}"
+ ],
+ "entity_types": [
+  {
+   "id": "canvas",
+   "identity": [
+    "/canvas/{id}"
+   ]
+  }
+ ]
+}

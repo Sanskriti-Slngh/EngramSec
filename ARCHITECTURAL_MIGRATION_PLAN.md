@@ -86,7 +86,7 @@ Each phase ends with a commit that passes the full test suite and its own exit c
   - whiteboard: seeded + created canvases as separate instances;
   - Crawl Maze view-state count ≤ the current group count, without increasing the merge audit;
   - capability recall measurable on fixtures;
-  - **T1 and T3 pass** on the Phase 0 corpora.
+  - **T1 and the model-level T3 checks pass** on the Phase 0 corpora: T3a export invariance, T3b, T3c and T3d. The planner-level T3 checks (T3a decision-log invariance, T3e planner isolation) cannot run before a planner exists. They are unchanged and are exit criteria of Phase 1b.
 - **Why first:** it tests the model on real evidence at zero browser cost and de-risks the expensive phases.
 - **Risk:** archived evidence lacks response shapes and ID flow. Entity recall is then lower bound only, which Phase 2 addresses.
 
@@ -94,7 +94,7 @@ Each phase ends with a commit that passes the full test suite and its own exit c
 
 - Implement `evaluation/appsim.py` and the planner's value, selection and allocation code against the simulator ([EXPLORATION_PLANNER_DESIGN.md](EXPLORATION_PLANNER_DESIGN.md) §10).
 - Implement the legacy-selector wrapper over the same simulator interface.
-- **Exit:** T2a–T2f pass.
+- **Exit:** T2a–T2f pass, and the planner-level T3 checks pass (T3a decision-log hash unchanged under label rewriting; T3e planner never reads label fields).
   - If T2f fails, the EIG machinery is dropped in favour of the cheaper question structure before any live experiment.
   - If T2d fails, the planner is restricted to applications with detected structure.
 - **Depends on:** Phase 1 resolvers (question generators read the ACG).
