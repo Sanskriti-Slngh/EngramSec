@@ -1753,7 +1753,9 @@ class Explorer:
         self.shadow = None
         self.action_ledger: dict[str, list[float]] = {}
         self.tour_summary: dict[str, Any] | None = None
-        if config.acg_evidence or config.shadow_tours or config.exploration_policy == "tours":
+        self.hybrid = None
+        self.hybrid_summary: dict[str, Any] | None = None
+        if config.acg_evidence or config.shadow_tours or config.exploration_policy in {"tours", "hybrid_capabilities"}:
             from .live.capture import EvidenceSink
             self.evidence_sink = EvidenceSink(config.max_resource_body_bytes)
         if config.shadow_tours:
@@ -2017,6 +2019,8 @@ class Explorer:
                 else:
                     self._explore(browser)
                     self._replay(browser)
+                    if self.hybrid is not None:
+                        self.hybrid_summary = self.hybrid.finish(self.output_dir)
             finally:
                 browser.close()
         self._finalize()
@@ -2279,6 +2283,9 @@ class Explorer:
     def _explore_persistent(self, browser: Browser) -> None:
         planner = (AreaTourPlanner(prefix_reuse=self.config.state_reuse == "prefix")
                    if self.config.policy == "hierarchical" else None)
+        if self.config.exploration_policy == "hybrid_capabilities":
+            from .live.hybrid import HybridController   # opt-in; ACG-aware selection over the same loop
+            self.hybrid = HybridController(self)
         with self._browser_session(browser) as session:
             self._navigate_start(session, "persistent_restore")
             live = session.observe(self._next_sequence())
@@ -2325,8 +2332,12 @@ class Explorer:
                         None,
                     )
                 chosen_index = selected_index if selected_index is not None else (local_index if local_index is not None else 0)
-                item = self.frontier.pop(chosen_index)
                 local = local_index is not None
+                if self.hybrid is not None and planner is None:
+                    chosen_index, local = self.hybrid.select(
+                        self.frontier, live, lambda c: session.find_current(live, c.action) is not None,
+                        local_index, local_burst)
+                item = self.frontier.pop(chosen_index)
                 local_burst = local_burst + 1 if local else 0
                 required_actions = self._descriptor_action_cost(item.action)
                 if not local:
@@ -2334,6 +2345,8 @@ class Explorer:
                 if not self._fits_exploration_action_budget(required_actions):
                     self.frontier.insert(chosen_index, item)
                     break
+                if self.hybrid is not None:
+                    self.hybrid.before_attempt(item)
                 updated = self._attempt_frontier(
                     browser,
                     item,
@@ -2343,6 +2356,8 @@ class Explorer:
                 )
                 if self.shadow is not None:
                     self.shadow.after_action(self.artifact, transitions_before)
+                if self.hybrid is not None:
+                    self.hybrid.after_attempt(updated)
                 if updated is None:
                     self.artifact.metrics.live_state_stale += 1
                     if self._discovery_http_exhausted():
@@ -2851,6 +2866,8 @@ class Explorer:
         for transition in candidates:
             if self._elapsed() >= self.config.max_seconds:
                 break
+            if self.hybrid is not None and not self.hybrid.gate(transition)[0]:
+                continue
             if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
                 break
             if self.http_budget is not None and not self.http_budget.remaining("browser"):
@@ -2880,6 +2897,8 @@ class Explorer:
                 if replay.status == EvidenceStatus.NOT_TESTED:
                     self.artifact.metrics.replays_untested_http_budget += 1
                     break
+                if self.hybrid is not None:
+                    self.hybrid.after_replay(transition, replay)
                 completed.append(replay)
                 self.artifact.replays.append(replay)
                 self.artifact.metrics.replay_success_denominator += 1
@@ -2959,7 +2978,12 @@ class Explorer:
             if not self._fits_action_budget(item.cost):
                 scheduler.skip(item)
                 continue
+            if self.hybrid is not None and not self.hybrid.gate(item.transition)[0]:
+                scheduler.skip(item)      # blocked: costs nothing, never offered again
+                continue
             replay = self._replay_transition(browser, item.transition, item)
+            if self.hybrid is not None and replay.status != EvidenceStatus.NOT_TESTED:
+                self.hybrid.after_replay(item.transition, replay)
             if replay.status == EvidenceStatus.NOT_TESTED:
                 self.artifact.metrics.replays_untested_http_budget += 1
                 break
