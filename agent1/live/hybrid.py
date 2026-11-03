@@ -348,7 +348,14 @@ class HybridController:
             _page(src) if src else None, sigs(src) if src else set(), _page(res), sigs(res),
             {c.signature for c in disabled.get(src.id, [])} if src else set(),
             {c.signature for c in disabled.get(last.id, [])} if last else set())
+        # Post-evaluation fix (not re-measured): a re-render can "reveal" a control
+        # that already ran on this page in this role; that is not a newly available control.
+        done = {(_page(s), _role(s), x.action.signature) for x in self.ex.artifact.transitions
+                if x.id != t.id and (s := self._obs(x.source_observation_id)) is not None}
         for sig, kind in found.items():
+            if (_page(res), _role(res), sig) in done:
+                self.counters["hypothesis_already_executed"] += 1
+                continue
             if sig not in self.open:
                 self.open[sig] = {"kind": kind, "after": t.id, "page": _page(res)}
                 self.counters[f"hypothesis_{kind}"] += 1

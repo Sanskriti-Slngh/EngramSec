@@ -91,3 +91,5 @@ agent1/experiments/active_posthoc_*/
 
 # Grounded A/B raw per-trial runs (aggregates live in evaluation/results)
 agent1/experiments/grounded_ab_*/
+# Capability-aware hybrid comparison runs (local only; summary in evaluation/results/hybrid_ab.json)
+agent1/experiments/hybrid_ab_*/

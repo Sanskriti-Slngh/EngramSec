@@ -218,3 +218,19 @@ def test_all_redundant_falls_back_to_legacy_choice():
     index, _ = h.select([a, b], page, lambda c: True, legacy_index=0, local_burst=0)
     assert index == 0 and h.decisions[-1]["reason"] == "all_redundant_legacy_fallback"
     assert Counter(d["reason"] for d in h.decisions[-1]["deferred"]) == Counter({"same_target_repeat": 2})
+
+
+def test_post_eval_rerender_does_not_reopen_an_executed_control():
+    """Post-evaluation fix (JS-heavy lab): continuation is only for controls not yet executed on that page and role."""
+    home_a, home_b = _obs("o1", "/", group="g1"), _obs("o2", "/", group="g2")
+    reports = SimpleNamespace(signature="sig:Open reports")
+    workflow = SimpleNamespace(signature="sig:Open workflow")
+    h = _controller([home_a, home_b])
+    h.ex.artifact.transitions = [SimpleNamespace(id="t0", source_observation_id="o1", action=reports),
+                                 SimpleNamespace(id="t1", source_observation_id="o1", action=workflow)]
+    home_a.controls = [SimpleNamespace(signature="sig:Open workflow", safe=True)]
+    home_b.controls = [SimpleNamespace(signature=s, safe=True) for s in ("sig:Open workflow", "sig:Open reports",
+                                                                          "sig:Load late")]
+    h._learn_continuation(home_a, home_b, h.ex.artifact.transitions[1])
+    assert set(h.open) == {"sig:Load late"}
+    assert h.counters["hypothesis_already_executed"] == 1
