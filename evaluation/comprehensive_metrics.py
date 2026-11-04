@@ -2,8 +2,16 @@
 
 Agent 1 never imports this module. Every quantity is computed from the frozen agent's
 own outputs (run.json, graph_a.json, action ledger, evidence sink) after the run ends.
-Ground truth is touched only by the `gt_*` functions, and only for environments that
-have it. Outputs are aggregate numbers: no URLs, labels, payloads or identifiers.
+Reference data is touched only by the `gt_*` functions and `safety_attribution`, and only
+for environments that have it. Outputs are aggregate numbers: no URLs, labels, payloads or
+identifiers.
+
+Terminology (preregistration revision 1):
+- The capability annotations of stateful_lab, js_heavy_lab and replay_lab are frozen,
+  author-curated development annotations, not independently established application
+  ground truth. Metrics computed from them are *annotation-based* recall and precision.
+- ACG "roles" are cookie-name session contexts. They are not semantic authorization roles,
+  so every role-derived metric here is called *session-conditioned*.
 """
 from __future__ import annotations
 
@@ -18,6 +26,15 @@ from agent1.model.materialize import materialize
 from agent1.model.schema import STATUS_RANK, Status
 
 FRACTIONS = [round(i / 10, 1) for i in range(11)]          # 0%, 10%, ..., 100% of budget
+
+# Skip reasons recorded by the frozen agent for advertised-but-unexecuted controls.
+SAFETY_REFUSAL_REASONS = {          # legitimate refusals by configuration/protocol (Phase 5 cat. 4)
+    "post_forms_disabled": "POST form submission disabled by the frozen production default",
+    "dangerous_label_or_target": "dangerous-label/target filter",
+    "requires_protected_or_file_input": "password/file input (no credentials or uploads by protocol)",
+}
+SCOPE_REFUSAL_REASONS = {"cross_origin"}
+TECHNICAL_SKIP_REASONS = {"frame_not_observable"}
 
 
 # ------------------------------------------------------------------ helpers
@@ -82,12 +99,26 @@ def discovery(run: dict, graph: dict, export: dict) -> dict[str, Any]:
                                         and STATUS_RANK.get(c["status"], -1) >= STATUS_RANK[Status.OBSERVED]),
         "entity_types": len(export["entity_types"]),
         "entity_instances": len(export["entity_instances"]),
-        "roles": len({c["role"] for c in caps} | {t["role"] for t in export["templates"]}),
+        # cookie-name session contexts (ACG "roles"); not semantic authorization roles
+        "session_contexts": len({c["role"] for c in caps} | {t["role"] for t in export["templates"]}),
         "resource_references": run["metrics"].get("resource_references_discovered"),
     }
 
 
 # ------------------------------------------------------------------ capabilities (4B) and evidence status (4C)
+def refusal_breakdown(skip: Counter) -> dict[str, Any]:
+    """Split advertised-unexecuted controls by cause: safety refusal, scope refusal, technical, not selected."""
+    return {
+        "safety_refusals_by_configuration": {k: skip.get(k, 0) for k in SAFETY_REFUSAL_REASONS},
+        "safety_refusals_total": sum(skip.get(k, 0) for k in SAFETY_REFUSAL_REASONS),
+        "scope_refusals": sum(skip.get(k, 0) for k in SCOPE_REFUSAL_REASONS),
+        "technical_unobservable": sum(skip.get(k, 0) for k in TECHNICAL_SKIP_REASONS),
+        "not_selected": skip.get("unexecuted_not_selected", 0),
+        "other": sum(n for k, n in skip.items() if k not in SAFETY_REFUSAL_REASONS and k not in SCOPE_REFUSAL_REASONS
+                     and k not in TECHNICAL_SKIP_REASONS and k != "unexecuted_not_selected"),
+    }
+
+
 def capabilities(export: dict, graph: dict) -> dict[str, Any]:
     caps = export["capabilities"]
     at_least_observed = [c for c in caps if STATUS_RANK.get(c["status"], -1) >= STATUS_RANK[Status.OBSERVED]]
@@ -104,8 +135,10 @@ def capabilities(export: dict, graph: dict) -> dict[str, Any]:
                                             for c in at_least_observed)),
         "unidentified": sum(1 for c in at_least_observed if c.get("unidentified", True)),
         "equivalent_interfaces_multi_entry": multi_entry,
-        "role_conditioned": {"roles": len(roles), "capabilities_in_non_primary_roles":
-                             sum(n for r, n in roles.items() if "+" in r)},
+        "operations_without_capability": len({o["id"] for o in export["operations"]}
+                                             - {i for c in caps for i in c["operation_ids"]}),
+        "session_conditioned": {"session_contexts": len(roles), "capabilities_in_cookie_session_contexts":
+                                sum(n for r, n in roles.items() if "+" in r)},
         "dependencies_learned_predicates": dict(preds),
         "evidence_status": {
             "advertised_unexecuted_controls": len(graph.get("advertised_unexecuted", [])),
@@ -118,6 +151,7 @@ def capabilities(export: dict, graph: dict) -> dict[str, Any]:
             "blocked_affordances": aff_status.get("blocked", 0),
             "advertised_by_skip_reason": dict(skip),
         },
+        "refusals": refusal_breakdown(skip),
         "claims_by_status": dict(Counter(str(c["status"]) for c in export["claims"])),
         "capture_gaps": sorted({g["kind"] for g in export["gaps"]}),
     }
@@ -239,7 +273,8 @@ def gt_capability(gt, run: dict, ledger: dict, app: str, cfg: dict, offline_expo
         if truth and not str(truth).startswith(("ambiguous", "non:")):
             gt_redundant += truth in seen
             seen.add(truth)
-    # 4G: role-conditioned coverage (author-defined; canonical M1a above is the frozen measure)
+    # 4G: session-conditioned coverage (author-defined; canonical M1a above is the frozen measure).
+    # Annotation "roles" are cookie-name session contexts, not independently annotated authorization roles.
     role_cookies = {r.id: set(r.cookie_names) for r in gt.roles}
     ops = {o["id"]: o for o in offline_export["operations"]}
     from evaluation.score_acg import _op_matches
@@ -264,12 +299,17 @@ def gt_capability(gt, run: dict, ledger: dict, app: str, cfg: dict, offline_expo
     del by_cid
     live = score_capabilities(gt, live_export, records) if live_export else None
     graph_a = score_legacy_features(gt, graph["nodes"].get("features", []), records)
+    attribution = safety_attribution(gt, run, graph, set(final["unmatched_gt"]))
+    legit = sum(1 for a in attribution.values() if a["class"] == "legitimate_safety_refusal")
+    denominator = final["m1a_recall"]["denominator"]
     return {
-        "denominator": final["m1a_recall"]["denominator"],
-        "final_recall": final["m1a_recall"]["value"], "final_precision": final["m1a_precision"]["value"],
+        "basis": "frozen author-curated development annotation (evaluation/annotations); "
+                 "not independently established application ground truth",
+        "denominator": denominator,
+        "annotation_recall": final["m1a_recall"]["value"], "annotation_precision": final["m1a_precision"]["value"],
         "matched": final["m1a_recall"]["matched"], "acg_capabilities_scored": final["m1a_precision"]["denominator"],
         "false_positives": len(final["unmatched_acg"]),
-        "unmatched_gt": final["unmatched_gt"],                      # development annotations only (Track A)
+        "unmatched_annotated": final["unmatched_gt"],               # development annotations only (Track A)
         "m1b": {"precision": final["m1b_precision"]["value"], "recall": final["m1b_recall"]["value"]},
         "incorrect_capability_merges": len(final["capability_merges"].get("incorrect_merges") or []),
         "capability_splits": len(final["capability_merges"].get("splits") or final["capability_merges"].get("incorrect_splits") or []),
@@ -277,15 +317,84 @@ def gt_capability(gt, run: dict, ledger: dict, app: str, cfg: dict, offline_expo
         "curves": curves,
         "auc_actions": trapezoid(curves["actions"]["recall"]), "auc_seconds": trapezoid(curves["seconds"]["recall"]),
         "gt_redundant_transitions": gt_redundant, "observed_transitions": observed,
-        "role_conditioned": {"pairs": len(pairs), "covered": hit, "recall": round(hit / len(pairs), 4) if pairs else None,
-                             "definition": "GT (capability, role) pair covered if the GT capability is matched by the frozen "
-                                           "one-to-one M1a AND the matched (or an operation-equivalent) observed ACG "
-                                           "capability exists in an ACG role whose cookie names include the GT role's "
-                                           "(anonymous = no session cookies). Author-defined; never exceeds canonical."},
-        "role_aware_precision_alt": role_aware_precision(gt, offline_export, final)["value"],
+        "session_conditioned": {
+            "pairs": len(pairs), "covered": hit, "recall": round(hit / len(pairs), 4) if pairs else None,
+            "definition": "Annotated (capability, session context) pair covered if the capability is matched by the "
+                          "frozen one-to-one M1a AND the matched (or an operation-equivalent) observed ACG capability "
+                          "exists in an ACG session context whose cookie names include the annotated context's "
+                          "(anonymous = no session cookies). Session contexts are cookie names, not semantic "
+                          "authorization roles. Author-defined; never exceeds canonical."},
+        "session_aware_precision_alt": role_aware_precision(gt, offline_export, final)["value"],
+        # Missed annotated capabilities, separated into legitimate safety refusals vs. everything else.
+        "missed_attribution": {cid: a for cid, a in sorted(attribution.items())},
+        "missed_by_class": dict(Counter(a["class"] for a in attribution.values())),
+        "annotation_recall_excluding_safety_refusals": {
+            "value": round(final["m1a_recall"]["matched"] / (denominator - legit), 4) if denominator - legit > 0 else None,
+            "denominator": denominator - legit, "excluded_legitimate_safety_refusals": legit,
+            "note": "supplementary view; the primary metric is annotation_recall over the full annotated denominator"},
         "live_acg": {"recall": live["m1a_recall"]["value"], "precision": live["m1a_precision"]["value"]} if live else None,
         "graph_a_features": {"features": graph_a["features"], "action_based_recall": graph_a["action_based_recall"]},
     }
+
+
+def _control_matches(cap, control: dict, source_route: str | None) -> bool:
+    """Does an advertised control plausibly realize an annotated capability's entry point or operation?"""
+    kind = control.get("kind")
+    label = (control.get("label") or "").strip()
+    target = control.get("target")
+    target_route = _route_template(target) if target else None
+    for ep in cap.entry_points:
+        if ep.kind is None and ep.label is None and ep.target_route is None and ep.source_route is None:
+            continue
+        if ep.kind and ep.kind != kind:
+            continue
+        if ep.label is not None and ep.label.strip() != label:
+            continue
+        if ep.target_route is not None and ep.target_route != target_route:
+            continue
+        if ep.source_route is not None and ep.source_route != source_route:
+            continue
+        return True
+    if target_route is not None:
+        method = (control.get("method") or "GET").upper()
+        return any(op.channel == "http" and op.method.upper() == method and op.route == target_route
+                   for op in cap.operations)
+    return False
+
+
+def safety_attribution(gt, run: dict, graph: dict, unmatched: set[str]) -> dict[str, dict[str, Any]]:
+    """For each missed annotated capability: was every advertised control that realizes it refused for safety?
+
+    Evidence-based only: a capability is a *legitimate safety refusal* when at least one advertised
+    control matches it and every matching control carries a configuration/protocol safety skip
+    reason. A dangerous-label refusal of a capability annotated as having no server effect is an
+    *over-conservative safety refusal* (a technical Phase 5 category-4 failure, not legitimate).
+    Anything else is left for the Phase 5 earliest-cause analysis.
+    """
+    obs = run.get("observations", []) + run.get("replay_observations", [])
+    src_route = {o["id"]: _route_template(o.get("url", "")) for o in obs}
+    advertised = [((a.get("control") or {}), src_route.get(a.get("source_observation_id")))
+                  for a in graph.get("advertised_unexecuted", [])]
+    out: dict[str, dict[str, Any]] = {}
+    for cap in gt.capabilities:
+        if cap.id not in unmatched:
+            continue
+        reasons = {c.get("skip_reason") or "unexecuted_not_selected" for c, s in advertised if _control_matches(cap, c, s)}
+        safety = reasons & set(SAFETY_REFUSAL_REASONS)
+        if not reasons:
+            cls = "no_matching_advertised_control"
+        elif reasons == safety:
+            benign = cap.effect_risk in {"none", "client_only"}
+            cls = ("over_conservative_safety_refusal" if benign and safety == {"dangerous_label_or_target"}
+                   else "legitimate_safety_refusal")
+        elif reasons <= SCOPE_REFUSAL_REASONS:
+            cls = "scope_refusal"
+        elif safety:
+            cls = "mixed_safety_and_unrefused_controls"
+        else:
+            cls = "not_safety_limited"
+        out[cap.id] = {"class": cls, "skip_reasons": sorted(reasons), "effect_risk": cap.effect_risk}
+    return out
 
 
 def gt_surface(graph: dict, truth: dict) -> dict[str, Any]:

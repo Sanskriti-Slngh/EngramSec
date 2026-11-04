@@ -60,7 +60,7 @@ def main() -> None:
                 results[target] = row
                 path.write_text(json.dumps(results, indent=1)); print(target, row, flush=True)
                 continue
-        ext = External(target)
+        ext = External(target, require_profile=False)
         t0 = time.monotonic()
         try:
             ext.setup()
