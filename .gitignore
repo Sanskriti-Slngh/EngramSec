@@ -93,3 +93,5 @@ agent1/experiments/active_posthoc_*/
 agent1/experiments/grounded_ab_*/
 # Capability-aware hybrid comparison runs (local only; summary in evaluation/results/hybrid_ab.json)
 agent1/experiments/hybrid_ab_*/
+# Comprehensive benchmark evaluation: raw run directories stay local (may hold protected benchmark evidence)
+agent1/experiments/comprehensive_*/
