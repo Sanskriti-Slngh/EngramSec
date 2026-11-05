@@ -238,3 +238,14 @@ def test_track_b_summary_reports_sections_and_no_coverage_percentage(tmp_path):
     assert not any("recall" in k or "precision" in k for k in entry["metrics"])
     assert entry["reset_integrity"]["container_ids_disjoint_across_trials"] is True
     assert "reference_kind" in entry and "gt" not in entry
+
+
+def test_run_config_fields_primary_unchanged_and_diagnostic_builds_a_valid_config(tmp_path):
+    from agent1.schema import RunConfig
+    primary = E.run_config_fields(True, False)
+    assert {k: primary[k] for k in FROZEN} == FROZEN and primary["acg_evidence"] and primary["action_ledger"]
+    diag = E.run_config_fields(True, True)
+    assert diag["allow_post_forms"] is True
+    assert {k: v for k, v in diag.items() if k != "allow_post_forms"} == {k: v for k, v in primary.items() if k != "allow_post_forms"}
+    for fields in (primary, diag):       # both must construct (the first Track S launch raised TypeError here)
+        RunConfig(start_url="http://127.0.0.1:1/", output_dir=tmp_path, context_label="t", **fields)

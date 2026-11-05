@@ -128,6 +128,17 @@ def _inproc_start(env: str):
     raise KeyError(env)
 
 
+def run_config_fields(instrumented: bool, post_diagnostic: bool) -> dict[str, Any]:
+    """Frozen configuration + evidence-only instrumentation (+ the Track S override, which replaces
+    `allow_post_forms`; fix for deviation: the override was first passed as a duplicate keyword)."""
+    fields = dict(FROZEN)
+    if instrumented:
+        fields.update(INSTRUMENTATION)
+    if post_diagnostic:
+        fields.update(POST_DIAGNOSTIC_OVERRIDE)
+    return fields
+
+
 def child(env: str, out: Path, url: str | None, instrumented: bool, post_diagnostic: bool = False) -> None:
     from agent1.explorer import Explorer
     from agent1.exporter import write_outputs
@@ -148,12 +159,9 @@ def child(env: str, out: Path, url: str | None, instrumented: bool, post_diagnos
                    "initial_state_digest": hashlib.sha256(json.dumps(snap, sort_keys=True, default=str).encode()).hexdigest()[:16],
                    "fixture_port": urlsplit(url).port}
     try:
-        extra = dict(INSTRUMENTATION) if instrumented else {}
-        if post_diagnostic:
-            extra.update(POST_DIAGNOSTIC_OVERRIDE)
         label = "comprehensive-postdiag" if post_diagnostic else "comprehensive"
         config = RunConfig(start_url=url, output_dir=out, context_label=f"{label}:{env}:anonymous",
-                           **FROZEN, **extra)
+                           **run_config_fields(instrumented, post_diagnostic))
         t0 = time.monotonic()
         explorer = Explorer(config, ROOT)
         artifact = explorer.run()
