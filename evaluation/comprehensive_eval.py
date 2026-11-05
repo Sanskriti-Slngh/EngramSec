@@ -128,18 +128,22 @@ def _inproc_start(env: str):
     raise KeyError(env)
 
 
-def run_config_fields(instrumented: bool, post_diagnostic: bool) -> dict[str, Any]:
+def run_config_fields(instrumented: bool, post_diagnostic: bool, overrides: dict[str, Any] | None = None) -> dict[str, Any]:
     """Frozen configuration + evidence-only instrumentation (+ the Track S override, which replaces
-    `allow_post_forms`; fix for deviation: the override was first passed as a duplicate keyword)."""
+    `allow_post_forms`; fix for deviation: the override was first passed as a duplicate keyword).
+    `overrides` (used only by later preregistered ablations) replaces individual fields."""
     fields = dict(FROZEN)
     if instrumented:
         fields.update(INSTRUMENTATION)
     if post_diagnostic:
         fields.update(POST_DIAGNOSTIC_OVERRIDE)
+    if overrides:
+        fields.update(overrides)
     return fields
 
 
-def child(env: str, out: Path, url: str | None, instrumented: bool, post_diagnostic: bool = False) -> None:
+def child(env: str, out: Path, url: str | None, instrumented: bool, post_diagnostic: bool = False,
+          overrides: dict[str, Any] | None = None, label_prefix: str | None = None) -> None:
     from agent1.explorer import Explorer
     from agent1.exporter import write_outputs
     from agent1.live.acg import LiveACG
@@ -159,9 +163,9 @@ def child(env: str, out: Path, url: str | None, instrumented: bool, post_diagnos
                    "initial_state_digest": hashlib.sha256(json.dumps(snap, sort_keys=True, default=str).encode()).hexdigest()[:16],
                    "fixture_port": urlsplit(url).port}
     try:
-        label = "comprehensive-postdiag" if post_diagnostic else "comprehensive"
+        label = label_prefix or ("comprehensive-postdiag" if post_diagnostic else "comprehensive")
         config = RunConfig(start_url=url, output_dir=out, context_label=f"{label}:{env}:anonymous",
-                           **run_config_fields(instrumented, post_diagnostic))
+                           **run_config_fields(instrumented, post_diagnostic, overrides))
         t0 = time.monotonic()
         explorer = Explorer(config, ROOT)
         artifact = explorer.run()
@@ -786,6 +790,8 @@ def main() -> None:
     c.add_argument("--env", required=True); c.add_argument("--out", type=Path, required=True)
     c.add_argument("--url"); c.add_argument("--no-instrumentation", action="store_true")
     c.add_argument("--post-diagnostic", action="store_true")
+    c.add_argument("--overrides", default=None, help="JSON object of RunConfig field overrides (ablations)")
+    c.add_argument("--label-prefix", default=None)
     r = sub.add_parser("run")
     r.add_argument("--envs", default="all"); r.add_argument("--trials", type=int, default=3)
     r.add_argument("--base", type=Path); r.add_argument("--no-instrumentation", action="store_true")
@@ -797,7 +803,8 @@ def main() -> None:
     s.add_argument("--base", type=Path); s.add_argument("--post-diagnostic", action="store_true")
     args = ap.parse_args()
     if args.cmd == "child":
-        child(args.env, args.out, args.url, not args.no_instrumentation, args.post_diagnostic)
+        child(args.env, args.out, args.url, not args.no_instrumentation, args.post_diagnostic,
+              json.loads(args.overrides) if args.overrides else None, args.label_prefix)
         return
     if args.cmd in {"run", "reset-verify"}:
         if not tree_clean(("agent1",)):
