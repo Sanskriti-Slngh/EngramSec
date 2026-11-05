@@ -1,0 +1,74 @@
+[
+ {
+  "id": "D1",
+  "when": "2026-11-04 22:4x",
+  "kind": "harness launch",
+  "what": "First launch of the primary run was refused by the harness freeze guard because the operator wrote the driver log inside agent1/ (an untracked file counts as an uncommitted change).",
+  "effect": "No trial ran. The log was moved outside agent1/ and the run was relaunched at 22:45:56 at revision 74426ce.",
+  "data_affected": false
+ },
+ {
+  "id": "D2",
+  "when": "2026-11-04 23:57 to 2026-11-05 12:37",
+  "kind": "host infrastructure (sleep)",
+  "what": "The host ran on battery (15% falling to 4%) and entered clamshell/maintenance sleep from 23:57:12. On macOS the monotonic clock pauses during sleep, so the agent's 180 s budget and the harness hard limits did not advance while asleep.",
+  "effect": "SiyuCMS trials 0 and 1 were mapped across sleep intervals (measured wall time minus agent clock: 1526.5 s and 3602.0 s). Both are kept, flagged host_sleep_affected, and not rerun. `caffeinate -i` (infrastructure only) was added at ~00:25 but cannot prevent clamshell sleep. At 01:32:53 the driver was paused at a clean boundary (after SiyuCMS trial 1 was recorded, during trial 2 container setup, before any mapping; trial_2 directory empty; teardown exit 0, no residual containers). It resumed automatically on AC power at 12:37:58 under `caffeinate -i -s`, with the same revision and frozen agent tree. All other 49 primary trials show no wall-vs-agent-clock gap above 5 s. The three whiteboard trials (23:58) ran in brief dark-wake windows and show no measurable gap.",
+  "data_affected": true
+ },
+ {
+  "id": "D3",
+  "when": "2026-11-04 16:00-17:10 (pre-run)",
+  "kind": "resolution of a disclosed observation",
+  "what": "Preregistration revision 1 (section 5) disclosed ~32-minute SiyuCMS reset-verification cycles of unknown cause. The power log shows the host was sleeping from 16:00; the delay was host sleep, not reset logic.",
+  "effect": "None on scored data.",
+  "data_affected": false
+ },
+ {
+  "id": "D4",
+  "when": "post-run review",
+  "kind": "preregistration factual error",
+  "what": "Preregistration section 3 states the preflight did not exercise the stricter WebSocket scope enforcement because phase2_lab opens only same-origin sockets. phase2_lab deliberately also attempts an out-of-scope WebSocket (another loopback port). In scored runs the capture refused it 15 times per trial.",
+  "effect": "The refusals are correct scope enforcement; with capture off the browser would have attempted that out-of-scope connection. Reported as a capture-on behaviour difference.",
+  "data_affected": false
+ },
+ {
+  "id": "D5",
+  "when": "2026-11-05 12:55",
+  "kind": "harness bug (Track S only)",
+  "what": "The supplementary write diagnostic passed allow_post_forms twice to RunConfig; all 9 Track S trials raised TypeError before the agent started (no browser, no mapping).",
+  "effect": "Failed records preserved (agent1/experiments/comprehensive_post_diagnostic_failed_launch_1, git-ignored). Fixed in 4a4f819 (config merged into one dict; primary configuration byte-identical, asserted by a test); Track S was then run once at that revision. Primary data unaffected.",
+  "data_affected": false
+ },
+ {
+  "id": "D6",
+  "when": "post-run review",
+  "kind": "harness limitation (readiness criterion)",
+  "what": "The preregistered readiness rule accepts any HTTP status < 500 at the application root. JetLinks answered 404 at the root after ~44-47 s of startup in all three trials, and the agent mapped that 404 page.",
+  "effect": "JetLinks results reflect the 404 root. Whether the application was still initializing or serves no page at its root cannot be determined without inspecting the target, which the evaluation-only protocol forbids. No rerun.",
+  "data_affected": true
+ },
+ {
+  "id": "D7",
+  "when": "post-run review",
+  "kind": "cosmetic",
+  "what": "The run log prints reference=None for surface, transfer and crawl-testbed reference kinds (the log looks up annotation keys only).",
+  "effect": "None; trial.json records the full reference results.",
+  "data_affected": false
+ },
+ {
+  "id": "D8",
+  "when": "post-run review",
+  "kind": "metric labelling defect (descriptive field only)",
+  "what": "The preregistered terminated_by field checks the action, transition and total-time budgets only. It cannot see the exploration time reserve (replay_reserve_fraction 0.30: exploration stops at ~126 s of 180 s and the rest is replay). Runs that stopped exploring at the reserve but finished replay early were labelled 'frontier_exhausted_or_other'.",
+  "effect": "Added a measured, additive descriptive field per trial (exploration_ended_s, exploration_stop) from the agent's own transition timestamps. No score, threshold or reference metric changed. Corrected labels: heldout_shop, restoration_lab, crawlground, white-jotter and siyucms trial 2 stopped exploring at the time reserve; SiyuCMS trials 0-1 cannot be classified (host sleep).",
+  "data_affected": false
+ },
+ {
+  "id": "D9",
+  "when": "2026-11-05 13:08 onward",
+  "kind": "host infrastructure (sleep), Track S only",
+  "what": "During the supplementary Track S run the host returned to battery power and maintenance/clamshell sleep (power log 13:13 onward).",
+  "effect": "Track S trials with a wall-vs-agent-clock gap above 5 s are flagged host_sleep_affected in agent1_post_diagnostic_summary.json. Track S uses in-process fixtures only (no external server clock), the agent budget is monotonic, and the affected heldout_shop trials reproduced the unaffected trial (17 capabilities; 309-311 actions). Not paused, not rerun. Primary data unaffected.",
+  "data_affected": true
+ }
+]

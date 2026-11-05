@@ -19,6 +19,8 @@ from typing import Any
 from evaluation.comprehensive_config import FROZEN, INSTRUMENTATION, git_revision
 from evaluation.comprehensive_eval import ENVS, GATED, RESULTS
 
+DEVIATIONS = RESULTS / "comprehensive_deviations.json"
+
 
 def _get(row: dict, path: str):
     cur: Any = row
@@ -154,6 +156,7 @@ def summarize(base: Path, post_diagnostic: bool = False, out_path: Path | None =
             "session_conditioned": "ACG roles are cookie-name session contexts, not semantic authorization roles",
             "track_b": TRACK_B_NOT_MEASURABLE},
         "not_evaluated": {"webexploitbench_gated_targets": GATED, "reason": "NOT EVALUATED — ACCESS RESTRICTED"},
+        "protocol_deviations": json.loads(DEVIATIONS.read_text()) if DEVIATIONS.exists() else [],
         "environments": {},
     }
     for env, spec in ENVS.items():
@@ -162,7 +165,27 @@ def summarize(base: Path, post_diagnostic: bool = False, out_path: Path | None =
             continue
         entry: dict[str, Any] = {k: spec[k] for k in ("track", "category", "exposure")}
         entry["reference_kind"] = spec["gt"] or "none"
+        for r in rows:                                # host sleep exposure (deviation D2): wall time minus agent clock
+            run_path = base / env / f"trial_{r['trial']}" / "run.json"
+            if run_path.exists():
+                from datetime import datetime
+                run = json.loads(run_path.read_text())
+                wall = (datetime.fromisoformat(run["ended_at"]) - datetime.fromisoformat(run["started_at"])).total_seconds()
+                r["host_sleep_gap_s"] = round(wall - (run["metrics"].get("elapsed_seconds") or 0.0), 1)
+                # Deviation D8: terminated_by cannot see the exploration time reserve (replay_reserve_fraction).
+                # Exploration end, from the agent's own timestamps (wall clock; unaffected trials only).
+                ends = [datetime.fromisoformat(t["ended_at"]) for t in run.get("transitions", []) if t.get("ended_at")]
+                if ends:
+                    end_s = (max(ends) - datetime.fromisoformat(run["started_at"])).total_seconds()
+                    r["exploration_ended_s"] = round(end_s, 1)
+                    reserve = FROZEN["max_seconds"] * (1 - (run["config"].get("replay_reserve_fraction") or 0.0))
+                    r["exploration_stop"] = ("exploration_time_reserve" if end_s >= reserve - 3 and (r.get("host_sleep_gap_s") or 0) <= 5
+                                             else "before_time_reserve")
         entry["trials"] = [{"trial": r["trial"], "status": r["status"],
+                            **({"host_sleep_affected": True, "host_sleep_gap_s": r["host_sleep_gap_s"]}
+                               if (r.get("host_sleep_gap_s") or 0) > 5 else {}),
+                            **({"exploration_ended_s": r["exploration_ended_s"], "exploration_stop": r["exploration_stop"]}
+                               if "exploration_ended_s" in r else {}),
                             **({"setup_error": r["setup_error"]} if r.get("setup_error") else {}),
                             **({"error_tail": r["error_tail"]} if r.get("error_tail") and spec["track"] == "A" else {}),
                             **({"metric_errors": r["metric_errors"]} if r.get("metric_errors") else {})} for r in rows]
