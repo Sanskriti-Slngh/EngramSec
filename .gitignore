@@ -97,3 +97,4 @@ agent1/experiments/hybrid_ab_*/
 agent1/experiments/comprehensive_*/
 agent1/experiments/perception_ablation/
 agent1/experiments/restoration_ab/
+agent1/experiments/recovery_transfer/
