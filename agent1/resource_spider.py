@@ -777,11 +777,20 @@ def extract_xml_references(text: str, response_url: str) -> list[ResourceReferen
 
 
 def extract_robots_sitemaps(text: str, response_url: str) -> list[ResourceReference]:
+    """Sitemap URLs and literal Allow/Disallow paths (RFC 9309). Patterns with wildcards are skipped."""
     result: list[ResourceReference] = []
     for line in (text or "")[:MAX_TEXT_BYTES].splitlines():
+        line = line.split("#", 1)[0]
         match = re.match(r"\s*sitemap\s*:\s*(\S+)\s*$", line, re.I)
         if match:
             item = _normalized(match.group(1), response_url, kind="navigation", source_type="robots", source="Sitemap:")
+            if item:
+                result.append(item)
+            continue
+        match = re.match(r"\s*(allow|disallow)\s*:\s*(/\S*)\s*$", line, re.I)
+        if match and match.group(2) != "/" and not set(match.group(2)) & {"*", "$"}:
+            item = _normalized(match.group(2), response_url, kind="navigation", source_type="robots",
+                               source=match.group(1).capitalize() + ":")
             if item:
                 result.append(item)
     return _dedupe(result)
@@ -1009,6 +1018,22 @@ class TypedResourceSpider:
         self._record({
             "url": safe, "kind": "asset", "source_type": "zap_seed", "source_url": safe,
             "source": "ZAP observed GET", "relation": "external_seed", "depth": 0,
+            "status": "discovered", "queue_decision": "admitted",
+        })
+        self.queue.append((reference, url, 1))
+        return True
+
+    def seed_well_known(self, url: str) -> bool:
+        """Queue a same-origin well-known location (/robots.txt, /sitemap.xml) for one GET."""
+        safe = _safe_resource_url(url)
+        if safe in self.seen or not allowed_origin(self.start_url, url, self.aliases) or urlsplit(url).query:
+            return False
+        self.seen.add(safe)
+        self.discovered_urls.add(safe)
+        reference = ResourceReference(url, "navigation", "well_known", "well-known location", "well_known")
+        self._record({
+            "url": safe, "kind": "navigation", "source_type": "well_known", "source_url": safe,
+            "source": "well-known location", "relation": "well_known", "depth": 0,
             "status": "discovered", "queue_decision": "admitted",
         })
         self.queue.append((reference, url, 1))

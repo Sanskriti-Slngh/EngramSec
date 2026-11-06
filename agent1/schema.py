@@ -120,6 +120,12 @@ class RunConfig(BaseModel):
     # refusing outright. "strict" (default) is the unchanged behavior.
     restoration_policy: Literal["strict", "contract"] = "strict"
     restoration_sample_interval_ms: int = Field(default=300, ge=50, le=2_000)
+    # Opt-in: restore a state reached only through plain same-origin GET links by one direct
+    # navigation to its exact URL (verified like any restoration; falls back to path replay).
+    restoration_shortcut: Literal["none", "direct_url"] = "none"
+    # Opt-in: seed the resource spider with the origin's /robots.txt and /sitemap.xml (GET only,
+    # same scope and budgets as any other resource reference).
+    well_known_discovery: bool = False
     # Optional discovery changes (defaults keep the frozen baseline behavior).
     resource_allocation: Literal["class_caps", "shared_http"] = "class_caps"
     passive_document_http_reserve: int | None = Field(default=None, ge=0, le=100_000)
@@ -417,7 +423,8 @@ class ExternalDiscoveryEvidence(BaseModel):
 
 class NavigationEvidence(BaseModel):
     id: str
-    reason: Literal["initial", "frontier_restore", "persistent_restore", "replay", "history_return"]
+    reason: Literal["initial", "frontier_restore", "persistent_restore", "replay", "history_return",
+                    "direct_url_restore"]
     url: str
     readiness: ReadinessEvidence = Field(default_factory=ReadinessEvidence)
     network: list[NetworkEvent] = Field(default_factory=list)

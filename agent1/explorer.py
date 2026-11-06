@@ -1766,6 +1766,7 @@ class Explorer:
         self._region_maps: dict[str, dict[str, Any]] | None = (
             {} if config.restoration_policy == "contract" else None)
         self._region_cost: dict[str, float] = {"captures": 0, "ms": 0.0}
+        self._contract_preaccepted: set[str] = set()
         if config.restoration_policy == "contract":
             self.artifact.metrics.restoration_contract["region_capture"] = self._region_cost
         self.evidence_sink = None
@@ -1974,6 +1975,8 @@ class Explorer:
             self.artifact.metrics.verification_root_reloads += 1
         elif reason == "history_return":
             self.artifact.metrics.history_returns += 1
+        elif reason == "direct_url_restore":
+            pass                                    # counted in restoration_contract["direct_url"]
         else:
             self.artifact.metrics.discovery_root_reloads += 1
         readiness = session.last_readiness
@@ -2024,6 +2027,9 @@ class Explorer:
                 if (item.method == "GET" and item.http_status is not None and 200 <= item.http_status < 300
                         and not item.parameter_names and not DANGEROUS_ACTION.search(urlsplit(item.mapped_url).path)):
                     self.resource_spider.seed_external(item.mapped_url)
+        if self.config.well_known_discovery and self.resource_spider is not None and not self.config.resume_from:
+            for well_known in ("/robots.txt", "/sitemap.xml"):
+                self.resource_spider.seed_well_known(urljoin(self.config.start_url, well_known))
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(headless=self.config.headless)
             self.artifact.browser_version = f"chromium {browser.version}"
@@ -2477,9 +2483,13 @@ class Explorer:
                         != expected_observation.session_markers
                     ):
                         session.reset_context()
-                    self._navigate_start(session, reason)
+                    shortcut = self._direct_url_restore(session, item, expected_observation, expected)
                     restoration_attempted = True
-                    source = self._restore(session, item.path, prerequisite_network)
+                    if shortcut is not None:
+                        source = shortcut
+                    else:
+                        self._navigate_start(session, reason)
+                        source = self._restore(session, item.path, prerequisite_network)
                     source_path = list(item.path)
                 actual = source.state_signature if self.config.policy == "exact" else source.group_signature
                 self._record_observation(source, source_path)
@@ -2495,7 +2505,8 @@ class Explorer:
                     )
                 )
                 if actual != expected and self.config.restoration_policy == "contract":
-                    self._restoration_contract(session, expected_observation, source, item.action, expected, actual)
+                    if source.id not in self._contract_preaccepted:
+                        self._restoration_contract(session, expected_observation, source, item.action, expected, actual)
                 elif actual != expected:
                     usable = bool(expected_observation) and self._usable_return_screen(
                         expected_observation, source
@@ -2709,7 +2720,8 @@ class Explorer:
         return plan
 
     def _restoration_contract(self, session: BrowserSession, expected_observation: Observation | None,
-                              source: Observation, action: ActionDescriptor, expected: str, actual: str) -> None:
+                              source: Observation, action: ActionDescriptor, expected: str, actual: str,
+                              purpose: str = "restore") -> None:
         """Experimental: accept a non-identical restored page only if the action's starting contract holds."""
         stats = self.artifact.metrics.restoration_contract
         stats["evaluations"] = stats.get("evaluations", 0) + 1
@@ -2753,12 +2765,69 @@ class Explorer:
             log.append({**decision.record(), "action_signature": action.signature, "action_label": action.label,
                         "expected_observation_id": expected_observation.id if expected_observation else None,
                         "restored_observation_id": source.id, "expected_group": expected, "restored_group": actual,
-                        "url": source.url, "elapsed_ms": round(elapsed, 1)})
+                        "url": source.url, "elapsed_ms": round(elapsed, 1), "purpose": purpose})
         if not decision.accepted:
             raise restoration_contract.RestorationRefused(
                 "restoration contract refused: " + ",".join(sorted(set(decision.reasons))))
         self.artifact.notes.append(
             f"Restoration contract ({decision.tier}) accepted a non-identical restored page for {action.signature}.")
+
+    def _direct_url_restore(self, session: BrowserSession, item: FrontierItem,
+                            expected_observation: Observation | None, expected: str) -> Observation | None:
+        """Opt-in: one direct navigation instead of a root reload plus a replayed link chain.
+
+        Only for states reached exclusively through plain same-origin GET links (no handler
+        revision, listener provenance, inputs or form fields) none of which was ever observed
+        to issue a write or a possible state change. The arrived page must reproduce the saved
+        state group, or (restoration_policy="contract") pass the starting-state contract;
+        otherwise the caller falls back to full path replay. Record identity is the exact URL.
+        """
+        if (self.config.restoration_shortcut != "direct_url" or expected_observation is None or not item.path
+                or session.page is None):
+            return None
+        url = expected_observation.url
+        if "<redacted>" in url or not allowed_origin(self.config.start_url, url, self.config.origin_aliases):
+            return None
+        for step in item.path:
+            if not (step.kind == "link" and step.interaction in {"click", "navigate"} and step.target
+                    and step.target.startswith(("http://", "https://"))
+                    and allowed_origin(self.config.start_url, step.target, self.config.origin_aliases)
+                    and (step.provenance or "snapshot") == "snapshot" and not step.behavior_revision
+                    and not step.input_plan_ref and not step.fields):
+                return None
+        unsafe = {t.action.signature for t in self.artifact.transitions
+                  if (t.behavior or {}).get("write_capable_request_observed")
+                  or (t.behavior or {}).get("possible_state_change")}
+        if any(step.signature in unsafe for step in item.path):
+            return None
+        stats = self.artifact.metrics.restoration_contract.setdefault(
+            "direct_url", {"attempted": 0, "accepted": 0, "fallback": 0, "actions_saved": 0})
+        stats["attempted"] += 1
+        try:
+            self.artifact.metrics.browser_actions += session.goto(url)
+        except (PlaywrightError, RuntimeError):
+            stats["fallback"] += 1
+            return None
+        self.artifact.metrics.restoration_actions += 1
+        self.artifact.metrics.navigation_requests += 1
+        self._record_navigation_evidence(session, "direct_url_restore")
+        observation = session.observe(self._next_sequence())
+        actual = observation.state_signature if self.config.policy == "exact" else observation.group_signature
+        accepted = actual == expected
+        if not accepted and self.config.restoration_policy == "contract":
+            try:
+                self._restoration_contract(session, expected_observation, observation, item.action, expected, actual,
+                                           purpose="direct_url")
+                accepted = True
+                self._contract_preaccepted.add(observation.id)
+            except restoration_contract.RestorationRefused:
+                accepted = False
+        if not accepted:
+            stats["fallback"] += 1
+            return None
+        stats["accepted"] += 1
+        stats["actions_saved"] += len(item.path)          # root reload + path steps, minus this one navigation
+        return observation
 
     @staticmethod
     def _usable_return_screen(expected: Observation, actual: Observation) -> bool:
