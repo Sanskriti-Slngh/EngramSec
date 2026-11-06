@@ -1,0 +1,5602 @@
+{
+ "milestone": "Agent 1 perception ablation",
+ "phase": "diagnostic",
+ "evaluated_revision": "34b66fc223d982541da44c2dcb35585dac1735fe",
+ "arms": {
+  "A": {
+   "overrides": {},
+   "name": "production defaults"
+  },
+  "B": {
+   "overrides": {
+    "robust_readiness": true
+   },
+   "name": "+ robust readiness"
+  },
+  "C": {
+   "overrides": {
+    "runtime_listener_observation": "revisit"
+   },
+   "name": "+ listener revisit"
+  },
+  "D": {
+   "overrides": {
+    "robust_readiness": true,
+    "runtime_listener_observation": "revisit"
+   },
+   "name": "+ both"
+  }
+ },
+ "environments": {
+  "stateful_lab": {
+   "A": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.2857,
+      "min": 0.2857,
+      "max": 0.2857
+     },
+     "reference.annotation_precision": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "reference.false_positives": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "reference.matched": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "perception.browser_actions": {
+      "median": 16,
+      "min": 16,
+      "max": 16
+     },
+     "perception.agent_elapsed_s": {
+      "median": 7.526,
+      "min": 7.526,
+      "max": 7.526
+     },
+     "driver_wall_s": {
+      "median": 7.89,
+      "min": 7.89,
+      "max": 7.89
+     },
+     "perception.observations": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_wait_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "efficiency.actions_failed": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "efficiency.actions_redundant": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": false,
+     "runtime_listener_observation": "off",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "UnsafeRestoration": 7,
+      "RuntimeError": 3
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "unsafe_restoration_refused": 7,
+      "restore_group_mismatch": 3
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "counter_get_insert",
+      "query_records"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     []
+    ],
+    "matched_with_revision_actions_per_trial": [
+     []
+    ],
+    "missed_attribution_trial0": {
+     "create_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "server_write"
+     },
+     "delete_all": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "dangerous_label_or_target"
+      ],
+      "effect_risk": "destructive"
+     },
+     "home": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "update_record": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "server_write"
+     },
+     "view_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     }
+    }
+   },
+   "B": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.2857,
+      "min": 0.2857,
+      "max": 0.2857
+     },
+     "reference.annotation_precision": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "reference.false_positives": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "reference.matched": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "perception.browser_actions": {
+      "median": 16,
+      "min": 16,
+      "max": 16
+     },
+     "perception.agent_elapsed_s": {
+      "median": 26.798,
+      "min": 26.798,
+      "max": 26.798
+     },
+     "driver_wall_s": {
+      "median": 27.34,
+      "min": 27.34,
+      "max": 27.34
+     },
+     "perception.observations": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_wait_ms": {
+      "median": 13247,
+      "min": 13247,
+      "max": 13247
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "efficiency.actions_failed": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "efficiency.actions_redundant": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": true,
+     "runtime_listener_observation": "off",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "UnsafeRestoration": 7,
+      "RuntimeError": 3
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "unsafe_restoration_refused": 7,
+      "restore_group_mismatch": 3
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "counter_get_insert",
+      "query_records"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     []
+    ],
+    "matched_with_revision_actions_per_trial": [
+     []
+    ],
+    "missed_attribution_trial0": {
+     "create_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "server_write"
+     },
+     "delete_all": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "dangerous_label_or_target"
+      ],
+      "effect_risk": "destructive"
+     },
+     "home": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "update_record": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "server_write"
+     },
+     "view_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     }
+    }
+   },
+   "C": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.2857,
+      "min": 0.2857,
+      "max": 0.2857
+     },
+     "reference.annotation_precision": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "reference.false_positives": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "reference.matched": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "perception.browser_actions": {
+      "median": 16,
+      "min": 16,
+      "max": 16
+     },
+     "perception.agent_elapsed_s": {
+      "median": 6.933,
+      "min": 6.933,
+      "max": 6.933
+     },
+     "driver_wall_s": {
+      "median": 7.38,
+      "min": 7.38,
+      "max": 7.38
+     },
+     "perception.observations": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 66.1,
+      "min": 66.1,
+      "max": 66.1
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 86,
+      "min": 86,
+      "max": 86
+     },
+     "perception.readiness_wait_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "efficiency.actions_failed": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "efficiency.actions_redundant": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": false,
+     "runtime_listener_observation": "revisit",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "UnsafeRestoration": 7,
+      "RuntimeError": 3
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "unsafe_restoration_refused": 7,
+      "restore_group_mismatch": 3
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {
+      "non_click_listener_nodes": 16,
+      "represented_by_snapshot": 8
+     }
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "counter_get_insert",
+      "query_records"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     []
+    ],
+    "matched_with_revision_actions_per_trial": [
+     []
+    ],
+    "missed_attribution_trial0": {
+     "create_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "server_write"
+     },
+     "delete_all": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "dangerous_label_or_target"
+      ],
+      "effect_risk": "destructive"
+     },
+     "home": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "update_record": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "server_write"
+     },
+     "view_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     }
+    }
+   },
+   "D": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.2857,
+      "min": 0.2857,
+      "max": 0.2857
+     },
+     "reference.annotation_precision": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "reference.false_positives": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "reference.matched": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "perception.browser_actions": {
+      "median": 16,
+      "min": 16,
+      "max": 16
+     },
+     "perception.agent_elapsed_s": {
+      "median": 26.686,
+      "min": 26.686,
+      "max": 26.686
+     },
+     "driver_wall_s": {
+      "median": 27.24,
+      "min": 27.24,
+      "max": 27.24
+     },
+     "perception.observations": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 60.6,
+      "min": 60.6,
+      "max": 60.6
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 86,
+      "min": 86,
+      "max": 86
+     },
+     "perception.readiness_wait_ms": {
+      "median": 13356,
+      "min": 13356,
+      "max": 13356
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "efficiency.actions_failed": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "efficiency.actions_redundant": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 8,
+      "min": 8,
+      "max": 8
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": true,
+     "runtime_listener_observation": "revisit",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "UnsafeRestoration": 7,
+      "RuntimeError": 3
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "unsafe_restoration_refused": 7,
+      "restore_group_mismatch": 3
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {
+      "non_click_listener_nodes": 16,
+      "represented_by_snapshot": 8
+     }
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "counter_get_insert",
+      "query_records"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     []
+    ],
+    "matched_with_revision_actions_per_trial": [
+     []
+    ],
+    "missed_attribution_trial0": {
+     "create_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "server_write"
+     },
+     "delete_all": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "dangerous_label_or_target"
+      ],
+      "effect_risk": "destructive"
+     },
+     "home": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "update_record": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "server_write"
+     },
+     "view_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     }
+    }
+   }
+  },
+  "js_heavy_lab": {
+   "A": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.2143,
+      "min": 0.2143,
+      "max": 0.2143
+     },
+     "reference.annotation_precision": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "reference.false_positives": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "reference.matched": {
+      "median": 3,
+      "min": 3,
+      "max": 3
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 3,
+      "min": 3,
+      "max": 3
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 3,
+      "min": 3,
+      "max": 3
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.browser_actions": {
+      "median": 31,
+      "min": 31,
+      "max": 31
+     },
+     "perception.agent_elapsed_s": {
+      "median": 14.948,
+      "min": 14.948,
+      "max": 14.948
+     },
+     "driver_wall_s": {
+      "median": 15.72,
+      "min": 15.72,
+      "max": 15.72
+     },
+     "perception.observations": {
+      "median": 22,
+      "min": 22,
+      "max": 22
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_wait_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "efficiency.actions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 3,
+      "min": 3,
+      "max": 3
+     },
+     "efficiency.actions_redundant": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 14,
+      "min": 14,
+      "max": 14
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": false,
+     "runtime_listener_observation": "off",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {}
+    ],
+    "restoration_failures_per_trial": [
+     {}
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "nav_home",
+      "nav_news",
+      "nav_overview"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     []
+    ],
+    "matched_with_revision_actions_per_trial": [
+     []
+    ],
+    "missed_attribution_trial0": {
+     "alias_area": {
+      "class": "scope_refusal",
+      "skip_reasons": [
+       "cross_origin"
+      ],
+      "effect_risk": "none"
+     },
+     "alias_data": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "continue_setup": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "enter_member_mode": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "server_write"
+     },
+     "load_late_reports": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "load_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "member_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_reports": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_workflow": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_workspace": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "workspace_detail": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     }
+    }
+   },
+   "B": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.6429,
+      "min": 0.6429,
+      "max": 0.6429
+     },
+     "reference.annotation_precision": {
+      "median": 0.6429,
+      "min": 0.6429,
+      "max": 0.6429
+     },
+     "reference.false_positives": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "reference.matched": {
+      "median": 9,
+      "min": 9,
+      "max": 9
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 14,
+      "min": 14,
+      "max": 14
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 9,
+      "min": 9,
+      "max": 9
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.browser_actions": {
+      "median": 224,
+      "min": 224,
+      "max": 224
+     },
+     "perception.agent_elapsed_s": {
+      "median": 153.735,
+      "min": 153.735,
+      "max": 153.735
+     },
+     "driver_wall_s": {
+      "median": 154.49,
+      "min": 154.49,
+      "max": 154.49
+     },
+     "perception.observations": {
+      "median": 117,
+      "min": 117,
+      "max": 117
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 13,
+      "min": 13,
+      "max": 13
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_wait_ms": {
+      "median": 47509,
+      "min": 47509,
+      "max": 47509
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 64,
+      "min": 64,
+      "max": 64
+     },
+     "perception.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "efficiency.actions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 12,
+      "min": 12,
+      "max": 12
+     },
+     "efficiency.actions_redundant": {
+      "median": 40,
+      "min": 40,
+      "max": 40
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 128,
+      "min": 128,
+      "max": 128
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 64,
+      "min": 64,
+      "max": 64
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": true,
+     "runtime_listener_observation": "off",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {}
+    ],
+    "restoration_failures_per_trial": [
+     {}
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "continue_setup",
+      "load_late_reports",
+      "nav_home",
+      "nav_news",
+      "nav_overview",
+      "open_reports",
+      "open_workflow",
+      "open_workspace",
+      "workspace_detail"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     []
+    ],
+    "matched_with_revision_actions_per_trial": [
+     []
+    ],
+    "missed_attribution_trial0": {
+     "alias_area": {
+      "class": "scope_refusal",
+      "skip_reasons": [
+       "cross_origin"
+      ],
+      "effect_risk": "none"
+     },
+     "alias_data": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "enter_member_mode": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "post_forms_disabled"
+      ],
+      "effect_risk": "server_write"
+     },
+     "load_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "member_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     }
+    }
+   },
+   "C": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.2143,
+      "min": 0.2143,
+      "max": 0.2143
+     },
+     "reference.annotation_precision": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "reference.false_positives": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "reference.matched": {
+      "median": 3,
+      "min": 3,
+      "max": 3
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 3,
+      "min": 3,
+      "max": 3
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 3,
+      "min": 3,
+      "max": 3
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.browser_actions": {
+      "median": 31,
+      "min": 31,
+      "max": 31
+     },
+     "perception.agent_elapsed_s": {
+      "median": 15.765,
+      "min": 15.765,
+      "max": 15.765
+     },
+     "driver_wall_s": {
+      "median": 16.61,
+      "min": 16.61,
+      "max": 16.61
+     },
+     "perception.observations": {
+      "median": 22,
+      "min": 22,
+      "max": 22
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 141.6,
+      "min": 141.6,
+      "max": 141.6
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 198,
+      "min": 198,
+      "max": 198
+     },
+     "perception.readiness_wait_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "efficiency.actions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 3,
+      "min": 3,
+      "max": 3
+     },
+     "efficiency.actions_redundant": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 14,
+      "min": 14,
+      "max": 14
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": false,
+     "runtime_listener_observation": "revisit",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {}
+    ],
+    "restoration_failures_per_trial": [
+     {}
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "nav_home",
+      "nav_news",
+      "nav_overview"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     []
+    ],
+    "matched_with_revision_actions_per_trial": [
+     []
+    ],
+    "missed_attribution_trial0": {
+     "alias_area": {
+      "class": "scope_refusal",
+      "skip_reasons": [
+       "cross_origin"
+      ],
+      "effect_risk": "none"
+     },
+     "alias_data": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "continue_setup": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "enter_member_mode": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "server_write"
+     },
+     "load_late_reports": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "load_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "member_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_reports": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_workflow": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_workspace": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "workspace_detail": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     }
+    }
+   },
+   "D": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.6429,
+      "min": 0.6429,
+      "max": 0.6429
+     },
+     "reference.annotation_precision": {
+      "median": 0.6923,
+      "min": 0.6923,
+      "max": 0.6923
+     },
+     "reference.false_positives": {
+      "median": 4,
+      "min": 4,
+      "max": 4
+     },
+     "reference.matched": {
+      "median": 9,
+      "min": 9,
+      "max": 9
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 13,
+      "min": 13,
+      "max": 13
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 9,
+      "min": 9,
+      "max": 9
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.browser_actions": {
+      "median": 220,
+      "min": 220,
+      "max": 220
+     },
+     "perception.agent_elapsed_s": {
+      "median": 152.118,
+      "min": 152.118,
+      "max": 152.118
+     },
+     "driver_wall_s": {
+      "median": 152.94,
+      "min": 152.94,
+      "max": 152.94
+     },
+     "perception.observations": {
+      "median": 115,
+      "min": 115,
+      "max": 115
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 13,
+      "min": 13,
+      "max": 13
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 711.0,
+      "min": 711.0,
+      "max": 711.0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 1185,
+      "min": 1185,
+      "max": 1185
+     },
+     "perception.readiness_wait_ms": {
+      "median": 46254,
+      "min": 46254,
+      "max": 46254
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 60,
+      "min": 60,
+      "max": 60
+     },
+     "perception.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "efficiency.actions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 12,
+      "min": 12,
+      "max": 12
+     },
+     "efficiency.actions_redundant": {
+      "median": 39,
+      "min": 39,
+      "max": 39
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 124,
+      "min": 124,
+      "max": 124
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 62,
+      "min": 62,
+      "max": 62
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": true,
+     "runtime_listener_observation": "revisit",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {}
+    ],
+    "restoration_failures_per_trial": [
+     {}
+    ],
+    "listener_candidate_skips_per_trial": [
+     {
+      "represented_by_snapshot": 201
+     }
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "continue_setup",
+      "load_late_reports",
+      "nav_home",
+      "nav_news",
+      "nav_overview",
+      "open_reports",
+      "open_workflow",
+      "open_workspace",
+      "workspace_detail"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     []
+    ],
+    "matched_with_revision_actions_per_trial": [
+     []
+    ],
+    "missed_attribution_trial0": {
+     "alias_area": {
+      "class": "scope_refusal",
+      "skip_reasons": [
+       "cross_origin"
+      ],
+      "effect_risk": "none"
+     },
+     "alias_data": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "enter_member_mode": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "post_forms_disabled"
+      ],
+      "effect_risk": "server_write"
+     },
+     "load_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "member_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     }
+    }
+   }
+  },
+  "replay_lab": {
+   "A": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.68,
+      "min": 0.68,
+      "max": 0.68
+     },
+     "reference.annotation_precision": {
+      "median": 0.7727,
+      "min": 0.7727,
+      "max": 0.7727
+     },
+     "reference.false_positives": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "reference.matched": {
+      "median": 17,
+      "min": 17,
+      "max": 17
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 22,
+      "min": 22,
+      "max": 22
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 20,
+      "min": 20,
+      "max": 20
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.browser_actions": {
+      "median": 172,
+      "min": 172,
+      "max": 172
+     },
+     "perception.agent_elapsed_s": {
+      "median": 82.462,
+      "min": 82.462,
+      "max": 82.462
+     },
+     "driver_wall_s": {
+      "median": 83.49,
+      "min": 83.49,
+      "max": 83.49
+     },
+     "perception.observations": {
+      "median": 110,
+      "min": 110,
+      "max": 110
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 24,
+      "min": 24,
+      "max": 24
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_wait_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "efficiency.actions_failed": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 24,
+      "min": 24,
+      "max": 24
+     },
+     "efficiency.actions_redundant": {
+      "median": 18,
+      "min": 18,
+      "max": 18
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": false,
+     "runtime_listener_observation": "off",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 1
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "restore_group_mismatch": 1
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "check_loans_first",
+      "claim_voucher",
+      "home",
+      "load_reviews",
+      "load_stock",
+      "open_cart",
+      "open_lab_claim",
+      "open_lab_danger",
+      "open_lab_div",
+      "open_lab_multi",
+      "open_lab_pair",
+      "open_lab_redefine",
+      "open_lab_twins",
+      "record_history",
+      "refresh_cart",
+      "view_record",
+      "view_topic"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     []
+    ],
+    "matched_with_revision_actions_per_trial": [
+     []
+    ],
+    "missed_attribution_trial0": {
+     "check_loans_second": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "load_details": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "reveal_details": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "save_item": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "wipe_records": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "destructive"
+     },
+     "wizard_begin": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "wizard_continue": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "wizard_finish": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     }
+    }
+   },
+   "B": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.68,
+      "min": 0.68,
+      "max": 0.68
+     },
+     "reference.annotation_precision": {
+      "median": 0.7727,
+      "min": 0.7727,
+      "max": 0.7727
+     },
+     "reference.false_positives": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "reference.matched": {
+      "median": 17,
+      "min": 17,
+      "max": 17
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 22,
+      "min": 22,
+      "max": 22
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 20,
+      "min": 20,
+      "max": 20
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.browser_actions": {
+      "median": 172,
+      "min": 172,
+      "max": 172
+     },
+     "perception.agent_elapsed_s": {
+      "median": 84.037,
+      "min": 84.037,
+      "max": 84.037
+     },
+     "driver_wall_s": {
+      "median": 84.83,
+      "min": 84.83,
+      "max": 84.83
+     },
+     "perception.observations": {
+      "median": 110,
+      "min": 110,
+      "max": 110
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 24,
+      "min": 24,
+      "max": 24
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_wait_ms": {
+      "median": 42664,
+      "min": 42664,
+      "max": 42664
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "efficiency.actions_failed": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 24,
+      "min": 24,
+      "max": 24
+     },
+     "efficiency.actions_redundant": {
+      "median": 18,
+      "min": 18,
+      "max": 18
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": true,
+     "runtime_listener_observation": "off",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 1
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "restore_group_mismatch": 1
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "check_loans_first",
+      "claim_voucher",
+      "home",
+      "load_reviews",
+      "load_stock",
+      "open_cart",
+      "open_lab_claim",
+      "open_lab_danger",
+      "open_lab_div",
+      "open_lab_multi",
+      "open_lab_pair",
+      "open_lab_redefine",
+      "open_lab_twins",
+      "record_history",
+      "refresh_cart",
+      "view_record",
+      "view_topic"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     []
+    ],
+    "matched_with_revision_actions_per_trial": [
+     []
+    ],
+    "missed_attribution_trial0": {
+     "check_loans_second": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "load_details": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "reveal_details": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "save_item": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "wipe_records": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "destructive"
+     },
+     "wizard_begin": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "wizard_continue": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "wizard_finish": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     }
+    }
+   },
+   "C": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.96,
+      "min": 0.96,
+      "max": 0.96
+     },
+     "reference.annotation_precision": {
+      "median": 0.8,
+      "min": 0.8,
+      "max": 0.8
+     },
+     "reference.false_positives": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "reference.matched": {
+      "median": 24,
+      "min": 24,
+      "max": 24
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 30,
+      "min": 30,
+      "max": 30
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 27,
+      "min": 27,
+      "max": 27
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 12,
+      "min": 12,
+      "max": 12
+     },
+     "perception.browser_actions": {
+      "median": 230,
+      "min": 230,
+      "max": 230
+     },
+     "perception.agent_elapsed_s": {
+      "median": 113.032,
+      "min": 113.032,
+      "max": 113.032
+     },
+     "driver_wall_s": {
+      "median": 113.73,
+      "min": 113.73,
+      "max": 113.73
+     },
+     "perception.observations": {
+      "median": 133,
+      "min": 133,
+      "max": 133
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 24,
+      "min": 24,
+      "max": 24
+     },
+     "perception.controls_observed_by_provenance.observed_listener": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.listener_transitions": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_transitions_ok": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.revision_transitions": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.revision_transitions_ok": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.listener_observer_ms": {
+      "median": 1038.9,
+      "min": 1038.9,
+      "max": 1038.9
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 1350,
+      "min": 1350,
+      "max": 1350
+     },
+     "perception.readiness_wait_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.capabilities_by_provenance.listener_only": {
+      "median": 4,
+      "min": 4,
+      "max": 4
+     },
+     "efficiency.actions_failed": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 29,
+      "min": 29,
+      "max": 29
+     },
+     "efficiency.actions_redundant": {
+      "median": 22,
+      "min": 22,
+      "max": 22
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": false,
+     "runtime_listener_observation": "revisit",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 1
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "restore_group_mismatch": 1
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {
+      "represented_by_snapshot": 74
+     }
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "check_loans_first",
+      "check_loans_second",
+      "claim_voucher",
+      "home",
+      "load_details",
+      "load_reviews",
+      "load_stock",
+      "open_cart",
+      "open_lab_claim",
+      "open_lab_danger",
+      "open_lab_div",
+      "open_lab_multi",
+      "open_lab_pair",
+      "open_lab_redefine",
+      "open_lab_twins",
+      "record_history",
+      "refresh_cart",
+      "reveal_details",
+      "save_item",
+      "view_record",
+      "view_topic",
+      "wizard_begin",
+      "wizard_continue",
+      "wizard_finish"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     [
+      "load_details",
+      "save_item",
+      "wizard_continue",
+      "wizard_finish"
+     ]
+    ],
+    "matched_with_revision_actions_per_trial": [
+     [
+      "check_loans_second"
+     ]
+    ],
+    "missed_attribution_trial0": {
+     "wipe_records": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "dangerous_label_or_target"
+      ],
+      "effect_risk": "destructive"
+     }
+    }
+   },
+   "D": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.96,
+      "min": 0.96,
+      "max": 0.96
+     },
+     "reference.annotation_precision": {
+      "median": 0.8,
+      "min": 0.8,
+      "max": 0.8
+     },
+     "reference.false_positives": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "reference.matched": {
+      "median": 24,
+      "min": 24,
+      "max": 24
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 30,
+      "min": 30,
+      "max": 30
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 27,
+      "min": 27,
+      "max": 27
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 12,
+      "min": 12,
+      "max": 12
+     },
+     "perception.browser_actions": {
+      "median": 230,
+      "min": 230,
+      "max": 230
+     },
+     "perception.agent_elapsed_s": {
+      "median": 120.195,
+      "min": 120.195,
+      "max": 120.195
+     },
+     "driver_wall_s": {
+      "median": 121.03,
+      "min": 121.03,
+      "max": 121.03
+     },
+     "perception.observations": {
+      "median": 133,
+      "min": 133,
+      "max": 133
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 24,
+      "min": 24,
+      "max": 24
+     },
+     "perception.controls_observed_by_provenance.observed_listener": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.listener_transitions": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_transitions_ok": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.revision_transitions": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.revision_transitions_ok": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.listener_observer_ms": {
+      "median": 1100.0,
+      "min": 1100.0,
+      "max": 1100.0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 1350,
+      "min": 1350,
+      "max": 1350
+     },
+     "perception.readiness_wait_ms": {
+      "median": 56652,
+      "min": 56652,
+      "max": 56652
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.capabilities_by_provenance.listener_only": {
+      "median": 4,
+      "min": 4,
+      "max": 4
+     },
+     "efficiency.actions_failed": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 29,
+      "min": 29,
+      "max": 29
+     },
+     "efficiency.actions_redundant": {
+      "median": 22,
+      "min": 22,
+      "max": 22
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.unsupported_functional_claims": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": true,
+     "runtime_listener_observation": "revisit",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 1
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "restore_group_mismatch": 1
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {
+      "represented_by_snapshot": 74
+     }
+    ],
+    "reset_integrity": null,
+    "matched_per_trial": [
+     [
+      "check_loans_first",
+      "check_loans_second",
+      "claim_voucher",
+      "home",
+      "load_details",
+      "load_reviews",
+      "load_stock",
+      "open_cart",
+      "open_lab_claim",
+      "open_lab_danger",
+      "open_lab_div",
+      "open_lab_multi",
+      "open_lab_pair",
+      "open_lab_redefine",
+      "open_lab_twins",
+      "record_history",
+      "refresh_cart",
+      "reveal_details",
+      "save_item",
+      "view_record",
+      "view_topic",
+      "wizard_begin",
+      "wizard_continue",
+      "wizard_finish"
+     ]
+    ],
+    "matched_only_via_listener_controls_per_trial": [
+     [
+      "load_details",
+      "save_item",
+      "wizard_continue",
+      "wizard_finish"
+     ]
+    ],
+    "matched_with_revision_actions_per_trial": [
+     [
+      "check_loans_second"
+     ]
+    ],
+    "missed_attribution_trial0": {
+     "wipe_records": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "dangerous_label_or_target"
+      ],
+      "effect_risk": "destructive"
+     }
+    }
+   }
+  },
+  "transfer_library": {
+   "A": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 27,
+      "min": 27,
+      "max": 27
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 16,
+      "min": 16,
+      "max": 16
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 12,
+      "min": 12,
+      "max": 12
+     },
+     "perception.browser_actions": {
+      "median": 341,
+      "min": 341,
+      "max": 341
+     },
+     "perception.agent_elapsed_s": {
+      "median": 180.932,
+      "min": 180.932,
+      "max": 180.932
+     },
+     "driver_wall_s": {
+      "median": 182.09,
+      "min": 182.09,
+      "max": 182.09
+     },
+     "perception.observations": {
+      "median": 172,
+      "min": 172,
+      "max": 172
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 134,
+      "min": 134,
+      "max": 134
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_wait_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "efficiency.actions_failed": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 59,
+      "min": 59,
+      "max": 59
+     },
+     "efficiency.actions_redundant": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": false,
+     "runtime_listener_observation": "off",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 1
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {}
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": null,
+    "functionality_per_trial": [
+     {
+      "F1 reading-list save": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F2 catalog search": {
+       "executed": true,
+       "replay_validated": true
+      },
+      "F3 loan status": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F4 loan eligibility": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F5 study-slot reserve": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F6 exhibit card": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F7 branch holdings": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F8 citation": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F9 call-number row": {
+       "executed": false,
+       "replay_validated": false
+      }
+     }
+    ],
+    "transfer_counts_per_trial": [
+     {
+      "documents_reached_2xx": "54/107",
+      "static_fetched_2xx": "37/64",
+      "functionality_executed": "3/9",
+      "functionality_replay_validated": "1/9"
+     }
+    ]
+   },
+   "B": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 27,
+      "min": 27,
+      "max": 27
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 15,
+      "min": 15,
+      "max": 15
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 13,
+      "min": 13,
+      "max": 13
+     },
+     "perception.browser_actions": {
+      "median": 327,
+      "min": 327,
+      "max": 327
+     },
+     "perception.agent_elapsed_s": {
+      "median": 182.29,
+      "min": 182.29,
+      "max": 182.29
+     },
+     "driver_wall_s": {
+      "median": 183.41,
+      "min": 183.41,
+      "max": 183.41
+     },
+     "perception.observations": {
+      "median": 168,
+      "min": 168,
+      "max": 168
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 134,
+      "min": 134,
+      "max": 134
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_wait_ms": {
+      "median": 71148,
+      "min": 71148,
+      "max": 71148
+     },
+     "perception.readiness_timeouts": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "efficiency.actions_failed": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 59,
+      "min": 59,
+      "max": 59
+     },
+     "efficiency.actions_redundant": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": true,
+     "runtime_listener_observation": "off",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 1
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {}
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": null,
+    "functionality_per_trial": [
+     {
+      "F1 reading-list save": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F2 catalog search": {
+       "executed": true,
+       "replay_validated": true
+      },
+      "F3 loan status": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F4 loan eligibility": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F5 study-slot reserve": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F6 exhibit card": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F7 branch holdings": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F8 citation": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F9 call-number row": {
+       "executed": false,
+       "replay_validated": false
+      }
+     }
+    ],
+    "transfer_counts_per_trial": [
+     {
+      "documents_reached_2xx": "54/107",
+      "static_fetched_2xx": "37/64",
+      "functionality_executed": "3/9",
+      "functionality_replay_validated": "1/9"
+     }
+    ]
+   },
+   "C": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 32,
+      "min": 32,
+      "max": 32
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 15,
+      "min": 15,
+      "max": 15
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 18,
+      "min": 18,
+      "max": 18
+     },
+     "perception.browser_actions": {
+      "median": 349,
+      "min": 349,
+      "max": 349
+     },
+     "perception.agent_elapsed_s": {
+      "median": 180.128,
+      "min": 180.128,
+      "max": 180.128
+     },
+     "driver_wall_s": {
+      "median": 181.13,
+      "min": 181.13,
+      "max": 181.13
+     },
+     "perception.observations": {
+      "median": 171,
+      "min": 171,
+      "max": 171
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 126,
+      "min": 126,
+      "max": 126
+     },
+     "perception.controls_observed_by_provenance.observed_listener": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.listener_transitions": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_transitions_ok": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "perception.listener_transitions_failed": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.revision_transitions_ok": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.listener_observer_ms": {
+      "median": 1212.3,
+      "min": 1212.3,
+      "max": 1212.3
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 1767,
+      "min": 1767,
+      "max": 1767
+     },
+     "perception.readiness_wait_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.capabilities_by_provenance.listener_only": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "efficiency.actions_failed": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 60,
+      "min": 60,
+      "max": 60
+     },
+     "efficiency.actions_redundant": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": false,
+     "runtime_listener_observation": "revisit",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 2
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {}
+    ],
+    "listener_candidate_skips_per_trial": [
+     {
+      "non_click_listener_nodes": 68,
+      "represented_by_snapshot": 82,
+      "not_rendered": 4,
+      "delegation_host": 2,
+      "closed_shadow_root": 4,
+      "family_limit": 4
+     }
+    ],
+    "reset_integrity": null,
+    "functionality_per_trial": [
+     {
+      "F1 reading-list save": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F2 catalog search": {
+       "executed": true,
+       "replay_validated": true
+      },
+      "F3 loan status": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F4 loan eligibility": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F5 study-slot reserve": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F6 exhibit card": {
+       "executed": true,
+       "replay_validated": true
+      },
+      "F7 branch holdings": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F8 citation": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F9 call-number row": {
+       "executed": false,
+       "replay_validated": false
+      }
+     }
+    ],
+    "transfer_counts_per_trial": [
+     {
+      "documents_reached_2xx": "51/107",
+      "static_fetched_2xx": "34/64",
+      "functionality_executed": "7/9",
+      "functionality_replay_validated": "2/9"
+     }
+    ]
+   },
+   "D": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 32,
+      "min": 32,
+      "max": 32
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 15,
+      "min": 15,
+      "max": 15
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 18,
+      "min": 18,
+      "max": 18
+     },
+     "perception.browser_actions": {
+      "median": 331,
+      "min": 331,
+      "max": 331
+     },
+     "perception.agent_elapsed_s": {
+      "median": 180.376,
+      "min": 180.376,
+      "max": 180.376
+     },
+     "driver_wall_s": {
+      "median": 181.66,
+      "min": 181.66,
+      "max": 181.66
+     },
+     "perception.observations": {
+      "median": 165,
+      "min": 165,
+      "max": 165
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 125,
+      "min": 125,
+      "max": 125
+     },
+     "perception.controls_observed_by_provenance.observed_listener": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 7,
+      "min": 7,
+      "max": 7
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.listener_transitions": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "perception.listener_transitions_ok": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "perception.listener_transitions_failed": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.revision_transitions_ok": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.listener_observer_ms": {
+      "median": 1104.8,
+      "min": 1104.8,
+      "max": 1104.8
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 1701,
+      "min": 1701,
+      "max": 1701
+     },
+     "perception.readiness_wait_ms": {
+      "median": 72498,
+      "min": 72498,
+      "max": 72498
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.capabilities_by_provenance.listener_only": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     },
+     "efficiency.actions_failed": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 59,
+      "min": 59,
+      "max": 59
+     },
+     "efficiency.actions_redundant": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": true,
+     "runtime_listener_observation": "revisit",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 2
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {}
+    ],
+    "listener_candidate_skips_per_trial": [
+     {
+      "non_click_listener_nodes": 62,
+      "represented_by_snapshot": 76,
+      "not_rendered": 4,
+      "delegation_host": 2,
+      "closed_shadow_root": 4,
+      "family_limit": 4
+     }
+    ],
+    "reset_integrity": null,
+    "functionality_per_trial": [
+     {
+      "F1 reading-list save": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F2 catalog search": {
+       "executed": true,
+       "replay_validated": true
+      },
+      "F3 loan status": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F4 loan eligibility": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F5 study-slot reserve": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F6 exhibit card": {
+       "executed": true,
+       "replay_validated": true
+      },
+      "F7 branch holdings": {
+       "executed": true,
+       "replay_validated": false
+      },
+      "F8 citation": {
+       "executed": false,
+       "replay_validated": false
+      },
+      "F9 call-number row": {
+       "executed": false,
+       "replay_validated": false
+      }
+     }
+    ],
+    "transfer_counts_per_trial": [
+     {
+      "documents_reached_2xx": "50/107",
+      "static_fetched_2xx": "33/64",
+      "functionality_executed": "7/9",
+      "functionality_replay_validated": "2/9"
+     }
+    ]
+   }
+  },
+  "crawlground": {
+   "A": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.recall": {
+      "median": 0.0678,
+      "min": 0.0678,
+      "max": 0.0678
+     },
+     "reference.markers_scored": {
+      "median": 4,
+      "min": 4,
+      "max": 4
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 22,
+      "min": 22,
+      "max": 22
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 20,
+      "min": 20,
+      "max": 20
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "perception.browser_actions": {
+      "median": 327,
+      "min": 327,
+      "max": 327
+     },
+     "perception.agent_elapsed_s": {
+      "median": 171.834,
+      "min": 171.834,
+      "max": 171.834
+     },
+     "driver_wall_s": {
+      "median": 172.73,
+      "min": 172.73,
+      "max": 172.73
+     },
+     "perception.observations": {
+      "median": 163,
+      "min": 163,
+      "max": 163
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 92,
+      "min": 92,
+      "max": 92
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_wait_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 59,
+      "min": 59,
+      "max": 59
+     },
+     "efficiency.actions_failed": {
+      "median": 59,
+      "min": 59,
+      "max": 59
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 28,
+      "min": 28,
+      "max": 28
+     },
+     "efficiency.actions_redundant": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 195,
+      "min": 195,
+      "max": 195
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 195,
+      "min": 195,
+      "max": 195
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": false,
+     "runtime_listener_observation": "off",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 59
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "restore_group_mismatch": 59
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": [
+     {
+      "teardown_exit": 0,
+      "mount_profile_matches_frozen": true,
+      "residual_containers_after_teardown": 0
+     }
+    ],
+    "markers_by_category_per_trial": [
+     {
+      "buttons": "0/2",
+      "dynamic-content": "1/10",
+      "forms": "1/12",
+      "frames": "0/4",
+      "js-events": "0/14",
+      "links": "1/7",
+      "navigation": "1/9",
+      "other": "0/1"
+     }
+    ]
+   },
+   "B": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.recall": {
+      "median": 0.1017,
+      "min": 0.1017,
+      "max": 0.1017
+     },
+     "reference.markers_scored": {
+      "median": 6,
+      "min": 6,
+      "max": 6
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 33,
+      "min": 33,
+      "max": 33
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 31,
+      "min": 31,
+      "max": 31
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 2,
+      "min": 2,
+      "max": 2
+     },
+     "perception.browser_actions": {
+      "median": 371,
+      "min": 371,
+      "max": 371
+     },
+     "perception.agent_elapsed_s": {
+      "median": 182.271,
+      "min": 182.271,
+      "max": 182.271
+     },
+     "driver_wall_s": {
+      "median": 183.14,
+      "min": 183.14,
+      "max": 183.14
+     },
+     "perception.observations": {
+      "median": 180,
+      "min": 180,
+      "max": 180
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 100,
+      "min": 100,
+      "max": 100
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_wait_ms": {
+      "median": 57140,
+      "min": 57140,
+      "max": 57140
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 49,
+      "min": 49,
+      "max": 49
+     },
+     "efficiency.actions_failed": {
+      "median": 49,
+      "min": 49,
+      "max": 49
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 38,
+      "min": 38,
+      "max": 38
+     },
+     "efficiency.actions_redundant": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 208,
+      "min": 208,
+      "max": 208
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 209,
+      "min": 209,
+      "max": 209
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": true,
+     "runtime_listener_observation": "off",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 49
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "restore_group_mismatch": 49
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {}
+    ],
+    "reset_integrity": [
+     {
+      "teardown_exit": 0,
+      "mount_profile_matches_frozen": true,
+      "residual_containers_after_teardown": 0
+     }
+    ],
+    "markers_by_category_per_trial": [
+     {
+      "buttons": "0/2",
+      "dynamic-content": "1/10",
+      "forms": "1/12",
+      "frames": "0/4",
+      "js-events": "2/14",
+      "links": "1/7",
+      "navigation": "1/9",
+      "other": "0/1"
+     }
+    ]
+   },
+   "C": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.recall": {
+      "median": 0.0678,
+      "min": 0.0678,
+      "max": 0.0678
+     },
+     "reference.markers_scored": {
+      "median": 4,
+      "min": 4,
+      "max": 4
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 22,
+      "min": 22,
+      "max": 22
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 21,
+      "min": 21,
+      "max": 21
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.browser_actions": {
+      "median": 327,
+      "min": 327,
+      "max": 327
+     },
+     "perception.agent_elapsed_s": {
+      "median": 173.504,
+      "min": 173.504,
+      "max": 173.504
+     },
+     "driver_wall_s": {
+      "median": 174.34,
+      "min": 174.34,
+      "max": 174.34
+     },
+     "perception.observations": {
+      "median": 163,
+      "min": 163,
+      "max": 163
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 92,
+      "min": 92,
+      "max": 92
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 933.2,
+      "min": 933.2,
+      "max": 933.2
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 1517,
+      "min": 1517,
+      "max": 1517
+     },
+     "perception.readiness_wait_ms": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 59,
+      "min": 59,
+      "max": 59
+     },
+     "efficiency.actions_failed": {
+      "median": 59,
+      "min": 59,
+      "max": 59
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 28,
+      "min": 28,
+      "max": 28
+     },
+     "efficiency.actions_redundant": {
+      "median": 10,
+      "min": 10,
+      "max": 10
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 195,
+      "min": 195,
+      "max": 195
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 195,
+      "min": 195,
+      "max": 195
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": false,
+     "runtime_listener_observation": "revisit",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 59
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "restore_group_mismatch": 59
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {
+      "represented_by_snapshot": 41
+     }
+    ],
+    "reset_integrity": [
+     {
+      "teardown_exit": 0,
+      "mount_profile_matches_frozen": true,
+      "residual_containers_after_teardown": 0
+     }
+    ],
+    "markers_by_category_per_trial": [
+     {
+      "buttons": "0/2",
+      "dynamic-content": "1/10",
+      "forms": "1/12",
+      "frames": "0/4",
+      "js-events": "0/14",
+      "links": "1/7",
+      "navigation": "1/9",
+      "other": "0/1"
+     }
+    ]
+   },
+   "D": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.recall": {
+      "median": 0.0678,
+      "min": 0.0678,
+      "max": 0.0678
+     },
+     "reference.markers_scored": {
+      "median": 4,
+      "min": 4,
+      "max": 4
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 23,
+      "min": 23,
+      "max": 23
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 22,
+      "min": 22,
+      "max": 22
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.unidentified": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "perception.browser_actions": {
+      "median": 336,
+      "min": 336,
+      "max": 336
+     },
+     "perception.agent_elapsed_s": {
+      "median": 166.542,
+      "min": 166.542,
+      "max": 166.542
+     },
+     "driver_wall_s": {
+      "median": 167.57,
+      "min": 167.57,
+      "max": 167.57
+     },
+     "perception.observations": {
+      "median": 170,
+      "min": 170,
+      "max": 170
+     },
+     "perception.controls_observed_by_provenance.snapshot": {
+      "median": 93,
+      "min": 93,
+      "max": 93
+     },
+     "perception.listener_candidates_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_executed_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_controls_advertised_unexecuted_distinct": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_transitions_no_effect": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.revision_transitions_ok": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.listener_observer_ms": {
+      "median": 990.7,
+      "min": 990.7,
+      "max": 990.7
+     },
+     "perception.listener_observer_cdp_calls": {
+      "median": 1584,
+      "min": 1584,
+      "max": 1584
+     },
+     "perception.readiness_wait_ms": {
+      "median": 54049,
+      "min": 54049,
+      "max": 54049
+     },
+     "perception.readiness_timeouts": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.controls_gained_during_readiness": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.restoration_failures_total": {
+      "median": 58,
+      "min": 58,
+      "max": 58
+     },
+     "efficiency.actions_failed": {
+      "median": 58,
+      "min": 58,
+      "max": 58
+     },
+     "efficiency.actions_unique_discovery": {
+      "median": 28,
+      "min": 28,
+      "max": 28
+     },
+     "efficiency.actions_redundant": {
+      "median": 14,
+      "min": 14,
+      "max": 14
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 202,
+      "min": 202,
+      "max": 202
+     },
+     "safety.ws_out_of_scope_refused": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "perception.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.scope_refusals": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     },
+     "capabilities.refusals.safety_refusals_total": {
+      "median": 202,
+      "min": 202,
+      "max": 202
+     }
+    },
+    "deterministic_action_sequences": true,
+    "capability_key_sets_identical": true,
+    "applied_config": {
+     "robust_readiness": true,
+     "runtime_listener_observation": "revisit",
+     "settle_ms": 350,
+     "readiness_timeout_ms": 2500,
+     "interaction_profile": "basic",
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100
+    },
+    "transition_errors_per_trial": [
+     {
+      "RuntimeError": 58
+     }
+    ],
+    "restoration_failures_per_trial": [
+     {
+      "restore_group_mismatch": 58
+     }
+    ],
+    "listener_candidate_skips_per_trial": [
+     {
+      "represented_by_snapshot": 43
+     }
+    ],
+    "reset_integrity": [
+     {
+      "teardown_exit": 0,
+      "mount_profile_matches_frozen": true,
+      "residual_containers_after_teardown": 0
+     }
+    ],
+    "markers_by_category_per_trial": [
+     {
+      "buttons": "0/2",
+      "dynamic-content": "1/10",
+      "forms": "1/12",
+      "frames": "0/4",
+      "js-events": "0/14",
+      "links": "1/7",
+      "navigation": "1/9",
+      "other": "0/1"
+     }
+    ]
+   }
+  }
+ }
+}
