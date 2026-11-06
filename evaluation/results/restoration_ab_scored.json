@@ -1,0 +1,4388 @@
+{
+ "milestone": "Agent 1 state-tolerant restoration A/B",
+ "phase": "scored",
+ "evaluated_revision": "82dcb18f92a637d7a3edec44bb0f34dd188dd5d4",
+ "agent_tree": "5b3fe75d02ebc86b0a586f16083308bf6cd171fb",
+ "arms": {
+  "A": {
+   "overrides": {
+    "runtime_listener_observation": "revisit"
+   },
+   "name": "strict restoration"
+  },
+  "B": {
+   "overrides": {
+    "runtime_listener_observation": "revisit",
+    "restoration_policy": "contract"
+   },
+   "name": "restoration contract"
+  }
+ },
+ "environments": {
+  "volatile_lab": {
+   "A": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 1,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 2,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 18,
+      "min": 17,
+      "max": 18,
+      "values": [
+       18,
+       17,
+       18
+      ]
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 16,
+      "min": 16,
+      "max": 16,
+      "values": [
+       16,
+       16,
+       16
+      ]
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.restoration_attempts": {
+      "median": 82,
+      "min": 82,
+      "max": 82,
+      "values": [
+       82,
+       82,
+       82
+      ]
+     },
+     "restoration.restoration_successes": {
+      "median": 63,
+      "min": 63,
+      "max": 63,
+      "values": [
+       63,
+       63,
+       63
+      ]
+     },
+     "restoration.restoration_failures_total": {
+      "median": 19,
+      "min": 19,
+      "max": 19,
+      "values": [
+       19,
+       19,
+       19
+      ]
+     },
+     "restoration.strict_rejections_graded": {
+      "median": 19,
+      "min": 19,
+      "max": 19,
+      "values": [
+       19,
+       19,
+       19
+      ]
+     },
+     "restoration.safe_volatile_rejections": {
+      "median": 16,
+      "min": 16,
+      "max": 16,
+      "values": [
+       16,
+       16,
+       16
+      ]
+     },
+     "restoration.safe_volatile_accepted": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_unsafe": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_server_state_changed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_audit_failures": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.writes_replayed_during_restoration": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.routes_reached": {
+      "median": 10,
+      "min": 10,
+      "max": 10,
+      "values": [
+       10,
+       10,
+       10
+      ]
+     },
+     "restoration.functions_executed_count": {
+      "median": 6,
+      "min": 6,
+      "max": 6,
+      "values": [
+       6,
+       6,
+       6
+      ]
+     },
+     "restoration.wrong_record_annotations": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.replay_validated_transitions": {
+      "median": 22,
+      "min": 22,
+      "max": 23,
+      "values": [
+       22,
+       23,
+       22
+      ]
+     },
+     "cost.browser_actions": {
+      "median": 327,
+      "min": 327,
+      "max": 327,
+      "values": [
+       327,
+       327,
+       327
+      ]
+     },
+     "cost.agent_elapsed_s": {
+      "median": 163.681,
+      "min": 163.357,
+      "max": 164.901,
+      "values": [
+       163.681,
+       163.357,
+       164.901
+      ]
+     },
+     "driver_wall_s": {
+      "median": 164.51,
+      "min": 164.17,
+      "max": 165.59,
+      "values": [
+       164.51,
+       164.17,
+       165.59
+      ]
+     },
+     "driver_monotonic_s": {
+      "median": 164.51,
+      "min": 164.17,
+      "max": 165.58,
+      "values": [
+       164.51,
+       164.17,
+       165.58
+      ]
+     },
+     "efficiency.actions_failed": {
+      "median": 19,
+      "min": 19,
+      "max": 19,
+      "values": [
+       19,
+       19,
+       19
+      ]
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.state_changing_requests_in_replay": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "applied_config": {
+     "restoration_policy": "strict",
+     "restoration_sample_interval_ms": 300,
+     "runtime_listener_observation": "revisit",
+     "robust_readiness": false,
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100,
+     "allow_post_forms": false,
+     "exploration_mode": "fresh"
+    },
+    "restoration_errors_per_trial": [
+     {
+      "group_mismatch": 19
+     },
+     {
+      "group_mismatch": 19
+     },
+     {
+      "group_mismatch": 19
+     }
+    ],
+    "oracle_detail_per_trial": [
+     {
+      "safe_volatile": 16,
+      "unsafe:wrong_record": 3
+     },
+     {
+      "safe_volatile": 16,
+      "unsafe:wrong_record": 3
+     },
+     {
+      "safe_volatile": 16,
+      "unsafe:wrong_record": 3
+     }
+    ],
+    "contract_refused_by_reason_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_accepted_by_tier_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_tolerated_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "refused_safe_examples_trial0": [
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Show status",
+      "route": "/clock"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Check out",
+      "route": "/clock"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Check in",
+      "route": "/clock"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Review alerts",
+      "route": "/board"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Patch firmware",
+      "route": "/board"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Calibrate sensors",
+      "route": "/board"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Audit badges",
+      "route": "/board"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Archive logs",
+      "route": "/board"
+     }
+    ],
+    "accepted_oracle_unsafe_examples": [],
+    "reset_integrity": null,
+    "functions_per_trial": [
+     [
+      "desk_annotate",
+      "record_history_1",
+      "record_history_2",
+      "showcase_compare",
+      "showcase_wishlist",
+      "task_run_2"
+     ],
+     [
+      "desk_annotate",
+      "record_history_1",
+      "record_history_2",
+      "showcase_compare",
+      "showcase_wishlist",
+      "task_run_2"
+     ],
+     [
+      "desk_annotate",
+      "record_history_1",
+      "record_history_2",
+      "showcase_compare",
+      "showcase_wishlist",
+      "task_run_2"
+     ]
+    ]
+   },
+   "B": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 1,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 2,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 20,
+      "min": 20,
+      "max": 20,
+      "values": [
+       20,
+       20,
+       20
+      ]
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 16,
+      "min": 15,
+      "max": 16,
+      "values": [
+       16,
+       15,
+       16
+      ]
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.restoration_attempts": {
+      "median": 61,
+      "min": 61,
+      "max": 62,
+      "values": [
+       61,
+       62,
+       61
+      ]
+     },
+     "restoration.restoration_successes": {
+      "median": 61,
+      "min": 61,
+      "max": 62,
+      "values": [
+       61,
+       62,
+       61
+      ]
+     },
+     "restoration.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.strict_rejections_graded": {
+      "median": 25,
+      "min": 25,
+      "max": 26,
+      "values": [
+       25,
+       26,
+       25
+      ]
+     },
+     "restoration.safe_volatile_rejections": {
+      "median": 25,
+      "min": 25,
+      "max": 26,
+      "values": [
+       25,
+       26,
+       25
+      ]
+     },
+     "restoration.safe_volatile_accepted": {
+      "median": 25,
+      "min": 25,
+      "max": 26,
+      "values": [
+       25,
+       26,
+       25
+      ]
+     },
+     "restoration.accepted_oracle_unsafe": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_server_state_changed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_audit_failures": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.writes_replayed_during_restoration": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.contract.evaluations": {
+      "median": 25,
+      "min": 25,
+      "max": 26,
+      "values": [
+       25,
+       26,
+       25
+      ]
+     },
+     "restoration.contract.accepted": {
+      "median": 25,
+      "min": 25,
+      "max": 26,
+      "values": [
+       25,
+       26,
+       25
+      ]
+     },
+     "restoration.contract.evaluation_ms": {
+      "median": 12544.7,
+      "min": 12511.2,
+      "max": 13042.7,
+      "values": [
+       12544.7,
+       13042.7,
+       12511.2
+      ]
+     },
+     "restoration.contract.region_capture.ms": {
+      "median": 1251.7,
+      "min": 971.1,
+      "max": 1274.1,
+      "values": [
+       1274.1,
+       971.1,
+       1251.7
+      ]
+     },
+     "restoration.routes_reached": {
+      "median": 10,
+      "min": 10,
+      "max": 10,
+      "values": [
+       10,
+       10,
+       10
+      ]
+     },
+     "restoration.functions_executed_count": {
+      "median": 14,
+      "min": 14,
+      "max": 14,
+      "values": [
+       14,
+       14,
+       14
+      ]
+     },
+     "restoration.wrong_record_annotations": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.replay_validated_transitions": {
+      "median": 27,
+      "min": 26,
+      "max": 27,
+      "values": [
+       27,
+       27,
+       26
+      ]
+     },
+     "cost.browser_actions": {
+      "median": 335,
+      "min": 331,
+      "max": 340,
+      "values": [
+       335,
+       340,
+       331
+      ]
+     },
+     "cost.agent_elapsed_s": {
+      "median": 181.628,
+      "min": 180.632,
+      "max": 181.991,
+      "values": [
+       181.628,
+       181.991,
+       180.632
+      ]
+     },
+     "driver_wall_s": {
+      "median": 182.4,
+      "min": 181.57,
+      "max": 182.72,
+      "values": [
+       182.4,
+       182.72,
+       181.57
+      ]
+     },
+     "driver_monotonic_s": {
+      "median": 182.4,
+      "min": 181.57,
+      "max": 182.72,
+      "values": [
+       182.4,
+       182.72,
+       181.57
+      ]
+     },
+     "efficiency.actions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.state_changing_requests_in_replay": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "applied_config": {
+     "restoration_policy": "contract",
+     "restoration_sample_interval_ms": 300,
+     "runtime_listener_observation": "revisit",
+     "robust_readiness": false,
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100,
+     "allow_post_forms": false,
+     "exploration_mode": "fresh"
+    },
+    "restoration_errors_per_trial": [
+     {},
+     {},
+     {}
+    ],
+    "oracle_detail_per_trial": [
+     {
+      "safe_volatile": 25
+     },
+     {
+      "safe_volatile": 26
+     },
+     {
+      "safe_volatile": 25
+     }
+    ],
+    "contract_refused_by_reason_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_accepted_by_tier_per_trial": [
+     {
+      "contextual": 20,
+      "declarative": 5
+     },
+     {
+      "contextual": 21,
+      "declarative": 5
+     },
+     {
+      "contextual": 20,
+      "declarative": 5
+     }
+    ],
+    "contract_tolerated_per_trial": [
+     {
+      "outside_scope": 20,
+      "volatile_region": 20
+     },
+     {
+      "outside_scope": 20,
+      "volatile_region": 21
+     },
+     {
+      "outside_scope": 20,
+      "volatile_region": 20
+     }
+    ],
+    "refused_safe_examples_trial0": [],
+    "accepted_oracle_unsafe_examples": [],
+    "reset_integrity": null,
+    "functions_per_trial": [
+     [
+      "clock_check_in",
+      "clock_check_out",
+      "clock_status",
+      "desk_annotate",
+      "record_history_1",
+      "record_history_2",
+      "showcase_compare",
+      "showcase_wishlist",
+      "task_run_1",
+      "task_run_2",
+      "task_run_3",
+      "task_run_4",
+      "task_run_5",
+      "task_run_6"
+     ],
+     [
+      "clock_check_in",
+      "clock_check_out",
+      "clock_status",
+      "desk_annotate",
+      "record_history_1",
+      "record_history_2",
+      "showcase_compare",
+      "showcase_wishlist",
+      "task_run_1",
+      "task_run_2",
+      "task_run_3",
+      "task_run_4",
+      "task_run_5",
+      "task_run_6"
+     ],
+     [
+      "clock_check_in",
+      "clock_check_out",
+      "clock_status",
+      "desk_annotate",
+      "record_history_1",
+      "record_history_2",
+      "showcase_compare",
+      "showcase_wishlist",
+      "task_run_1",
+      "task_run_2",
+      "task_run_3",
+      "task_run_4",
+      "task_run_5",
+      "task_run_6"
+     ]
+    ]
+   }
+  },
+  "stateful_lab": {
+   "A": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 1,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 2,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.2857,
+      "min": 0.2857,
+      "max": 0.2857,
+      "values": [
+       0.2857142857142857,
+       0.2857142857142857,
+       0.2857142857142857
+      ]
+     },
+     "reference.annotation_precision": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "values": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "reference.false_positives": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "reference.matched": {
+      "median": 2,
+      "min": 2,
+      "max": 2,
+      "values": [
+       2,
+       2,
+       2
+      ]
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 2,
+      "min": 2,
+      "max": 2,
+      "values": [
+       2,
+       2,
+       2
+      ]
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.restoration_attempts": {
+      "median": 12,
+      "min": 12,
+      "max": 12,
+      "values": [
+       12,
+       12,
+       12
+      ]
+     },
+     "restoration.restoration_successes": {
+      "median": 2,
+      "min": 2,
+      "max": 2,
+      "values": [
+       2,
+       2,
+       2
+      ]
+     },
+     "restoration.restoration_failures_total": {
+      "median": 10,
+      "min": 10,
+      "max": 10,
+      "values": [
+       10,
+       10,
+       10
+      ]
+     },
+     "restoration.strict_rejections_graded": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "restoration.safe_volatile_rejections": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.safe_volatile_accepted": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_unsafe": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_server_state_changed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_audit_failures": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.writes_replayed_during_restoration": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.routes_reached": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "restoration.replay_validated_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.known_mutating_get_requests": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "cost.browser_actions": {
+      "median": 16,
+      "min": 16,
+      "max": 16,
+      "values": [
+       16,
+       16,
+       16
+      ]
+     },
+     "cost.agent_elapsed_s": {
+      "median": 6.847,
+      "min": 6.827,
+      "max": 7.018,
+      "values": [
+       7.018,
+       6.847,
+       6.827
+      ]
+     },
+     "driver_wall_s": {
+      "median": 7.16,
+      "min": 7.15,
+      "max": 7.43,
+      "values": [
+       7.43,
+       7.15,
+       7.16
+      ]
+     },
+     "driver_monotonic_s": {
+      "median": 7.16,
+      "min": 7.15,
+      "max": 7.43,
+      "values": [
+       7.43,
+       7.15,
+       7.16
+      ]
+     },
+     "efficiency.actions_failed": {
+      "median": 10,
+      "min": 10,
+      "max": 10,
+      "values": [
+       10,
+       10,
+       10
+      ]
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "safety.state_changing_requests_in_replay": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 8,
+      "min": 8,
+      "max": 8,
+      "values": [
+       8,
+       8,
+       8
+      ]
+     },
+     "scope.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "applied_config": {
+     "restoration_policy": "strict",
+     "restoration_sample_interval_ms": 300,
+     "runtime_listener_observation": "revisit",
+     "robust_readiness": false,
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100,
+     "allow_post_forms": false,
+     "exploration_mode": "fresh"
+    },
+    "restoration_errors_per_trial": [
+     {
+      "unsafe_restoration_refused": 7,
+      "group_mismatch": 3
+     },
+     {
+      "unsafe_restoration_refused": 7,
+      "group_mismatch": 3
+     },
+     {
+      "unsafe_restoration_refused": 7,
+      "group_mismatch": 3
+     }
+    ],
+    "oracle_detail_per_trial": [
+     {
+      "server_state_changed": 3
+     },
+     {
+      "server_state_changed": 3
+     },
+     {
+      "server_state_changed": 3
+     }
+    ],
+    "contract_refused_by_reason_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_accepted_by_tier_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_tolerated_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "refused_safe_examples_trial0": [],
+    "accepted_oracle_unsafe_examples": [],
+    "reset_integrity": null,
+    "missed_attribution_trial0": {
+     "create_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "server_write"
+     },
+     "delete_all": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "dangerous_label_or_target"
+      ],
+      "effect_risk": "destructive"
+     },
+     "home": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "update_record": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "server_write"
+     },
+     "view_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     }
+    }
+   },
+   "B": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 1,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 2,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.2857,
+      "min": 0.2857,
+      "max": 0.2857,
+      "values": [
+       0.2857142857142857,
+       0.2857142857142857,
+       0.2857142857142857
+      ]
+     },
+     "reference.annotation_precision": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "values": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "reference.false_positives": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "reference.matched": {
+      "median": 2,
+      "min": 2,
+      "max": 2,
+      "values": [
+       2,
+       2,
+       2
+      ]
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 2,
+      "min": 2,
+      "max": 2,
+      "values": [
+       2,
+       2,
+       2
+      ]
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.restoration_attempts": {
+      "median": 12,
+      "min": 12,
+      "max": 12,
+      "values": [
+       12,
+       12,
+       12
+      ]
+     },
+     "restoration.restoration_successes": {
+      "median": 2,
+      "min": 2,
+      "max": 2,
+      "values": [
+       2,
+       2,
+       2
+      ]
+     },
+     "restoration.restoration_failures_total": {
+      "median": 10,
+      "min": 10,
+      "max": 10,
+      "values": [
+       10,
+       10,
+       10
+      ]
+     },
+     "restoration.strict_rejections_graded": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "restoration.safe_volatile_rejections": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.safe_volatile_accepted": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_unsafe": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_server_state_changed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_audit_failures": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.writes_replayed_during_restoration": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.contract.evaluations": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "restoration.contract.refused": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "restoration.contract.evaluation_ms": {
+      "median": 1851.3,
+      "min": 1848.7,
+      "max": 1854.3,
+      "values": [
+       1854.3,
+       1851.3,
+       1848.7
+      ]
+     },
+     "restoration.contract.region_capture.ms": {
+      "median": 42.9,
+      "min": 40.9,
+      "max": 44.5,
+      "values": [
+       44.5,
+       40.9,
+       42.9
+      ]
+     },
+     "restoration.routes_reached": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "restoration.replay_validated_transitions": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.known_mutating_get_requests": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "cost.browser_actions": {
+      "median": 16,
+      "min": 16,
+      "max": 16,
+      "values": [
+       16,
+       16,
+       16
+      ]
+     },
+     "cost.agent_elapsed_s": {
+      "median": 8.79,
+      "min": 8.759,
+      "max": 8.846,
+      "values": [
+       8.79,
+       8.846,
+       8.759
+      ]
+     },
+     "driver_wall_s": {
+      "median": 9.16,
+      "min": 9.09,
+      "max": 9.19,
+      "values": [
+       9.16,
+       9.19,
+       9.09
+      ]
+     },
+     "driver_monotonic_s": {
+      "median": 9.16,
+      "min": 9.09,
+      "max": 9.19,
+      "values": [
+       9.16,
+       9.19,
+       9.09
+      ]
+     },
+     "efficiency.actions_failed": {
+      "median": 10,
+      "min": 10,
+      "max": 10,
+      "values": [
+       10,
+       10,
+       10
+      ]
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "safety.state_changing_requests_in_replay": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 8,
+      "min": 8,
+      "max": 8,
+      "values": [
+       8,
+       8,
+       8
+      ]
+     },
+     "scope.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "applied_config": {
+     "restoration_policy": "contract",
+     "restoration_sample_interval_ms": 300,
+     "runtime_listener_observation": "revisit",
+     "robust_readiness": false,
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100,
+     "allow_post_forms": false,
+     "exploration_mode": "fresh"
+    },
+    "restoration_errors_per_trial": [
+     {
+      "unsafe_restoration_refused": 7,
+      "contract_refused": 3
+     },
+     {
+      "unsafe_restoration_refused": 7,
+      "contract_refused": 3
+     },
+     {
+      "unsafe_restoration_refused": 7,
+      "contract_refused": 3
+     }
+    ],
+    "oracle_detail_per_trial": [
+     {
+      "server_state_changed": 3
+     },
+     {
+      "server_state_changed": 3
+     },
+     {
+      "server_state_changed": 3
+     }
+    ],
+    "contract_refused_by_reason_per_trial": [
+     {
+      "affordance_added": 3,
+      "content_changed": 1
+     },
+     {
+      "affordance_added": 3,
+      "content_changed": 1
+     },
+     {
+      "affordance_added": 3,
+      "content_changed": 1
+     }
+    ],
+    "contract_accepted_by_tier_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_tolerated_per_trial": [
+     {
+      "outside_scope": 4
+     },
+     {
+      "outside_scope": 4
+     },
+     {
+      "outside_scope": 4
+     }
+    ],
+    "refused_safe_examples_trial0": [],
+    "accepted_oracle_unsafe_examples": [],
+    "reset_integrity": null,
+    "missed_attribution_trial0": {
+     "create_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "server_write"
+     },
+     "delete_all": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "dangerous_label_or_target"
+      ],
+      "effect_risk": "destructive"
+     },
+     "home": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     },
+     "update_record": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "server_write"
+     },
+     "view_record": {
+      "class": "not_safety_limited",
+      "skip_reasons": [
+       "unexecuted_not_selected"
+      ],
+      "effect_risk": "none"
+     }
+    }
+   }
+  },
+  "replay_lab": {
+   "A": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 1,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 2,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.96,
+      "min": 0.96,
+      "max": 0.96,
+      "values": [
+       0.96,
+       0.96,
+       0.96
+      ]
+     },
+     "reference.annotation_precision": {
+      "median": 0.8,
+      "min": 0.8,
+      "max": 0.8,
+      "values": [
+       0.8,
+       0.8,
+       0.8
+      ]
+     },
+     "reference.false_positives": {
+      "median": 6,
+      "min": 6,
+      "max": 6,
+      "values": [
+       6,
+       6,
+       6
+      ]
+     },
+     "reference.matched": {
+      "median": 24,
+      "min": 24,
+      "max": 24,
+      "values": [
+       24,
+       24,
+       24
+      ]
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 30,
+      "min": 30,
+      "max": 30,
+      "values": [
+       30,
+       30,
+       30
+      ]
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 27,
+      "min": 27,
+      "max": 27,
+      "values": [
+       27,
+       27,
+       27
+      ]
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.restoration_attempts": {
+      "median": 52,
+      "min": 52,
+      "max": 52,
+      "values": [
+       52,
+       52,
+       52
+      ]
+     },
+     "restoration.restoration_successes": {
+      "median": 51,
+      "min": 51,
+      "max": 51,
+      "values": [
+       51,
+       51,
+       51
+      ]
+     },
+     "restoration.restoration_failures_total": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "restoration.strict_rejections_graded": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "restoration.safe_volatile_rejections": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.safe_volatile_accepted": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_unsafe": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_server_state_changed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_audit_failures": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.writes_replayed_during_restoration": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.routes_reached": {
+      "median": 16,
+      "min": 16,
+      "max": 16,
+      "values": [
+       16,
+       16,
+       16
+      ]
+     },
+     "restoration.replay_validated_transitions": {
+      "median": 27,
+      "min": 27,
+      "max": 27,
+      "values": [
+       27,
+       27,
+       27
+      ]
+     },
+     "cost.browser_actions": {
+      "median": 230,
+      "min": 230,
+      "max": 230,
+      "values": [
+       230,
+       230,
+       230
+      ]
+     },
+     "cost.agent_elapsed_s": {
+      "median": 113.975,
+      "min": 113.562,
+      "max": 113.98,
+      "values": [
+       113.562,
+       113.98,
+       113.975
+      ]
+     },
+     "driver_wall_s": {
+      "median": 114.7,
+      "min": 114.28,
+      "max": 114.7,
+      "values": [
+       114.28,
+       114.7,
+       114.7
+      ]
+     },
+     "driver_monotonic_s": {
+      "median": 114.7,
+      "min": 114.28,
+      "max": 114.7,
+      "values": [
+       114.28,
+       114.7,
+       114.7
+      ]
+     },
+     "efficiency.actions_failed": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.state_changing_requests_in_replay": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 2,
+      "min": 2,
+      "max": 2,
+      "values": [
+       2,
+       2,
+       2
+      ]
+     },
+     "scope.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "applied_config": {
+     "restoration_policy": "strict",
+     "restoration_sample_interval_ms": 300,
+     "runtime_listener_observation": "revisit",
+     "robust_readiness": false,
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100,
+     "allow_post_forms": false,
+     "exploration_mode": "fresh"
+    },
+    "restoration_errors_per_trial": [
+     {
+      "group_mismatch": 1
+     },
+     {
+      "group_mismatch": 1
+     },
+     {
+      "group_mismatch": 1
+     }
+    ],
+    "oracle_detail_per_trial": [
+     {
+      "server_state_changed": 1
+     },
+     {
+      "server_state_changed": 1
+     },
+     {
+      "server_state_changed": 1
+     }
+    ],
+    "contract_refused_by_reason_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_accepted_by_tier_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_tolerated_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "refused_safe_examples_trial0": [],
+    "accepted_oracle_unsafe_examples": [],
+    "reset_integrity": null,
+    "missed_attribution_trial0": {
+     "wipe_records": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "dangerous_label_or_target"
+      ],
+      "effect_risk": "destructive"
+     }
+    }
+   },
+   "B": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 1,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 2,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.96,
+      "min": 0.96,
+      "max": 0.96,
+      "values": [
+       0.96,
+       0.96,
+       0.96
+      ]
+     },
+     "reference.annotation_precision": {
+      "median": 0.8,
+      "min": 0.8,
+      "max": 0.8,
+      "values": [
+       0.8,
+       0.8,
+       0.8
+      ]
+     },
+     "reference.false_positives": {
+      "median": 6,
+      "min": 6,
+      "max": 6,
+      "values": [
+       6,
+       6,
+       6
+      ]
+     },
+     "reference.matched": {
+      "median": 24,
+      "min": 24,
+      "max": 24,
+      "values": [
+       24,
+       24,
+       24
+      ]
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 30,
+      "min": 30,
+      "max": 30,
+      "values": [
+       30,
+       30,
+       30
+      ]
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 27,
+      "min": 27,
+      "max": 27,
+      "values": [
+       27,
+       27,
+       27
+      ]
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.restoration_attempts": {
+      "median": 52,
+      "min": 52,
+      "max": 52,
+      "values": [
+       52,
+       52,
+       52
+      ]
+     },
+     "restoration.restoration_successes": {
+      "median": 51,
+      "min": 51,
+      "max": 51,
+      "values": [
+       51,
+       51,
+       51
+      ]
+     },
+     "restoration.restoration_failures_total": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "restoration.strict_rejections_graded": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "restoration.safe_volatile_rejections": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.safe_volatile_accepted": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_unsafe": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_server_state_changed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_audit_failures": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.writes_replayed_during_restoration": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.contract.evaluations": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "restoration.contract.refused": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "restoration.contract.evaluation_ms": {
+      "median": 613.0,
+      "min": 611.4,
+      "max": 613.6,
+      "values": [
+       613.6,
+       613.0,
+       611.4
+      ]
+     },
+     "restoration.contract.region_capture.ms": {
+      "median": 782.1,
+      "min": 747.8,
+      "max": 785.6,
+      "values": [
+       785.6,
+       782.1,
+       747.8
+      ]
+     },
+     "restoration.routes_reached": {
+      "median": 16,
+      "min": 16,
+      "max": 16,
+      "values": [
+       16,
+       16,
+       16
+      ]
+     },
+     "restoration.replay_validated_transitions": {
+      "median": 27,
+      "min": 27,
+      "max": 27,
+      "values": [
+       27,
+       27,
+       27
+      ]
+     },
+     "cost.browser_actions": {
+      "median": 230,
+      "min": 230,
+      "max": 230,
+      "values": [
+       230,
+       230,
+       230
+      ]
+     },
+     "cost.agent_elapsed_s": {
+      "median": 114.672,
+      "min": 114.485,
+      "max": 114.68,
+      "values": [
+       114.672,
+       114.68,
+       114.485
+      ]
+     },
+     "driver_wall_s": {
+      "median": 115.37,
+      "min": 115.21,
+      "max": 115.39,
+      "values": [
+       115.37,
+       115.39,
+       115.21
+      ]
+     },
+     "driver_monotonic_s": {
+      "median": 115.37,
+      "min": 115.21,
+      "max": 115.39,
+      "values": [
+       115.37,
+       115.39,
+       115.21
+      ]
+     },
+     "efficiency.actions_failed": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.state_changing_requests_in_replay": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 2,
+      "min": 2,
+      "max": 2,
+      "values": [
+       2,
+       2,
+       2
+      ]
+     },
+     "scope.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "applied_config": {
+     "restoration_policy": "contract",
+     "restoration_sample_interval_ms": 300,
+     "runtime_listener_observation": "revisit",
+     "robust_readiness": false,
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100,
+     "allow_post_forms": false,
+     "exploration_mode": "fresh"
+    },
+    "restoration_errors_per_trial": [
+     {
+      "contract_refused": 1
+     },
+     {
+      "contract_refused": 1
+     },
+     {
+      "contract_refused": 1
+     }
+    ],
+    "oracle_detail_per_trial": [
+     {
+      "server_state_changed": 1
+     },
+     {
+      "server_state_changed": 1
+     },
+     {
+      "server_state_changed": 1
+     }
+    ],
+    "contract_refused_by_reason_per_trial": [
+     {
+      "affordance_removed": 1
+     },
+     {
+      "affordance_removed": 1
+     },
+     {
+      "affordance_removed": 1
+     }
+    ],
+    "contract_accepted_by_tier_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_tolerated_per_trial": [
+     {
+      "outside_scope": 2
+     },
+     {
+      "outside_scope": 2
+     },
+     {
+      "outside_scope": 2
+     }
+    ],
+    "refused_safe_examples_trial0": [],
+    "accepted_oracle_unsafe_examples": [],
+    "reset_integrity": null,
+    "missed_attribution_trial0": {
+     "wipe_records": {
+      "class": "legitimate_safety_refusal",
+      "skip_reasons": [
+       "dangerous_label_or_target"
+      ],
+      "effect_risk": "destructive"
+     }
+    }
+   }
+  },
+  "js_heavy_lab": {
+   "A": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 1,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 2,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.2143,
+      "min": 0.2143,
+      "max": 0.2143,
+      "values": [
+       0.21428571428571427,
+       0.21428571428571427,
+       0.21428571428571427
+      ]
+     },
+     "reference.annotation_precision": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "values": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "reference.false_positives": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "reference.matched": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.restoration_attempts": {
+      "median": 9,
+      "min": 9,
+      "max": 9,
+      "values": [
+       9,
+       9,
+       9
+      ]
+     },
+     "restoration.restoration_successes": {
+      "median": 9,
+      "min": 9,
+      "max": 9,
+      "values": [
+       9,
+       9,
+       9
+      ]
+     },
+     "restoration.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.strict_rejections_graded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.safe_volatile_rejections": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.safe_volatile_accepted": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_unsafe": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_server_state_changed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_audit_failures": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.writes_replayed_during_restoration": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.routes_reached": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "restoration.replay_validated_transitions": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "cost.browser_actions": {
+      "median": 31,
+      "min": 31,
+      "max": 31,
+      "values": [
+       31,
+       31,
+       31
+      ]
+     },
+     "cost.agent_elapsed_s": {
+      "median": 15.169,
+      "min": 15.152,
+      "max": 15.329,
+      "values": [
+       15.152,
+       15.169,
+       15.329
+      ]
+     },
+     "driver_wall_s": {
+      "median": 15.88,
+      "min": 15.87,
+      "max": 16.05,
+      "values": [
+       15.87,
+       15.88,
+       16.05
+      ]
+     },
+     "driver_monotonic_s": {
+      "median": 15.88,
+      "min": 15.87,
+      "max": 16.05,
+      "values": [
+       15.87,
+       15.88,
+       16.05
+      ]
+     },
+     "efficiency.actions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.state_changing_requests_in_replay": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "applied_config": {
+     "restoration_policy": "strict",
+     "restoration_sample_interval_ms": 300,
+     "runtime_listener_observation": "revisit",
+     "robust_readiness": false,
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100,
+     "allow_post_forms": false,
+     "exploration_mode": "fresh"
+    },
+    "restoration_errors_per_trial": [
+     {},
+     {},
+     {}
+    ],
+    "oracle_detail_per_trial": [
+     {},
+     {},
+     {}
+    ],
+    "contract_refused_by_reason_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_accepted_by_tier_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_tolerated_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "refused_safe_examples_trial0": [],
+    "accepted_oracle_unsafe_examples": [],
+    "reset_integrity": null,
+    "missed_attribution_trial0": {
+     "alias_area": {
+      "class": "scope_refusal",
+      "skip_reasons": [
+       "cross_origin"
+      ],
+      "effect_risk": "none"
+     },
+     "alias_data": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "continue_setup": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "enter_member_mode": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "server_write"
+     },
+     "load_late_reports": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "load_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "member_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_reports": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_workflow": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_workspace": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "workspace_detail": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     }
+    }
+   },
+   "B": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 1,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 2,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.annotation_recall": {
+      "median": 0.2143,
+      "min": 0.2143,
+      "max": 0.2143,
+      "values": [
+       0.21428571428571427,
+       0.21428571428571427,
+       0.21428571428571427
+      ]
+     },
+     "reference.annotation_precision": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "values": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "reference.false_positives": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "reference.matched": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.restoration_attempts": {
+      "median": 9,
+      "min": 9,
+      "max": 9,
+      "values": [
+       9,
+       9,
+       9
+      ]
+     },
+     "restoration.restoration_successes": {
+      "median": 9,
+      "min": 9,
+      "max": 9,
+      "values": [
+       9,
+       9,
+       9
+      ]
+     },
+     "restoration.restoration_failures_total": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.strict_rejections_graded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.safe_volatile_rejections": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.safe_volatile_accepted": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_unsafe": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_server_state_changed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_audit_failures": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.writes_replayed_during_restoration": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.contract.region_capture.ms": {
+      "median": 98.2,
+      "min": 92.2,
+      "max": 106.5,
+      "values": [
+       106.5,
+       92.2,
+       98.2
+      ]
+     },
+     "restoration.routes_reached": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "restoration.replay_validated_transitions": {
+      "median": 3,
+      "min": 3,
+      "max": 3,
+      "values": [
+       3,
+       3,
+       3
+      ]
+     },
+     "cost.browser_actions": {
+      "median": 31,
+      "min": 31,
+      "max": 31,
+      "values": [
+       31,
+       31,
+       31
+      ]
+     },
+     "cost.agent_elapsed_s": {
+      "median": 15.379,
+      "min": 15.228,
+      "max": 15.414,
+      "values": [
+       15.379,
+       15.228,
+       15.414
+      ]
+     },
+     "driver_wall_s": {
+      "median": 16.12,
+      "min": 15.96,
+      "max": 16.2,
+      "values": [
+       16.12,
+       15.96,
+       16.2
+      ]
+     },
+     "driver_monotonic_s": {
+      "median": 16.12,
+      "min": 15.96,
+      "max": 16.2,
+      "values": [
+       16.12,
+       15.96,
+       16.2
+      ]
+     },
+     "efficiency.actions_failed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.state_changing_requests_in_replay": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.destructive_endpoint_hits": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "applied_config": {
+     "restoration_policy": "contract",
+     "restoration_sample_interval_ms": 300,
+     "runtime_listener_observation": "revisit",
+     "robust_readiness": false,
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100,
+     "allow_post_forms": false,
+     "exploration_mode": "fresh"
+    },
+    "restoration_errors_per_trial": [
+     {},
+     {},
+     {}
+    ],
+    "oracle_detail_per_trial": [
+     {},
+     {},
+     {}
+    ],
+    "contract_refused_by_reason_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_accepted_by_tier_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_tolerated_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "refused_safe_examples_trial0": [],
+    "accepted_oracle_unsafe_examples": [],
+    "reset_integrity": null,
+    "missed_attribution_trial0": {
+     "alias_area": {
+      "class": "scope_refusal",
+      "skip_reasons": [
+       "cross_origin"
+      ],
+      "effect_risk": "none"
+     },
+     "alias_data": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "continue_setup": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "enter_member_mode": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "server_write"
+     },
+     "load_late_reports": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "load_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "member_preferences": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_reports": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_workflow": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "open_workspace": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     },
+     "workspace_detail": {
+      "class": "no_matching_advertised_control",
+      "skip_reasons": [],
+      "effect_risk": "none"
+     }
+    }
+   }
+  },
+  "crawlground": {
+   "A": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 1,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 2,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.recall": {
+      "median": 0.0678,
+      "min": 0.0678,
+      "max": 0.0678,
+      "values": [
+       0.0678,
+       0.0678,
+       0.0678
+      ]
+     },
+     "reference.markers_scored": {
+      "median": 4,
+      "min": 4,
+      "max": 4,
+      "values": [
+       4,
+       4,
+       4
+      ]
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 22,
+      "min": 22,
+      "max": 22,
+      "values": [
+       22,
+       22,
+       22
+      ]
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 21,
+      "min": 20,
+      "max": 21,
+      "values": [
+       21,
+       20,
+       21
+      ]
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.restoration_attempts": {
+      "median": 97,
+      "min": 96,
+      "max": 97,
+      "values": [
+       97,
+       97,
+       96
+      ]
+     },
+     "restoration.restoration_successes": {
+      "median": 38,
+      "min": 37,
+      "max": 38,
+      "values": [
+       38,
+       38,
+       37
+      ]
+     },
+     "restoration.restoration_failures_total": {
+      "median": 59,
+      "min": 59,
+      "max": 59,
+      "values": [
+       59,
+       59,
+       59
+      ]
+     },
+     "restoration.strict_rejections_graded": {
+      "median": 59,
+      "min": 59,
+      "max": 59,
+      "values": [
+       59,
+       59,
+       59
+      ]
+     },
+     "restoration.safe_volatile_rejections": {
+      "median": 59,
+      "min": 58,
+      "max": 59,
+      "values": [
+       59,
+       59,
+       58
+      ]
+     },
+     "restoration.safe_volatile_accepted": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_unsafe": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_server_state_changed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_audit_failures": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.writes_replayed_during_restoration": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.routes_reached": {
+      "median": 20,
+      "min": 20,
+      "max": 20,
+      "values": [
+       20,
+       20,
+       20
+      ]
+     },
+     "restoration.test_pages_reached": {
+      "median": 5,
+      "min": 5,
+      "max": 5,
+      "values": [
+       5,
+       5,
+       5
+      ]
+     },
+     "restoration.replay_validated_transitions": {
+      "median": 25,
+      "min": 25,
+      "max": 26,
+      "values": [
+       26,
+       25,
+       25
+      ]
+     },
+     "cost.browser_actions": {
+      "median": 327,
+      "min": 319,
+      "max": 327,
+      "values": [
+       327,
+       327,
+       319
+      ]
+     },
+     "cost.agent_elapsed_s": {
+      "median": 173.855,
+      "min": 172.355,
+      "max": 174.097,
+      "values": [
+       173.855,
+       174.097,
+       172.355
+      ]
+     },
+     "driver_wall_s": {
+      "median": 174.63,
+      "min": 173.23,
+      "max": 174.89,
+      "values": [
+       174.63,
+       174.89,
+       173.23
+      ]
+     },
+     "driver_monotonic_s": {
+      "median": 174.67,
+      "min": 173.23,
+      "max": 174.89,
+      "values": [
+       174.67,
+       174.89,
+       173.23
+      ]
+     },
+     "efficiency.actions_failed": {
+      "median": 59,
+      "min": 59,
+      "max": 59,
+      "values": [
+       59,
+       59,
+       59
+      ]
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "safety.state_changing_requests_in_replay": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 195,
+      "min": 193,
+      "max": 195,
+      "values": [
+       195,
+       195,
+       193
+      ]
+     },
+     "scope.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "applied_config": {
+     "restoration_policy": "strict",
+     "restoration_sample_interval_ms": 300,
+     "runtime_listener_observation": "revisit",
+     "robust_readiness": false,
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100,
+     "allow_post_forms": false,
+     "exploration_mode": "fresh"
+    },
+    "restoration_errors_per_trial": [
+     {
+      "group_mismatch": 59
+     },
+     {
+      "group_mismatch": 59
+     },
+     {
+      "group_mismatch": 59
+     }
+    ],
+    "oracle_detail_per_trial": [
+     {
+      "safe_volatile": 59
+     },
+     {
+      "safe_volatile": 59
+     },
+     {
+      "safe_volatile": 58,
+      "unsafe:target_unavailable": 1
+     }
+    ],
+    "contract_refused_by_reason_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_accepted_by_tier_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "contract_tolerated_per_trial": [
+     null,
+     null,
+     null
+    ],
+    "refused_safe_examples_trial0": [
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "window.open() navigation",
+      "route": "/results"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "window.location.replace() navigation",
+      "route": "/results"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "window.location assigned in setTimeout",
+      "route": "/results"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Tab panel with JS-rendered content",
+      "route": "/results"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "SVG <a> element",
+      "route": "/results"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Single-level CSS :hover dropdown",
+      "route": "/results"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Score link inside <template> element",
+      "route": "/results"
+     },
+     {
+      "accepted": false,
+      "oracle": "safe_volatile",
+      "label": "Right-click (contextmenu) link injection",
+      "route": "/results"
+     }
+    ],
+    "accepted_oracle_unsafe_examples": [],
+    "reset_integrity": [
+     {
+      "teardown_exit": 0,
+      "mount_profile_matches_frozen": true,
+      "residual_containers_after_teardown": 0
+     },
+     {
+      "teardown_exit": 0,
+      "mount_profile_matches_frozen": true,
+      "residual_containers_after_teardown": 0
+     },
+     {
+      "teardown_exit": 0,
+      "mount_profile_matches_frozen": true,
+      "residual_containers_after_teardown": 0
+     }
+    ],
+    "markers_by_category_per_trial": [
+     {
+      "buttons": "0/2",
+      "dynamic-content": "1/10",
+      "forms": "1/12",
+      "frames": "0/4",
+      "js-events": "0/14",
+      "links": "1/7",
+      "navigation": "1/9",
+      "other": "0/1"
+     },
+     {
+      "buttons": "0/2",
+      "dynamic-content": "1/10",
+      "forms": "1/12",
+      "frames": "0/4",
+      "js-events": "0/14",
+      "links": "1/7",
+      "navigation": "1/9",
+      "other": "0/1"
+     },
+     {
+      "buttons": "0/2",
+      "dynamic-content": "1/10",
+      "forms": "1/12",
+      "frames": "0/4",
+      "js-events": "0/14",
+      "links": "1/7",
+      "navigation": "1/9",
+      "other": "0/1"
+     }
+    ]
+   },
+   "B": {
+    "trials": [
+     {
+      "trial": 0,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 1,
+      "status": "ok",
+      "host_sleep_affected": false
+     },
+     {
+      "trial": 2,
+      "status": "ok",
+      "host_sleep_affected": false
+     }
+    ],
+    "metrics": {
+     "reference.recall": {
+      "median": 0.0847,
+      "min": 0.0847,
+      "max": 0.0847,
+      "values": [
+       0.0847,
+       0.0847,
+       0.0847
+      ]
+     },
+     "reference.markers_scored": {
+      "median": 5,
+      "min": 5,
+      "max": 5,
+      "values": [
+       5,
+       5,
+       5
+      ]
+     },
+     "capabilities.distinct_capabilities_observed_or_better": {
+      "median": 62,
+      "min": 61,
+      "max": 62,
+      "values": [
+       61,
+       62,
+       62
+      ]
+     },
+     "capabilities.evidence_status.reproduced": {
+      "median": 35,
+      "min": 33,
+      "max": 35,
+      "values": [
+       35,
+       35,
+       33
+      ]
+     },
+     "capabilities.evidence_status.verified": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.restoration_attempts": {
+      "median": 73,
+      "min": 72,
+      "max": 73,
+      "values": [
+       72,
+       73,
+       73
+      ]
+     },
+     "restoration.restoration_successes": {
+      "median": 71,
+      "min": 70,
+      "max": 71,
+      "values": [
+       70,
+       71,
+       71
+      ]
+     },
+     "restoration.restoration_failures_total": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "restoration.strict_rejections_graded": {
+      "median": 39,
+      "min": 38,
+      "max": 39,
+      "values": [
+       38,
+       39,
+       39
+      ]
+     },
+     "restoration.safe_volatile_rejections": {
+      "median": 38,
+      "min": 37,
+      "max": 38,
+      "values": [
+       37,
+       38,
+       38
+      ]
+     },
+     "restoration.safe_volatile_accepted": {
+      "median": 38,
+      "min": 37,
+      "max": 38,
+      "values": [
+       37,
+       38,
+       38
+      ]
+     },
+     "restoration.accepted_oracle_unsafe": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_oracle_server_state_changed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.accepted_audit_failures": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.writes_replayed_during_restoration": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "restoration.contract.evaluations": {
+      "median": 39,
+      "min": 38,
+      "max": 39,
+      "values": [
+       38,
+       39,
+       39
+      ]
+     },
+     "restoration.contract.accepted": {
+      "median": 38,
+      "min": 37,
+      "max": 38,
+      "values": [
+       37,
+       38,
+       38
+      ]
+     },
+     "restoration.contract.refused": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "restoration.contract.evaluation_ms": {
+      "median": 784.5,
+      "min": 731.2,
+      "max": 788.9,
+      "values": [
+       788.9,
+       731.2,
+       784.5
+      ]
+     },
+     "restoration.contract.region_capture.ms": {
+      "median": 2940.7,
+      "min": 2925.0,
+      "max": 3174.3,
+      "values": [
+       2940.7,
+       2925.0,
+       3174.3
+      ]
+     },
+     "restoration.routes_reached": {
+      "median": 52,
+      "min": 51,
+      "max": 52,
+      "values": [
+       51,
+       52,
+       52
+      ]
+     },
+     "restoration.test_pages_reached": {
+      "median": 37,
+      "min": 36,
+      "max": 37,
+      "values": [
+       36,
+       37,
+       37
+      ]
+     },
+     "restoration.replay_validated_transitions": {
+      "median": 35,
+      "min": 34,
+      "max": 35,
+      "values": [
+       35,
+       35,
+       34
+      ]
+     },
+     "cost.browser_actions": {
+      "median": 324,
+      "min": 324,
+      "max": 327,
+      "values": [
+       324,
+       327,
+       324
+      ]
+     },
+     "cost.agent_elapsed_s": {
+      "median": 180.279,
+      "min": 180.261,
+      "max": 180.565,
+      "values": [
+       180.279,
+       180.261,
+       180.565
+      ]
+     },
+     "driver_wall_s": {
+      "median": 180.97,
+      "min": 180.96,
+      "max": 181.3,
+      "values": [
+       180.96,
+       180.97,
+       181.3
+      ]
+     },
+     "driver_monotonic_s": {
+      "median": 180.97,
+      "min": 180.96,
+      "max": 181.3,
+      "values": [
+       180.96,
+       180.97,
+       181.3
+      ]
+     },
+     "efficiency.actions_failed": {
+      "median": 2,
+      "min": 2,
+      "max": 2,
+      "values": [
+       2,
+       2,
+       2
+      ]
+     },
+     "safety.state_changing_requests_issued": {
+      "median": 1,
+      "min": 1,
+      "max": 1,
+      "values": [
+       1,
+       1,
+       1
+      ]
+     },
+     "safety.state_changing_requests_in_replay": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "safety.dangerous_controls_skipped": {
+      "median": 184,
+      "min": 181,
+      "max": 184,
+      "values": [
+       181,
+       184,
+       184
+      ]
+     },
+     "scope.out_of_scope_requests_recorded": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     },
+     "scope.out_of_scope_requests_completed": {
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "applied_config": {
+     "restoration_policy": "contract",
+     "restoration_sample_interval_ms": 300,
+     "runtime_listener_observation": "revisit",
+     "robust_readiness": false,
+     "policy": "coverage",
+     "max_seconds": 180.0,
+     "max_browser_actions": 500,
+     "max_transitions": 100,
+     "allow_post_forms": false,
+     "exploration_mode": "fresh"
+    },
+    "restoration_errors_per_trial": [
+     {
+      "contract_refused": 1
+     },
+     {
+      "contract_refused": 1
+     },
+     {
+      "contract_refused": 1
+     }
+    ],
+    "oracle_detail_per_trial": [
+     {
+      "safe_volatile": 37,
+      "unsafe:target_unavailable": 1
+     },
+     {
+      "safe_volatile": 38,
+      "unsafe:target_unavailable": 1
+     },
+     {
+      "safe_volatile": 38,
+      "unsafe:target_unavailable": 1
+     }
+    ],
+    "contract_refused_by_reason_per_trial": [
+     {
+      "target_absent": 1
+     },
+     {
+      "target_absent": 1
+     },
+     {
+      "target_absent": 1
+     }
+    ],
+    "contract_accepted_by_tier_per_trial": [
+     {
+      "declarative": 37
+     },
+     {
+      "declarative": 38
+     },
+     {
+      "declarative": 38
+     }
+    ],
+    "contract_tolerated_per_trial": [
+     {
+      "affordance_present_in_dom": 37,
+      "outside_scope": 452
+     },
+     {
+      "affordance_present_in_dom": 38,
+      "outside_scope": 469
+     },
+     {
+      "affordance_present_in_dom": 38,
+      "outside_scope": 469
+     }
+    ],
+    "refused_safe_examples_trial0": [],
+    "accepted_oracle_unsafe_examples": [],
+    "reset_integrity": [
+     {
+      "teardown_exit": 0,
+      "mount_profile_matches_frozen": true,
+      "residual_containers_after_teardown": 0
+     },
+     {
+      "teardown_exit": 0,
+      "mount_profile_matches_frozen": true,
+      "residual_containers_after_teardown": 0
+     },
+     {
+      "teardown_exit": 0,
+      "mount_profile_matches_frozen": true,
+      "residual_containers_after_teardown": 0
+     }
+    ],
+    "markers_by_category_per_trial": [
+     {
+      "buttons": "1/2",
+      "dynamic-content": "0/10",
+      "forms": "1/12",
+      "frames": "0/4",
+      "js-events": "1/14",
+      "links": "1/7",
+      "navigation": "1/9",
+      "other": "0/1"
+     },
+     {
+      "buttons": "1/2",
+      "dynamic-content": "0/10",
+      "forms": "1/12",
+      "frames": "0/4",
+      "js-events": "1/14",
+      "links": "1/7",
+      "navigation": "1/9",
+      "other": "0/1"
+     },
+     {
+      "buttons": "1/2",
+      "dynamic-content": "0/10",
+      "forms": "1/12",
+      "frames": "0/4",
+      "js-events": "1/14",
+      "links": "1/7",
+      "navigation": "1/9",
+      "other": "0/1"
+     }
+    ]
+   }
+  }
+ }
+}
