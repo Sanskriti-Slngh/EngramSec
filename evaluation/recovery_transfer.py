@@ -39,6 +39,16 @@ if WXB_CONFIG.exists():
     _frozen = json.loads(WXB_CONFIG.read_text())
     for _t in WXB_TARGETS:
         VARIANTS[f"wxb_{_t}"] = {"env": _t, "run_config": _frozen["run_config"], "frozen_from": _frozen["frozen_from"]}
+        # Write-policy runs (after the enforcement fix): read-only is the frozen configuration, now
+        # enforced at request level; disposable allows bounded, logged, non-destructive writes and is
+        # attested by this harness only after the target's reset integrity has been verified.
+        VARIANTS[f"wxb_{_t}_policy_read_only"] = {"env": _t, "run_config": {**_frozen["run_config"],
+                                                                             "write_policy": "read_only"}}
+        VARIANTS[f"wxb_{_t}_policy_disposable"] = {"env": _t, "run_config": {
+            **_frozen["run_config"], "allow_post_forms": True, "write_policy": "disposable"}, "attest": True}
+for _base in ("crawlmaze_integrated_180", "crawlground_integrated_readonly_600"):
+    VARIANTS[f"{_base}_policy_read_only"] = {"env": HISTORICAL[_base]["env"],
+                                             "run_config": {**HISTORICAL[_base]["run_config"], "write_policy": "read_only"}}
 
 
 def run_trial(variant: str, trial: int, code_root: Path, label: str, log) -> dict[str, Any]:
@@ -53,8 +63,15 @@ def run_trial(variant: str, trial: int, code_root: Path, label: str, log) -> dic
     url = None
     try:
         url = ext.setup()
+        run_config = dict(spec["run_config"])
+        if spec.get("attest"):
+            # Only reached after ext.setup() verified the reset-integrity profile (it raises otherwise).
+            if not (ext.reset or {}).get("mount_profile_matches_frozen"):
+                raise ResetFailure("disposable write policy requires a verified reset-integrity profile")
+            run_config["environment_attestation"] = f"disposable:targetctl-reset-verified:{env}"
+            row["attestation"] = run_config["environment_attestation"]
         cmd = [sys.executable, str(ROOT / "evaluation" / "recovery_child.py"), "--out", str(out), "--url", url,
-               "--config", json.dumps(spec["run_config"]), "--code-root", str(code_root)]
+               "--config", json.dumps(run_config), "--code-root", str(code_root)]
         mono0, wall0 = time.monotonic(), time.time()
         import os
         env_vars = dict(os.environ, PYTHONPATH=str(code_root))

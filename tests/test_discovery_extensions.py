@@ -359,7 +359,10 @@ def test_live_combined_mode_reaches_more_documents_without_new_ui_transitions(si
     assert graph["metrics"]["graph_connections_missing_evidence"] == 0
     surfaces = {(s["method"], urlsplit(s["url"]).path): s for s in graph["request_surfaces"]}
     commit = surfaces.get(("POST", "/desk/commit"))
-    assert commit is not None and commit["outcome"] == "sent_non_2xx" and commit["statuses"] == [405]
+    # Read-only is enforced at request level: the browser's POST is recorded but blocked before sending.
+    assert commit is not None and commit["outcome"] == "sent_no_response" and not commit["statuses"]
+    assert any(x["method"] == "POST" and x["route"] == "/desk/commit" and x["decision"] == "blocked_read_only"
+               for x in combined.metrics.write_policy["log"])
     assert commit["sent_by"] == ["browser_action"] and not commit["in_replay_validated_workflow"]
     assert ("GET", "/desk/commit") not in surfaces
 

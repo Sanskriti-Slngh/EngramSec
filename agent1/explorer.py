@@ -31,6 +31,7 @@ from .replay_scheduler import (ReplayItem, ReplayScheduler, request_structures, 
 from .resource_spider import ResourceBudget, TypedResourceSpider
 from .revision import code_revision
 from . import restoration as restoration_contract
+from .write_policy import ABORT_CODE, WritePolicy
 from .hierarchical import AreaTourPlanner
 from .zap_adapter import load_zap_evidence
 from .search import (
@@ -703,6 +704,7 @@ class BrowserSession:
         # restoration_policy="contract" only: condensed region evidence per observation id.
         self.region_sink: dict[str, dict[str, Any]] | None = None
         self.region_cost: dict[str, float] = {"captures": 0, "ms": 0.0}
+        self.write_policy: WritePolicy | None = None
 
     def _new_listener_observer(self) -> ListenerObserver | None:
         if self.config.runtime_listener_observation == "off":
@@ -769,6 +771,16 @@ class BrowserSession:
 
             self.context.route("**/*", bounded_route)
             self.context.on("request", charge_redirect_hop)
+        if self.write_policy is not None and self.write_policy.enforcing:
+            # Registered last, so it runs first: a write is judged before scope routing.
+            policy = self.write_policy
+
+            def write_gate(route: Any, request: Any) -> None:
+                if policy.decide(request.method, request.url) == "allow":
+                    route.fallback()
+                else:
+                    route.abort(ABORT_CODE)
+            self.context.route("**/*", write_gate)
         if self.evidence_sink is not None:
             # WebSockets bypass the HTTP scope router; with ACG evidence on, out-of-scope
             # connections are refused (and counted) instead of silently allowed.
@@ -1767,6 +1779,12 @@ class Explorer:
             {} if config.restoration_policy == "contract" else None)
         self._region_cost: dict[str, float] = {"captures": 0, "ms": 0.0}
         self._contract_preaccepted: set[str] = set()
+        self.write_policy = WritePolicy(config.effective_write_policy, config.max_write_requests,
+                                        config.allow_destructive)
+        self.artifact.metrics.write_policy.update(self.write_policy.stats)
+        self.write_policy.stats = self.artifact.metrics.write_policy
+        if config.environment_attestation:
+            self.artifact.metrics.write_policy["environment_attestation"] = config.environment_attestation
         if config.restoration_policy == "contract":
             self.artifact.metrics.restoration_contract["region_capture"] = self._region_cost
         self.evidence_sink = None
@@ -1809,6 +1827,7 @@ class Explorer:
         )
         session.region_sink = self._region_maps
         session.region_cost = self._region_cost
+        session.write_policy = self.write_policy
         return session
 
     def _revision(self) -> str:

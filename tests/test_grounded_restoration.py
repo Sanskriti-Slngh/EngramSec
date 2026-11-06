@@ -234,7 +234,9 @@ def test_08_refused_write_is_never_reproposed():
                 break
             result, g.live, g.path = g.executor.run(g.browser, g.session, plan, g.live, g.path, target)
             g.runner.complete(result)
-        assert g.state["archived"] == 1 and g.runner.repeated_blocked == 0
+        # Read-only is enforced at request level, so the archive POST never reaches the server; the write
+        # attempt is still recorded, and refusing to re-propose it is what this test checks.
+        assert g.state["archived"] == 0 and g.runner.repeated_blocked == 0
         refused = [p["proposal"]["question"] for p in g.runner.proposals
                    if p.get("proposal") and (p.get("executed") or {}).get("refused")]
         for q in set(refused):

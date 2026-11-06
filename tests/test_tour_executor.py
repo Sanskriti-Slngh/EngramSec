@@ -119,9 +119,11 @@ def test_two_records_and_restoration_to_the_wrong_record():
 
 def test_javascript_form_post_is_never_repeated():
     with harness("notes") as h:
-        assert h.click("Add note").completed and h.posts("/api/notes") == 1
+        # Read-only (allow_post_forms=False) is enforced at request level: the script's POST is attempted,
+        # blocked before it reaches the server, and still recorded as a write-capable action.
+        assert h.click("Add note").completed and h.posts("/api/notes") == 0
         again = h.click("Add note")
-        assert not again.completed and h.posts("/api/notes") == 1          # known write: refused, not replayed
+        assert not again.completed and h.posts("/api/notes") == 0          # known write: refused, not replayed
 
 
 def test_unsafe_control_is_never_executed():

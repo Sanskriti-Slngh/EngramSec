@@ -126,6 +126,15 @@ class RunConfig(BaseModel):
     # Opt-in: seed the resource spider with the origin's /robots.txt and /sitemap.xml (GET only,
     # same scope and budgets as any other resource reference).
     well_known_discovery: bool = False
+    # Request-level write policy (agent1/write_policy.py). None derives it from allow_post_forms:
+    # False -> "read_only" (enforced on every browser request, not only HTML form methods);
+    # True -> "legacy_post_forms" (historical, un-gated). "disposable" allows bounded, logged,
+    # non-destructive writes and requires an operator/harness attestation of a disposable,
+    # reset-verified environment.
+    write_policy: Literal["read_only", "disposable"] | None = None
+    environment_attestation: str | None = Field(default=None, max_length=200)
+    max_write_requests: int = Field(default=50, ge=0, le=10_000)
+    allow_destructive: bool = False
     # Optional discovery changes (defaults keep the frozen baseline behavior).
     resource_allocation: Literal["class_caps", "shared_http"] = "class_caps"
     passive_document_http_reserve: int | None = Field(default=None, ge=0, le=100_000)
@@ -159,6 +168,25 @@ class RunConfig(BaseModel):
     # Evidence-only framework handler probe on pages with a delegation host
     # (elements scanned; 0 = off). Never creates candidate controls.
     framework_handler_probe: int = Field(default=0, ge=0, le=20_000)
+
+    @property
+    def effective_write_policy(self) -> str:
+        if self.write_policy:
+            return self.write_policy
+        return "legacy_post_forms" if self.allow_post_forms else "read_only"
+
+    @model_validator(mode="after")
+    def consistent_write_policy(self) -> "RunConfig":
+        if self.write_policy == "disposable":
+            if not self.allow_post_forms:
+                raise ValueError("write_policy=disposable requires allow_post_forms=True")
+            if not (self.environment_attestation or "").startswith("disposable:"):
+                raise ValueError("write_policy=disposable requires an environment_attestation 'disposable:...'")
+        if self.write_policy == "read_only" and self.allow_post_forms:
+            raise ValueError("write_policy=read_only contradicts allow_post_forms=True")
+        if self.allow_destructive and self.write_policy != "disposable":
+            raise ValueError("allow_destructive is only meaningful under write_policy=disposable")
+        return self
 
     @model_validator(mode="after")
     def paired_search_probes(self) -> "RunConfig":
@@ -692,6 +720,8 @@ class RunMetrics(BaseModel):
     replay_scheduler: dict[str, Any] = Field(default_factory=dict)
     # Restoration-contract decisions (restoration_policy="contract" only).
     restoration_contract: dict[str, Any] = Field(default_factory=dict)
+    # Request-level write policy decisions (mode, counts, bounded log of method/route/decision).
+    write_policy: dict[str, Any] = Field(default_factory=dict)
     passive_cookie_updates: dict[str, int] = Field(default_factory=dict)
     python_peak_rss_mb: float = 0.0
     listener_observations: int = 0

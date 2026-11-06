@@ -24,6 +24,17 @@ t0 = time.monotonic()
 explorer = Explorer(config, args.code_root)
 artifact = explorer.run()
 write_outputs(artifact, args.out)
+try:
+    # Security-oriented capability evidence, derived post-run from the ACG export (never a verdict).
+    from agent1.model.importer import import_run_artifact
+    from agent1.model.materialize import materialize
+    from agent1.security_evidence import capability_evidence
+    run = artifact.model_dump(mode="json")
+    export = materialize(import_run_artifact(run, "run.json", None)).model_dump(mode="json")
+    (args.out / "capability_evidence.json").write_text(
+        json.dumps(capability_evidence(export, run), indent=1, ensure_ascii=False) + "\n")
+except Exception as exc:  # evidence-only; older agent code has no view
+    (args.out / "capability_evidence.error.txt").write_text(f"{type(exc).__name__}: {exc}\n")
 budget = getattr(explorer, "http_budget", None)
 (args.out / "child_meta.json").write_text(json.dumps({
     "wall_seconds": round(time.monotonic() - t0, 2),

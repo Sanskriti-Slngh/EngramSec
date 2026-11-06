@@ -21,8 +21,10 @@ from evaluation.comprehensive_eval import CHILD_TIMEOUT_S, trial_metrics
 
 BASE = ROOT / "agent1" / "experiments" / "recovery_transfer" / "dev_regression"
 CONFIGS = json.loads((ROOT / "evaluation" / "recovery_historical_configs.json").read_text())
-ARMS = {"baseline": CONFIGS["crawlmaze_integrated_180"]["run_config"],
-        "fix": CONFIGS["crawlmaze_integrated_180_fix"]["run_config"]}
+# The child sets its own context label; the historical value (`anonymous`) would collide with it.
+_strip = lambda cfg: {k: v for k, v in cfg.items() if k != "context_label"}
+ARMS = {"baseline": _strip(CONFIGS["crawlmaze_integrated_180"]["run_config"]),
+        "fix": _strip(CONFIGS["crawlmaze_integrated_180_fix"]["run_config"])}
 FIXTURES = ["replay_lab", "heldout_shop", "volatile_lab"]
 
 
