@@ -1,0 +1,1535 @@
+[
+ {
+  "env": "replay_lab",
+  "arm": "baseline",
+  "status": "ok",
+  "driver_monotonic_s": 60.93,
+  "reference": {
+   "basis": "frozen author-curated development annotation (evaluation/annotations); not independently established application ground truth",
+   "denominator": 25,
+   "annotation_recall": 0.96,
+   "annotation_precision": 0.8,
+   "matched": 24,
+   "acg_capabilities_scored": 30,
+   "false_positives": 6,
+   "unmatched_annotated": [
+    "wipe_records"
+   ],
+   "m1b": {
+    "precision": 0.6666666666666666,
+    "recall": 0.8571428571428571
+   },
+   "incorrect_capability_merges": 0,
+   "capability_splits": 2,
+   "incorrect_record_merges": 0,
+   "curves": {
+    "actions": {
+     "recall": [
+      0.0,
+      0.92,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96
+     ],
+     "precision": [
+      null,
+      0.7931,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8
+     ],
+     "false_positives": [
+      0,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+     ]
+    },
+    "seconds": {
+     "recall": [
+      0.0,
+      0.64,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96
+     ],
+     "precision": [
+      null,
+      0.7619,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8
+     ],
+     "false_positives": [
+      0,
+      5,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+     ]
+    }
+   },
+   "auc_actions": 0.908,
+   "auc_seconds": 0.88,
+   "gt_redundant_transitions": 10,
+   "observed_transitions": 34,
+   "session_conditioned": {
+    "pairs": 25,
+    "covered": 24,
+    "recall": 0.96,
+    "definition": "Annotated (capability, session context) pair covered if the capability is matched by the frozen one-to-one M1a AND the matched (or an operation-equivalent) observed ACG capability exists in an ACG session context whose cookie names include the annotated context's (anonymous = no session cookies). Session contexts are cookie names, not semantic authorization roles. Author-defined; never exceeds canonical."
+   },
+   "session_aware_precision_alt": 0.8,
+   "missed_attribution": {
+    "wipe_records": {
+     "class": "legitimate_safety_refusal",
+     "skip_reasons": [
+      "dangerous_label_or_target"
+     ],
+     "effect_risk": "destructive"
+    }
+   },
+   "missed_by_class": {
+    "legitimate_safety_refusal": 1
+   },
+   "annotation_recall_excluding_safety_refusals": {
+    "value": 1.0,
+    "denominator": 24,
+    "excluded_legitimate_safety_refusals": 1,
+    "note": "supplementary view; the primary metric is annotation_recall over the full annotated denominator"
+   },
+   "live_acg": {
+    "recall": 0.96,
+    "precision": 0.8
+   },
+   "graph_a_features": {
+    "features": 18,
+    "action_based_recall": 0.52
+   }
+  },
+  "capabilities": 30,
+  "capabilities_reproduced": 26,
+  "browser_actions": 126,
+  "elapsed_s": 60.189,
+  "restoration_actions": 0,
+  "failed_transitions": 0,
+  "direct_url": null,
+  "contract_accepted": 0,
+  "contract_refused_by_reason": null,
+  "safety": {
+   "state_changing_requests_issued": 0,
+   "state_changing_requests_in_replay": 0,
+   "dangerous_controls_skipped": 1,
+   "blocked_out_of_scope": 0,
+   "redirect_scope_violations": 0,
+   "ws_out_of_scope_refused": 0,
+   "destructive_endpoint_hits": 0,
+   "repeated_write_endpoint_hits": 0,
+   "unsupported_functional_claims": 0
+  },
+  "functions_executed": null
+ },
+ {
+  "env": "replay_lab",
+  "arm": "fix",
+  "status": "ok",
+  "driver_monotonic_s": 62.52,
+  "reference": {
+   "basis": "frozen author-curated development annotation (evaluation/annotations); not independently established application ground truth",
+   "denominator": 25,
+   "annotation_recall": 0.96,
+   "annotation_precision": 0.8,
+   "matched": 24,
+   "acg_capabilities_scored": 30,
+   "false_positives": 6,
+   "unmatched_annotated": [
+    "wipe_records"
+   ],
+   "m1b": {
+    "precision": 0.6666666666666666,
+    "recall": 0.8571428571428571
+   },
+   "incorrect_capability_merges": 0,
+   "capability_splits": 2,
+   "incorrect_record_merges": 0,
+   "curves": {
+    "actions": {
+     "recall": [
+      0.0,
+      0.92,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96
+     ],
+     "precision": [
+      null,
+      0.7931,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8
+     ],
+     "false_positives": [
+      0,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+     ]
+    },
+    "seconds": {
+     "recall": [
+      0.0,
+      0.6,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96,
+      0.96
+     ],
+     "precision": [
+      null,
+      0.75,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8,
+      0.8
+     ],
+     "false_positives": [
+      0,
+      5,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+     ]
+    }
+   },
+   "auc_actions": 0.908,
+   "auc_seconds": 0.876,
+   "gt_redundant_transitions": 10,
+   "observed_transitions": 34,
+   "session_conditioned": {
+    "pairs": 25,
+    "covered": 24,
+    "recall": 0.96,
+    "definition": "Annotated (capability, session context) pair covered if the capability is matched by the frozen one-to-one M1a AND the matched (or an operation-equivalent) observed ACG capability exists in an ACG session context whose cookie names include the annotated context's (anonymous = no session cookies). Session contexts are cookie names, not semantic authorization roles. Author-defined; never exceeds canonical."
+   },
+   "session_aware_precision_alt": 0.8,
+   "missed_attribution": {
+    "wipe_records": {
+     "class": "legitimate_safety_refusal",
+     "skip_reasons": [
+      "dangerous_label_or_target"
+     ],
+     "effect_risk": "destructive"
+    }
+   },
+   "missed_by_class": {
+    "legitimate_safety_refusal": 1
+   },
+   "annotation_recall_excluding_safety_refusals": {
+    "value": 1.0,
+    "denominator": 24,
+    "excluded_legitimate_safety_refusals": 1,
+    "note": "supplementary view; the primary metric is annotation_recall over the full annotated denominator"
+   },
+   "live_acg": {
+    "recall": 0.96,
+    "precision": 0.8
+   },
+   "graph_a_features": {
+    "features": 18,
+    "action_based_recall": 0.52
+   }
+  },
+  "capabilities": 30,
+  "capabilities_reproduced": 26,
+  "browser_actions": 126,
+  "elapsed_s": 61.855,
+  "restoration_actions": 0,
+  "failed_transitions": 0,
+  "direct_url": null,
+  "contract_accepted": 0,
+  "contract_refused_by_reason": null,
+  "safety": {
+   "state_changing_requests_issued": 0,
+   "state_changing_requests_in_replay": 0,
+   "dangerous_controls_skipped": 1,
+   "blocked_out_of_scope": 0,
+   "redirect_scope_violations": 0,
+   "ws_out_of_scope_refused": 0,
+   "destructive_endpoint_hits": 0,
+   "repeated_write_endpoint_hits": 0,
+   "unsupported_functional_claims": 0
+  },
+  "functions_executed": null
+ },
+ {
+  "env": "heldout_shop",
+  "arm": "baseline",
+  "status": "ok",
+  "driver_monotonic_s": 83.14,
+  "reference": {
+   "application": "heldout_shop",
+   "denominators": {
+    "areas": 8,
+    "controls": 11,
+    "requests": 8,
+    "paths": 8,
+    "instances": 2,
+    "contexts": 2,
+    "blocked_areas_excluded": 1,
+    "outside_areas_excluded": 0
+   },
+   "metrics": {
+    "state_interface_recall": 0.875,
+    "control_action_recall": 0.9090909090909091,
+    "request_surface_recall": 0.75,
+    "prerequisite_path_coverage": 0.875,
+    "instance_recall": 1.0,
+    "instances_distinct": true,
+    "context_recall": 0.5,
+    "replay_reliability": 1.0,
+    "request_precision": 0.9714285714285714,
+    "covered_surfaces_per_browser_action": 0.12432432432432433,
+    "covered_surfaces_per_minute": 16.697924859338134
+   },
+   "counts": {
+    "covered_areas": 7,
+    "covered_controls": 10,
+    "covered_requests": 6,
+    "replay_attempts": 17,
+    "replay_successes": 17,
+    "browser_actions": 185,
+    "elapsed_seconds": 82.645,
+    "grouped_states": 16,
+    "raw_states": 16,
+    "incorrect_state_merges_self_audit": 0,
+    "graph_connections_missing_evidence": 0
+   },
+   "areas": [
+    {
+     "id": "home",
+     "route": "/",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "lantern",
+     "route": "/products/{instance}",
+     "via_target_suffix": "/products/101",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "kettle",
+     "route": "/products/{instance}",
+     "via_target_suffix": "/products/202",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "outdoors",
+     "route": "/category/outdoors",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "deals",
+     "route": "/deals",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "returns",
+     "route": "/returns",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "cart",
+     "route": "/cart",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "checkout",
+     "route": "/checkout",
+     "scope": "applicable",
+     "status": "missed"
+    },
+    {
+     "id": "admin",
+     "route": "/admin",
+     "scope": "blocked",
+     "status": "discovered_blocked"
+    }
+   ],
+   "controls": [
+    {
+     "id": "lantern",
+     "label": "Trail lantern",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "kettle",
+     "label": "Camp kettle",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "categories",
+     "label": "Browse categories",
+     "kind": "button",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "outdoors",
+     "label": "Outdoor collection",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "deals_tab",
+     "label": "Current deals",
+     "kind": "button",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "deals",
+     "label": "See all deals",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "returns_summary",
+     "label": "Shipping and returns",
+     "kind": "button",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "returns",
+     "label": "Returns guide",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "reviews",
+     "label": "Load customer reviews",
+     "kind": "button",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "cart_add",
+     "label": "Add sample to cart",
+     "kind": "form_submit",
+     "scope": "applicable",
+     "status": "covered_structural_not_replayed"
+    },
+    {
+     "id": "checkout",
+     "label": "Begin checkout",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "missed"
+    },
+    {
+     "id": "admin",
+     "label": "Admin login",
+     "kind": "form_submit",
+     "scope": "blocked",
+     "status": "discovered_blocked"
+    }
+   ],
+   "requests": [
+    {
+     "id": "product",
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "outdoors",
+     "method": "GET",
+     "path": "/category/outdoors",
+     "params": [],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "deals",
+     "method": "GET",
+     "path": "/deals",
+     "params": [],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "returns",
+     "method": "GET",
+     "path": "/returns",
+     "params": [],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "reviews",
+     "method": "GET",
+     "path": "/api/reviews",
+     "params": [
+      "limit",
+      "product"
+     ],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "cart_post",
+     "method": "POST",
+     "path": "/cart/items",
+     "params": [
+      "sku"
+     ],
+     "scope": "applicable",
+     "status": "missed"
+    },
+    {
+     "id": "cart",
+     "method": "GET",
+     "path": "/cart",
+     "params": [],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "checkout",
+     "method": "GET",
+     "path": "/checkout",
+     "params": [],
+     "scope": "applicable",
+     "status": "missed"
+    }
+   ],
+   "instances": [
+    {
+     "id": "product_101",
+     "target_suffix": "/products/101",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "product_202",
+     "target_suffix": "/products/202",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    }
+   ],
+   "contexts": [
+    {
+     "id": "anonymous",
+     "cookie_name": null,
+     "scope": "applicable",
+     "status": "covered_structural_not_replayed"
+    },
+    {
+     "id": "cart",
+     "cookie_name": "shop_cart",
+     "scope": "applicable",
+     "status": "missed"
+    }
+   ],
+   "observed_request_structures": [
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_0fb057ac3c1538342b44"
+    },
+    {
+     "method": "GET",
+     "path": "/api/reviews",
+     "params": [
+      "limit",
+      "product"
+     ],
+     "resource_type": "fetch",
+     "action_id": "action_tr_8d9130611bff3a08491c"
+    },
+    {
+     "method": "GET",
+     "path": "/api/reviews",
+     "params": [
+      "limit",
+      "product"
+     ],
+     "resource_type": "fetch",
+     "action_id": "action_tr_d4ec5476e03dd4034c82"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_46b70a412ec68ae0a4a1"
+    },
+    {
+     "method": "GET",
+     "path": "/api/reviews",
+     "params": [
+      "limit",
+      "product"
+     ],
+     "resource_type": "fetch",
+     "action_id": "action_tr_ea2e5ccf41c0129e00cb"
+    },
+    {
+     "method": "GET",
+     "path": "/api/reviews",
+     "params": [
+      "limit",
+      "product"
+     ],
+     "resource_type": "fetch",
+     "action_id": "action_tr_164a58e59599da27abc9"
+    },
+    {
+     "method": "GET",
+     "path": "/returns",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_81400e1f358f1ce2396b"
+    },
+    {
+     "method": "GET",
+     "path": "/deals",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_4ae885333eaa1001b055"
+    },
+    {
+     "method": "GET",
+     "path": "/category/outdoors",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_71ab9b313d35fbefb162"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_de339bdc56751c8a4c36"
+    },
+    {
+     "method": "GET",
+     "path": "/",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_d2d4b4feb6784ba2b9b0"
+    },
+    {
+     "method": "GET",
+     "path": "/cart",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_08b8ff5bc56706bd2eb4"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_91a5145c962d6947b61a"
+    },
+    {
+     "method": "GET",
+     "path": "/deals",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_c78ab4c86846a3510f1c"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_1eabae237345e888b3eb"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_450db825aa871280edf6"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_c1969f83ebec54d08df1"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_42600320f1678082b129"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_2ee510b6205331ab5077"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_cebb5b38678391529912"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_2644ffebd3f1eaff8d14"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_f718afe122bf5e141d3e"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_5ff286376b451aebf44c"
+    },
+    {
+     "method": "GET",
+     "path": "/returns",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_d0cb1cccea5f3f89c680"
+    },
+    {
+     "method": "GET",
+     "path": "/deals",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_e7f016dcb7911ab5578c"
+    },
+    {
+     "method": "GET",
+     "path": "/category/outdoors",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_7dc5332c281ee1460435"
+    },
+    {
+     "method": "GET",
+     "path": "/category/outdoors",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_12414daf0a8c8a12f6cd"
+    },
+    {
+     "method": "GET",
+     "path": "/returns",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_1e2e28805a69fe30746e"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_597cc12ee142dabab5c1"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_0319fe1b0248c8ddf5e4"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_9e3ef0d7b85c51c10d70"
+    },
+    {
+     "method": "GET",
+     "path": "/deals",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_6b9ccdad5fe0ccf25e5b"
+    },
+    {
+     "method": "GET",
+     "path": "/returns",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_0447605f0c11a634eca2"
+    },
+    {
+     "method": "GET",
+     "path": "/category/outdoors",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_182ee2a113031fbae611"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_7d8465e11c6bc071ca07"
+    }
+   ]
+  },
+  "capabilities": 11,
+  "capabilities_reproduced": 11,
+  "browser_actions": 185,
+  "elapsed_s": 82.645,
+  "restoration_actions": 47,
+  "failed_transitions": 0,
+  "direct_url": null,
+  "contract_accepted": 0,
+  "contract_refused_by_reason": null,
+  "safety": {
+   "state_changing_requests_issued": 0,
+   "state_changing_requests_in_replay": 0,
+   "dangerous_controls_skipped": 0,
+   "blocked_out_of_scope": 0,
+   "redirect_scope_violations": 0,
+   "ws_out_of_scope_refused": 0
+  },
+  "functions_executed": null
+ },
+ {
+  "env": "heldout_shop",
+  "arm": "fix",
+  "status": "ok",
+  "driver_monotonic_s": 83.81,
+  "reference": {
+   "application": "heldout_shop",
+   "denominators": {
+    "areas": 8,
+    "controls": 11,
+    "requests": 8,
+    "paths": 8,
+    "instances": 2,
+    "contexts": 2,
+    "blocked_areas_excluded": 1,
+    "outside_areas_excluded": 0
+   },
+   "metrics": {
+    "state_interface_recall": 0.875,
+    "control_action_recall": 0.9090909090909091,
+    "request_surface_recall": 0.75,
+    "prerequisite_path_coverage": 0.875,
+    "instance_recall": 1.0,
+    "instances_distinct": true,
+    "context_recall": 0.5,
+    "replay_reliability": 1.0,
+    "request_precision": 0.9714285714285714,
+    "covered_surfaces_per_browser_action": 0.12432432432432433,
+    "covered_surfaces_per_minute": 16.656206247284313
+   },
+   "counts": {
+    "covered_areas": 7,
+    "covered_controls": 10,
+    "covered_requests": 6,
+    "replay_attempts": 17,
+    "replay_successes": 17,
+    "browser_actions": 185,
+    "elapsed_seconds": 82.852,
+    "grouped_states": 16,
+    "raw_states": 16,
+    "incorrect_state_merges_self_audit": 0,
+    "graph_connections_missing_evidence": 0
+   },
+   "areas": [
+    {
+     "id": "home",
+     "route": "/",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "lantern",
+     "route": "/products/{instance}",
+     "via_target_suffix": "/products/101",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "kettle",
+     "route": "/products/{instance}",
+     "via_target_suffix": "/products/202",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "outdoors",
+     "route": "/category/outdoors",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "deals",
+     "route": "/deals",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "returns",
+     "route": "/returns",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "cart",
+     "route": "/cart",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "checkout",
+     "route": "/checkout",
+     "scope": "applicable",
+     "status": "missed"
+    },
+    {
+     "id": "admin",
+     "route": "/admin",
+     "scope": "blocked",
+     "status": "discovered_blocked"
+    }
+   ],
+   "controls": [
+    {
+     "id": "lantern",
+     "label": "Trail lantern",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "kettle",
+     "label": "Camp kettle",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "categories",
+     "label": "Browse categories",
+     "kind": "button",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "outdoors",
+     "label": "Outdoor collection",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "deals_tab",
+     "label": "Current deals",
+     "kind": "button",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "deals",
+     "label": "See all deals",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "returns_summary",
+     "label": "Shipping and returns",
+     "kind": "button",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "returns",
+     "label": "Returns guide",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "reviews",
+     "label": "Load customer reviews",
+     "kind": "button",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "cart_add",
+     "label": "Add sample to cart",
+     "kind": "form_submit",
+     "scope": "applicable",
+     "status": "covered_structural_not_replayed"
+    },
+    {
+     "id": "checkout",
+     "label": "Begin checkout",
+     "kind": "link",
+     "scope": "applicable",
+     "status": "missed"
+    },
+    {
+     "id": "admin",
+     "label": "Admin login",
+     "kind": "form_submit",
+     "scope": "blocked",
+     "status": "discovered_blocked"
+    }
+   ],
+   "requests": [
+    {
+     "id": "product",
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "outdoors",
+     "method": "GET",
+     "path": "/category/outdoors",
+     "params": [],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "deals",
+     "method": "GET",
+     "path": "/deals",
+     "params": [],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "returns",
+     "method": "GET",
+     "path": "/returns",
+     "params": [],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "reviews",
+     "method": "GET",
+     "path": "/api/reviews",
+     "params": [
+      "limit",
+      "product"
+     ],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "cart_post",
+     "method": "POST",
+     "path": "/cart/items",
+     "params": [
+      "sku"
+     ],
+     "scope": "applicable",
+     "status": "missed"
+    },
+    {
+     "id": "cart",
+     "method": "GET",
+     "path": "/cart",
+     "params": [],
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "checkout",
+     "method": "GET",
+     "path": "/checkout",
+     "params": [],
+     "scope": "applicable",
+     "status": "missed"
+    }
+   ],
+   "instances": [
+    {
+     "id": "product_101",
+     "target_suffix": "/products/101",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    },
+    {
+     "id": "product_202",
+     "target_suffix": "/products/202",
+     "scope": "applicable",
+     "status": "covered_replayed"
+    }
+   ],
+   "contexts": [
+    {
+     "id": "anonymous",
+     "cookie_name": null,
+     "scope": "applicable",
+     "status": "covered_structural_not_replayed"
+    },
+    {
+     "id": "cart",
+     "cookie_name": "shop_cart",
+     "scope": "applicable",
+     "status": "missed"
+    }
+   ],
+   "observed_request_structures": [
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_d5c688a96f54be5e7089"
+    },
+    {
+     "method": "GET",
+     "path": "/api/reviews",
+     "params": [
+      "limit",
+      "product"
+     ],
+     "resource_type": "fetch",
+     "action_id": "action_tr_1dbc4dbcd6c61315eb1c"
+    },
+    {
+     "method": "GET",
+     "path": "/api/reviews",
+     "params": [
+      "limit",
+      "product"
+     ],
+     "resource_type": "fetch",
+     "action_id": "action_tr_de30d42adcd7c31bb533"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_dda98b3a29b0378506d4"
+    },
+    {
+     "method": "GET",
+     "path": "/api/reviews",
+     "params": [
+      "limit",
+      "product"
+     ],
+     "resource_type": "fetch",
+     "action_id": "action_tr_c5f82fdab2f4ff747f85"
+    },
+    {
+     "method": "GET",
+     "path": "/api/reviews",
+     "params": [
+      "limit",
+      "product"
+     ],
+     "resource_type": "fetch",
+     "action_id": "action_tr_f9412816d055cd156a1d"
+    },
+    {
+     "method": "GET",
+     "path": "/returns",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_3ecb0667735c0fc8dc72"
+    },
+    {
+     "method": "GET",
+     "path": "/deals",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_6fb794e2f08fa8a39aa4"
+    },
+    {
+     "method": "GET",
+     "path": "/category/outdoors",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_a53e0a241ce860f86598"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_d33e590d543eed7987d2"
+    },
+    {
+     "method": "GET",
+     "path": "/",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_0150d4440396720c5aea"
+    },
+    {
+     "method": "GET",
+     "path": "/cart",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_8af1ed0ea9dadeb1031f"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_71ecc11eb1af11069b8f"
+    },
+    {
+     "method": "GET",
+     "path": "/deals",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_e10598f5557e8cdce90b"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_da8de1c9bde09190c8c3"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_bb655722646dc67827a7"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_e7afeae5e30080dce68a"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_9df9c9b4ed517d1970aa"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_27c42b4faabdf8c8a48f"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_2c31b4734259387ae1a1"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_fe011a7bb30f2b346e0f"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_0f5d9b64cc7d201ab13b"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_f1ad54ae13a17cec7d05"
+    },
+    {
+     "method": "GET",
+     "path": "/returns",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_4b4922755586e26f344b"
+    },
+    {
+     "method": "GET",
+     "path": "/deals",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_10f4014bd5784247f1af"
+    },
+    {
+     "method": "GET",
+     "path": "/category/outdoors",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_3cfd1f4648958917686e"
+    },
+    {
+     "method": "GET",
+     "path": "/category/outdoors",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_d1672a2086e6fcd986ff"
+    },
+    {
+     "method": "GET",
+     "path": "/returns",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_84b08e482e5670f67e90"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_6ce1ada86b7e752e2614"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_fdbf654f7ac715e1187d"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_572e821bb74539d5fac6"
+    },
+    {
+     "method": "GET",
+     "path": "/deals",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_e0a7f2b7329787f15b8e"
+    },
+    {
+     "method": "GET",
+     "path": "/returns",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_69657dafac8c6a6d50cf"
+    },
+    {
+     "method": "GET",
+     "path": "/category/outdoors",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_4f94f45d70a84dc20325"
+    },
+    {
+     "method": "GET",
+     "path": "/products/{instance}",
+     "params": [],
+     "resource_type": "document",
+     "action_id": "action_tr_c3ffd25318116a25a9de"
+    }
+   ]
+  },
+  "capabilities": 11,
+  "capabilities_reproduced": 11,
+  "browser_actions": 185,
+  "elapsed_s": 82.852,
+  "restoration_actions": 47,
+  "failed_transitions": 0,
+  "direct_url": null,
+  "contract_accepted": 0,
+  "contract_refused_by_reason": null,
+  "safety": {
+   "state_changing_requests_issued": 0,
+   "state_changing_requests_in_replay": 0,
+   "dangerous_controls_skipped": 0,
+   "blocked_out_of_scope": 0,
+   "redirect_scope_violations": 0,
+   "ws_out_of_scope_refused": 0
+  },
+  "functions_executed": null
+ },
+ {
+  "env": "volatile_lab",
+  "arm": "baseline",
+  "status": "ok",
+  "driver_monotonic_s": 181.62,
+  "reference": null,
+  "capabilities": 13,
+  "capabilities_reproduced": 11,
+  "browser_actions": 237,
+  "elapsed_s": 180.453,
+  "restoration_actions": 2,
+  "failed_transitions": 0,
+  "direct_url": null,
+  "contract_accepted": 0,
+  "contract_refused_by_reason": null,
+  "safety": {
+   "state_changing_requests_issued": 0,
+   "state_changing_requests_in_replay": 0,
+   "dangerous_controls_skipped": 0,
+   "blocked_out_of_scope": 0,
+   "redirect_scope_violations": 0,
+   "ws_out_of_scope_refused": 0
+  },
+  "functions_executed": [
+   "clock_status",
+   "desk_annotate",
+   "record_history_1",
+   "record_history_2",
+   "showcase_compare",
+   "showcase_wishlist"
+  ]
+ },
+ {
+  "env": "volatile_lab",
+  "arm": "fix",
+  "status": "ok",
+  "driver_monotonic_s": 185.91,
+  "reference": null,
+  "capabilities": 16,
+  "capabilities_reproduced": 11,
+  "browser_actions": 243,
+  "elapsed_s": 184.783,
+  "restoration_actions": 2,
+  "failed_transitions": 0,
+  "direct_url": {
+   "accepted": 2,
+   "actions_saved": 2,
+   "attempted": 2,
+   "fallback": 0
+  },
+  "contract_accepted": 0,
+  "contract_refused_by_reason": null,
+  "safety": {
+   "state_changing_requests_issued": 0,
+   "state_changing_requests_in_replay": 0,
+   "dangerous_controls_skipped": 0,
+   "blocked_out_of_scope": 0,
+   "redirect_scope_violations": 0,
+   "ws_out_of_scope_refused": 0
+  },
+  "functions_executed": [
+   "clock_status",
+   "desk_annotate",
+   "record_history_1",
+   "record_history_2",
+   "showcase_compare",
+   "showcase_wishlist"
+  ]
+ }
+]
