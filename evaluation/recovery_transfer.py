@@ -46,6 +46,18 @@ if WXB_CONFIG.exists():
                                                                              "write_policy": "read_only"}}
         VARIANTS[f"wxb_{_t}_policy_disposable"] = {"env": _t, "run_config": {
             **_frozen["run_config"], "allow_post_forms": True, "write_policy": "disposable"}, "attest": True}
+# Functional re-evaluation (post-diagnosis, not blind): generous general budgets and depth,
+# deployment corrections, well-known discovery, attested disposable writes (destructive blocked).
+FUNCTIONAL = {"max_seconds": 1800.0, "max_browser_actions": 2000, "max_transitions": 800,
+              "max_total_http_requests": 20000, "max_resource_fetches": 2000, "max_resource_document_fetches": 1400,
+              "max_resource_script_fetches": 400, "max_resource_stylesheet_fetches": 200,
+              "max_resource_asset_fetches": 400, "max_resource_fetches_per_observation": 30, "max_resource_depth": 8,
+              "passive_document_max_depth": 8, "hard_max_resource_depth": 12, "well_known_discovery": True,
+              "allow_post_forms": True, "write_policy": "disposable", "max_write_requests": 100}
+if WXB_CONFIG.exists():
+    for _t in WXB_TARGETS:
+        VARIANTS[f"wxb_{_t}_functional"] = {"env": _t, "run_config": {**_frozen["run_config"], **FUNCTIONAL},
+                                            "attest": True, "deployment_fixes": True}
 for _base in ("crawlmaze_integrated_180", "crawlground_integrated_readonly_600"):
     VARIANTS[f"{_base}_policy_read_only"] = {"env": HISTORICAL[_base]["env"],
                                              "run_config": {**HISTORICAL[_base]["run_config"], "write_policy": "read_only"}}
@@ -60,10 +72,16 @@ def run_trial(variant: str, trial: int, code_root: Path, label: str, log) -> dic
                            "code_root": str(code_root), "code_revision": _rev(code_root)}
     # WebExploitBench: official targetctl, loopback-only check and the frozen reset-integrity profile.
     ext = External(env, require_profile=env in WXB_TARGETS)
+    ext.prefer_html_entry = bool(spec.get("deployment_fixes"))
     url = None
     try:
         url = ext.setup()
         run_config = dict(spec["run_config"])
+        if spec.get("deployment_fixes"):
+            run_config.update(deployment_fixes(ext, url))
+            row["deployment_fixes"] = {"entry_choice": getattr(ext, "entry_choice", None),
+                                       "origin_aliases": run_config.get("origin_aliases"),
+                                       "host_map": run_config.get("host_map")}
         if spec.get("attest"):
             # Only reached after ext.setup() verified the reset-integrity profile (it raises otherwise).
             if not (ext.reset or {}).get("mount_profile_matches_frozen"):
@@ -122,6 +140,41 @@ def run_trial(variant: str, trial: int, code_root: Path, label: str, log) -> dic
         f"elapsed={(row.get('agent') or {}).get('elapsed_seconds')} wall={row.get('driver_wall_s')} "
         f"sleep={row.get('host_sleep_affected')} {row.get('error_tail') or row.get('setup_error') or ''}")
     return row
+
+
+def deployment_fixes(ext: External, url: str) -> dict[str, Any]:
+    """General deployment corrections, decided from the running deployment only:
+    every URL the official targetctl printed is an approved origin; a single-label host the entry
+    page links to is aliased to the loopback URL only if serving that Host header through loopback
+    returns the application (an internal service name, never a public domain)."""
+    import re
+    import urllib.request
+    from urllib.parse import urlsplit
+    aliases = [u.rstrip("/") for u in getattr(ext, "urls", []) if u.rstrip("/") != url.rstrip("/")]
+    host_map: dict[str, str] = {}
+    try:
+        with urllib.request.urlopen(url, timeout=15) as r:
+            html = r.read(2_000_000).decode("utf-8", "replace")
+    except Exception:
+        html = ""
+    hosts = {m.group(1).lower() for m in re.finditer(r"""href=["']https?://([A-Za-z0-9_-]+)(?::80)?/""", html)}
+    for host in sorted(hosts - {"localhost"}):
+        req = urllib.request.Request(url, headers={"Host": host})
+        try:
+            with urllib.request.urlopen(req, timeout=15) as r:
+                ok = r.status < 400 and "html" in (r.headers.get("Content-Type") or "").lower()
+        except Exception:
+            ok = False
+        if ok:
+            origin = f"http://{host}"
+            host_map[origin] = url.rstrip("/")
+            aliases.append(origin)
+    out: dict[str, Any] = {}
+    if aliases:
+        out["origin_aliases"] = sorted(set(aliases))
+    if host_map:
+        out["host_map"] = host_map
+    return out
 
 
 def _rev(root: Path) -> str:

@@ -98,3 +98,4 @@ agent1/experiments/comprehensive_*/
 agent1/experiments/perception_ablation/
 agent1/experiments/restoration_ab/
 agent1/experiments/recovery_transfer/
+agent1/experiments/model_scaling/

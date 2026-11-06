@@ -135,6 +135,9 @@ class RunConfig(BaseModel):
     environment_attestation: str | None = Field(default=None, max_length=200)
     max_write_requests: int = Field(default=50, ge=0, le=10_000)
     allow_destructive: bool = False
+    # Operator-approved canonical-host aliases, origin -> loopback origin (see bounded_http.HOST_MAP).
+    # Every key must also be listed in origin_aliases, so scope is never widened implicitly.
+    host_map: dict[str, str] = Field(default_factory=dict)
     # Optional discovery changes (defaults keep the frozen baseline behavior).
     resource_allocation: Literal["class_caps", "shared_http"] = "class_caps"
     passive_document_http_reserve: int | None = Field(default=None, ge=0, le=100_000)
@@ -176,6 +179,16 @@ class RunConfig(BaseModel):
         return "legacy_post_forms" if self.allow_post_forms else "read_only"
 
     @model_validator(mode="after")
+    def loopback_host_map(self) -> "RunConfig":
+        from urllib.parse import urlsplit as _split
+        for alias, target in self.host_map.items():
+            if (_split(target).hostname or "") not in {"127.0.0.1", "localhost", "::1"}:
+                raise ValueError("host_map targets must be loopback origins")
+            if alias.rstrip("/") not in {a.rstrip("/") for a in self.origin_aliases}:
+                raise ValueError("every host_map alias must also be an approved origin alias")
+        return self
+
+    @model_validator(mode="after")
     def consistent_write_policy(self) -> "RunConfig":
         if self.write_policy == "disposable":
             if not self.allow_post_forms:
@@ -213,11 +226,13 @@ class RunConfig(BaseModel):
                 raise ValueError("search probes cannot contain control characters")
             self.search_probe_primary, self.search_probe_contrast = cleaned
         normalized_aliases: list[str] = []
+        # A non-loopback alias is allowed only when host_map routes it to a loopback origin.
+        mapped_aliases = {k.rstrip("/") for k in self.host_map}
         for value in self.origin_aliases:
             parsed = urlsplit(value)
             if (
                 parsed.scheme not in {"http", "https"}
-                or parsed.hostname not in {"127.0.0.1", "localhost", "::1"}
+                or (parsed.hostname not in {"127.0.0.1", "localhost", "::1"} and value.rstrip("/") not in mapped_aliases)
                 or parsed.username
                 or parsed.password
                 or parsed.query

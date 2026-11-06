@@ -431,8 +431,21 @@ class External:
         if not published or not all(_loopback_only(p) for p in published):
             raise RuntimeError("isolation not established: a published port is not loopback-only")
         self._post_start()
-        url = urls[0].rstrip("/") + "/"
+        self.urls = [u.rstrip("/") + "/" for u in dict.fromkeys(urls)]
+        url = self.urls[0]
         _wait_http(url, SETUP_TIMEOUT_S)
+        if getattr(self, "prefer_html_entry", False) and len(self.urls) > 1:
+            # Entry point: the first printed URL whose root serves an HTML document (a UI rather
+            # than a bare API); every printed URL is an approved origin of this deployment.
+            for candidate in self.urls:
+                try:
+                    with urllib.request.urlopen(candidate, timeout=10) as r:
+                        if r.status < 400 and "html" in (r.headers.get("Content-Type") or "").lower():
+                            url = candidate
+                            break
+                except Exception:
+                    continue
+        self.entry_choice = {"printed_urls": self.urls, "entry": url}
         return url
 
     def setup(self) -> str:

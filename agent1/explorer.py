@@ -742,7 +742,13 @@ class BrowserSession:
                     route.abort("blockedbyclient")
                     return
                 try:
-                    response = route.fetch(max_redirects=0, timeout=config.action_timeout_ms * 2)
+                    from .bounded_http import mapped_target
+                    mapped = mapped_target(request.url)
+                    if mapped:   # approved canonical-host alias: fetch via loopback, keep the Host header
+                        response = route.fetch(url=mapped[0], headers={**request.headers, "host": mapped[1]},
+                                               max_redirects=0, timeout=config.action_timeout_ms * 2)
+                    else:
+                        response = route.fetch(max_redirects=0, timeout=config.action_timeout_ms * 2)
                 except PlaywrightError:
                     route.abort("failed")
                     return
@@ -2046,11 +2052,18 @@ class Explorer:
                 if (item.method == "GET" and item.http_status is not None and 200 <= item.http_status < 300
                         and not item.parameter_names and not DANGEROUS_ACTION.search(urlsplit(item.mapped_url).path)):
                     self.resource_spider.seed_external(item.mapped_url)
+        launch_args: list[str] = []
+        if self.config.host_map:
+            from .bounded_http import set_host_map
+            netloc = lambda origin: f"{(urlsplit(origin).hostname or '').lower()}:{urlsplit(origin).port or (443 if urlsplit(origin).scheme == 'https' else 80)}"
+            mapping = {netloc(alias): urlsplit(target).netloc for alias, target in self.config.host_map.items()}
+            set_host_map(mapping)
+            launch_args.append("--host-resolver-rules=" + ", ".join(f"MAP {k} {v}" for k, v in mapping.items()))
         if self.config.well_known_discovery and self.resource_spider is not None and not self.config.resume_from:
             for well_known in ("/robots.txt", "/sitemap.xml"):
                 self.resource_spider.seed_well_known(urljoin(self.config.start_url, well_known))
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch(headless=self.config.headless)
+            browser = playwright.chromium.launch(headless=self.config.headless, args=launch_args)
             self.artifact.browser_version = f"chromium {browser.version}"
             try:
                 if self.config.resume_from:

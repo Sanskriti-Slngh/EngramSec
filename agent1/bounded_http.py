@@ -39,6 +39,27 @@ class BoundedResponse:
     set_cookies: list[str] = field(default_factory=list)
 
 
+# Operator-approved canonical-host aliases: an application that links to its own internal
+# service name (e.g. "http://prestashop/") is reached through its loopback publication while the
+# original Host header is kept. Keys and values are netlocs ("prestashop:80" -> "127.0.0.1:58956").
+HOST_MAP: dict[str, str] = {}
+
+
+def set_host_map(mapping: dict[str, str]) -> None:
+    HOST_MAP.clear()
+    HOST_MAP.update(mapping)
+
+
+def mapped_target(url: str) -> tuple[str, str] | None:
+    """(URL to connect to, original Host header) for an aliased URL, else None."""
+    parts = urlsplit(url)
+    port = parts.port or (443 if parts.scheme == "https" else 80)
+    target = HOST_MAP.get(f"{(parts.hostname or '').lower()}:{port}")
+    if not target:
+        return None
+    return parts._replace(netloc=target).geturl(), parts.netloc
+
+
 def bounded_get(url: str, *, max_body_bytes: int, timeout_s: float = 5.0, cookie_header: str | None = None,
                 read_body: bool = True, deadline_s: float | None = None) -> BoundedResponse:
     started = time.monotonic()
@@ -51,8 +72,12 @@ def bounded_get(url: str, *, max_body_bytes: int, timeout_s: float = 5.0, cookie
     kwargs = {"timeout": timeout_s}
     if parts.scheme == "https":
         kwargs["context"] = ssl.create_default_context()
-    connection = connection_class(parts.hostname, parts.port, **kwargs)  # type: ignore[arg-type]
     headers = {"Accept": "*/*", "Accept-Encoding": "gzip, deflate", "User-Agent": "EngramSec-Agent1/0.1 (passive)"}
+    mapped = mapped_target(url)
+    connect = urlsplit(mapped[0]) if mapped else parts
+    if mapped:
+        headers["Host"] = mapped[1]
+    connection = connection_class(connect.hostname, connect.port, **kwargs)  # type: ignore[arg-type]
     if cookie_header:
         headers["Cookie"] = cookie_header
     try:
