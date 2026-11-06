@@ -58,6 +58,13 @@ if WXB_CONFIG.exists():
     for _t in WXB_TARGETS:
         VARIANTS[f"wxb_{_t}_functional"] = {"env": _t, "run_config": {**_frozen["run_config"], **FUNCTIONAL},
                                             "attest": True, "deployment_fixes": True}
+        # Authenticated-exploration pair: same functional budget and deployment fixes; the only
+        # difference is the provisioned login. Anonymous is the matched control for the authenticated run.
+        VARIANTS[f"wxb_{_t}_auth_anon"] = {"env": _t, "run_config": {**_frozen["run_config"], **FUNCTIONAL},
+                                           "attest": True, "deployment_fixes": True}
+        VARIANTS[f"wxb_{_t}_auth_login"] = {"env": _t, "run_config": {**_frozen["run_config"], **FUNCTIONAL},
+                                            "attest": True, "deployment_fixes": True, "authenticate": True,
+                                            "require_auth": True}
 for _base in ("crawlmaze_integrated_180", "crawlground_integrated_readonly_600"):
     VARIANTS[f"{_base}_policy_read_only"] = {"env": HISTORICAL[_base]["env"],
                                              "run_config": {**HISTORICAL[_base]["run_config"], "write_policy": "read_only"}}
@@ -88,6 +95,21 @@ def run_trial(variant: str, trial: int, code_root: Path, label: str, log) -> dic
                 raise ResetFailure("disposable write policy requires a verified reset-integrity profile")
             run_config["environment_attestation"] = f"disposable:targetctl-reset-verified:{env}"
             row["attestation"] = run_config["environment_attestation"]
+        if spec.get("authenticate"):
+            # Provision a session OUTSIDE the agent; the agent receives only the storage-state file.
+            from evaluation.auth_provision import provision
+            attested = bool((ext.reset or {}).get("mount_profile_matches_frozen"))
+            auth = provision(env, url, attested_disposable=attested, aliases=run_config.get("origin_aliases"))
+            row["auth"] = auth.public()
+            if auth.status == "authenticated":
+                run_config["storage_state_path"] = str(auth.storage_state_path)
+            else:
+                # Record the access barrier instead of exploring as if the frontier were complete.
+                row["auth_barrier"] = auth.barrier
+                if spec.get("require_auth"):
+                    row.update(status="auth_unavailable", setup_error=f"authentication unavailable: {auth.barrier}")
+                    (out / "trial.json").write_text(json.dumps(row, default=str))
+                    return row
         cmd = [sys.executable, str(ROOT / "evaluation" / "recovery_child.py"), "--out", str(out), "--url", url,
                "--config", json.dumps(run_config), "--code-root", str(code_root)]
         mono0, wall0 = time.monotonic(), time.time()
@@ -103,6 +125,10 @@ def run_trial(variant: str, trial: int, code_root: Path, label: str, log) -> dic
         row["driver_monotonic_s"] = round(time.monotonic() - mono0, 2)
         row["driver_wall_s"] = round(time.time() - wall0, 2)
         row["host_sleep_affected"] = row["driver_wall_s"] - row["driver_monotonic_s"] > SLEEP_GAP_S
+        if row.get("auth", {}).get("status") == "authenticated":
+            # The login is a prerequisite of everything the authenticated run maps: co-locate it with
+            # Graph A as an authored prerequisite (no secrets; account_ref is opaque).
+            (out / "auth_prerequisite.json").write_text(json.dumps(row["auth"]["prerequisite"], indent=1))
         if row["status"] == "ok":
             row["score"] = ext.score(out, url)
             if env == "crawlground":       # per-test outcome for the post-run miss audit (git-ignored)
