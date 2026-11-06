@@ -115,6 +115,11 @@ class RunConfig(BaseModel):
     replay_policy: Literal["shallow", "diverse", "structure"] = "shallow"
     replay_structure_attempts: int = Field(default=2, ge=1, le=10)
     state_reuse: Literal["root", "prefix"] = "root"
+    # Experimental (opt-in): when the strict group check fails after a restoration, "contract"
+    # evaluates the pending action's starting-state contract (agent1/restoration.py) instead of
+    # refusing outright. "strict" (default) is the unchanged behavior.
+    restoration_policy: Literal["strict", "contract"] = "strict"
+    restoration_sample_interval_ms: int = Field(default=300, ge=50, le=2_000)
     # Optional discovery changes (defaults keep the frozen baseline behavior).
     resource_allocation: Literal["class_caps", "shared_http"] = "class_caps"
     passive_document_http_reserve: int | None = Field(default=None, ge=0, le=100_000)
@@ -678,6 +683,8 @@ class RunMetrics(BaseModel):
     runtime_behaviors_replay_validated: int = 0
     replay_failure_reasons: dict[str, int] = Field(default_factory=dict)
     replay_scheduler: dict[str, Any] = Field(default_factory=dict)
+    # Restoration-contract decisions (restoration_policy="contract" only).
+    restoration_contract: dict[str, Any] = Field(default_factory=dict)
     passive_cookie_updates: dict[str, int] = Field(default_factory=dict)
     python_peak_rss_mb: float = 0.0
     listener_observations: int = 0

@@ -69,6 +69,8 @@ ENVS: dict[str, dict[str, Any]] = {
                             exposure="development"),
     "hybrid_lab": dict(track="A", kind="inproc", category="catalog + setup chain contract fixture", gt=None,
                        exposure="development"),
+    "volatile_lab": dict(track="A", kind="inproc", category="volatile-state restoration fixture", gt=None,
+                         exposure="development (built for the state-restoration experiment)"),
     "crawl_maze": dict(track="A", kind="crawl_maze", category="crawler testbed (link/JS/HTML discovery)", gt="crawl_maze",
                        exposure="development (repeatedly used)"),
     "crawlground": dict(track="A", kind="crawlground", category="crawler testbed (interaction-gated markers)", gt="crawlground",
@@ -121,6 +123,10 @@ def _inproc_start(env: str):
         from development_apps.restoration_lab import start_restoration_lab
         server, url, log, state = start_restoration_lab()
         return url, server.shutdown, lambda: list(log), lambda: dict(state)
+    if env == "volatile_lab":
+        from development_apps.volatile_lab import start_volatile_lab
+        server, url, vstate = start_volatile_lab()
+        return url, server.shutdown, lambda: [(e["method"], e["path"]) for e in vstate.log], vstate.snapshot
     if env == "hybrid_lab":
         from development_apps.hybrid_lab import start_hybrid_lab
         server, url, log, state = start_hybrid_lab()

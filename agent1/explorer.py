@@ -30,6 +30,7 @@ from .replay_scheduler import (ReplayItem, ReplayScheduler, request_structures, 
                                structure_paths, workflow_changes_state, workflow_key)
 from .resource_spider import ResourceBudget, TypedResourceSpider
 from .revision import code_revision
+from . import restoration as restoration_contract
 from .hierarchical import AreaTourPlanner
 from .zap_adapter import load_zap_evidence
 from .search import (
@@ -699,6 +700,9 @@ class BrowserSession:
         self.last_popup_opened = False
         self._last_action: str | None = None
         self.listener_observer: ListenerObserver | None = None
+        # restoration_policy="contract" only: condensed region evidence per observation id.
+        self.region_sink: dict[str, dict[str, Any]] | None = None
+        self.region_cost: dict[str, float] = {"captures": 0, "ms": 0.0}
 
     def _new_listener_observer(self) -> ListenerObserver | None:
         if self.config.runtime_listener_observation == "off":
@@ -1193,7 +1197,7 @@ class BrowserSession:
         )
         if self.evidence_sink is not None:
             self.evidence_sink.disabled[observation_id] = disabled_controls
-        return Observation(
+        observation = Observation(
             id=observation_id,
             sequence=sequence,
             url=current_url,
@@ -1220,6 +1224,16 @@ class BrowserSession:
             behavior_signature=behavior_signature(group_sig, active_revisions, sorted(
                 control.signature for control in controls if control.provenance == "observed_listener" and control.safe)),
         )
+        if self.region_sink is not None:
+            started = time.monotonic()
+            try:
+                self.region_sink[observation_id] = restoration_contract.collect(
+                    self.page, sorted({control.css_path for control in controls}))
+            except PlaywrightError:
+                pass
+            self.region_cost["captures"] += 1
+            self.region_cost["ms"] = round(self.region_cost["ms"] + (time.monotonic() - started) * 1_000, 1)
+        return observation
 
     def _frame_for_href(self, href: str) -> tuple[int, str] | None:
         assert self.page
@@ -1749,6 +1763,11 @@ class Explorer:
             ],
         )
         self._observation_ids: set[str] = set()
+        self._region_maps: dict[str, dict[str, Any]] | None = (
+            {} if config.restoration_policy == "contract" else None)
+        self._region_cost: dict[str, float] = {"captures": 0, "ms": 0.0}
+        if config.restoration_policy == "contract":
+            self.artifact.metrics.restoration_contract["region_capture"] = self._region_cost
         self.evidence_sink = None
         self.shadow = None
         self.action_ledger: dict[str, list[float]] = {}
@@ -1777,7 +1796,7 @@ class Explorer:
         return data
 
     def _browser_session(self, browser: Browser) -> BrowserSession:
-        return BrowserSession(
+        session = BrowserSession(
             browser,
             self.config,
             self.resource_budget,
@@ -1787,6 +1806,9 @@ class Explorer:
             self.browser_body_status,
             self.evidence_sink,
         )
+        session.region_sink = self._region_maps
+        session.region_cost = self._region_cost
+        return session
 
     def _revision(self) -> str:
         return code_revision(self.repository_root)
@@ -2472,7 +2494,9 @@ class Explorer:
                         for descriptor in item.path
                     )
                 )
-                if actual != expected:
+                if actual != expected and self.config.restoration_policy == "contract":
+                    self._restoration_contract(session, expected_observation, source, item.action, expected, actual)
+                elif actual != expected:
                     usable = bool(expected_observation) and self._usable_return_screen(
                         expected_observation, source
                     )
@@ -2683,6 +2707,58 @@ class Explorer:
             if not descriptor.input_plan_ref or field.id not in plan:
                 raise RuntimeError("configured search replay requires its exact protected input plan")
         return plan
+
+    def _restoration_contract(self, session: BrowserSession, expected_observation: Observation | None,
+                              source: Observation, action: ActionDescriptor, expected: str, actual: str) -> None:
+        """Experimental: accept a non-identical restored page only if the action's starting contract holds."""
+        stats = self.artifact.metrics.restoration_contract
+        stats["evaluations"] = stats.get("evaluations", 0) + 1
+        started = time.monotonic()
+        decision = None
+        if expected_observation is not None and session.page is not None:
+            prior = (self._region_maps or {}).get(expected_observation.id)
+            probe = sorted({c.css_path for c in expected_observation.controls} | {action.css_path})
+            current = session.find_current(source, action)
+            samples: list[dict[str, Any]] = []
+            try:
+                samples.append(restoration_contract.collect(session.page, probe))
+                decision = restoration_contract.evaluate(expected_observation, source, action, current, prior, samples,
+                                                         self.config.start_url, self.config.origin_aliases)
+                if decision.needs_samples:
+                    more, _ = restoration_contract.sample_restored(session.page, probe,
+                                                                   self.config.restoration_sample_interval_ms, 3)
+                    samples.extend(more[1:])
+                    decision = restoration_contract.evaluate(expected_observation, source, action, current, prior,
+                                                             samples, self.config.start_url, self.config.origin_aliases)
+            except PlaywrightError as exc:
+                decision = restoration_contract.Decision(False, "contextual", [f"evidence_error:{type(exc).__name__}"])
+        if decision is None:
+            decision = restoration_contract.Decision(False, "contextual", ["no_expected_observation"])
+        elapsed = (time.monotonic() - started) * 1_000
+        stats["evaluation_ms"] = round(stats.get("evaluation_ms", 0.0) + elapsed, 1)
+        stats["region_capture"] = self._region_cost
+        key = "accepted" if decision.accepted else "refused"
+        stats[key] = stats.get(key, 0) + 1
+        bucket = stats.setdefault(f"{key}_by_tier", {})
+        bucket[decision.tier] = bucket.get(decision.tier, 0) + 1
+        if not decision.accepted:
+            reasons = stats.setdefault("refused_by_reason", {})
+            for reason in sorted(set(decision.reasons)):
+                reasons[reason] = reasons.get(reason, 0) + 1
+        tolerated = stats.setdefault("tolerated", {})
+        for name, count in decision.tolerated.items():
+            tolerated[name] = tolerated.get(name, 0) + count
+        log = stats.setdefault("decisions", [])
+        if len(log) < 500:
+            log.append({**decision.record(), "action_signature": action.signature, "action_label": action.label,
+                        "expected_observation_id": expected_observation.id if expected_observation else None,
+                        "restored_observation_id": source.id, "expected_group": expected, "restored_group": actual,
+                        "url": source.url, "elapsed_ms": round(elapsed, 1)})
+        if not decision.accepted:
+            raise restoration_contract.RestorationRefused(
+                "restoration contract refused: " + ",".join(sorted(set(decision.reasons))))
+        self.artifact.notes.append(
+            f"Restoration contract ({decision.tier}) accepted a non-identical restored page for {action.signature}.")
 
     @staticmethod
     def _usable_return_screen(expected: Observation, actual: Observation) -> bool:
