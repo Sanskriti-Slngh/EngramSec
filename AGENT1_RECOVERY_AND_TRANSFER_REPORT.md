@@ -132,7 +132,41 @@ All five runs:
 | White-Jotter | 595 | 511 s | 6 / 60 | 22 | 14 | 248 / 11 | 172 / 10 / 0 | action budget |
 
 - **Pages and endpoints discovered** and **functions executed or reproduced** are the agent's own evidence only. None is a coverage percentage: without independent ground truth, the share of each application captured cannot be established.
-- **Vulnerable-function reachability: NOT MEASURABLE.** Reading the benchmark's officially supplied challenge metadata for a post-run evaluator was denied by this session's permission policy. No location ground truth was accessed, and none was guessed.
+### Vulnerable-function reachability (separate post-run evaluator)
+
+[evaluation/wxb_reachability.py](evaluation/wxb_reachability.py); results in [evaluation/results/wxb_reachability.json](evaluation/results/wxb_reachability.json).
+
+**Ground truth and integrity.**
+- The source is the benchmark's officially supplied `vulnerability/<id>/metadata.json` `Location` field (28 vulnerabilities across the five targets).
+- It was read with your explicit authorization, only after every run and this report's results were committed (`0788922`).
+- Only the location path is used. No report, exploit or verifier content was read, and nothing was passed to Agent 1.
+- Matching is path-only, because the ground truth names internal service hosts. `{placeholder}` segments match any single segment.
+
+**Levels**, each implying the ones above it:
+- **referenced:** the path appears in a link, form, extracted reference or policy-blocked request;
+- **requested:** the browser or spider sent a request that was not blocked;
+- **executed:** an executed agent action issued an unblocked request to the path, or landed on it;
+- **reproduced:** a replay-validated workflow, or a reproduced or verified capability, includes it.
+
+**Frozen runs (`5dfee96`): 4 of 28 vulnerable locations reached.**
+
+| Target | Documented | Reached (highest level) | Main limiting factor (from §4 analysis) |
+|---|---:|---|---|
+| PrestaShop | 4 | 0 | in-scope frontier empty: links point to a configured non-loopback host; the admin path is never linked in scope |
+| ComfyUI | 6 | 0 | HTTP budget exhausted at 40 s |
+| SiyuCMS | 6 | 1 (`/index/team.html`: requested) | HTTP budget exhausted at 70 s; most locations lie under `/admin`, behind authentication |
+| JetLinks | 5 | 0 | the harness started at the first URL `targetctl` prints, the API root, which returns 404; the separate UI port was not used as the entry point (a pre-existing harness choice, known before reading ground truth) |
+| White-Jotter | 7 | 3 (`/api/search`: **reproduced**; `/api/login`, `/api/register`: **executed**) | the remaining locations are administrative or authenticated API paths |
+
+Prefix evidence, reported but not counted: White-Jotter's `/api/` location ends with a slash and may denote the whole API; the agent requested 8 distinct paths under it.
+
+**White-Jotter under the write policies (`12e0a7e`):**
+- **read-only:** `/api/search` reproduced; `/api/login` and `/api/register` **referenced only**, because both were attempted and blocked by the policy. The agent found them but, by design, did not exercise them.
+- **disposable:** `/api/login` and `/api/register` executed. `/api/search` was not replay-validated in this single run.
+
+**Interpretation.** Reachability on WebExploitBench is bounded first by deployment and budget factors already identified: scope configuration, HTTP budget, entry URL and authentication. The mapper reached every documented White-Jotter location it could get to without credentials or the admin area.
+
+These numbers are discovery and reachability only. Nothing was exploited, and no official WebExploitBench score is claimed. Future WebExploitBench runs by this author are no longer blind to these locations, and they must stay out of any tuning or training.
 - **Budget finding:** on two of five real applications, the HTTP budget sized for the testbeds ran out within about a minute, so actions and time went unused. That is input for the scaling experiment.
 
 ### Safety finding: read-only was claimed but not enforced
@@ -209,7 +243,7 @@ The agent did not go on to use the new account to explore authenticated areas. T
    - Two targets exhausted a testbed-sized HTTP budget in about a minute.
    - PrestaShop's links point to a non-loopback host.
    - JetLinks' root returns 404.
-   - Vulnerable-function reachability is NOT MEASURABLE until the evaluator is permitted to read the official location ground truth.
+   - Vulnerable-function reachability (official locations, post-run): **4 of 28** in the frozen runs, of which White-Jotter accounts for 3 of 7 (1 reproduced, 2 executed).
 4. **Read-only is now enforced.** Disposable, attested environments can exercise state-changing functionality with logging, a cap and destructive blocking. Each capability carries security evidence with vulnerability status left to a downstream assessor.
 5. **Open gaps:**
    - state-identity inflation from volatile text under persistent exploration (volatile_lab `/clock`);
@@ -226,5 +260,5 @@ The agent did not go on to use the new account to explore authenticated areas. T
   - both White-Jotter policy runs.
 
   Outcomes stand; timing from these trials is excluded.
-- **D3.** Reading WebExploitBench `challenge.json` and `vulnerability/` for the post-run evaluator was denied by the session's permission policy. It was not worked around.
+- **D3.** The first attempt to read WebExploitBench metadata for the post-run evaluator was denied by the session's permission policy and was not worked around. You then explicitly authorized the read, after all runs and results were committed (`0788922`). Only `metadata.json` `Location` fields were used.
 - **D4.** Three existing tests asserted the read-only gap (script POSTs reaching the server with POST forms off). They were updated to the enforced behaviour, each with a comment.

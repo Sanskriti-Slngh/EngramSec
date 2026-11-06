@@ -77,7 +77,7 @@
  },
  "frozen_code": "5dfee96 (agent1 tree 5b3fe75), separate git worktree",
  "trials_per_target": 1,
- "vulnerable_function_reachability": "NOT MEASURABLE: reading the benchmark's official challenge metadata for a post-run evaluator was denied by this session's permission policy; no location ground truth was accessed, and none was guessed",
+ "vulnerable_function_reachability": "Measured post-run in evaluation/results/wxb_reachability.json from the official metadata.json Location fields (read with explicit authorization after commit 0788922): 4 of 28 reached in the frozen runs.",
  "targets": {
   "prestashop": {
    "agent1_module_frozen": true,
