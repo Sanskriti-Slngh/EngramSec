@@ -54,3 +54,22 @@ def test_is_promotable_write_only_safe_non_get_forms():
     # under read-only nothing is promotable
     ro = _explorer("read_only", True)
     assert not ro._is_promotable_write(_form("POST", "http://localhost/order/new"))
+
+
+def test_focused_subtree_is_a_valid_opt_in_config():
+    from agent1.schema import RunConfig
+    c = RunConfig(start_url="http://127.0.0.1/", output_dir="/tmp/x")
+    assert c.write_execution_policy == "deferred"          # default unchanged
+    assert c.focus_max_steps == 12
+    f = RunConfig(start_url="http://127.0.0.1/", output_dir="/tmp/x",
+                  write_execution_policy="focused_subtree", focus_max_steps=20,
+                  write_sweep_replay_floor=0.25)
+    assert f.write_execution_policy == "focused_subtree" and f.focus_max_steps == 20
+    assert f.write_sweep_replay_floor == 0.25
+
+
+def test_focused_subtree_still_requires_attested_disposable():
+    # the focus sweep is gated by the same authorization check as authorized_fair
+    assert _explorer("disposable", True)._writes_authorized()
+    assert not _explorer("read_only", True)._writes_authorized()
+    assert not _explorer("disposable", False)._writes_authorized()

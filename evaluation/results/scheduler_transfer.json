@@ -51,6 +51,28 @@
    "destructive_in_server_log": []
   },
   {
+   "fixture": "stateful_lab",
+   "policy": "focused_subtree",
+   "status": "ok",
+   "browser_actions": 16,
+   "transitions": 12,
+   "write_policy": {
+    "allowed": 1,
+    "blocked_destructive": 0,
+    "blocked_read_only": 0,
+    "blocked_write_cap": 0
+   },
+   "write_sweep": {
+    "enabled": true,
+    "promotable": 0,
+    "writes_executed": 0,
+    "sweep_actions": 0,
+    "unlocked_transitions": 0
+   },
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  },
+  {
    "fixture": "heldout_shop",
    "policy": "deferred",
    "status": "ok",
@@ -70,7 +92,7 @@
    "fixture": "heldout_shop",
    "policy": "authorized_fair",
    "status": "ok",
-   "browser_actions": 189,
+   "browser_actions": 187,
    "transitions": 54,
    "write_policy": {
     "allowed": 2,
@@ -82,9 +104,38 @@
     "enabled": true,
     "promotable": 2,
     "writes_executed": 0,
-    "sweep_actions": 36,
+    "sweep_actions": 37,
     "unlocked_transitions": 9,
-    "replay_floor": 0.1
+    "replay_floor": 0.1,
+    "focus": false,
+    "focus_steps": 0,
+    "focus_prefixes": []
+   },
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  },
+  {
+   "fixture": "heldout_shop",
+   "policy": "focused_subtree",
+   "status": "ok",
+   "browser_actions": 190,
+   "transitions": 54,
+   "write_policy": {
+    "allowed": 2,
+    "blocked_destructive": 0,
+    "blocked_read_only": 0,
+    "blocked_write_cap": 0
+   },
+   "write_sweep": {
+    "enabled": true,
+    "promotable": 2,
+    "writes_executed": 0,
+    "sweep_actions": 37,
+    "unlocked_transitions": 9,
+    "replay_floor": 0.1,
+    "focus": true,
+    "focus_steps": 0,
+    "focus_prefixes": []
    },
    "destructive_requests_fired": [],
    "destructive_in_server_log": []

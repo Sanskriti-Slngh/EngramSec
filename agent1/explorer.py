@@ -2100,7 +2100,7 @@ class Explorer:
                     self._explore_tours(browser)      # verification is part of the tour agenda
                 else:
                     self._explore(browser)
-                    if (self.config.write_execution_policy == "authorized_fair"
+                    if (self.config.write_execution_policy in {"authorized_fair", "focused_subtree"}
                             and self._writes_authorized()):
                         self._authorized_write_sweep(browser)
                     self._replay(browser)
@@ -2438,28 +2438,122 @@ class Explorer:
         start_actions = self.artifact.metrics.browser_actions
         start_transitions = len(self.artifact.transitions)
         writes_before = self.write_policy.stats["allowed"]
-        while self.frontier:
-            if self._elapsed() >= time_ceiling:
-                break
-            if len(self.artifact.transitions) >= self.config.max_transitions:
-                break
-            if self._discovery_http_exhausted():
-                break
-            if self.artifact.metrics.browser_actions >= action_ceiling:
-                break
-            item = self.frontier.pop(0)
-            cost = 1 + self._path_action_cost(item.path) + self._descriptor_action_cost(item.action)
-            if self.artifact.metrics.browser_actions + cost > action_ceiling:
-                self.frontier.insert(0, item)
-                break
-            self._attempt_frontier(browser, item)
-            self.save_checkpoint()
+        # "focused_subtree": after a write unlocks a new route, prefer that subtree's NOVEL child actions
+        # over leftover shallow breadth, and explore them from the LIVE post-write page (a persistent
+        # session) so a write-gated child need not re-run the write to be reached. Bounded by
+        # focus_max_steps; reorders within the same sweep budget so the replay floor is unchanged.
+        focus = self.config.write_execution_policy == "focused_subtree"
+        focus_prefixes: list[str] = []
+        focus_anchor: dict[str, str] = {}      # prefix path -> entrance URL (a persistent GET URL)
+        focus_budget = self.config.focus_max_steps if focus else 0
+        focus_steps = 0
+        seen_routes = {route_pattern(o.url).split("?")[0] for o in self.artifact.observations}
+
+        def prefix_of(target: str | None) -> str | None:
+            tp = urlsplit(target or "").path
+            matches = [p for p in focus_prefixes if tp == p or tp.startswith(p + "/")]
+            return max(matches, key=len) if matches else None      # most specific subtree anchor
+
+        def in_family(target: str | None) -> bool:
+            return prefix_of(target) is not None
+
+        with self._browser_session(browser) as session:
+            self._navigate_start(session, "persistent_restore")
+            live = session.observe(self._next_sequence())
+            live_path: list[ActionDescriptor] = []
+            while self.frontier:
+                if self._elapsed() >= time_ceiling:
+                    break
+                if len(self.artifact.transitions) >= self.config.max_transitions:
+                    break
+                if self._discovery_http_exhausted():
+                    break
+                if self.artifact.metrics.browser_actions >= action_ceiling:
+                    break
+                reachable = lambda c: (c.expected_source_group == live.group_signature
+                                       and session.find_current(live, c.action) is not None)
+                novel = lambda c: route_pattern(c.action.target or "").split("?")[0] not in seen_routes
+                idx, focused = None, False
+                # Prefer a NOVEL child of an unlocked subtree: (1) reachable right here (descend live),
+                # else (2) reachable by re-anchoring to the subtree entrance. Novelty only, so the focus
+                # stops when the subtree has no unseen routes left (no depth-for-depth, no cycles).
+                if focus and focus_budget > 0 and focus_prefixes:
+                    idx = next((i for i, it in enumerate(self.frontier)
+                                if in_family(it.action.target) and novel(it) and reachable(it)), None)
+                    if idx is None:
+                        idx = next((i for i, it in enumerate(self.frontier)
+                                    if in_family(it.action.target) and novel(it)), None)
+                    if idx is None:   # a nested safe write inside the subtree (e.g. create a task) ->
+                        idx = next((i for i, it in enumerate(self.frontier)   # unlocks a deeper prerequisite
+                                    if in_family(it.action.target) and self._is_promotable_write(it.action)), None)
+                    if idx is not None:
+                        focused = True
+                if idx is None:       # 3) else the highest-priority promotable write (restored to its page)
+                    idx = next((i for i, it in enumerate(self.frontier)
+                                if self._is_promotable_write(it.action)), None)
+                if idx is None:       # 4) else the global top
+                    idx = 0
+                item = self.frontier[idx]
+                local = reachable(item)
+                cost = self._descriptor_action_cost(item.action) + (0 if local else 1 + self._path_action_cost(item.path))
+                if self.artifact.metrics.browser_actions + cost > action_ceiling:
+                    if idx == 0:
+                        break
+                    idx = 0
+                    item = self.frontier[0]
+                    focused = in_family(item.action.target)
+                    if self.artifact.metrics.browser_actions + self._descriptor_action_cost(item.action) \
+                            + 1 + self._path_action_cost(item.path) > action_ceiling:
+                        break
+                self.frontier.pop(idx)
+                if focused:
+                    focus_budget -= 1
+                    focus_steps += 1
+                    # Re-anchor: a write-gated sibling cannot be restored by replaying its path (that would
+                    # re-run the write). Instead navigate live to the subtree ENTRANCE (a persistent GET
+                    # URL) so the sibling is reachable locally, with no write replay.
+                    anchor = focus_anchor.get(prefix_of(item.action.target) or "")
+                    if anchor and not local and anchor != live.url:
+                        try:
+                            self.artifact.metrics.browser_actions += session.goto(anchor)
+                            self.artifact.metrics.restoration_actions += 1
+                            self._record_navigation_evidence(session, "direct_url_restore")
+                            live = session.observe(self._next_sequence())
+                            live_path = []
+                        except (PlaywrightError, RuntimeError):
+                            pass
+                obs_before = len(self.artifact.observations)
+                promotable = self._is_promotable_write(item.action)
+                updated = self._attempt_frontier(browser, item, persistent_session=session,
+                                                 live_source=live, live_path=live_path)
+                if focus and updated is not None and len(self.artifact.observations) > obs_before:
+                    landed = self.artifact.observations[-1]
+                    rp = route_pattern(landed.url).split("?")[0]
+                    if rp not in seen_routes:
+                        seen_routes.add(rp)
+                        if promotable or focused:        # a write or in-family step reached a NEW route
+                            prefix = urlsplit(landed.url).path.rstrip("/")
+                            if prefix and prefix not in focus_prefixes:
+                                focus_prefixes.append(prefix)
+                                focus_anchor[prefix] = landed.url    # entrance to re-anchor siblings
+                if updated is None:
+                    self._navigate_start(session, "persistent_restore")
+                    live = session.observe(self._next_sequence())
+                    live_path = []
+                else:
+                    live, observed_path = updated
+                    instance = record_instance(live) if self.config.state_aware_exploration else None
+                    key = (f"instance:{instance}:{live.behavior_signature or live.group_signature}"
+                           if instance else live.behavior_signature or live.group_signature)
+                    live_path = list(self.artifact.return_paths.get(key, observed_path))
+                self.save_checkpoint()
         self.artifact.metrics.write_sweep = {
             "enabled": True, "promotable": promoted,
             "writes_executed": self.write_policy.stats["allowed"] - writes_before,
             "sweep_actions": self.artifact.metrics.browser_actions - start_actions,
             "unlocked_transitions": len(self.artifact.transitions) - start_transitions,
-            "replay_floor": floor,
+            "replay_floor": floor, "focus": focus, "focus_steps": focus_steps,
+            "focus_prefixes": focus_prefixes[:20],
         }
 
     def _explore_persistent(self, browser: Browser) -> None:

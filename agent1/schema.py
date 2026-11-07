@@ -122,8 +122,14 @@ class RunConfig(BaseModel):
     # attested disposable environment, never destructive routes, still under max_write_requests. The
     # write penalty is unchanged during normal discovery; this only gives queued writes a fair turn
     # afterward. `write_sweep_replay_floor` is the fraction of the budget kept back for replay.
-    write_execution_policy: Literal["deferred", "authorized_fair"] = "deferred"
+    # "focused_subtree" is authorized_fair plus a short-lived focus: right after a promoted write unlocks
+    # a new route, the sweep prefers that subtree's NOVEL child actions over leftover shallow breadth, so
+    # it descends the unlocked workflow instead of wandering back to the global path-length-first queue.
+    # Bounded by `focus_max_steps`; it reorders within the SAME sweep budget, so the replay floor (and
+    # hence reproduction) is unchanged relative to authorized_fair.
+    write_execution_policy: Literal["deferred", "authorized_fair", "focused_subtree"] = "deferred"
     write_sweep_replay_floor: float = Field(default=0.10, ge=0.0, le=0.5)
+    focus_max_steps: int = Field(default=12, ge=0, le=200)
     budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"
     # "structure": evidence-driven replay (agent1/replay_scheduler.py). Replay
     # budget is shared by action cost between greedy coverage of unverified

@@ -83,7 +83,7 @@ def run_one(fixture: str, policy: str) -> dict[str, Any]:
 def main() -> None:
     results = {"matched_config": MATCHED, "runs": []}
     for fixture in ("stateful_lab", "heldout_shop"):
-        for policy in ("deferred", "authorized_fair"):
+        for policy in ("deferred", "authorized_fair", "focused_subtree"):
             r = run_one(fixture, policy)
             results["runs"].append(r)
             print(f"{fixture}/{policy}: status={r['status']} actions={r.get('browser_actions')} "
