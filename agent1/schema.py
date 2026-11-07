@@ -112,6 +112,18 @@ class RunConfig(BaseModel):
     # against the shared HTTP budget. Efficiency only; never caches documents or XHR/fetch. Changes how
     # many requests a run makes, so it is off by default and compared with a matched baseline.
     resource_cache: bool = False
+    # Read-only diagnosis (default off): when discovery ends, record the frontier items that were never
+    # executed, with their priority and defer reason, plus which budget bound ended discovery. Records
+    # only; changes no scheduling decision.
+    record_unexecuted_frontier: bool = False
+    # Scheduling of authorized state-changing actions. "deferred" (default) keeps the historical write
+    # deprioritization. "authorized_fair": after ordinary discovery finishes, run a bounded sweep that
+    # executes queued SAFE writes (each at most once) and explores what they unlock -- only on an
+    # attested disposable environment, never destructive routes, still under max_write_requests. The
+    # write penalty is unchanged during normal discovery; this only gives queued writes a fair turn
+    # afterward. `write_sweep_replay_floor` is the fraction of the budget kept back for replay.
+    write_execution_policy: Literal["deferred", "authorized_fair"] = "deferred"
+    write_sweep_replay_floor: float = Field(default=0.10, ge=0.0, le=0.5)
     budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"
     # "structure": evidence-driven replay (agent1/replay_scheduler.py). Replay
     # budget is shared by action cost between greedy coverage of unverified
@@ -744,6 +756,11 @@ class RunMetrics(BaseModel):
     write_policy: dict[str, Any] = Field(default_factory=dict)
     # Static-asset dedup cache stats (only when resource_cache is enabled): hits, stored entries, bytes saved.
     resource_cache: dict[str, Any] = Field(default_factory=dict)
+    # Terminal discovery frontier (only when record_unexecuted_frontier is enabled): exit reason and the
+    # unexecuted items with priority and defer reason. Diagnosis only.
+    unexecuted_frontier: dict[str, Any] = Field(default_factory=dict)
+    # Authorized write sweep stats (only when write_execution_policy="authorized_fair").
+    write_sweep: dict[str, Any] = Field(default_factory=dict)
     passive_cookie_updates: dict[str, int] = Field(default_factory=dict)
     python_peak_rss_mb: float = 0.0
     listener_observations: int = 0

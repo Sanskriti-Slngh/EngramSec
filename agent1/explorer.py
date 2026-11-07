@@ -2100,6 +2100,9 @@ class Explorer:
                     self._explore_tours(browser)      # verification is part of the tour agenda
                 else:
                     self._explore(browser)
+                    if (self.config.write_execution_policy == "authorized_fair"
+                            and self._writes_authorized()):
+                        self._authorized_write_sweep(browser)
                     self._replay(browser)
                     if self.hybrid is not None:
                         self.hybrid_summary = self.hybrid.finish(self.output_dir)
@@ -2338,20 +2341,26 @@ class Explorer:
         if self.config.exploration_mode == "persistent":
             self._explore_persistent(browser)
             return
+        reason = "frontier_empty"
         while self.frontier:
             if self._elapsed() >= self._exploration_deadline():
+                reason = "exploration_time_deadline"
                 break
             if len(self.artifact.transitions) >= self.config.max_transitions:
+                reason = "transition_cap"
                 break
             if self._discovery_http_exhausted():
+                reason = "http_discovery_exhausted"
                 break
             if self.artifact.metrics.browser_actions >= self.config.max_browser_actions:
+                reason = "action_cap"
                 break
             item = self.frontier.pop(0)
             if not self._fits_exploration_action_budget(
                 1 + self._path_action_cost(item.path) + self._descriptor_action_cost(item.action)
             ):
                 self.frontier.insert(0, item)
+                reason = "action_reserve_boundary"
                 break
             before = len(self.artifact.transitions)
             if self.shadow is not None and self.artifact.observations:
@@ -2361,6 +2370,97 @@ class Explorer:
             if self.shadow is not None:
                 self.shadow.after_action(self.artifact, before)
             self.save_checkpoint()
+        if self.config.record_unexecuted_frontier:
+            self._record_terminal_frontier(reason)
+
+    def _record_terminal_frontier(self, reason: str) -> None:
+        """Read-only diagnosis: snapshot the frontier items discovery never executed, with priority and a
+        defer reason. Does not alter any scheduling decision."""
+        items = []
+        for it in self.frontier:
+            a = it.action
+            path = urlsplit(a.target or "").path
+            is_write = a.kind == "form_submit" and (a.method or "").upper() not in {"", "GET", "HEAD", "OPTIONS"}
+            # The scheduler cannot see a form's method until submit; treat a non-search form_submit whose
+            # target is a same-page/app route as a candidate write for this diagnosis.
+            form_submit = a.kind == "form_submit"
+            items.append({"kind": a.kind, "label": a.label[:60], "target_path": path,
+                          "method": a.method, "priority": round(it.priority, 2),
+                          "form_submit": form_submit, "is_write_method": is_write,
+                          "source_observation_id": it.source_observation_id})
+        items.sort(key=lambda x: -x["priority"])
+        self.artifact.metrics.unexecuted_frontier = {
+            "discovery_exit_reason": reason,
+            "exploration_deadline_s": round(self._exploration_deadline(), 1),
+            "elapsed_at_exit_s": round(self._elapsed(), 1),
+            "browser_actions": self.artifact.metrics.browser_actions,
+            "max_browser_actions": self.config.max_browser_actions,
+            "transitions": len(self.artifact.transitions),
+            "max_transitions": self.config.max_transitions,
+            "remaining_count": len(items),
+            "remaining_form_submits": sum(1 for x in items if x["form_submit"]),
+            "items": items[:60],
+        }
+
+    def _writes_authorized(self) -> bool:
+        """A write may be promoted only on an operator-attested disposable environment."""
+        return (self.config.effective_write_policy == "disposable"
+                and bool(self.config.environment_attestation)
+                and self.write_policy is not None)
+
+    def _is_promotable_write(self, action: Any) -> bool:
+        """A safe, non-destructive, non-GET form submission the write policy would allow (does not count
+        against the policy; destructive routes and the write cap are respected via would_allow)."""
+        if action.kind != "form_submit":
+            return False
+        method = (action.method or "").upper()
+        if method in {"", "GET", "HEAD", "OPTIONS"}:
+            return False
+        return self.write_policy.would_allow(method, action.target or self.config.start_url)
+
+    def _authorized_write_sweep(self, browser: Browser) -> None:
+        """After ordinary discovery, give queued safe writes a bounded, fair turn to execute (and to
+        reveal what they unlock). Each distinct write still executes at most once (`_known_write`), stays
+        under `max_write_requests`, never touches a destructive route, and leaves a replay-budget floor.
+        The write deprioritization during normal discovery is unchanged."""
+        promoted = sum(1 for it in self.frontier if self._is_promotable_write(it.action))
+        if not promoted:
+            self.artifact.metrics.write_sweep = {"enabled": True, "promotable": 0, "writes_executed": 0,
+                                                 "sweep_actions": 0, "unlocked_transitions": 0}
+            return
+        for it in self.frontier:
+            if self._is_promotable_write(it.action):
+                it.priority += 1000.0          # sort ahead of ordinary items for this phase only
+        self._sort_frontier()
+        floor = self.config.write_sweep_replay_floor
+        time_ceiling = self.config.max_seconds * (1.0 - floor)
+        action_ceiling = int(self.config.max_browser_actions * (1.0 - floor))
+        start_actions = self.artifact.metrics.browser_actions
+        start_transitions = len(self.artifact.transitions)
+        writes_before = self.write_policy.stats["allowed"]
+        while self.frontier:
+            if self._elapsed() >= time_ceiling:
+                break
+            if len(self.artifact.transitions) >= self.config.max_transitions:
+                break
+            if self._discovery_http_exhausted():
+                break
+            if self.artifact.metrics.browser_actions >= action_ceiling:
+                break
+            item = self.frontier.pop(0)
+            cost = 1 + self._path_action_cost(item.path) + self._descriptor_action_cost(item.action)
+            if self.artifact.metrics.browser_actions + cost > action_ceiling:
+                self.frontier.insert(0, item)
+                break
+            self._attempt_frontier(browser, item)
+            self.save_checkpoint()
+        self.artifact.metrics.write_sweep = {
+            "enabled": True, "promotable": promoted,
+            "writes_executed": self.write_policy.stats["allowed"] - writes_before,
+            "sweep_actions": self.artifact.metrics.browser_actions - start_actions,
+            "unlocked_transitions": len(self.artifact.transitions) - start_transitions,
+            "replay_floor": floor,
+        }
 
     def _explore_persistent(self, browser: Browser) -> None:
         planner = (AreaTourPlanner(prefix_reuse=self.config.state_reuse == "prefix")

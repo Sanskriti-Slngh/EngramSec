@@ -43,6 +43,20 @@ class WritePolicy:
     def enforcing(self) -> bool:
         return self.mode in {"read_only", "disposable"}
 
+    def would_allow(self, method: str, url: str) -> bool:
+        """Non-mutating check used by the scheduler to decide whether a write MAY be promoted. Mirrors
+        decide() without logging or counting; a write is promotable only on a disposable (attested) env,
+        when it is non-destructive and under the request cap."""
+        method = (method or "GET").upper()
+        if method in SAFE_METHODS:
+            return True
+        if self.mode != "disposable":
+            return False
+        path = urlsplit(url).path or "/"
+        if not self.allow_destructive and (method == "DELETE" or DESTRUCTIVE_ROUTE.search(path)):
+            return False
+        return self.stats["allowed"] < self.max_write_requests
+
     def decide(self, method: str, url: str) -> str:
         method = (method or "GET").upper()
         if method in SAFE_METHODS or not self.enforcing:

@@ -44,7 +44,7 @@ MATCHED: dict[str, Any] = {
 
 
 # ---------------------------------------------------------------- child (one arm, one trial)
-def run_child(arm: str, trial: int, out: Path, seconds: float | None) -> None:
+def run_child(arm: str, trial: int, out: Path, seconds: float | None, diagnose: bool = False) -> None:
     from development_apps.role_lab import ACCOUNTS, start_role_lab
     from agent1.explorer import Explorer
     from agent1.exporter import write_outputs
@@ -76,6 +76,8 @@ def run_child(arm: str, trial: int, out: Path, seconds: float | None) -> None:
         cfg = dict(MATCHED)
         if seconds is not None:
             cfg["max_seconds"] = seconds
+        if diagnose:
+            cfg["record_unexecuted_frontier"] = True
         config = RunConfig(
             start_url=url, output_dir=out, context_label=role,          # <-- role carried into Graph A
             storage_state_path=storage_state_path,
@@ -239,12 +241,13 @@ def main() -> None:
     c.add_argument("--trial", type=int, required=True)
     c.add_argument("--out", type=Path, required=True)
     c.add_argument("--seconds", type=float, default=None)
+    c.add_argument("--diagnose", action="store_true")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--trials", type=int, default=3)
     args = ap.parse_args()
 
     if args.cmd == "child":
-        run_child(args.arm, args.trial, args.out, args.seconds)
+        run_child(args.arm, args.trial, args.out, args.seconds, getattr(args, "diagnose", False))
         return
 
     label = "smoke" if args.smoke else "matched"

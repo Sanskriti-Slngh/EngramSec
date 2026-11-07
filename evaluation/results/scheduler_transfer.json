@@ -1,0 +1,93 @@
+{
+ "matched_config": {
+  "max_seconds": 90.0,
+  "max_browser_actions": 500,
+  "max_transitions": 200,
+  "state_aware_exploration": true,
+  "record_aware_graph": true,
+  "allow_post_forms": true,
+  "write_policy": "disposable",
+  "max_write_requests": 40,
+  "replay_policy": "structure",
+  "record_unexecuted_frontier": true
+ },
+ "runs": [
+  {
+   "fixture": "stateful_lab",
+   "policy": "deferred",
+   "status": "ok",
+   "browser_actions": 16,
+   "transitions": 12,
+   "write_policy": {
+    "allowed": 1,
+    "blocked_destructive": 0,
+    "blocked_read_only": 0,
+    "blocked_write_cap": 0
+   },
+   "write_sweep": {},
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  },
+  {
+   "fixture": "stateful_lab",
+   "policy": "authorized_fair",
+   "status": "ok",
+   "browser_actions": 16,
+   "transitions": 12,
+   "write_policy": {
+    "allowed": 1,
+    "blocked_destructive": 0,
+    "blocked_read_only": 0,
+    "blocked_write_cap": 0
+   },
+   "write_sweep": {
+    "enabled": true,
+    "promotable": 0,
+    "writes_executed": 0,
+    "sweep_actions": 0,
+    "unlocked_transitions": 0
+   },
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  },
+  {
+   "fixture": "heldout_shop",
+   "policy": "deferred",
+   "status": "ok",
+   "browser_actions": 175,
+   "transitions": 45,
+   "write_policy": {
+    "allowed": 2,
+    "blocked_destructive": 0,
+    "blocked_read_only": 0,
+    "blocked_write_cap": 0
+   },
+   "write_sweep": {},
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  },
+  {
+   "fixture": "heldout_shop",
+   "policy": "authorized_fair",
+   "status": "ok",
+   "browser_actions": 189,
+   "transitions": 54,
+   "write_policy": {
+    "allowed": 2,
+    "blocked_destructive": 0,
+    "blocked_read_only": 0,
+    "blocked_write_cap": 0
+   },
+   "write_sweep": {
+    "enabled": true,
+    "promotable": 2,
+    "writes_executed": 0,
+    "sweep_actions": 36,
+    "unlocked_transitions": 9,
+    "replay_floor": 0.1
+   },
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  }
+ ]
+}

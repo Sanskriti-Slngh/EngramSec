@@ -106,8 +106,14 @@ class ResourceCache:
     def put(self, url: str, status: int, headers: dict[str, str], body: bytes) -> None:
         if status != 200 or len(body) > self.max_entry_bytes or url in self._store:
             return
-        cc = (headers.get("cache-control") or headers.get("Cache-Control") or "").lower()
+        lower = {k.lower(): (v or "") for k, v in headers.items()}
+        cc = lower.get("cache-control", "").lower()
         if "no-store" in cc or "no-cache" in cc or "private" in cc:
+            return
+        # Session-dependent responses must never be shared: a Vary on Cookie/Authorization means the body
+        # may differ per account, so it is not safe to replay to a later request.
+        vary = lower.get("vary", "").lower()
+        if "cookie" in vary or "authorization" in vary or vary == "*":
             return
         if len(self._store) >= self.max_entries or self._bytes + len(body) > self.max_total_bytes:
             return

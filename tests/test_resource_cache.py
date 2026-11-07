@@ -57,3 +57,32 @@ def test_bounded_by_entries_and_bytes():
     big = ResourceCache(max_entry_bytes=4)
     big.put("u", 200, {}, b"toolong")        # exceeds max_entry_bytes -> dropped
     assert big.get("u") is None
+
+
+def test_never_caches_session_dependent_vary_responses():
+    c = ResourceCache()
+    c.put("http://x/a.js", 200, {"Vary": "Cookie"}, b"x")
+    c.put("http://x/b.js", 200, {"Vary": "Accept-Encoding, Authorization"}, b"x")
+    c.put("http://x/c.js", 200, {"Vary": "*"}, b"x")
+    assert c.get("http://x/a.js") is None
+    assert c.get("http://x/b.js") is None
+    assert c.get("http://x/c.js") is None
+    # a benign Vary (encoding only) is still cacheable
+    c.put("http://x/d.js", 200, {"Vary": "Accept-Encoding"}, b"ok")
+    assert c.get("http://x/d.js") is not None
+
+
+def test_mutable_api_types_are_never_eligible():
+    c = ResourceCache()
+    # XHR/fetch are how dynamic/authenticated data arrives; documents are pages. None may be cached.
+    for rt in ("xhr", "fetch", "document", "websocket", "eventsource", "manifest", "other"):
+        assert not c.eligible("GET", rt)
+
+
+def test_cache_is_per_instance_so_accounts_cannot_share():
+    # Each run owns its own cache (one per Explorer), so one account's assets can never be served to
+    # another: there is no shared/global store. Two instances do not see each other's entries.
+    a, b = ResourceCache(), ResourceCache()
+    a.put("http://x/a.js", 200, {}, b"AAA")
+    assert a.get("http://x/a.js") is not None
+    assert b.get("http://x/a.js") is None
