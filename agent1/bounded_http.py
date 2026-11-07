@@ -60,6 +60,67 @@ def mapped_target(url: str) -> tuple[str, str] | None:
     return parts._replace(netloc=target).geturl(), parts.netloc
 
 
+# Static resource types whose responses are safe to deduplicate across navigations: a repeated GET of
+# the same URL returns the same bytes (hashed SPA bundles, stylesheets, fonts, images). Documents and
+# XHR/fetch are never cached (they are where application state and dynamic data appear).
+CACHEABLE_RESOURCE_TYPES = frozenset({"script", "stylesheet", "font", "image"})
+
+
+class ResourceCache:
+    """Opt-in, per-run dedup of identical static-asset responses for the browser route interceptor.
+
+    The route interceptor fetches every request from the server (``route.fetch``), which defeats the
+    browser's own HTTP cache, and restored pages start from a cold context -- so a module-heavy SPA
+    re-downloads the same scripts/styles on every navigation and every replay, consuming the shared HTTP
+    budget. When enabled, a GET of a cacheable static resource type is served from memory on the second
+    and later requests, is NOT re-fetched, and is NOT charged to the HTTP budget. This changes efficiency
+    only: the same bytes are returned, no non-GET request is ever cached, and nothing dynamic is cached.
+    Bounded by entry count and total bytes so memory stays small.
+    """
+
+    # Response headers that must not be replayed verbatim (the body is already decoded; length is reset).
+    _DROP = frozenset({"content-encoding", "content-length", "transfer-encoding", "set-cookie", "connection"})
+
+    def __init__(self, max_entries: int = 400, max_total_bytes: int = 64 * 1024 * 1024,
+                 max_entry_bytes: int = 4 * 1024 * 1024):
+        self.max_entries = max_entries
+        self.max_total_bytes = max_total_bytes
+        self.max_entry_bytes = max_entry_bytes
+        self._store: dict[str, dict] = {}
+        self._bytes = 0
+        self.hits = 0
+        self.stores = 0
+        self.bytes_saved = 0
+
+    @staticmethod
+    def eligible(method: str, resource_type: str | None) -> bool:
+        return (method or "GET").upper() == "GET" and resource_type in CACHEABLE_RESOURCE_TYPES
+
+    def get(self, url: str) -> dict | None:
+        entry = self._store.get(url)
+        if entry is not None:
+            self.hits += 1
+            self.bytes_saved += len(entry["body"])
+        return entry
+
+    def put(self, url: str, status: int, headers: dict[str, str], body: bytes) -> None:
+        if status != 200 or len(body) > self.max_entry_bytes or url in self._store:
+            return
+        cc = (headers.get("cache-control") or headers.get("Cache-Control") or "").lower()
+        if "no-store" in cc or "no-cache" in cc or "private" in cc:
+            return
+        if len(self._store) >= self.max_entries or self._bytes + len(body) > self.max_total_bytes:
+            return
+        clean = {k: v for k, v in headers.items() if k.lower() not in self._DROP}
+        self._store[url] = {"status": status, "headers": clean, "body": body}
+        self._bytes += len(body)
+        self.stores += 1
+
+    def stats(self) -> dict:
+        return {"enabled": True, "hits": self.hits, "stored_entries": len(self._store),
+                "stores": self.stores, "bytes_cached": self._bytes, "bytes_saved": self.bytes_saved}
+
+
 def bounded_get(url: str, *, max_body_bytes: int, timeout_s: float = 5.0, cookie_header: str | None = None,
                 read_body: bool = True, deadline_s: float | None = None) -> BoundedResponse:
     started = time.monotonic()

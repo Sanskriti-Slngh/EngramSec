@@ -103,6 +103,10 @@ def run_trial(variant: str, trial: int, code_root: Path, label: str, log) -> dic
             row["auth"] = auth.public()
             if auth.status == "authenticated":
                 run_config["storage_state_path"] = str(auth.storage_state_path)
+                # Carry the true permission context into Graph A / the ACG. Without this the
+                # authenticated run inherits context_label="anonymous" and is indistinguishable in
+                # session_context from the anonymous control (and from other roles sharing a cookie name).
+                run_config["context_label"] = auth.role
             else:
                 # Record the access barrier instead of exploring as if the frontier were complete.
                 row["auth_barrier"] = auth.barrier

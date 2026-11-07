@@ -107,6 +107,11 @@ class RunConfig(BaseModel):
     resource_random_seed: int = Field(default=0, ge=0, le=2_147_483_647)
     javascript_reference_parser: Literal["legacy_regex", "ast"] = "ast"
     share_resource_frontier: bool = True
+    # Opt-in (default off): deduplicate identical static-asset responses (script/stylesheet/font/image
+    # GETs) across navigations and replay so the route interceptor does not refetch and recharge them
+    # against the shared HTTP budget. Efficiency only; never caches documents or XHR/fetch. Changes how
+    # many requests a run makes, so it is off by default and compared with a matched baseline.
+    resource_cache: bool = False
     budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"
     # "structure": evidence-driven replay (agent1/replay_scheduler.py). Replay
     # budget is shared by action cost between greedy coverage of unverified
@@ -737,6 +742,8 @@ class RunMetrics(BaseModel):
     restoration_contract: dict[str, Any] = Field(default_factory=dict)
     # Request-level write policy decisions (mode, counts, bounded log of method/route/decision).
     write_policy: dict[str, Any] = Field(default_factory=dict)
+    # Static-asset dedup cache stats (only when resource_cache is enabled): hits, stored entries, bytes saved.
+    resource_cache: dict[str, Any] = Field(default_factory=dict)
     passive_cookie_updates: dict[str, int] = Field(default_factory=dict)
     python_peak_rss_mb: float = 0.0
     listener_observations: int = 0

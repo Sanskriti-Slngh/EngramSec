@@ -1,0 +1,210 @@
+{
+ "frozen_600s": {
+  "budget": {
+   "total_http_requests_cap": 2000,
+   "observed_http_requests": 2059,
+   "total_http_budget_used": 2000,
+   "http_budget_by_source": {
+    "browser": 1123,
+    "browser_verification": 600,
+    "passive_document": 226,
+    "resource_spider": 26,
+    "speculative_candidate": 25
+   },
+   "browser_actions": 29,
+   "resource_fetches_attempted": 277,
+   "resource_fetches_succeeded": 44
+  },
+  "stored_events": 2055,
+  "unique_paths": 532,
+  "repeat_ratio": 3.9,
+  "by_resource_type": {
+   "script": 1844,
+   "fetch": 133,
+   "stylesheet": 53,
+   "xhr": 8,
+   "font": 6,
+   "media": 6,
+   "document": 4,
+   "image": 1
+  },
+  "static_asset_events": 1913,
+  "static_asset_share": 0.931,
+  "static_refetches_wasted": 1408,
+  "static_refetch_share_of_stored": 0.685,
+  "top_repeated": [
+   [
+    30,
+    "/api/history"
+   ],
+   [
+    16,
+    "/api/prompt"
+   ],
+   [
+    15,
+    "/api/queue"
+   ],
+   [
+    9,
+    "/api/manager/component/loads"
+   ],
+   [
+    8,
+    "/api/userdata/user.css"
+   ],
+   [
+    8,
+    "/user.css"
+   ],
+   [
+    6,
+    "/api/system_stats"
+   ],
+   [
+    6,
+    "/api/userdata"
+   ],
+   [
+    6,
+    "/api/userdata/comfy.templates.json"
+   ],
+   [
+    4,
+    "/"
+   ],
+   [
+    4,
+    "/materialdesignicons.min.css"
+   ],
+   [
+    4,
+    "/assets/vendor-xterm-LZoznX6r.css"
+   ],
+   [
+    4,
+    "/assets/vendor-other-C4ppb7nW.css"
+   ],
+   [
+    4,
+    "/assets/vendor-vue-BdxT_DqU.js"
+   ],
+   [
+    4,
+    "/assets/vendor-tiptap-t5HCezR_.js"
+   ]
+  ],
+  "notes": [
+   "Website-only browser evidence; target source and verifier internals were not inspected.",
+   "A browser-observed edge is not counted as a validated feature until its complete path replays.",
+   "Query values with sensitive-looking keys are redacted from stored network evidence.",
+   "HTTP discovery budget exhausted; exploration stopped before replay.",
+   "HTTP verification budget exhausted; remaining transitions left untested.",
+   "unsupported_connections is retained only as a backwards-compatible failed-replay alias; use replay_failures and graph_connections_missing_evidence for distinct claims."
+  ]
+ },
+ "generous_budget": {
+  "budget": {
+   "total_http_requests_cap": 20000,
+   "observed_http_requests": 18768,
+   "total_http_budget_used": 20000,
+   "http_budget_by_source": {
+    "browser": 12515,
+    "browser_verification": 6000,
+    "passive_document": 1363,
+    "resource_spider": 97,
+    "speculative_candidate": 25
+   },
+   "browser_actions": 217,
+   "resource_fetches_attempted": 1485,
+   "resource_fetches_succeeded": 115
+  },
+  "stored_events": 18696,
+  "unique_paths": 533,
+  "repeat_ratio": 35.1,
+  "by_resource_type": {
+   "script": 16788,
+   "fetch": 1200,
+   "stylesheet": 526,
+   "xhr": 71,
+   "font": 68,
+   "document": 36,
+   "media": 6,
+   "image": 1
+  },
+  "static_asset_events": 17392,
+  "static_asset_share": 0.93,
+  "static_refetches_wasted": 16887,
+  "static_refetch_share_of_stored": 0.903,
+  "top_repeated": [
+   [
+    267,
+    "/api/history"
+   ],
+   [
+    138,
+    "/api/prompt"
+   ],
+   [
+    134,
+    "/api/queue"
+   ],
+   [
+    102,
+    "/api/manager/component/loads"
+   ],
+   [
+    72,
+    "/api/userdata/user.css"
+   ],
+   [
+    72,
+    "/user.css"
+   ],
+   [
+    68,
+    "/api/system_stats"
+   ],
+   [
+    68,
+    "/api/userdata"
+   ],
+   [
+    68,
+    "/api/userdata/comfy.templates.json"
+   ],
+   [
+    36,
+    "/"
+   ],
+   [
+    36,
+    "/materialdesignicons.min.css"
+   ],
+   [
+    36,
+    "/assets/vendor-other-C4ppb7nW.css"
+   ],
+   [
+    36,
+    "/assets/vendor-xterm-LZoznX6r.css"
+   ],
+   [
+    36,
+    "/assets/vendor-vue-BdxT_DqU.js"
+   ],
+   [
+    36,
+    "/assets/vendor-tiptap-t5HCezR_.js"
+   ]
+  ],
+  "notes": [
+   "Website-only browser evidence; target source and verifier internals were not inspected.",
+   "A browser-observed edge is not counted as a validated feature until its complete path replays.",
+   "Query values with sensitive-looking keys are redacted from stored network evidence.",
+   "HTTP discovery budget exhausted; exploration stopped before replay.",
+   "HTTP verification budget exhausted; remaining transitions left untested.",
+   "unsupported_connections is retained only as a backwards-compatible failed-replay alias; use replay_failures and graph_connections_missing_evidence for distinct claims."
+  ]
+ }
+}

@@ -705,6 +705,7 @@ class BrowserSession:
         self.region_sink: dict[str, dict[str, Any]] | None = None
         self.region_cost: dict[str, float] = {"captures": 0, "ms": 0.0}
         self.write_policy: WritePolicy | None = None
+        self.asset_cache: Any = None
 
     def _new_listener_observer(self) -> ListenerObserver | None:
         if self.config.runtime_listener_observation == "off":
@@ -738,6 +739,15 @@ class BrowserSession:
                     budget.blocked += 1
                     route.abort("blockedbyclient")
                     return
+                # Static-asset dedup: serve a repeated identical GET from memory without refetching or
+                # recharging the HTTP budget (opt-in; never caches documents or XHR/fetch).
+                cache = self.asset_cache
+                eligible = cache is not None and cache.eligible(request.method, request.resource_type)
+                if eligible:
+                    hit = cache.get(request.url)
+                    if hit is not None:
+                        route.fulfill(status=hit["status"], headers=hit["headers"], body=hit["body"])
+                        return
                 if not budget.consume("browser"):
                     route.abort("blockedbyclient")
                     return
@@ -765,6 +775,15 @@ class BrowserSession:
                         budget.blocked += 1
                         route.abort("blockedbyclient")
                         return
+                if eligible and response.status == 200:
+                    try:
+                        body = response.body()
+                    except PlaywrightError:
+                        route.fulfill(response=response)
+                        return
+                    cache.put(request.url, response.status, dict(response.headers), body)
+                    route.fulfill(status=response.status, headers=response.headers, body=body)
+                    return
                 route.fulfill(response=response)
 
             def charge_redirect_hop(request: Any) -> None:
@@ -1785,6 +1804,8 @@ class Explorer:
             {} if config.restoration_policy == "contract" else None)
         self._region_cost: dict[str, float] = {"captures": 0, "ms": 0.0}
         self._contract_preaccepted: set[str] = set()
+        from .bounded_http import ResourceCache
+        self._asset_cache = ResourceCache() if config.resource_cache else None
         self.write_policy = WritePolicy(config.effective_write_policy, config.max_write_requests,
                                         config.allow_destructive)
         self.artifact.metrics.write_policy.update(self.write_policy.stats)
@@ -1834,6 +1855,7 @@ class Explorer:
         session.region_sink = self._region_maps
         session.region_cost = self._region_cost
         session.write_policy = self.write_policy
+        session.asset_cache = self._asset_cache
         return session
 
     def _revision(self) -> str:
@@ -4221,6 +4243,8 @@ class Explorer:
         self.artifact.metrics.spider_body_status = dict(spider_status)
         if self.http_budget is not None:
             self.http_budget.export(self.artifact.metrics)
+        if self._asset_cache is not None:
+            self.artifact.metrics.resource_cache = self._asset_cache.stats()
         self.artifact.ended_at = utc_now()
         self.artifact.features = self._build_features()
         self.artifact.functional_workflows = self._build_functional_workflows()
