@@ -1,0 +1,67 @@
+{
+ "targets": {
+  "white-jotter": {
+   "auth": {
+    "status": "authenticated",
+    "role": "registered_user",
+    "source": "registered_disposable",
+    "account_ref": "acct_0b5c149f6d44",
+    "prerequisite": {
+     "kind": "authentication",
+     "method": "form_login",
+     "login_route": "/login",
+     "field_names": [
+      "username_or_email",
+      "password"
+     ],
+     "role": "registered_user",
+     "account_ref": "acct_0b5c149f6d44",
+     "source": "registered_disposable",
+     "verified_by": "authenticated marker present after submit"
+    },
+    "barrier": null,
+    "verification": {
+     "logged_in_marker": false,
+     "logged_out_marker_gone": true,
+     "session_token_present": false,
+     "redirected_to_app_area": true,
+     "url": "/admin/dashboard"
+    }
+   },
+   "actions": {
+    "anon": 1652,
+    "auth": 1508
+   },
+   "routes": {
+    "anon": 6,
+    "auth": 7,
+    "new_under_auth": [
+     "/admin/dashboard"
+    ],
+    "new_under_auth_count": 1
+   },
+   "capabilities": {
+    "anon": {
+     "observed_or_better": 422,
+     "reproduced": 19
+    },
+    "auth": {
+     "observed_or_better": 308,
+     "reproduced": 16
+    }
+   },
+   "vuln_locations_changed": [
+    {
+     "vuln_id": "white-jotter-001",
+     "location": "/api/login",
+     "anon": "exercised",
+     "auth": "area_only"
+    }
+   ],
+   "host_sleep": {
+    "anon": false,
+    "auth": false
+   }
+  }
+ }
+}

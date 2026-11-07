@@ -251,7 +251,36 @@ The agent did not go on to use the new account to explore authenticated areas. T
    - WebSocket-delivered content under the scope router;
    - an authenticated workflow (register → log in → explore) in disposable mode.
 
-## 8. Deviations
+## 8. Functional reachability and authenticated exploration (reframing)
+
+Agent 1 is a functionality mapper, not a vulnerability detector. The `4/28` figure in §4 is path overlap with documented vulnerability *locations*, not vulnerability discovery. [evaluation/wxb_functional_reachability.py](evaluation/wxb_functional_reachability.py) re-asks, per location: did Agent 1 map the functionality there, and if not, why (evidence-based first cause)?
+
+**Generous budgets alone do not help** ([evaluation/results/wxb_functional_reachability.json](evaluation/results/wxb_functional_reachability.json)). The functional runs (30 min, 2,000 actions, 20,000 HTTP, depth 8, deployment fixes, attested disposable writes) reached the *same* vulnerable locations as the frozen 600 s runs. The one movement was SiyuCMS `/index/team.html`: `observed → exercised`. Every unreached location is an access barrier, not a mapping failure of reachable functionality:
+- **admin / authenticated areas** never referenced by public pages (SiyuCMS `/admin/*`, `/api/user`; PrestaShop `/admin-dev`; White-Jotter `/api/admin/*`; JetLinks behind its login) — `not_referenced`;
+- **a single-page app that spends even a 20,000-request budget on front-end assets** (ComfyUI, one route);
+- JetLinks' UI is a one-page login; its API needs authentication.
+
+So the binding limit is **authentication**, exactly as the reframing predicted. Depth and HTTP budget were not the ceiling.
+
+**Authenticated exploration** ([evaluation/auth_provision.py](evaluation/auth_provision.py), [evaluation/auth_comparison.py](evaluation/auth_comparison.py)). Credentials never reach the agent: a session is provisioned outside it and passed as `storage_state_path`; secrets stay under git-ignored `agent1/.auth/`; the login is recorded co-located with Graph A as an authored prerequisite (method, route, field names, role, opaque `account_ref`) with no secret values.
+
+White-Jotter, matched functional budget, only the login differs:
+
+| | Anonymous | Authenticated (disposable registered user) |
+|---|---|---|
+| actions | 1,652 | 1,508 |
+| `/admin/dashboard` | redirected to `/login` | **reached and rendered** (visits, messages, donations) |
+| new routes under auth | — | `/admin/dashboard` |
+| `/api/admin/*` calls | 0 | 0 |
+
+- The harness self-registered a disposable account, logged in, verified the session (admin dashboard renders while anonymous bounces to `/login`), and explored authenticated.
+- It unlocked the authenticated **user** area that anonymous cannot reach, but **not** the admin CRUD functionality: self-registration yields a regular-user role, and the dashboard exposed no admin navigation links to it (no 401/403 was seen; the admin sections were simply not linked for this role).
+- **This shows the need for explicitly provisioned privileged roles.** White-Jotter's admin vulnerability locations (`/api/admin/content/article`, `/api/admin/user`) require an *admin* account. The harness accepts operator-provided credentials and a role (`WHITE_JOTTER_TEST_USERNAME` / `_PASSWORD` / `_ROLE`); none were supplied, so the admin area stays recorded as an access barrier rather than explored.
+- Capability counts (anon 422/19 vs auth 308/16 observed/reproduced) are single-run exploration variance within the time budget, not a meaningful delta; `/api/login` moving `exercised → area_only` reflects the authenticated run entering via the saved session rather than clicking login.
+
+**Containerized launch confirmed.** Every WebExploitBench run here, including the SiyuCMS rerun and both authenticated-comparison runs, launched fresh official `targetctl` Docker containers with loopback-only publication and verified reset integrity.
+
+## 9. Deviations
 
 - **D1.** The first attempt at the development-app transfer check failed in the harness (duplicate `context_label`); no agent started. The record is kept, the harness was fixed, and the check was rerun.
 - **D2.** Host sleep (lid closed, on battery) affected:
