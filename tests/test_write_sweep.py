@@ -73,3 +73,14 @@ def test_focused_subtree_still_requires_attested_disposable():
     assert _explorer("disposable", True)._writes_authorized()
     assert not _explorer("read_only", True)._writes_authorized()
     assert not _explorer("disposable", False)._writes_authorized()
+
+
+def test_focused_adaptive_is_a_valid_opt_in_config():
+    from agent1.schema import RunConfig
+    f = RunConfig(start_url="http://127.0.0.1/", output_dir="/tmp/x",
+                  write_execution_policy="focused_adaptive")
+    assert f.write_execution_policy == "focused_adaptive"
+    # still gated on attested disposable, like the other focus policies
+    assert _explorer("disposable", True)._writes_authorized()
+    assert not _explorer("read_only", True)._writes_authorized()
+    assert not _explorer("disposable", False)._writes_authorized()

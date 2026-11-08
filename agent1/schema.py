@@ -127,7 +127,12 @@ class RunConfig(BaseModel):
     # it descends the unlocked workflow instead of wandering back to the global path-length-first queue.
     # Bounded by `focus_max_steps`; it reorders within the SAME sweep budget, so the replay floor (and
     # hence reproduction) is unchanged relative to authorized_fair.
-    write_execution_policy: Literal["deferred", "authorized_fair", "focused_subtree"] = "deferred"
+    # "focused_adaptive" generalizes focused_subtree: the post-discovery focus also continues subtrees
+    # that were unlocked during ORDINARY discovery (not only writes run in the sweep). A subtree is seeded
+    # only on evidence of genuinely new functionality -- its entrance was reached by an executed
+    # interaction and it has queued novel children with >=2 distinct route templates (a functional area),
+    # or it was reached by a write -- so ordinary breadth lists (one template x N items) are not focused.
+    write_execution_policy: Literal["deferred", "authorized_fair", "focused_subtree", "focused_adaptive"] = "deferred"
     write_sweep_replay_floor: float = Field(default=0.10, ge=0.0, le=0.5)
     focus_max_steps: int = Field(default=12, ge=0, le=200)
     budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"

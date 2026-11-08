@@ -46,8 +46,11 @@ ARMS = {
     "authorized_fair":   {"write_execution_policy": "authorized_fair", "write_sweep_replay_floor": 0.10},
     "focused":           {"write_execution_policy": "focused_subtree", "write_sweep_replay_floor": 0.10},
     "focused_protected": {"write_execution_policy": "focused_subtree", "write_sweep_replay_floor": 0.25},
+    # generalized event-driven focus (seeds subtrees unlocked in ordinary discovery too)
+    "adaptive":          {"write_execution_policy": "focused_adaptive", "write_sweep_replay_floor": 0.10},
+    "adaptive_protected": {"write_execution_policy": "focused_adaptive", "write_sweep_replay_floor": 0.25},
 }
-FIXTURES = ("workflow_lab", "branch_lab", "role_lab_admin")
+FIXTURES = ("workflow_lab", "branch_lab", "gated_get_lab", "role_lab_admin")
 
 
 def _gt(fixture: str):
@@ -57,6 +60,10 @@ def _gt(fixture: str):
     if fixture == "branch_lab":
         from development_apps.branch_lab import ALWAYS_REACHABLE, FUNCTIONAL_CAPABILITIES, WRITE_UNLOCKS
         return FUNCTIONAL_CAPABILITIES, ALWAYS_REACHABLE, WRITE_UNLOCKS
+    if fixture == "gated_get_lab":
+        from development_apps.gated_get_lab import ALWAYS_REACHABLE, DEEP_GET_SUBTREE, FUNCTIONAL_CAPABILITIES
+        # the deep subtree is "unlocked" by a GET to the hub, not a write; model it as the unlock set
+        return FUNCTIONAL_CAPABILITIES, ALWAYS_REACHABLE, {"dashboard_view": DEEP_GET_SUBTREE}
     from development_apps.role_lab import role_inventory
     inv = role_inventory("admin")
     return inv, inv - {"order_create", "profile_update", "admin_settings_update", "admin_user_delete"}, {}
@@ -73,6 +80,8 @@ def run_child(fixture: str, arm: str, trial: int, out: Path, seconds: float | No
         from development_apps.workflow_lab import start_workflow_lab as start
     elif fixture == "branch_lab":
         from development_apps.branch_lab import start_branch_lab as start
+    elif fixture == "gated_get_lab":
+        from development_apps.gated_get_lab import start_gated_get_lab as start
     else:
         start = None
     if start is not None:
@@ -154,11 +163,10 @@ def collect(fixture: str, arm: str, trial: int, out: Path) -> dict[str, Any]:
     repro_routes = {urlsplit((next((o for o in run.get("observations", []) if o["id"] == t.get("result_observation_id")), {}) or {}).get("url") or "").path
                     for t in run.get("transitions", []) if t.get("status") == "replay_validated"}
     uf = row.get("unexecuted_frontier") or {}
+    FAM = ("project", "report", "dashboard")
     # eligible child actions left unexplored inside an unlocked family
-    unlocked_families = [urlsplit(o.get("url") or "").path for o in run.get("observations", [])
-                         if any(seg in ("project", "report") for seg in urlsplit(o.get("url") or "").path.split("/"))]
     leftover_in_family = sum(1 for it in uf.get("items", [])
-                             if any(seg in ("project", "report") for seg in (it.get("target_path") or "").split("/")))
+                             if any(seg in FAM for seg in (it.get("target_path") or "").split("/")))
     wp = row.get("write_policy") or {}
     sweep = row.get("write_sweep") or {}
     exec_n = len(executed)
@@ -169,7 +177,8 @@ def collect(fixture: str, arm: str, trial: int, out: Path) -> dict[str, Any]:
         "deepest_prereq_chain": _deepest_prereq_chain(executed, unlocks),
         "functional_areas": len(_families(run.get("observations", []))),
         "replay_validated_transitions": reproduced,
-        "replay_validated_unlocked_routes": sorted(r for r in repro_routes if "/project/" in r or "/report/" in r),
+        "replay_validated_unlocked_routes": sorted(r for r in repro_routes
+                                                   if any(f"/{x}/" in r for x in ("project", "report", "dashboard"))),
         "writes_executed": wp.get("allowed"), "writes_blocked_destructive": wp.get("blocked_destructive"),
         "write_sweep": {k: sweep.get(k) for k in
                         ("promotable", "writes_executed", "sweep_actions", "unlocked_transitions", "focus",

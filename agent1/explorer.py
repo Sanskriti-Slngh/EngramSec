@@ -2100,7 +2100,8 @@ class Explorer:
                     self._explore_tours(browser)      # verification is part of the tour agenda
                 else:
                     self._explore(browser)
-                    if (self.config.write_execution_policy in {"authorized_fair", "focused_subtree"}
+                    if (self.config.write_execution_policy in {"authorized_fair", "focused_subtree",
+                                                               "focused_adaptive"}
                             and self._writes_authorized()):
                         self._authorized_write_sweep(browser)
                     self._replay(browser)
@@ -2418,15 +2419,65 @@ class Explorer:
             return False
         return self.write_policy.would_allow(method, action.target or self.config.start_url)
 
+    def _adaptive_subtrees(self, seen_routes: set[str]) -> dict[str, str]:
+        """Subtrees unlocked during ORDINARY discovery whose children are still queued (for
+        focused_adaptive). A subtree is seeded only on evidence of genuinely new functionality: its
+        entrance observation was reached by an executed transition, it is a FUNCTIONAL area (its child
+        controls under the entrance path have >=2 distinct route templates -- distinct operations, not one
+        template x N items) OR it was reached by a write, and at least one novel child is still queued.
+        Ordinary breadth lists are excluded, so this is not "every URL change". Maps entrance path ->
+        entrance URL."""
+        obs_by_id = {o.id: o for o in self.artifact.observations}
+        reached_any = {t.result_observation_id for t in self.artifact.transitions if t.result_observation_id}
+        reached_by_write = {t.result_observation_id for t in self.artifact.transitions
+                            if t.result_observation_id and any(
+                                (e.method or "GET").upper() not in {"GET", "HEAD", "OPTIONS"} and not e.failure
+                                for e in t.network)}
+        start_path = urlsplit(self.config.start_url).path.rstrip("/")
+
+        def child_templates(src: Any, epath: str) -> set[str]:
+            out = set()
+            for c in src.controls:
+                cp = urlsplit(c.target or "").path
+                if cp.startswith(epath + "/"):
+                    out.add(route_pattern(c.target or "").split("?")[0])
+            return out
+
+        novel_src: dict[str, str] = {}      # source obs id with >=1 novel queued child -> entrance URL
+        for it in self.frontier:
+            rp = route_pattern(it.action.target or "").split("?")[0]
+            if not rp or rp in seen_routes:
+                continue
+            src = obs_by_id.get(it.source_observation_id)
+            if src is None or it.source_observation_id not in reached_any:
+                continue
+            epath = urlsplit(src.url).path.rstrip("/")
+            if not epath or epath == start_path:
+                continue
+            novel_src[it.source_observation_id] = src.url
+        seeds: dict[str, str] = {}
+        for sid, url in novel_src.items():
+            src = obs_by_id[sid]
+            epath = urlsplit(url).path.rstrip("/")
+            if len(child_templates(src, epath)) >= 2 or sid in reached_by_write:
+                seeds[epath] = url
+        return seeds
+
     def _authorized_write_sweep(self, browser: Browser) -> None:
         """After ordinary discovery, give queued safe writes a bounded, fair turn to execute (and to
         reveal what they unlock). Each distinct write still executes at most once (`_known_write`), stays
         under `max_write_requests`, never touches a destructive route, and leaves a replay-budget floor.
         The write deprioritization during normal discovery is unchanged."""
+        policy = self.config.write_execution_policy
+        focus = policy in {"focused_subtree", "focused_adaptive"}
+        seen_routes = {route_pattern(o.url).split("?")[0] for o in self.artifact.observations}
         promoted = sum(1 for it in self.frontier if self._is_promotable_write(it.action))
-        if not promoted:
+        # focused_adaptive also continues subtrees unlocked during ordinary discovery.
+        seeds = self._adaptive_subtrees(seen_routes) if policy == "focused_adaptive" else {}
+        if not promoted and not seeds:
             self.artifact.metrics.write_sweep = {"enabled": True, "promotable": 0, "writes_executed": 0,
-                                                 "sweep_actions": 0, "unlocked_transitions": 0}
+                                                 "sweep_actions": 0, "unlocked_transitions": 0,
+                                                 "focus": focus, "focus_steps": 0, "adaptive_seeds": 0}
             return
         for it in self.frontier:
             if self._is_promotable_write(it.action):
@@ -2438,24 +2489,30 @@ class Explorer:
         start_actions = self.artifact.metrics.browser_actions
         start_transitions = len(self.artifact.transitions)
         writes_before = self.write_policy.stats["allowed"]
-        # "focused_subtree": after a write unlocks a new route, prefer that subtree's NOVEL child actions
-        # over leftover shallow breadth, and explore them from the LIVE post-write page (a persistent
-        # session) so a write-gated child need not re-run the write to be reached. Bounded by
-        # focus_max_steps; reorders within the same sweep budget so the replay floor is unchanged.
-        focus = self.config.write_execution_policy == "focused_subtree"
-        focus_prefixes: list[str] = []
-        focus_anchor: dict[str, str] = {}      # prefix path -> entrance URL (a persistent GET URL)
+        # "focused_subtree"/"focused_adaptive": prefer a newly unlocked subtree's NOVEL child actions over
+        # shallow breadth, exploring them from the LIVE page (persistent session) and re-anchoring to the
+        # entrance so a write-gated child need not re-run the write. focused_adaptive additionally seeds
+        # subtrees unlocked during ordinary discovery. Reorders within the same sweep budget.
+        focus_prefixes: list[str] = list(seeds.keys())
+        focus_anchor: dict[str, str] = dict(seeds)      # prefix path -> entrance URL (a persistent GET URL)
         focus_budget = self.config.focus_max_steps if focus else 0
         focus_steps = 0
-        seen_routes = {route_pattern(o.url).split("?")[0] for o in self.artifact.observations}
+        adaptive_seeds = len(seeds)
 
         def prefix_of(target: str | None) -> str | None:
             tp = urlsplit(target or "").path
             matches = [p for p in focus_prefixes if tp == p or tp.startswith(p + "/")]
             return max(matches, key=len) if matches else None      # most specific subtree anchor
 
+        def root_of(target: str | None) -> str | None:
+            tp = urlsplit(target or "").path
+            matches = [p for p in focus_prefixes if tp == p or tp.startswith(p + "/")]
+            return min(matches, key=len) if matches else None      # top-level subtree (for fair grouping)
+
         def in_family(target: str | None) -> bool:
             return prefix_of(target) is not None
+
+        active_root: str | None = None   # the subtree currently being descended (exhaust it before switching)
 
         with self._browser_session(browser) as session:
             self._navigate_start(session, "persistent_restore")
@@ -2478,16 +2535,24 @@ class Explorer:
                 # else (2) reachable by re-anchoring to the subtree entrance. Novelty only, so the focus
                 # stops when the subtree has no unseen routes left (no depth-for-depth, no cycles).
                 if focus and focus_budget > 0 and focus_prefixes:
-                    idx = next((i for i, it in enumerate(self.frontier)
-                                if in_family(it.action.target) and novel(it) and reachable(it)), None)
+                    # Exhaust the subtree we are currently descending before switching to a competing one
+                    # (fair, but no re-anchor thrash): prefer the active root, then any subtree.
+                    def pick(pred):
+                        if active_root is not None:
+                            j = next((i for i, it in enumerate(self.frontier)
+                                      if root_of(it.action.target) == active_root and pred(it)), None)
+                            if j is not None:
+                                return j
+                        return next((i for i, it in enumerate(self.frontier)
+                                     if in_family(it.action.target) and pred(it)), None)
+                    idx = pick(lambda it: novel(it) and reachable(it))          # descend live
                     if idx is None:
-                        idx = next((i for i, it in enumerate(self.frontier)
-                                    if in_family(it.action.target) and novel(it)), None)
-                    if idx is None:   # a nested safe write inside the subtree (e.g. create a task) ->
-                        idx = next((i for i, it in enumerate(self.frontier)   # unlocks a deeper prerequisite
-                                    if in_family(it.action.target) and self._is_promotable_write(it.action)), None)
+                        idx = pick(novel)                                       # re-anchor to a child
+                    if idx is None:                                            # a nested safe write inside
+                        idx = pick(lambda it: self._is_promotable_write(it.action))
                     if idx is not None:
                         focused = True
+                        active_root = root_of(self.frontier[idx].action.target)
                 if idx is None:       # 3) else the highest-priority promotable write (restored to its page)
                     idx = next((i for i, it in enumerate(self.frontier)
                                 if self._is_promotable_write(it.action)), None)
@@ -2526,6 +2591,10 @@ class Explorer:
                 promotable = self._is_promotable_write(item.action)
                 updated = self._attempt_frontier(browser, item, persistent_session=session,
                                                  live_source=live, live_path=live_path)
+                if focused:
+                    # Mark a focused target attempted so it is never re-selected, even if the attempt did
+                    # not record a new observation (prevents cycles / duplicate work in the subtree).
+                    seen_routes.add(route_pattern(item.action.target or "").split("?")[0])
                 if focus and updated is not None and len(self.artifact.observations) > obs_before:
                     landed = self.artifact.observations[-1]
                     rp = route_pattern(landed.url).split("?")[0]
@@ -2553,7 +2622,7 @@ class Explorer:
             "sweep_actions": self.artifact.metrics.browser_actions - start_actions,
             "unlocked_transitions": len(self.artifact.transitions) - start_transitions,
             "replay_floor": floor, "focus": focus, "focus_steps": focus_steps,
-            "focus_prefixes": focus_prefixes[:20],
+            "focus_prefixes": focus_prefixes[:20], "adaptive_seeds": adaptive_seeds,
         }
 
     def _explore_persistent(self, browser: Browser) -> None:
