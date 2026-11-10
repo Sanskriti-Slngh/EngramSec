@@ -1,0 +1,2618 @@
+{
+ "config": {
+  "max_seconds": 140.0,
+  "max_browser_actions": 600,
+  "max_transitions": 300,
+  "state_aware_exploration": true,
+  "record_aware_graph": true,
+  "interaction_profile": "extended",
+  "typed_resource_spider": false,
+  "allow_post_forms": true,
+  "write_policy": "disposable",
+  "max_write_requests": 60,
+  "replay_policy": "structure",
+  "replay_structure_attempts": 2,
+  "acg_evidence": true,
+  "record_unexecuted_frontier": true,
+  "restoration_shortcut": "direct_url",
+  "write_execution_policy": "focused_adaptive",
+  "write_sweep_replay_floor": 0.25
+ },
+ "arms": {
+  "A": {},
+  "capcap": {
+   "focus_to_budget": true
+  },
+  "rotate": {
+   "fair_subtree_rotation": true
+  },
+  "full": {
+   "fair_subtree_rotation": true,
+   "focus_stagnation_limit": 2
+  }
+ },
+ "sample_k": 2,
+ "variants": {
+  "atlas": {
+   "arms": {
+    "A": {
+     "trials": [
+      {
+       "variant": "atlas",
+       "arm": "A",
+       "trial": 0,
+       "executed_total": 32,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 14,
+       "deep_total": 26,
+       "executed_tdistinct": 14,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         4,
+         9
+        ],
+        "controls": [
+         8,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.85,
+        "controls": 6.75,
+        "pipelines": 2.91,
+        "bulletins": 8.66
+       },
+       "time_to_first_deep_s": 48.07,
+       "auc_over_requests": {
+        "auc_norm": 0.4698,
+        "final": 32,
+        "n": 247
+       },
+       "auc_over_time": {
+        "auc_norm": 0.4826,
+        "final": 32
+       },
+       "breadth_wasted_actions": 27,
+       "breadth_wasted_time_s": 25.7,
+       "total_browser_actions": 256,
+       "restoration_actions": 87,
+       "root_reloads": 38,
+       "http_requests": 247,
+       "server_requests": 247,
+       "replays_validated": 23,
+       "replay_attempts": 25,
+       "replay_failures": 2,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.454,
+       "wall_seconds": 141.15,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "ledgers_freight_annual",
+        "ledgers_fuel_annual",
+        "ledgers_fuel_monthly",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      },
+      {
+       "variant": "atlas",
+       "arm": "A",
+       "trial": 1,
+       "executed_total": 31,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 13,
+       "deep_total": 26,
+       "executed_tdistinct": 13,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         3,
+         9
+        ],
+        "controls": [
+         8,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.83,
+        "controls": 6.72,
+        "pipelines": 2.88,
+        "bulletins": 8.66
+       },
+       "time_to_first_deep_s": 48.0,
+       "auc_over_requests": {
+        "auc_norm": 0.4655,
+        "final": 31,
+        "n": 249
+       },
+       "auc_over_time": {
+        "auc_norm": 0.4775,
+        "final": 31
+       },
+       "breadth_wasted_actions": 28,
+       "breadth_wasted_time_s": 26.6,
+       "total_browser_actions": 258,
+       "restoration_actions": 87,
+       "root_reloads": 38,
+       "http_requests": 249,
+       "server_requests": 249,
+       "replays_validated": 24,
+       "replay_attempts": 25,
+       "replay_failures": 1,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 141.421,
+       "wall_seconds": 142.12,
+       "state_changing_requests": 0,
+       "focus_steps": 5,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "ledgers_freight_annual",
+        "ledgers_freight_monthly",
+        "ledgers_fuel_annual",
+        "ledgers_fuel_monthly",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      },
+      {
+       "variant": "atlas",
+       "arm": "A",
+       "trial": 2,
+       "executed_total": 31,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 13,
+       "deep_total": 26,
+       "executed_tdistinct": 13,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         3,
+         9
+        ],
+        "controls": [
+         8,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.84,
+        "controls": 6.71,
+        "pipelines": 2.89,
+        "bulletins": 8.61
+       },
+       "time_to_first_deep_s": 48.03,
+       "auc_over_requests": {
+        "auc_norm": 0.4636,
+        "final": 31,
+        "n": 247
+       },
+       "auc_over_time": {
+        "auc_norm": 0.4755,
+        "final": 31
+       },
+       "breadth_wasted_actions": 28,
+       "breadth_wasted_time_s": 26.5,
+       "total_browser_actions": 256,
+       "restoration_actions": 87,
+       "root_reloads": 38,
+       "http_requests": 247,
+       "server_requests": 247,
+       "replays_validated": 23,
+       "replay_attempts": 25,
+       "replay_failures": 2,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.199,
+       "wall_seconds": 140.94,
+       "state_changing_requests": 0,
+       "focus_steps": 5,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "ledgers_freight_annual",
+        "ledgers_freight_monthly",
+        "ledgers_fuel_annual",
+        "ledgers_fuel_monthly",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      }
+     ],
+     "median": {
+      "executed_total": 31,
+      "deep_reached": 13,
+      "executed_tdistinct": 13,
+      "executed_semantic": 0,
+      "total_browser_actions": 256,
+      "restoration_actions": 87,
+      "root_reloads": 38
+     },
+     "diagnosis": {
+      "stable_missed": [
+       "bulletins_release_11_changelog",
+       "bulletins_release_19_changelog",
+       "bulletins_release_25_changelog",
+       "bulletins_release_31_changelog",
+       "bulletins_release_4_changelog",
+       "ledgers_freight_annual",
+       "ledgers_fuel_annual",
+       "ledgers_fuel_monthly",
+       "ledgers_tariff_annual",
+       "ledgers_tariff_monthly",
+       "pipelines_ingest_status",
+       "pipelines_settle_status"
+      ],
+      "classes": {
+       "tdistinct_stranded": [
+        "ledgers_freight_annual",
+        "ledgers_fuel_annual",
+        "ledgers_fuel_monthly",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ],
+       "tdistinct_undiscovered": [],
+       "semantic_stranded": [
+        "bulletins_release_4_changelog"
+       ],
+       "semantic_undiscovered": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog"
+       ],
+       "other": []
+      },
+      "counts": {
+       "tdistinct_stranded": 7,
+       "tdistinct_undiscovered": 0,
+       "semantic_stranded": 1,
+       "semantic_undiscovered": 4,
+       "other": 0
+      }
+     }
+    },
+    "capcap": {
+     "trials": [
+      {
+       "variant": "atlas",
+       "arm": "capcap",
+       "trial": 0,
+       "executed_total": 32,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 14,
+       "deep_total": 26,
+       "executed_tdistinct": 14,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         4,
+         9
+        ],
+        "controls": [
+         8,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.84,
+        "controls": 6.72,
+        "pipelines": 2.9,
+        "bulletins": 8.65
+       },
+       "time_to_first_deep_s": 48.14,
+       "auc_over_requests": {
+        "auc_norm": 0.4677,
+        "final": 32,
+        "n": 245
+       },
+       "auc_over_time": {
+        "auc_norm": 0.4822,
+        "final": 32
+       },
+       "breadth_wasted_actions": 27,
+       "breadth_wasted_time_s": 25.7,
+       "total_browser_actions": 256,
+       "restoration_actions": 87,
+       "root_reloads": 38,
+       "http_requests": 245,
+       "server_requests": 245,
+       "replays_validated": 23,
+       "replay_attempts": 25,
+       "replay_failures": 2,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.551,
+       "wall_seconds": 141.27,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "ledgers_freight_annual",
+        "ledgers_fuel_annual",
+        "ledgers_fuel_monthly",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      },
+      {
+       "variant": "atlas",
+       "arm": "capcap",
+       "trial": 1,
+       "executed_total": 31,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 13,
+       "deep_total": 26,
+       "executed_tdistinct": 13,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         3,
+         9
+        ],
+        "controls": [
+         8,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.81,
+        "controls": 6.71,
+        "pipelines": 2.87,
+        "bulletins": 8.63
+       },
+       "time_to_first_deep_s": 48.04,
+       "auc_over_requests": {
+        "auc_norm": 0.4636,
+        "final": 31,
+        "n": 247
+       },
+       "auc_over_time": {
+        "auc_norm": 0.476,
+        "final": 31
+       },
+       "breadth_wasted_actions": 28,
+       "breadth_wasted_time_s": 26.6,
+       "total_browser_actions": 256,
+       "restoration_actions": 87,
+       "root_reloads": 38,
+       "http_requests": 247,
+       "server_requests": 247,
+       "replays_validated": 23,
+       "replay_attempts": 25,
+       "replay_failures": 2,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.615,
+       "wall_seconds": 141.32,
+       "state_changing_requests": 0,
+       "focus_steps": 5,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "ledgers_freight_annual",
+        "ledgers_freight_monthly",
+        "ledgers_fuel_annual",
+        "ledgers_fuel_monthly",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      },
+      {
+       "variant": "atlas",
+       "arm": "capcap",
+       "trial": 2,
+       "executed_total": 31,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 13,
+       "deep_total": 26,
+       "executed_tdistinct": 13,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         3,
+         9
+        ],
+        "controls": [
+         8,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.86,
+        "controls": 6.79,
+        "pipelines": 2.9,
+        "bulletins": 8.71
+       },
+       "time_to_first_deep_s": 136.55,
+       "auc_over_requests": {
+        "auc_norm": 0.4581,
+        "final": 31,
+        "n": 236
+       },
+       "auc_over_time": {
+        "auc_norm": 0.3914,
+        "final": 31
+       },
+       "breadth_wasted_actions": 25,
+       "breadth_wasted_time_s": 23.9,
+       "total_browser_actions": 244,
+       "restoration_actions": 81,
+       "root_reloads": 38,
+       "http_requests": 236,
+       "server_requests": 236,
+       "replays_validated": 23,
+       "replay_attempts": 25,
+       "replay_failures": 2,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 141.385,
+       "wall_seconds": 142.32,
+       "state_changing_requests": 0,
+       "focus_steps": 5,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "ledgers_freight_annual",
+        "ledgers_freight_monthly",
+        "ledgers_fuel_annual",
+        "ledgers_fuel_monthly",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      }
+     ],
+     "median": {
+      "executed_total": 31,
+      "deep_reached": 13,
+      "executed_tdistinct": 13,
+      "executed_semantic": 0,
+      "total_browser_actions": 256,
+      "restoration_actions": 87,
+      "root_reloads": 38
+     },
+     "diagnosis": {
+      "stable_missed": [
+       "bulletins_release_11_changelog",
+       "bulletins_release_19_changelog",
+       "bulletins_release_25_changelog",
+       "bulletins_release_31_changelog",
+       "bulletins_release_4_changelog",
+       "ledgers_freight_annual",
+       "ledgers_fuel_annual",
+       "ledgers_fuel_monthly",
+       "ledgers_tariff_annual",
+       "ledgers_tariff_monthly",
+       "pipelines_ingest_status",
+       "pipelines_settle_status"
+      ],
+      "classes": {
+       "tdistinct_stranded": [
+        "ledgers_freight_annual",
+        "ledgers_fuel_annual",
+        "ledgers_fuel_monthly",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ],
+       "tdistinct_undiscovered": [],
+       "semantic_stranded": [
+        "bulletins_release_4_changelog"
+       ],
+       "semantic_undiscovered": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog"
+       ],
+       "other": []
+      },
+      "counts": {
+       "tdistinct_stranded": 7,
+       "tdistinct_undiscovered": 0,
+       "semantic_stranded": 1,
+       "semantic_undiscovered": 4,
+       "other": 0
+      }
+     }
+    },
+    "rotate": {
+     "trials": [
+      {
+       "variant": "atlas",
+       "arm": "rotate",
+       "trial": 0,
+       "executed_total": 32,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 14,
+       "deep_total": 26,
+       "executed_tdistinct": 14,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         6,
+         9
+        ],
+        "controls": [
+         6,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.82,
+        "controls": 6.7,
+        "pipelines": 2.89,
+        "bulletins": 8.64
+       },
+       "time_to_first_deep_s": 52.19,
+       "auc_over_requests": {
+        "auc_norm": 0.4673,
+        "final": 32,
+        "n": 243
+       },
+       "auc_over_time": {
+        "auc_norm": 0.4674,
+        "final": 32
+       },
+       "breadth_wasted_actions": 26,
+       "breadth_wasted_time_s": 27.9,
+       "total_browser_actions": 252,
+       "restoration_actions": 84,
+       "root_reloads": 40,
+       "http_requests": 243,
+       "server_requests": 243,
+       "replays_validated": 22,
+       "replay_attempts": 27,
+       "replay_failures": 5,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.87,
+       "wall_seconds": 141.81,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "controls_pilots_roster",
+        "controls_signals_bands",
+        "ledgers_fuel_annual",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      },
+      {
+       "variant": "atlas",
+       "arm": "rotate",
+       "trial": 1,
+       "executed_total": 32,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 14,
+       "deep_total": 26,
+       "executed_tdistinct": 14,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         6,
+         9
+        ],
+        "controls": [
+         6,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.83,
+        "controls": 6.71,
+        "pipelines": 2.87,
+        "bulletins": 8.67
+       },
+       "time_to_first_deep_s": 65.04,
+       "auc_over_requests": {
+        "auc_norm": 0.4673,
+        "final": 32,
+        "n": 243
+       },
+       "auc_over_time": {
+        "auc_norm": 0.4304,
+        "final": 32
+       },
+       "breadth_wasted_actions": 26,
+       "breadth_wasted_time_s": 37.8,
+       "total_browser_actions": 251,
+       "restoration_actions": 84,
+       "root_reloads": 39,
+       "http_requests": 243,
+       "server_requests": 243,
+       "replays_validated": 22,
+       "replay_attempts": 26,
+       "replay_failures": 4,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.229,
+       "wall_seconds": 140.97,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "controls_pilots_roster",
+        "controls_signals_bands",
+        "ledgers_fuel_annual",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      },
+      {
+       "variant": "atlas",
+       "arm": "rotate",
+       "trial": 2,
+       "executed_total": 32,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 14,
+       "deep_total": 26,
+       "executed_tdistinct": 14,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         6,
+         9
+        ],
+        "controls": [
+         6,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.81,
+        "controls": 6.66,
+        "pipelines": 2.86,
+        "bulletins": 8.56
+       },
+       "time_to_first_deep_s": 48.05,
+       "auc_over_requests": {
+        "auc_norm": 0.4693,
+        "final": 32,
+        "n": 246
+       },
+       "auc_over_time": {
+        "auc_norm": 0.482,
+        "final": 32
+       },
+       "breadth_wasted_actions": 27,
+       "breadth_wasted_time_s": 25.6,
+       "total_browser_actions": 254,
+       "restoration_actions": 85,
+       "root_reloads": 40,
+       "http_requests": 246,
+       "server_requests": 246,
+       "replays_validated": 22,
+       "replay_attempts": 27,
+       "replay_failures": 5,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.156,
+       "wall_seconds": 140.9,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "controls_pilots_roster",
+        "controls_signals_bands",
+        "ledgers_fuel_annual",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      }
+     ],
+     "median": {
+      "executed_total": 32,
+      "deep_reached": 14,
+      "executed_tdistinct": 14,
+      "executed_semantic": 0,
+      "total_browser_actions": 252,
+      "restoration_actions": 84,
+      "root_reloads": 40
+     },
+     "diagnosis": {
+      "stable_missed": [
+       "bulletins_release_11_changelog",
+       "bulletins_release_19_changelog",
+       "bulletins_release_25_changelog",
+       "bulletins_release_31_changelog",
+       "bulletins_release_4_changelog",
+       "controls_pilots_roster",
+       "controls_signals_bands",
+       "ledgers_fuel_annual",
+       "ledgers_tariff_annual",
+       "ledgers_tariff_monthly",
+       "pipelines_ingest_status",
+       "pipelines_settle_status"
+      ],
+      "classes": {
+       "tdistinct_stranded": [
+        "controls_pilots_roster",
+        "controls_signals_bands",
+        "ledgers_fuel_annual",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ],
+       "tdistinct_undiscovered": [],
+       "semantic_stranded": [
+        "bulletins_release_4_changelog"
+       ],
+       "semantic_undiscovered": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog"
+       ],
+       "other": []
+      },
+      "counts": {
+       "tdistinct_stranded": 7,
+       "tdistinct_undiscovered": 0,
+       "semantic_stranded": 1,
+       "semantic_undiscovered": 4,
+       "other": 0
+      }
+     }
+    },
+    "full": {
+     "trials": [
+      {
+       "variant": "atlas",
+       "arm": "full",
+       "trial": 0,
+       "executed_total": 32,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 14,
+       "deep_total": 26,
+       "executed_tdistinct": 14,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         6,
+         9
+        ],
+        "controls": [
+         6,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.85,
+        "controls": 6.73,
+        "pipelines": 2.9,
+        "bulletins": 8.63
+       },
+       "time_to_first_deep_s": 48.91,
+       "auc_over_requests": {
+        "auc_norm": 0.4673,
+        "final": 32,
+        "n": 243
+       },
+       "auc_over_time": {
+        "auc_norm": 0.4818,
+        "final": 32
+       },
+       "breadth_wasted_actions": 26,
+       "breadth_wasted_time_s": 25.0,
+       "total_browser_actions": 254,
+       "restoration_actions": 84,
+       "root_reloads": 40,
+       "http_requests": 243,
+       "server_requests": 243,
+       "replays_validated": 23,
+       "replay_attempts": 27,
+       "replay_failures": 4,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 141.46,
+       "wall_seconds": 142.21,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "controls_pilots_roster",
+        "controls_signals_bands",
+        "ledgers_fuel_annual",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      },
+      {
+       "variant": "atlas",
+       "arm": "full",
+       "trial": 1,
+       "executed_total": 32,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 14,
+       "deep_total": 26,
+       "executed_tdistinct": 14,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         6,
+         9
+        ],
+        "controls": [
+         6,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.83,
+        "controls": 6.69,
+        "pipelines": 2.88,
+        "bulletins": 8.68
+       },
+       "time_to_first_deep_s": 49.11,
+       "auc_over_requests": {
+        "auc_norm": 0.464,
+        "final": 32,
+        "n": 240
+       },
+       "auc_over_time": {
+        "auc_norm": 0.4797,
+        "final": 32
+       },
+       "breadth_wasted_actions": 26,
+       "breadth_wasted_time_s": 25.0,
+       "total_browser_actions": 251,
+       "restoration_actions": 84,
+       "root_reloads": 39,
+       "http_requests": 240,
+       "server_requests": 240,
+       "replays_validated": 22,
+       "replay_attempts": 26,
+       "replay_failures": 4,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.547,
+       "wall_seconds": 141.27,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "controls_pilots_roster",
+        "controls_signals_bands",
+        "ledgers_fuel_annual",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      },
+      {
+       "variant": "atlas",
+       "arm": "full",
+       "trial": 2,
+       "executed_total": 32,
+       "inventory": 44,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 14,
+       "deep_total": 26,
+       "executed_tdistinct": 14,
+       "tdistinct_total": 21,
+       "executed_semantic": 0,
+       "semantic_total": 5,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "ledgers": [
+         6,
+         9
+        ],
+        "controls": [
+         6,
+         8
+        ],
+        "pipelines": [
+         2,
+         4
+        ],
+        "bulletins": [
+         0,
+         5
+        ]
+       },
+       "time_to_first_hub_s": {
+        "ledgers": 3.87,
+        "controls": 6.78,
+        "pipelines": 2.91,
+        "bulletins": 8.7
+       },
+       "time_to_first_deep_s": 48.51,
+       "auc_over_requests": {
+        "auc_norm": 0.4673,
+        "final": 32,
+        "n": 243
+       },
+       "auc_over_time": {
+        "auc_norm": 0.481,
+        "final": 32
+       },
+       "breadth_wasted_actions": 26,
+       "breadth_wasted_time_s": 24.9,
+       "total_browser_actions": 252,
+       "restoration_actions": 84,
+       "root_reloads": 40,
+       "http_requests": 243,
+       "server_requests": 243,
+       "replays_validated": 22,
+       "replay_attempts": 27,
+       "replay_failures": 5,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.432,
+       "wall_seconds": 141.14,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog",
+        "bulletins_release_4_changelog",
+        "controls_pilots_roster",
+        "controls_signals_bands",
+        "ledgers_fuel_annual",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ]
+      }
+     ],
+     "median": {
+      "executed_total": 32,
+      "deep_reached": 14,
+      "executed_tdistinct": 14,
+      "executed_semantic": 0,
+      "total_browser_actions": 252,
+      "restoration_actions": 84,
+      "root_reloads": 40
+     },
+     "diagnosis": {
+      "stable_missed": [
+       "bulletins_release_11_changelog",
+       "bulletins_release_19_changelog",
+       "bulletins_release_25_changelog",
+       "bulletins_release_31_changelog",
+       "bulletins_release_4_changelog",
+       "controls_pilots_roster",
+       "controls_signals_bands",
+       "ledgers_fuel_annual",
+       "ledgers_tariff_annual",
+       "ledgers_tariff_monthly",
+       "pipelines_ingest_status",
+       "pipelines_settle_status"
+      ],
+      "classes": {
+       "tdistinct_stranded": [
+        "controls_pilots_roster",
+        "controls_signals_bands",
+        "ledgers_fuel_annual",
+        "ledgers_tariff_annual",
+        "ledgers_tariff_monthly",
+        "pipelines_ingest_status",
+        "pipelines_settle_status"
+       ],
+       "tdistinct_undiscovered": [],
+       "semantic_stranded": [
+        "bulletins_release_4_changelog"
+       ],
+       "semantic_undiscovered": [
+        "bulletins_release_11_changelog",
+        "bulletins_release_19_changelog",
+        "bulletins_release_25_changelog",
+        "bulletins_release_31_changelog"
+       ],
+       "other": []
+      },
+      "counts": {
+       "tdistinct_stranded": 7,
+       "tdistinct_undiscovered": 0,
+       "semantic_stranded": 1,
+       "semantic_undiscovered": 4,
+       "other": 0
+      }
+     }
+    }
+   }
+  },
+  "orchard": {
+   "arms": {
+    "A": {
+     "trials": [
+      {
+       "variant": "orchard",
+       "arm": "A",
+       "trial": 0,
+       "executed_total": 28,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 10,
+       "deep_total": 30,
+       "executed_tdistinct": 10,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         2,
+         12
+        ],
+        "policies": [
+         6,
+         6
+        ],
+        "jobs": [
+         2,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.84,
+        "jobs": 6.72,
+        "releases": 2.9
+       },
+       "time_to_first_deep_s": 72.27,
+       "auc_over_requests": {
+        "auc_norm": 0.3669,
+        "final": 28,
+        "n": 244
+       },
+       "auc_over_time": {
+        "auc_norm": 0.3794,
+        "final": 28
+       },
+       "breadth_wasted_actions": 25,
+       "breadth_wasted_time_s": 23.7,
+       "total_browser_actions": 256,
+       "restoration_actions": 85,
+       "root_reloads": 40,
+       "http_requests": 244,
+       "server_requests": 244,
+       "replays_validated": 23,
+       "replay_attempts": 27,
+       "replay_failures": 4,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.954,
+       "wall_seconds": 141.67,
+       "state_changing_requests": 0,
+       "focus_steps": 5,
+       "adaptive_seeds": 6,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_dispatch",
+        "jobs_dispatch_status",
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest",
+        "yields_harvest_seasonal",
+        "yields_harvest_weekly",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      },
+      {
+       "variant": "orchard",
+       "arm": "A",
+       "trial": 1,
+       "executed_total": 29,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 11,
+       "deep_total": 30,
+       "executed_tdistinct": 11,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         3,
+         12
+        ],
+        "policies": [
+         6,
+         6
+        ],
+        "jobs": [
+         2,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.84,
+        "jobs": 6.71,
+        "releases": 2.89
+       },
+       "time_to_first_deep_s": 71.98,
+       "auc_over_requests": {
+        "auc_norm": 0.3736,
+        "final": 29,
+        "n": 246
+       },
+       "auc_over_time": {
+        "auc_norm": 0.386,
+        "final": 29
+       },
+       "breadth_wasted_actions": 25,
+       "breadth_wasted_time_s": 23.6,
+       "total_browser_actions": 257,
+       "restoration_actions": 86,
+       "root_reloads": 41,
+       "http_requests": 246,
+       "server_requests": 246,
+       "replays_validated": 22,
+       "replay_attempts": 28,
+       "replay_failures": 6,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 141.083,
+       "wall_seconds": 141.8,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 6,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_dispatch",
+        "jobs_dispatch_status",
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest_seasonal",
+        "yields_harvest_weekly",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      },
+      {
+       "variant": "orchard",
+       "arm": "A",
+       "trial": 2,
+       "executed_total": 29,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 11,
+       "deep_total": 30,
+       "executed_tdistinct": 11,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         3,
+         12
+        ],
+        "policies": [
+         6,
+         6
+        ],
+        "jobs": [
+         2,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.83,
+        "jobs": 6.75,
+        "releases": 2.87
+       },
+       "time_to_first_deep_s": 72.23,
+       "auc_over_requests": {
+        "auc_norm": 0.3717,
+        "final": 29,
+        "n": 244
+       },
+       "auc_over_time": {
+        "auc_norm": 0.3845,
+        "final": 29
+       },
+       "breadth_wasted_actions": 25,
+       "breadth_wasted_time_s": 23.7,
+       "total_browser_actions": 256,
+       "restoration_actions": 86,
+       "root_reloads": 40,
+       "http_requests": 244,
+       "server_requests": 244,
+       "replays_validated": 22,
+       "replay_attempts": 27,
+       "replay_failures": 5,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.558,
+       "wall_seconds": 141.31,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 6,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_dispatch",
+        "jobs_dispatch_status",
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest_seasonal",
+        "yields_harvest_weekly",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      }
+     ],
+     "median": {
+      "executed_total": 29,
+      "deep_reached": 11,
+      "executed_tdistinct": 11,
+      "executed_semantic": 0,
+      "total_browser_actions": 256,
+      "restoration_actions": 86,
+      "root_reloads": 40
+     },
+     "diagnosis": {
+      "stable_missed": [
+       "jobs_dispatch",
+       "jobs_dispatch_status",
+       "jobs_pack_status",
+       "jobs_sort_status",
+       "releases_release_13_changelog",
+       "releases_release_17_changelog",
+       "releases_release_28_changelog",
+       "releases_release_35_changelog",
+       "releases_release_41_changelog",
+       "releases_release_6_changelog",
+       "yields_grade",
+       "yields_grade_seasonal",
+       "yields_grade_weekly",
+       "yields_harvest_seasonal",
+       "yields_harvest_weekly",
+       "yields_loss_seasonal",
+       "yields_loss_weekly",
+       "yields_price_seasonal",
+       "yields_price_weekly"
+      ],
+      "classes": {
+       "tdistinct_stranded": [
+        "jobs_dispatch",
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "yields_grade",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ],
+       "tdistinct_undiscovered": [
+        "jobs_dispatch_status",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest_seasonal",
+        "yields_harvest_weekly"
+       ],
+       "semantic_stranded": [
+        "releases_release_6_changelog"
+       ],
+       "semantic_undiscovered": [
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog"
+       ],
+       "other": []
+      },
+      "counts": {
+       "tdistinct_stranded": 8,
+       "tdistinct_undiscovered": 5,
+       "semantic_stranded": 1,
+       "semantic_undiscovered": 5,
+       "other": 0
+      }
+     }
+    },
+    "capcap": {
+     "trials": [
+      {
+       "variant": "orchard",
+       "arm": "capcap",
+       "trial": 0,
+       "executed_total": 29,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 11,
+       "deep_total": 30,
+       "executed_tdistinct": 11,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         3,
+         12
+        ],
+        "policies": [
+         6,
+         6
+        ],
+        "jobs": [
+         2,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.83,
+        "jobs": 6.69,
+        "releases": 2.89
+       },
+       "time_to_first_deep_s": 72.05,
+       "auc_over_requests": {
+        "auc_norm": 0.3726,
+        "final": 29,
+        "n": 245
+       },
+       "auc_over_time": {
+        "auc_norm": 0.3862,
+        "final": 29
+       },
+       "breadth_wasted_actions": 25,
+       "breadth_wasted_time_s": 23.7,
+       "total_browser_actions": 257,
+       "restoration_actions": 86,
+       "root_reloads": 41,
+       "http_requests": 245,
+       "server_requests": 245,
+       "replays_validated": 22,
+       "replay_attempts": 28,
+       "replay_failures": 6,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 141.489,
+       "wall_seconds": 142.19,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 6,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_dispatch",
+        "jobs_dispatch_status",
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest_seasonal",
+        "yields_harvest_weekly",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      },
+      {
+       "variant": "orchard",
+       "arm": "capcap",
+       "trial": 1,
+       "executed_total": 29,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 11,
+       "deep_total": 30,
+       "executed_tdistinct": 11,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         3,
+         12
+        ],
+        "policies": [
+         6,
+         6
+        ],
+        "jobs": [
+         2,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.82,
+        "jobs": 6.72,
+        "releases": 2.85
+       },
+       "time_to_first_deep_s": 72.11,
+       "auc_over_requests": {
+        "auc_norm": 0.3736,
+        "final": 29,
+        "n": 246
+       },
+       "auc_over_time": {
+        "auc_norm": 0.3856,
+        "final": 29
+       },
+       "breadth_wasted_actions": 25,
+       "breadth_wasted_time_s": 23.7,
+       "total_browser_actions": 257,
+       "restoration_actions": 86,
+       "root_reloads": 41,
+       "http_requests": 246,
+       "server_requests": 246,
+       "replays_validated": 22,
+       "replay_attempts": 28,
+       "replay_failures": 6,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 141.018,
+       "wall_seconds": 141.72,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 6,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_dispatch",
+        "jobs_dispatch_status",
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest_seasonal",
+        "yields_harvest_weekly",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      },
+      {
+       "variant": "orchard",
+       "arm": "capcap",
+       "trial": 2,
+       "executed_total": 29,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 11,
+       "deep_total": 30,
+       "executed_tdistinct": 11,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         3,
+         12
+        ],
+        "policies": [
+         6,
+         6
+        ],
+        "jobs": [
+         2,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.82,
+        "jobs": 6.69,
+        "releases": 2.86
+       },
+       "time_to_first_deep_s": 72.17,
+       "auc_over_requests": {
+        "auc_norm": 0.3726,
+        "final": 29,
+        "n": 245
+       },
+       "auc_over_time": {
+        "auc_norm": 0.3847,
+        "final": 29
+       },
+       "breadth_wasted_actions": 25,
+       "breadth_wasted_time_s": 23.6,
+       "total_browser_actions": 256,
+       "restoration_actions": 86,
+       "root_reloads": 40,
+       "http_requests": 245,
+       "server_requests": 245,
+       "replays_validated": 22,
+       "replay_attempts": 27,
+       "replay_failures": 5,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.578,
+       "wall_seconds": 141.35,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 6,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_dispatch",
+        "jobs_dispatch_status",
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest_seasonal",
+        "yields_harvest_weekly",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      }
+     ],
+     "median": {
+      "executed_total": 29,
+      "deep_reached": 11,
+      "executed_tdistinct": 11,
+      "executed_semantic": 0,
+      "total_browser_actions": 257,
+      "restoration_actions": 86,
+      "root_reloads": 41
+     },
+     "diagnosis": {
+      "stable_missed": [
+       "jobs_dispatch",
+       "jobs_dispatch_status",
+       "jobs_pack_status",
+       "jobs_sort_status",
+       "releases_release_13_changelog",
+       "releases_release_17_changelog",
+       "releases_release_28_changelog",
+       "releases_release_35_changelog",
+       "releases_release_41_changelog",
+       "releases_release_6_changelog",
+       "yields_grade",
+       "yields_grade_seasonal",
+       "yields_grade_weekly",
+       "yields_harvest_seasonal",
+       "yields_harvest_weekly",
+       "yields_loss_seasonal",
+       "yields_loss_weekly",
+       "yields_price_seasonal",
+       "yields_price_weekly"
+      ],
+      "classes": {
+       "tdistinct_stranded": [
+        "jobs_dispatch",
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "yields_grade",
+        "yields_harvest_seasonal",
+        "yields_harvest_weekly",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ],
+       "tdistinct_undiscovered": [
+        "jobs_dispatch_status",
+        "yields_grade_seasonal",
+        "yields_grade_weekly"
+       ],
+       "semantic_stranded": [
+        "releases_release_6_changelog"
+       ],
+       "semantic_undiscovered": [
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog"
+       ],
+       "other": []
+      },
+      "counts": {
+       "tdistinct_stranded": 10,
+       "tdistinct_undiscovered": 3,
+       "semantic_stranded": 1,
+       "semantic_undiscovered": 5,
+       "other": 0
+      }
+     }
+    },
+    "rotate": {
+     "trials": [
+      {
+       "variant": "orchard",
+       "arm": "rotate",
+       "trial": 0,
+       "executed_total": 29,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 11,
+       "deep_total": 30,
+       "executed_tdistinct": 11,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         4,
+         12
+        ],
+        "policies": [
+         3,
+         6
+        ],
+        "jobs": [
+         4,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.75,
+        "jobs": 6.62,
+        "releases": 2.82
+       },
+       "time_to_first_deep_s": 71.99,
+       "auc_over_requests": {
+        "auc_norm": 0.3704,
+        "final": 29,
+        "n": 242
+       },
+       "auc_over_time": {
+        "auc_norm": 0.3857,
+        "final": 29
+       },
+       "breadth_wasted_actions": 25,
+       "breadth_wasted_time_s": 23.7,
+       "total_browser_actions": 253,
+       "restoration_actions": 83,
+       "root_reloads": 40,
+       "http_requests": 242,
+       "server_requests": 242,
+       "replays_validated": 22,
+       "replay_attempts": 27,
+       "replay_failures": 5,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.911,
+       "wall_seconds": 142.09,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 6,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "policies_irrigation_audit",
+        "policies_labor_audit",
+        "policies_labor_schedule",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest_seasonal",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      },
+      {
+       "variant": "orchard",
+       "arm": "rotate",
+       "trial": 1,
+       "executed_total": 26,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 8,
+       "deep_total": 30,
+       "executed_tdistinct": 8,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         3,
+         12
+        ],
+        "policies": [
+         2,
+         6
+        ],
+        "jobs": [
+         3,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.84,
+        "jobs": 6.73,
+        "releases": 2.89
+       },
+       "time_to_first_deep_s": 132.93,
+       "auc_over_requests": {
+        "auc_norm": 0.3441,
+        "final": 26,
+        "n": 224
+       },
+       "auc_over_time": {
+        "auc_norm": 0.2828,
+        "final": 26
+       },
+       "breadth_wasted_actions": 21,
+       "breadth_wasted_time_s": 20.2,
+       "total_browser_actions": 236,
+       "restoration_actions": 76,
+       "root_reloads": 39,
+       "http_requests": 224,
+       "server_requests": 224,
+       "replays_validated": 21,
+       "replay_attempts": 26,
+       "replay_failures": 5,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.735,
+       "wall_seconds": 141.57,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_dispatch",
+        "jobs_dispatch_status",
+        "jobs_sort_status",
+        "policies_irrigation",
+        "policies_irrigation_audit",
+        "policies_irrigation_schedule",
+        "policies_labor_audit",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest",
+        "yields_harvest_seasonal",
+        "yields_harvest_weekly",
+        "yields_loss_seasonal",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      },
+      {
+       "variant": "orchard",
+       "arm": "rotate",
+       "trial": 2,
+       "executed_total": 28,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 10,
+       "deep_total": 30,
+       "executed_tdistinct": 10,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         4,
+         12
+        ],
+        "policies": [
+         2,
+         6
+        ],
+        "jobs": [
+         4,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.85,
+        "jobs": 6.69,
+        "releases": 2.88
+       },
+       "time_to_first_deep_s": 99.07,
+       "auc_over_requests": {
+        "auc_norm": 0.3608,
+        "final": 28,
+        "n": 233
+       },
+       "auc_over_time": {
+        "auc_norm": 0.3148,
+        "final": 28
+       },
+       "breadth_wasted_actions": 22,
+       "breadth_wasted_time_s": 21.4,
+       "total_browser_actions": 245,
+       "restoration_actions": 80,
+       "root_reloads": 39,
+       "http_requests": 233,
+       "server_requests": 233,
+       "replays_validated": 22,
+       "replay_attempts": 26,
+       "replay_failures": 4,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 140.644,
+       "wall_seconds": 141.39,
+       "state_changing_requests": 0,
+       "focus_steps": 7,
+       "adaptive_seeds": 4,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "policies_irrigation",
+        "policies_irrigation_audit",
+        "policies_irrigation_schedule",
+        "policies_labor_audit",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest",
+        "yields_harvest_seasonal",
+        "yields_harvest_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      }
+     ],
+     "median": {
+      "executed_total": 28,
+      "deep_reached": 10,
+      "executed_tdistinct": 10,
+      "executed_semantic": 0,
+      "total_browser_actions": 245,
+      "restoration_actions": 80,
+      "root_reloads": 39
+     },
+     "diagnosis": {
+      "stable_missed": [
+       "jobs_sort_status",
+       "policies_irrigation_audit",
+       "policies_labor_audit",
+       "releases_release_13_changelog",
+       "releases_release_17_changelog",
+       "releases_release_28_changelog",
+       "releases_release_35_changelog",
+       "releases_release_41_changelog",
+       "releases_release_6_changelog",
+       "yields_grade",
+       "yields_grade_seasonal",
+       "yields_grade_weekly",
+       "yields_harvest_seasonal",
+       "yields_price_seasonal",
+       "yields_price_weekly"
+      ],
+      "classes": {
+       "tdistinct_stranded": [
+        "jobs_sort_status",
+        "policies_irrigation_audit",
+        "policies_labor_audit",
+        "yields_grade",
+        "yields_harvest_seasonal",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ],
+       "tdistinct_undiscovered": [
+        "yields_grade_seasonal",
+        "yields_grade_weekly"
+       ],
+       "semantic_stranded": [
+        "releases_release_6_changelog"
+       ],
+       "semantic_undiscovered": [
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog"
+       ],
+       "other": []
+      },
+      "counts": {
+       "tdistinct_stranded": 7,
+       "tdistinct_undiscovered": 2,
+       "semantic_stranded": 1,
+       "semantic_undiscovered": 5,
+       "other": 0
+      }
+     }
+    },
+    "full": {
+     "trials": [
+      {
+       "variant": "orchard",
+       "arm": "full",
+       "trial": 0,
+       "executed_total": 29,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 11,
+       "deep_total": 30,
+       "executed_tdistinct": 11,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         4,
+         12
+        ],
+        "policies": [
+         3,
+         6
+        ],
+        "jobs": [
+         4,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.8,
+        "jobs": 6.66,
+        "releases": 2.83
+       },
+       "time_to_first_deep_s": 73.15,
+       "auc_over_requests": {
+        "auc_norm": 0.3724,
+        "final": 29,
+        "n": 243
+       },
+       "auc_over_time": {
+        "auc_norm": 0.3852,
+        "final": 29
+       },
+       "breadth_wasted_actions": 24,
+       "breadth_wasted_time_s": 22.9,
+       "total_browser_actions": 253,
+       "restoration_actions": 82,
+       "root_reloads": 40,
+       "http_requests": 243,
+       "server_requests": 243,
+       "replays_validated": 23,
+       "replay_attempts": 27,
+       "replay_failures": 4,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 141.799,
+       "wall_seconds": 142.75,
+       "state_changing_requests": 0,
+       "focus_steps": 6,
+       "adaptive_seeds": 6,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_pack_status",
+        "jobs_sort_status",
+        "policies_irrigation_audit",
+        "policies_labor_audit",
+        "policies_labor_schedule",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest_seasonal",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      },
+      {
+       "variant": "orchard",
+       "arm": "full",
+       "trial": 1,
+       "executed_total": 30,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 12,
+       "deep_total": 30,
+       "executed_tdistinct": 12,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         4,
+         12
+        ],
+        "policies": [
+         3,
+         6
+        ],
+        "jobs": [
+         5,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.79,
+        "jobs": 6.6,
+        "releases": 2.86
+       },
+       "time_to_first_deep_s": 73.17,
+       "auc_over_requests": {
+        "auc_norm": 0.3783,
+        "final": 30,
+        "n": 244
+       },
+       "auc_over_time": {
+        "auc_norm": 0.3906,
+        "final": 30
+       },
+       "breadth_wasted_actions": 24,
+       "breadth_wasted_time_s": 22.8,
+       "total_browser_actions": 254,
+       "restoration_actions": 84,
+       "root_reloads": 40,
+       "http_requests": 244,
+       "server_requests": 244,
+       "replays_validated": 22,
+       "replay_attempts": 27,
+       "replay_failures": 5,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 141.625,
+       "wall_seconds": 142.38,
+       "state_changing_requests": 0,
+       "focus_steps": 7,
+       "adaptive_seeds": 6,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_pack_status",
+        "policies_irrigation_audit",
+        "policies_labor_audit",
+        "policies_labor_schedule",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest_seasonal",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      },
+      {
+       "variant": "orchard",
+       "arm": "full",
+       "trial": 2,
+       "executed_total": 30,
+       "inventory": 48,
+       "executed_always": 18,
+       "always_total": 18,
+       "deep_reached": 12,
+       "deep_total": 30,
+       "executed_tdistinct": 12,
+       "tdistinct_total": 24,
+       "executed_semantic": 0,
+       "semantic_total": 6,
+       "max_workflow_depth": 3,
+       "hub_coverage": {
+        "yields": [
+         4,
+         12
+        ],
+        "policies": [
+         3,
+         6
+        ],
+        "jobs": [
+         5,
+         6
+        ],
+        "releases": [
+         0,
+         6
+        ]
+       },
+       "time_to_first_hub_s": {
+        "yields": 0.0,
+        "policies": 3.83,
+        "jobs": 6.71,
+        "releases": 2.89
+       },
+       "time_to_first_deep_s": 72.1,
+       "auc_over_requests": {
+        "auc_norm": 0.3771,
+        "final": 30,
+        "n": 244
+       },
+       "auc_over_time": {
+        "auc_norm": 0.392,
+        "final": 30
+       },
+       "breadth_wasted_actions": 25,
+       "breadth_wasted_time_s": 23.6,
+       "total_browser_actions": 256,
+       "restoration_actions": 85,
+       "root_reloads": 40,
+       "http_requests": 244,
+       "server_requests": 244,
+       "replays_validated": 22,
+       "replay_attempts": 27,
+       "replay_failures": 5,
+       "transitions_failed": 0,
+       "unsafe_restorations_suppressed": 0,
+       "elapsed_s": 141.384,
+       "wall_seconds": 142.18,
+       "state_changing_requests": 0,
+       "focus_steps": 7,
+       "adaptive_seeds": 6,
+       "stagnant_roots": [],
+       "missed": [
+        "jobs_pack_status",
+        "policies_irrigation_audit",
+        "policies_labor_audit",
+        "policies_labor_schedule",
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog",
+        "releases_release_6_changelog",
+        "yields_grade",
+        "yields_grade_seasonal",
+        "yields_grade_weekly",
+        "yields_harvest_seasonal",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ]
+      }
+     ],
+     "median": {
+      "executed_total": 30,
+      "deep_reached": 12,
+      "executed_tdistinct": 12,
+      "executed_semantic": 0,
+      "total_browser_actions": 254,
+      "restoration_actions": 84,
+      "root_reloads": 40
+     },
+     "diagnosis": {
+      "stable_missed": [
+       "jobs_pack_status",
+       "policies_irrigation_audit",
+       "policies_labor_audit",
+       "policies_labor_schedule",
+       "releases_release_13_changelog",
+       "releases_release_17_changelog",
+       "releases_release_28_changelog",
+       "releases_release_35_changelog",
+       "releases_release_41_changelog",
+       "releases_release_6_changelog",
+       "yields_grade",
+       "yields_grade_seasonal",
+       "yields_grade_weekly",
+       "yields_harvest_seasonal",
+       "yields_loss_seasonal",
+       "yields_loss_weekly",
+       "yields_price_seasonal",
+       "yields_price_weekly"
+      ],
+      "classes": {
+       "tdistinct_stranded": [
+        "jobs_pack_status",
+        "policies_irrigation_audit",
+        "policies_labor_audit",
+        "policies_labor_schedule",
+        "yields_grade",
+        "yields_harvest_seasonal",
+        "yields_loss_seasonal",
+        "yields_loss_weekly",
+        "yields_price_seasonal",
+        "yields_price_weekly"
+       ],
+       "tdistinct_undiscovered": [
+        "yields_grade_seasonal",
+        "yields_grade_weekly"
+       ],
+       "semantic_stranded": [
+        "releases_release_6_changelog"
+       ],
+       "semantic_undiscovered": [
+        "releases_release_13_changelog",
+        "releases_release_17_changelog",
+        "releases_release_28_changelog",
+        "releases_release_35_changelog",
+        "releases_release_41_changelog"
+       ],
+       "other": []
+      },
+      "counts": {
+       "tdistinct_stranded": 10,
+       "tdistinct_undiscovered": 2,
+       "semantic_stranded": 1,
+       "semantic_undiscovered": 5,
+       "other": 0
+      }
+     }
+    }
+   }
+  }
+ }
+}

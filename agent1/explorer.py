@@ -2495,7 +2495,16 @@ class Explorer:
         # subtrees unlocked during ordinary discovery. Reorders within the same sweep budget.
         focus_prefixes: list[str] = list(seeds.keys())
         focus_anchor: dict[str, str] = dict(seeds)      # prefix path -> entrance URL (a persistent GET URL)
-        focus_budget = self.config.focus_max_steps if focus else 0
+        # Opt-in Stage-1 deterministic scheduling (defaults off -> frozen baseline). rotation implies
+        # to-budget. The real wall-clock/action/transition ceilings still bind each iteration below, and
+        # the replay floor is untouched, so these only change WHICH in-family steps run, not the budget.
+        rotate = bool(focus and self.config.fair_subtree_rotation)
+        to_budget = bool(focus and (self.config.focus_to_budget or rotate))
+        stagn_limit = self.config.focus_stagnation_limit if focus else 0
+        focus_budget = (self.config.max_transitions if to_budget
+                        else (self.config.focus_max_steps if focus else 0))
+        stagnant_roots: set[str] = set()       # seeded hubs deprioritized by the stagnation rule / exhaustion
+        root_miss: dict[str, int] = {}         # consecutive focused steps on a hub with no new observation
         focus_steps = 0
         adaptive_seeds = len(seeds)
 
@@ -2530,29 +2539,66 @@ class Explorer:
                 reachable = lambda c: (c.expected_source_group == live.group_signature
                                        and session.find_current(live, c.action) is not None)
                 novel = lambda c: route_pattern(c.action.target or "").split("?")[0] not in seen_routes
-                idx, focused = None, False
+                idx, focused, step_root = None, False, None
                 # Prefer a NOVEL child of an unlocked subtree: (1) reachable right here (descend live),
                 # else (2) reachable by re-anchoring to the subtree entrance. Novelty only, so the focus
                 # stops when the subtree has no unseen routes left (no depth-for-depth, no cycles).
                 if focus and focus_budget > 0 and focus_prefixes:
-                    # Exhaust the subtree we are currently descending before switching to a competing one
-                    # (fair, but no re-anchor thrash): prefer the active root, then any subtree.
-                    def pick(pred):
-                        if active_root is not None:
-                            j = next((i for i, it in enumerate(self.frontier)
-                                      if root_of(it.action.target) == active_root and pred(it)), None)
-                            if j is not None:
-                                return j
-                        return next((i for i, it in enumerate(self.frontier)
-                                     if in_family(it.action.target) and pred(it)), None)
-                    idx = pick(lambda it: novel(it) and reachable(it))          # descend live
-                    if idx is None:
-                        idx = pick(novel)                                       # re-anchor to a child
-                    if idx is None:                                            # a nested safe write inside
-                        idx = pick(lambda it: self._is_promotable_write(it.action))
-                    if idx is not None:
-                        focused = True
-                        active_root = root_of(self.frontier[idx].action.target)
+                    if rotate:
+                        # Fair rotation: stay on the active hub only while it has a FREE (live-reachable)
+                        # novel child; rotate the EXPENSIVE re-anchor steps round-robin across the other
+                        # competing seeded hubs, so no single subtree monopolizes the restoration budget.
+                        if active_root is not None and active_root not in stagnant_roots:
+                            idx = next((i for i, it in enumerate(self.frontier)
+                                        if root_of(it.action.target) == active_root
+                                        and novel(it) and reachable(it)), None)
+                            if idx is not None:
+                                focused = True
+                        if idx is None:                 # rotation boundary: give the next hub the turn
+                            order: list[str] = []
+                            for it in self.frontier:
+                                r = root_of(it.action.target)
+                                if (r is not None and r not in stagnant_roots and r not in order
+                                        and in_family(it.action.target)):
+                                    order.append(r)
+                            start = (order.index(active_root) + 1) % len(order) \
+                                if (order and active_root in order) else 0
+                            for k in range(len(order)):
+                                cand = order[(start + k) % len(order)]
+                                j = None
+                                for pred in (lambda it: novel(it) and reachable(it), novel,
+                                             lambda it: self._is_promotable_write(it.action)):
+                                    j = next((i for i, it in enumerate(self.frontier)
+                                              if root_of(it.action.target) == cand and pred(it)), None)
+                                    if j is not None:
+                                        break
+                                if j is not None:
+                                    idx, focused, active_root = j, True, cand
+                                    break
+                                stagnant_roots.add(cand)    # hub has no selectable child left: exhausted
+                    else:
+                        # Baseline: exhaust the subtree being descended before switching to a competing
+                        # one (prefer the active root, then any non-stagnant subtree).
+                        def pick(pred):
+                            if active_root is not None and active_root not in stagnant_roots:
+                                j = next((i for i, it in enumerate(self.frontier)
+                                          if root_of(it.action.target) == active_root and pred(it)), None)
+                                if j is not None:
+                                    return j
+                            return next((i for i, it in enumerate(self.frontier)
+                                         if in_family(it.action.target)
+                                         and root_of(it.action.target) not in stagnant_roots
+                                         and pred(it)), None)
+                        idx = pick(lambda it: novel(it) and reachable(it))          # descend live
+                        if idx is None:
+                            idx = pick(novel)                                       # re-anchor to a child
+                        if idx is None:                                            # a nested safe write inside
+                            idx = pick(lambda it: self._is_promotable_write(it.action))
+                        if idx is not None:
+                            focused = True
+                            active_root = root_of(self.frontier[idx].action.target)
+                    if focused:
+                        step_root = active_root
                 if idx is None:       # 3) else the highest-priority promotable write (restored to its page)
                     idx = next((i for i, it in enumerate(self.frontier)
                                 if self._is_promotable_write(it.action)), None)
@@ -2605,6 +2651,16 @@ class Explorer:
                             if prefix and prefix not in focus_prefixes:
                                 focus_prefixes.append(prefix)
                                 focus_anchor[prefix] = landed.url    # entrance to re-anchor siblings
+                if focused and stagn_limit > 0 and step_root is not None:
+                    # Bounded stagnation: a focused step that reaches no new observation is unproductive;
+                    # after `stagn_limit` consecutive such steps on a hub, deprioritize it (drop it from the
+                    # active set) so the rotation/descent stops paying restoration for a stalled branch.
+                    if len(self.artifact.observations) > obs_before:
+                        root_miss[step_root] = 0
+                    else:
+                        root_miss[step_root] = root_miss.get(step_root, 0) + 1
+                        if root_miss[step_root] >= stagn_limit:
+                            stagnant_roots.add(step_root)
                 if updated is None:
                     self._navigate_start(session, "persistent_restore")
                     live = session.observe(self._next_sequence())
@@ -2623,6 +2679,8 @@ class Explorer:
             "unlocked_transitions": len(self.artifact.transitions) - start_transitions,
             "replay_floor": floor, "focus": focus, "focus_steps": focus_steps,
             "focus_prefixes": focus_prefixes[:20], "adaptive_seeds": adaptive_seeds,
+            "fair_rotation": rotate, "focus_to_budget": to_budget, "stagnation_limit": stagn_limit,
+            "stagnant_roots": sorted(stagnant_roots)[:20],
         }
 
     def _explore_persistent(self, browser: Browser) -> None:

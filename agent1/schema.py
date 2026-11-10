@@ -135,6 +135,20 @@ class RunConfig(BaseModel):
     write_execution_policy: Literal["deferred", "authorized_fair", "focused_subtree", "focused_adaptive"] = "deferred"
     write_sweep_replay_floor: float = Field(default=0.10, ge=0.0, le=0.5)
     focus_max_steps: int = Field(default=12, ge=0, le=200)
+    # Opt-in deterministic scheduling policy for the post-discovery subtree focus (Stage 1 of the
+    # LLM-augmentation study). All three default to the frozen baseline; no production default changes,
+    # no new scheduler -- they only reorder item selection inside the existing `_authorized_write_sweep`
+    # focus loop, under the SAME sweep budget and replay floor, with no safety/scope change.
+    #   focus_to_budget: let the focus run until the real wall-clock/action/transition ceiling instead of
+    #     stopping at the fixed `focus_max_steps` cap (which otherwise binds before the budget does).
+    #   fair_subtree_rotation: round-robin the EXPENSIVE re-anchor steps across competing seeded hubs
+    #     (stay on a hub only while it has a free, live-reachable novel child) rather than exhausting one
+    #     seeded subtree before switching. Implies focus_to_budget (rotation is moot under the 12-step cap).
+    #   focus_stagnation_limit: 0 disables; N>0 drops a seeded hub from the active set after N consecutive
+    #     focused steps that reach no new observation (bounded deprioritization of a stalled branch).
+    focus_to_budget: bool = False
+    fair_subtree_rotation: bool = False
+    focus_stagnation_limit: int = Field(default=0, ge=0, le=50)
     budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"
     # "structure": evidence-driven replay (agent1/replay_scheduler.py). Replay
     # budget is shared by action cost between greedy coverage of unverified
