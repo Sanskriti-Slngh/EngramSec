@@ -2367,7 +2367,8 @@ class Explorer:
             if self.shadow is not None and self.artifact.observations:
                 self.shadow.decide(self.artifact, self.artifact.observations[-1].id,
                                    self.artifact.metrics.browser_actions)
-            self._attempt_frontier(browser, item)
+            if not (self.config.eager_child_expansion and self._eager_expand_fresh(browser, item)):
+                self._attempt_frontier(browser, item)
             if self.shadow is not None:
                 self.shadow.after_action(self.artifact, before)
             self.save_checkpoint()
@@ -3294,6 +3295,143 @@ class Explorer:
             self.artifact.metrics.history_return_rejected += 1
             return None
         return observation, parent_path
+
+    def _eager_parent_ok(self, parent_obs: Observation | None, parent_path: list[ActionDescriptor]) -> bool:
+        """The parent is safe to hold for batched child expansion: reached only through plain same-origin
+        GET links (snapshot provenance, no inputs/forms/handler revision), in scope, never redacted. Same
+        GET-only regime as the direct_url restore shortcut it reuses budget with."""
+        if self.config.restoration_shortcut != "direct_url" or parent_obs is None:
+            return False
+        if "<redacted>" in parent_obs.url or not allowed_origin(
+                self.config.start_url, parent_obs.url, self.config.origin_aliases):
+            return False
+        for step in parent_path:
+            if not (step.kind == "link" and step.interaction in {"click", "navigate"} and step.target
+                    and step.target.startswith(("http://", "https://"))
+                    and allowed_origin(self.config.start_url, step.target, self.config.origin_aliases)
+                    and (step.provenance or "snapshot") == "snapshot" and not step.behavior_revision
+                    and not step.input_plan_ref and not step.fields):
+                return False
+        return True
+
+    def _eager_child_ok_item(self, parent_obs: Observation, item: FrontierItem,
+                             seen_templates: set[str], unsafe: set[str]) -> bool:
+        """A queued child is eligible for in-place batched expansion only if it is a plain same-origin GET
+        link off this exact parent observation (so its control is, by construction, present in the cached
+        parent), a DISTINCT route template (uniform breadth lists are never batched -- they add no
+        capability), and not a known or observed write / possible state change."""
+        a = item.action
+        if item.source_observation_id != parent_obs.id:
+            return False
+        if item.expected_source_group != parent_obs.group_signature:
+            return False
+        if not (a.kind == "link" and a.interaction in {"click", "navigate"} and a.target
+                and a.target.startswith(("http://", "https://"))
+                and allowed_origin(self.config.start_url, a.target, self.config.origin_aliases)
+                and (a.provenance or "snapshot") == "snapshot" and not a.behavior_revision
+                and not a.input_plan_ref and not a.fields):
+            return False
+        if a.signature in unsafe:
+            return False
+        if route_pattern(a.target).split("?")[0] in seen_templates:
+            return False
+        if self.config.state_aware_exploration and self._known_write(parent_obs, a):
+            return False
+        return True
+
+    def _same_live_page(self, session: BrowserSession, parent_obs: Observation) -> bool:
+        """Cheap confirmation that one history step actually landed us back on the verified parent (by
+        in-scope path identity), without paying a full re-observation/readiness wait for a static GET page."""
+        if session.page is None:
+            return False
+        current = session.page.url
+        if not allowed_origin(self.config.start_url, current, self.config.origin_aliases):
+            return False
+        return urlsplit(current).path.rstrip("/") == urlsplit(parent_obs.url).path.rstrip("/")
+
+    def _reach_parent(self, session: BrowserSession, parent_obs: Observation) -> bool:
+        """Reach a verified GET parent once with a single direct navigation (the same restore the baseline
+        pays per child), then hold it for the batch. Rejected -> caller falls back to the normal path."""
+        try:
+            self.artifact.metrics.browser_actions += session.goto(parent_obs.url)
+        except (PlaywrightError, RuntimeError):
+            return False
+        self.artifact.metrics.restoration_actions += 1
+        self.artifact.metrics.navigation_requests += 1
+        self._record_navigation_evidence(session, "direct_url_restore")
+        observation = session.observe(self._next_sequence())
+        if observation.group_signature != parent_obs.group_signature:
+            return False
+        if (self.config.state_aware_exploration
+                and record_instance(observation) != record_instance(parent_obs)):
+            return False
+        return True
+
+    def _eager_expand_fresh(self, browser: Browser, item: FrontierItem) -> bool:
+        """Opt-in Stage-2 (fresh exploration mode): execute ``item`` and a bounded batch of its DISTINCT
+        GET siblings inside ONE browser session, restoring the shared parent only once and returning to it
+        with a verified history step (go_back) between children -- instead of a fresh browser context and
+        an independent parent restore per child. Every child runs through ``_attempt_frontier`` with
+        ``live_source=parent_obs`` (live_state_reuse: no per-child restore), so recording, write-cap,
+        scope, record-identity and replay semantics are unchanged. Returns True iff it handled ``item``
+        (caller then skips the normal single attempt); False leaves ``item`` untouched for the normal path.
+        Any uncertainty -- an ineligible parent, no eligible sibling, a parent that will not verify, a
+        return that does not land back on the parent -- declines or stops and falls back."""
+        parent_obs = self._observation_by_id(item.source_observation_id)
+        if not self._eager_parent_ok(parent_obs, item.path):
+            return False
+        assert parent_obs is not None
+        seen_templates = {route_pattern(o.url).split("?")[0] for o in self.artifact.observations}
+        unsafe = {t.action.signature for t in self.artifact.transitions
+                  if (t.behavior or {}).get("write_capable_request_observed")
+                  or (t.behavior or {}).get("possible_state_change")}
+        if not self._eager_child_ok_item(parent_obs, item, seen_templates, unsafe):
+            return False
+        # Gather the bounded batch: the popped item plus its still-queued eligible distinct siblings.
+        batch: list[FrontierItem] = [item]
+        batch_templates = set(seen_templates)
+        batch_templates.add(route_pattern(item.action.target or "").split("?")[0])
+        for sib in list(self.frontier):
+            if len(batch) >= self.config.eager_expansion_max:
+                break
+            if self._eager_child_ok_item(parent_obs, sib, batch_templates, unsafe):
+                batch.append(sib)
+                batch_templates.add(route_pattern(sib.action.target or "").split("?")[0])
+        if len(batch) < 2:
+            return False                                   # no sibling to amortize the parent restore
+        with self._browser_session(browser) as session:
+            if not self._reach_parent(session, parent_obs):
+                return False                               # item untouched; caller does a normal attempt
+            expanded = 0
+            for pos, child in enumerate(batch):
+                if (self._elapsed() >= self._exploration_deadline()
+                        or len(self.artifact.transitions) >= self.config.max_transitions
+                        or self.artifact.metrics.browser_actions >= self.config.max_browser_actions):
+                    break
+                if pos > 0:
+                    # Not the first child: one verified history step back to the shared parent, then a
+                    # cheap confirmation (no full re-observe) that we actually landed back on it.
+                    if not session.go_back():
+                        break
+                    self.artifact.metrics.browser_actions += 1
+                    self.artifact.metrics.restoration_actions += 1
+                    self.artifact.metrics.eager_parent_returns += 1
+                    self._record_navigation_evidence(session, "history_return")
+                    if not self._same_live_page(session, parent_obs):
+                        self.artifact.metrics.eager_returns_rejected += 1
+                        break
+                    if child not in self.frontier:         # consumed elsewhere; skip safely
+                        continue
+                    self.frontier.remove(child)
+                updated = self._attempt_frontier(browser, child, persistent_session=session,
+                                                 live_source=parent_obs, live_path=list(item.path))
+                expanded += 1
+                if updated is None:
+                    break
+        if expanded:
+            self.artifact.metrics.eager_batches += 1
+            self.artifact.metrics.eager_children_expanded += expanded
+        return expanded > 0
 
     def _restore(
         self,

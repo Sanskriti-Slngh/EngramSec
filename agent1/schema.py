@@ -149,6 +149,15 @@ class RunConfig(BaseModel):
     focus_to_budget: bool = False
     fair_subtree_rotation: bool = False
     focus_stagnation_limit: int = Field(default=0, ge=0, le=50)
+    # Opt-in Stage-2 restoration saver (defaults off -> frozen baseline). When Agent 1 has reached a
+    # verified, plain-GET, non-destructive parent state with several DISTINCT (novel-route) children still
+    # queued, execute a bounded batch of them without independently restoring the parent per child: each
+    # child runs via live_state_reuse from the cached parent observation, with ONE verified history return
+    # (go_back) between children. Reuses the existing frontier/session/_attempt_frontier/replay machinery;
+    # all safety, scope, write-cap, and record-identity checks are unchanged, and it falls back to the
+    # normal restoration path on any uncertainty. Never batches writes, roles, or cross-origin actions.
+    eager_child_expansion: bool = False
+    eager_expansion_max: int = Field(default=6, ge=1, le=50)
     budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"
     # "structure": evidence-driven replay (agent1/replay_scheduler.py). Replay
     # budget is shared by action cost between greedy coverage of unverified
@@ -717,6 +726,12 @@ class RunMetrics(BaseModel):
     restoration_actions: int = 0
     live_state_reuses: int = 0
     live_state_stale: int = 0
+    # Stage-2 eager child expansion (opt-in): a bounded batch of a verified GET parent's distinct
+    # children executed via one history return each instead of an independent parent restore per child.
+    eager_batches: int = 0                 # times a parent was drained
+    eager_children_expanded: int = 0       # children executed inside a batch (via live_state_reuse)
+    eager_parent_returns: int = 0          # history-return navigations used to re-reach the parent
+    eager_returns_rejected: int = 0        # returns that did not land back on the verified parent (fell back)
     startup_readiness_failures: int = 0
     navigation_network_events_recorded: int = 0
     ineffective_transitions: int = 0
