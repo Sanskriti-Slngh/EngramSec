@@ -1,0 +1,10 @@
+seed 0 calibration pure 0 sufficient=0 effect=0.000472
+seed 0 calibration small 0 sufficient=1 effect=0.001168
+seed 0 calibration moderate 0 sufficient=2 effect=0.002771
+seed 0 calibration large 0 sufficient=4 effect=0.005227
+seed 0 calibration distractor 0 sufficient=4 effect=0.002687
+seed 0 test pure 0 sufficient=0 effect=0.003112
+seed 0 test small 0 sufficient=1 effect=0.000671
+seed 0 test moderate 0 sufficient=2 effect=0.001985
+seed 0 test large 0 sufficient=4 effect=0.005583
+seed 0 test distractor 0 sufficient=4 effect=0.002178

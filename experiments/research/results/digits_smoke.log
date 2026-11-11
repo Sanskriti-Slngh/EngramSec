@@ -1,0 +1,4 @@
+0 calibration cal_lr sufficient=4
+0 calibration cal_rb sufficient=1
+0 test left_plus sufficient=2
+0 test right_contrast sufficient=1
