@@ -80,6 +80,17 @@ class FixtureHandler(BaseHTTPRequestHandler):
                 "b.textContent='Hydrated control';document.querySelector('#mount').append(b)},350)</script>"
                 "</main></body></html>"
             )
+        elif path == "/out-of-main":
+            # Controls are enabled and present immediately, but rendered OUTSIDE any <main>
+            # (as many SPAs do). A <script> is present so the readiness branch treats it as a
+            # scripted page. There is nothing to hydrate; readiness_any_enabled should exit fast.
+            self._html(
+                "<html><title>Out of main</title><body>"
+                "<nav><a href='/'>Home</a></nav>"
+                "<div id='app'><button id='a'>Action A</button>"
+                "<button id='b'>Action B</button><a href='/catalog/1'>Deep link</a></div>"
+                "<script>void 0;</script></body></html>"
+            )
         elif path == "/budget-redirect":
             self.send_response(HTTPStatus.FOUND)
             self.send_header("Location", "/redirected")
@@ -456,6 +467,43 @@ def test_readiness_waits_for_late_control_and_delayed_redirect(
                 assert session.page and session.page.url.endswith("/redirected")
         finally:
             browser.close()
+
+
+def test_readiness_any_enabled_skips_hydration_wait_for_ready_out_of_main_page(
+    fixture_url: str, tmp_path: Path
+) -> None:
+    """A page whose controls are already enabled but rendered outside <main> is READY; the default
+    readiness still pays the full hydration wait (controls not in <main>), while readiness_any_enabled
+    exits at the cheap stability wait. This is the fix for the breadth-heavy-SPA readiness tax."""
+    from playwright.sync_api import sync_playwright
+
+    common = dict(
+        start_url=f"{fixture_url}out-of-main", output_dir=tmp_path / "ooml",
+        robust_readiness=True, readiness_timeout_ms=2_500, readiness_poll_ms=50,
+        idle_page_wait_ms=1_600, passive_page_wait_ms=100, readiness_strategy="fixed",
+    )
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        try:
+            # Default: controls are outside <main> -> slow hydration path.
+            with BrowserSession(browser, RunConfig(**common)) as s:
+                s.goto_start()
+                slow = s.observe(1)
+            # Fix on: any enabled control counts -> cheap exit.
+            with BrowserSession(browser, RunConfig(**{**common, "readiness_any_enabled": True})) as s:
+                s.goto_start()
+                fast = s.observe(1)
+        finally:
+            browser.close()
+
+    # Both see the same ready controls...
+    for obs in (slow, fast):
+        assert any(c.label in {"Action A", "Action B"} for c in obs.controls)
+        assert obs.readiness.status == "usable"
+    # ...but the fix exits much sooner (no wasted hydration wait).
+    assert fast.readiness.duration_ms < 900, fast.readiness.duration_ms
+    assert slow.readiness.duration_ms >= 1_200, slow.readiness.duration_ms
+    assert fast.readiness.duration_ms < slow.readiness.duration_ms
 
 
 def test_history_return_is_verified_and_keeps_graph_evidence_complete(

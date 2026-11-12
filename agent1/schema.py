@@ -85,6 +85,9 @@ class RunConfig(BaseModel):
     search_probe_primary: str | None = Field(default=None, max_length=80)
     search_probe_contrast: str | None = Field(default=None, max_length=80)
     robust_readiness: bool = False
+    readiness_any_enabled: bool = False
+    loopback_origin_equivalence: bool = False
+    ignore_https_errors: bool = False
     readiness_timeout_ms: int = Field(default=2_500, ge=250, le=15_000)
     readiness_poll_ms: int = Field(default=100, ge=25, le=1_000)
     origin_aliases: list[str] = Field(default_factory=list)
@@ -297,6 +300,22 @@ class RunConfig(BaseModel):
             host = f"[{parsed.hostname}]" if ":" in (parsed.hostname or "") else parsed.hostname
             normalized_aliases.append(f"{parsed.scheme.lower()}://{host}:{port}")
         self.origin_aliases = sorted(set(normalized_aliases))
+        if self.loopback_origin_equivalence:
+            # Treat the three loopback spellings (127.0.0.1 / localhost / ::1) of the same
+            # scheme+port as one origin. This never widens scope beyond the local machine:
+            # it only adds the *sibling spellings* of an origin that is already in scope
+            # (the start URL or an existing loopback alias), reusing the explicit-alias path
+            # so scope stays declared rather than implicitly broadened.
+            loopback_hosts = ("127.0.0.1", "localhost", "::1")
+            expanded = set(self.origin_aliases)
+            for origin in [str(self.start_url), *self.origin_aliases]:
+                parsed = urlsplit(origin if "://" in origin else "http://" + origin)
+                if parsed.hostname in loopback_hosts:
+                    port = parsed.port or (443 if parsed.scheme == "https" else 80)
+                    for host in loopback_hosts:
+                        spelled = f"[{host}]" if ":" in host else host
+                        expanded.add(f"{parsed.scheme.lower()}://{spelled}:{port}")
+            self.origin_aliases = sorted(expanded)
         return self
 
 

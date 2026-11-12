@@ -723,7 +723,8 @@ class BrowserSession:
         # state). Agent 1 never enters credentials; every exploration and
         # replay context starts from the same session identity.
         self.context = self.browser.new_context(
-            storage_state=str(self.config.storage_state_path) if self.config.storage_state_path else None)
+            storage_state=str(self.config.storage_state_path) if self.config.storage_state_path else None,
+            ignore_https_errors=self.config.ignore_https_errors)
         # The scope router is installed whenever an HTTP budget is configured.
         # Listener candidates have no statically known target, so the
         # cross-origin check on link targets cannot apply to them; with listener
@@ -1015,7 +1016,18 @@ class BrowserSession:
             if not initializing:
                 stable_samples = stable_samples + 1 if stable else 1
                 refresh_wait = (sample.meta_refresh_delay_ms or 0) + 250
-                if sample.main_enabled_control_count == 0:
+                # A page is "actionable" once it exposes an enabled control. By default we require that
+                # control to be inside the semantic <main> (wait out chrome-first hydration); but many
+                # SPAs render their controls outside a <main>, so readiness_any_enabled keys off *any*
+                # enabled control. Combined with the stability window below, this avoids paying the full
+                # hydration wait on pages that are already rendered (the dominant cost on breadth-heavy
+                # SPAs) while still waiting where controls are genuinely absent or disabled.
+                actionable_count = (
+                    sample.enabled_control_count
+                    if self.config.readiness_any_enabled
+                    else sample.main_enabled_control_count
+                )
+                if actionable_count == 0:
                     if self.config.readiness_strategy == "adaptive" and sample.script_count:
                         mutation_active = (
                             prior_mutations >= 0
