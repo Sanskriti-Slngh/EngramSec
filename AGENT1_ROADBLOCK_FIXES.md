@@ -270,7 +270,24 @@ inputs MODEL/CONDITIONING/LATENT/INT/FLOAT/COMBO, output LATENT, 7 widgets with 
 drive demo succeeded (node count 0→1→0, graph restored) — all where DOM crawling found zero, with no
 execution and no risk.
 
-**Honest scope:** this enumerates the catalog, reads each operation's full I/O schema, and demonstrates safe
-graph manipulation. It deliberately stops short of **executing** a workflow (e.g. `queuePrompt`), which is a
-real server side-effect that belongs behind the write policy / disposable attestation like any other write.
-Generic-sweep extraction is best-effort for frameworks that keep their instance off a global.
+**(c) Executing the workflow (authorized), with a RED roadblock when blocked.** `execute_canvas_workflow`
+runs the app's workflow (ComfyUI `POST /prompt`) — a real server side-effect, so it is **double-gated**:
+the opt-in `allow_canvas_execution` flag **and** a write policy that permits the POST (disposable env +
+operator attestation), exactly like every other write. In an authorized (attested) engagement it fires and
+captures the server's response; otherwise it records a **RED roadblock marker** (`as_red_node()`) for the
+blocked capability — and can **inject a visible red annotation node into the canvas** — instead of silently
+skipping it, so the operator sees exactly what functionality is gated. Default off.
+
+**Validated live on comfyui:**
+- *Unauthorized* (`read_only`): `roadblock=True`, `color=RED`, not executed; the RED marker names the
+  capability (`canvas_workflow_execution`) and endpoint (`/prompt`), and a red node was injected into the
+  graph (`injected: true`).
+- *Authorized* (`disposable`): the real `POST /prompt` fired and the server responded (`400
+  prompt_no_outputs` on the empty default graph — i.e. the execution endpoint was reached and processed the
+  input; a loaded workflow would run). This is the full security-relevant capability, under the existing
+  write-authorization contract.
+
+**Honest scope:** enumeration and schema reading are read-only and always on; graph *driving* (add/remove)
+is client-side and reversible; workflow *execution* is a real write, gated behind `allow_canvas_execution`
++ disposable attestation, with a RED roadblock recorded when not authorized. Generic-sweep extraction is
+best-effort for frameworks that keep their instance off a global.

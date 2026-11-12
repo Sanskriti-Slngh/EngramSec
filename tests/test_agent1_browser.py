@@ -103,6 +103,16 @@ class FixtureHandler(BaseHTTPRequestHandler):
                 "links:{},add:function(n){this._nodes.push(n);},remove:function(n){const i=this._nodes.indexOf(n);if(i>=0)this._nodes.splice(i,1);}}};"
                 "</script></body></html>"
             )
+        elif path == "/comfy-exec-mock":
+            # A LiteGraph app exposing a workflow-execution mechanism (app.graphToPrompt + POST /prompt).
+            self._html(
+                "<html><title>Exec</title><body><canvas></canvas><script>"
+                "window.LiteGraph={registered_node_types:{Note:1},"
+                "createNode:function(t){return {type:t,title:t,pos:[0,0],inputs:[],outputs:[],widgets:[{name:'text',value:''}]};}};"
+                "window.app={graph:{_nodes:[],add:function(n){this._nodes.push(n);},remove:function(n){const i=this._nodes.indexOf(n);if(i>=0)this._nodes.splice(i,1);}},"
+                "graphToPrompt:async function(){return {output:{'1':{class_type:'Note'}}};}};"
+                "</script></body></html>"
+            )
         elif path == "/reactflow-mock":
             # React Flow renders nodes as DOM elements (not canvas) — extractable from the DOM.
             self._html(
@@ -229,6 +239,11 @@ class FixtureHandler(BaseHTTPRequestHandler):
             self._html("<html><title>Not found</title></html>", 404)
 
     def do_POST(self) -> None:
+        if self.path == "/prompt":
+            length = int(self.headers.get("Content-Length") or 0)
+            self.rfile.read(length)
+            self._html('{"prompt_id":"pid-123","number":1}', 200)
+            return
         if self.path != "/session":
             self._html("<html><title>Not found</title></html>", 404)
             return
@@ -660,6 +675,43 @@ def test_canvas_probe_drives_litegraph_schemas_and_add_remove(fixture_url: str) 
     assert demo is not None
     assert demo["added_ok"] and demo["removed_ok"]
     assert demo["after_remove"] == demo["before"]
+
+
+def test_canvas_execution_red_roadblock_when_unauthorized(fixture_url: str) -> None:
+    """Without authorization, canvas workflow execution is NOT fired — a RED roadblock marker is recorded
+    (optionally injected as a visible red node), so the blocked capability is surfaced, not skipped."""
+    from agent1.canvas_probe import on_page, execute_canvas_workflow
+    from agent1.write_policy import WritePolicy
+
+    def act(page):
+        # read_only policy -> would_allow(POST) is False -> roadblock even with allow_execution=True
+        return execute_canvas_workflow(
+            page, allow_execution=True, write_policy=WritePolicy("read_only"), inject_roadblock_node=True)
+
+    att = on_page(f"{fixture_url}comfy-exec-mock", act, wait_ms=500)
+    assert att.roadblock and not att.executed
+    assert att.color == "RED"
+    assert att.framework == "litegraph" and att.endpoint == "/prompt"
+    red = att.as_red_node()
+    assert red["color"] == "RED" and red["kind"] == "roadblock"
+    assert att.evidence.get("red_node", {}).get("injected") is True
+
+
+def test_canvas_execution_fires_when_authorized(fixture_url: str) -> None:
+    """With allow_execution AND a disposable write policy, execution fires (POST /prompt) and the server
+    response is captured as evidence (GREEN)."""
+    from agent1.canvas_probe import on_page, execute_canvas_workflow
+    from agent1.write_policy import WritePolicy
+
+    def act(page):
+        return execute_canvas_workflow(
+            page, allow_execution=True, write_policy=WritePolicy("disposable"))
+
+    att = on_page(f"{fixture_url}comfy-exec-mock", act, wait_ms=500)
+    assert att.executed and not att.roadblock
+    assert att.color == "GREEN"
+    assert att.evidence.get("status") == 200
+    assert "pid-123" in (att.evidence.get("body") or "")
 
 
 def test_canvas_probe_returns_none_without_graph_model(fixture_url: str) -> None:

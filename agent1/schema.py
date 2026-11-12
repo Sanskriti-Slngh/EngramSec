@@ -197,6 +197,11 @@ class RunConfig(BaseModel):
     environment_attestation: str | None = Field(default=None, max_length=200)
     max_write_requests: int = Field(default=50, ge=0, le=10_000)
     allow_destructive: bool = False
+    # Canvas/node-graph workflow EXECUTION (e.g. ComfyUI POST /prompt). A real server side-effect, so it
+    # is double-gated: this opt-in flag AND a write policy that permits the POST (disposable + operator
+    # attestation). When not authorized, the agent records a RED roadblock marker for the blocked
+    # capability instead of executing. Default off (frozen baseline unaffected).
+    allow_canvas_execution: bool = False
     # Operator-approved canonical-host aliases, origin -> loopback origin (see bounded_http.HOST_MAP).
     # Every key must also be listed in origin_aliases, so scope is never widened implicitly.
     host_map: dict[str, str] = Field(default_factory=dict)

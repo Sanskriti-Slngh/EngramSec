@@ -251,6 +251,103 @@ def demonstrate_drive(page: Any, node_type: str = "Note") -> dict[str, Any] | No
     return raw
 
 
+# ----------------------------------------------------------------------------- execution (gated)
+
+# Detect whether the app exposes a workflow-execution mechanism, and the endpoint it posts to.
+_EXEC_DETECT_JS = r"""
+() => {
+  const app = window.app;
+  if (app && typeof app.graphToPrompt === 'function') return {framework:'litegraph', endpoint:'/prompt', supported:true};
+  if (window.LiteGraph) return {framework:'litegraph', endpoint:'/prompt', supported:false, reason:'app.graphToPrompt unavailable'};
+  return {supported:false, reason:'no known canvas execution mechanism'};
+}
+"""
+
+# Fire execution: build the prompt from the live graph and POST it. Only called when authorized.
+_EXEC_FIRE_JS = r"""
+async () => {
+  const app = window.app;
+  try {
+    const p = await app.graphToPrompt();
+    const body = JSON.stringify({ prompt: (p && p.output) || p, client_id: 'engramsec-probe' });
+    const resp = await fetch('/prompt', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+    const text = await resp.text();
+    return { fired: true, status: resp.status, ok: resp.ok, body: text.slice(0, 400) };
+  } catch (e) { return { fired: true, error: String(e).slice(0, 240) }; }
+}
+"""
+
+# Inject a visible RED roadblock annotation into a LiteGraph canvas (opt-in; a client-side marker).
+_INJECT_RED_JS = r"""
+(reason) => {
+  const LG = window.LiteGraph; const graph = (window.app && window.app.graph) || window.graph;
+  if (!LG || !graph || typeof LG.createNode !== 'function') return { injected: false };
+  const n = LG.createNode('Note') || LG.createNode('MarkdownNote');
+  if (!n) return { injected: false };
+  n.title = 'ROADBLOCK (execution not authorized)';
+  n.color = '#aa0000'; n.bgcolor = '#550000';
+  if (n.widgets && n.widgets[0]) n.widgets[0].value = 'RED: ' + reason;
+  n.pos = [40, 40];
+  graph.add(n);
+  return { injected: true, node_id: n.id };
+}
+"""
+
+
+@dataclass
+class ExecutionAttempt:
+    capability: str = "canvas_workflow_execution"
+    framework: str | None = None
+    endpoint: str | None = None
+    executed: bool = False
+    roadblock: bool = False
+    color: str = "GRAY"  # GREEN = executed, RED = blocked roadblock
+    reason: str = ""
+    evidence: dict[str, Any] = field(default_factory=dict)
+
+    def as_red_node(self) -> dict[str, Any]:
+        """A RED roadblock marker for the agent's capability graph: a capability that exists but was
+        blocked (here, by authorization). Recorded instead of silently skipping it."""
+        return {"color": "RED", "kind": "roadblock", "capability": self.capability,
+                "framework": self.framework, "endpoint": self.endpoint, "reason": self.reason}
+
+
+def execute_canvas_workflow(
+    page: Any, *, allow_execution: bool, write_policy: Any = None,
+    inject_roadblock_node: bool = False,
+) -> ExecutionAttempt:
+    """Execute the canvas app's workflow (e.g. ComfyUI `POST /prompt`) — a real server side-effect, so it
+    is double-gated: `allow_execution` AND a write policy that permits the POST (disposable + attestation).
+
+    - Authorized  -> fire the execution and capture the server's response (GREEN).
+    - Not authorized / unsupported -> record a RED roadblock marker and do NOT execute; optionally inject a
+      visible red annotation node into the canvas (`inject_roadblock_node`).
+    """
+    det = page.evaluate(_EXEC_DETECT_JS) or {}
+    att = ExecutionAttempt(framework=det.get("framework"), endpoint=det.get("endpoint"))
+
+    if not det.get("supported"):
+        att.roadblock, att.color = True, "RED"
+        att.reason = det.get("reason") or "no known canvas execution mechanism"
+    else:
+        permitted = bool(allow_execution) and (
+            write_policy is None or write_policy.would_allow("POST", att.endpoint or "/prompt"))
+        if not permitted:
+            att.roadblock, att.color = True, "RED"
+            att.reason = ("canvas execution not authorized: requires allow_canvas_execution=True and a "
+                          "write policy that permits the POST (disposable env + operator attestation)")
+        else:
+            res = page.evaluate(_EXEC_FIRE_JS) or {}
+            att.executed, att.color, att.reason, att.evidence = True, "GREEN", "executed", res
+
+    if att.roadblock and inject_roadblock_node:
+        try:
+            att.evidence["red_node"] = page.evaluate(_INJECT_RED_JS, att.reason)
+        except Exception:
+            pass
+    return att
+
+
 # ----------------------------------------------------------------------------- convenience
 
 def probe_url(url: str, *, wait_ms: int = 16000, ignore_https_errors: bool = False) -> CanvasInventory | None:
