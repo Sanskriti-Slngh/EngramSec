@@ -240,3 +240,22 @@ server-round-trip workflows. The LiteGraph `<canvas>` node-graph itself is still
 needs coordinate-based canvas interaction (a separate, larger capability); the WebSocket is capturable as
 evidence, not as driven workflows. But the context-init blocker — the thing that made comfyui a flat zero —
 is resolved.
+
+## Roadblock #5 (canvas node-graph) — enumerated via framework introspection, not blind clicking
+
+The canvas node-graph itself (LiteGraph in ComfyUI) is not in the DOM, so DOM crawling maps **0** of it.
+Blind **coordinate-based clicking** on a canvas is both unreliable and **unsafe** (it can trigger arbitrary,
+possibly destructive, actions), so it is deliberately not done. The tractable, safe path is to read the
+app's **own graph model** through its JS globals.
+
+New read-only capability **`agent1/canvas_probe.py`** (`introspect_canvas_graph(page)` / `probe_url(url)`):
+for a LiteGraph app it reads `window.LiteGraph.registered_node_types` (the full operation catalog) and
+`app.graph._nodes` (placed nodes + widgets). **Validated live on comfyui: 543 registered node types**
+(`KSampler`, `CheckpointLoaderSimple`, `CLIPTextEncode`, `VAEDecode`, `SaveImage`, `LoadImage`, …) — a rich
+functionality inventory where DOM crawling found zero, obtained with **no interaction and no risk**.
+Unit-tested (`test_canvas_probe_introspects_litegraph_model`); returns `None` (reported honestly) for a
+canvas with no introspectable model.
+
+**Honest scope:** this *enumerates* canvas functionality (the high-value, safe first step) and is
+framework-specific (LiteGraph today; extensible to other graph frameworks by their globals). *Driving* the
+graph — adding/wiring/executing nodes — remains a separate, larger capability and is not attempted here.

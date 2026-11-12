@@ -80,6 +80,18 @@ class FixtureHandler(BaseHTTPRequestHandler):
                 "b.textContent='Hydrated control';document.querySelector('#mount').append(b)},350)</script>"
                 "</main></body></html>"
             )
+        elif path == "/litegraph-mock":
+            # A canvas app that exposes a LiteGraph model via JS globals (as ComfyUI does). The DOM has
+            # only a <canvas>; the functionality (node types + placed nodes) lives in the JS model.
+            self._html(
+                "<html><title>Canvas</title><body><canvas id='c' width='200' height='200'></canvas>"
+                "<script>"
+                "window.LiteGraph={registered_node_types:{KSampler:1,LoadImage:1,SaveImage:1,CLIPTextEncode:1}};"
+                "window.app={graph:{_nodes:["
+                "{type:'KSampler',title:'KSampler',pos:[10,20],widgets:[{name:'seed',value:42},{name:'steps',value:20}]},"
+                "{type:'LoadImage',title:'Load Image',pos:[200,20],widgets:[]}]}};"
+                "</script></body></html>"
+            )
         elif path == "/login-form":
             # A minimal SPA-style login: on submit, JS writes BOTH a cookie and a localStorage flag,
             # then changes the URL. Exercises the UI-login helper capturing full client state.
@@ -552,6 +564,29 @@ def test_readiness_any_enabled_skips_hydration_wait_for_ready_out_of_main_page(
     assert fast.readiness.duration_ms < 900, fast.readiness.duration_ms
     assert slow.readiness.duration_ms >= 1_200, slow.readiness.duration_ms
     assert fast.readiness.duration_ms < slow.readiness.duration_ms
+
+
+def test_canvas_probe_introspects_litegraph_model(fixture_url: str) -> None:
+    """The canvas probe reads a node-graph app's JS model (operation catalog + placed nodes) that a
+    DOM crawler cannot see. Read-only; no canvas interaction."""
+    from agent1.canvas_probe import probe_url
+
+    inv = probe_url(f"{fixture_url}litegraph-mock", wait_ms=800)
+    assert inv is not None and inv.is_introspectable
+    assert inv.framework == "litegraph"
+    assert inv.canvas_count == 1
+    assert inv.node_type_count == 4
+    assert "KSampler" in inv.registered_node_types and "CLIPTextEncode" in inv.registered_node_types
+    assert len(inv.current_nodes) == 2
+    assert inv.current_nodes[0]["type"] == "KSampler"
+    assert {w["name"] for w in inv.current_nodes[0]["widgets"]} == {"seed", "steps"}
+
+
+def test_canvas_probe_returns_none_without_graph_model(fixture_url: str) -> None:
+    """A page with no canvas / no introspectable graph model returns None (reported honestly)."""
+    from agent1.canvas_probe import probe_url
+
+    assert probe_url(f"{fixture_url}interactions", wait_ms=400) is None
 
 
 def test_ui_login_helper_captures_cookie_and_localstorage(fixture_url: str, tmp_path: Path) -> None:
