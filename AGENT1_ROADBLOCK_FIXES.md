@@ -248,14 +248,29 @@ Blind **coordinate-based clicking** on a canvas is both unreliable and **unsafe*
 possibly destructive, actions), so it is deliberately not done. The tractable, safe path is to read the
 app's **own graph model** through its JS globals.
 
-New read-only capability **`agent1/canvas_probe.py`** (`introspect_canvas_graph(page)` / `probe_url(url)`):
-for a LiteGraph app it reads `window.LiteGraph.registered_node_types` (the full operation catalog) and
-`app.graph._nodes` (placed nodes + widgets). **Validated live on comfyui: 543 registered node types**
-(`KSampler`, `CheckpointLoaderSimple`, `CLIPTextEncode`, `VAEDecode`, `SaveImage`, `LoadImage`, …) — a rich
-functionality inventory where DOM crawling found zero, obtained with **no interaction and no risk**.
-Unit-tested (`test_canvas_probe_introspects_litegraph_model`); returns `None` (reported honestly) for a
-canvas with no introspectable model.
+New capability **`agent1/canvas_probe.py`**, covering both the enumeration and the driving frontier:
 
-**Honest scope:** this *enumerates* canvas functionality (the high-value, safe first step) and is
-framework-specific (LiteGraph today; extensible to other graph frameworks by their globals). *Driving* the
-graph — adding/wiring/executing nodes — remains a separate, larger capability and is not attempted here.
+**(a) Extended introspection beyond LiteGraph.** `introspect_canvas_graph(page)` detects the graph
+framework and extracts its model: **LiteGraph** (ComfyUI — `registered_node_types` catalog + `graph._nodes`),
+**Cytoscape.js** (`window.cy`), **vis.js Network** (`window.network`), **React Flow** (its DOM nodes/edges),
+plus a **generic `window` sweep** for any editor stored on a global that exposes a graph shape
+(`._nodes` / `.nodes` / `.getNodes()` / `.model.nodeDataArray`). It reports which frameworks are present
+even when a model is not reachable, and returns `None` honestly when there is no canvas/graph. Unit-tested
+against React Flow, a generic-global editor, and Cytoscape mocks (`test_canvas_probe_extends_beyond_...`).
+
+**(b) Driving the graph (safely).** `drive_node_schemas(page)` instantiates each registered node type
+(`LiteGraph.createNode`) and reads its **full live I/O contract** — typed input/output ports and widgets
+with defaults; `demonstrate_drive(page)` proves the graph is drivable by **adding then removing** a node.
+This is client-side only: it **never executes the graph** (no `queuePrompt`), never reaches the server, and
+restores the graph to its prior state. Unit-tested (`test_canvas_probe_drives_...`).
+
+**Validated live on comfyui:** framework auto-detected (`litegraph`); **543 registered node types**
+enumerated; **25/25 sampled node types instantiated with full I/O schemas** (e.g. `KSampler` → 10 typed
+inputs MODEL/CONDITIONING/LATENT/INT/FLOAT/COMBO, output LATENT, 7 widgets with defaults); the add→remove
+drive demo succeeded (node count 0→1→0, graph restored) — all where DOM crawling found zero, with no
+execution and no risk.
+
+**Honest scope:** this enumerates the catalog, reads each operation's full I/O schema, and demonstrates safe
+graph manipulation. It deliberately stops short of **executing** a workflow (e.g. `queuePrompt`), which is a
+real server side-effect that belongs behind the write policy / disposable attestation like any other write.
+Generic-sweep extraction is best-effort for frameworks that keep their instance off a global.

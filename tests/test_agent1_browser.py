@@ -82,14 +82,52 @@ class FixtureHandler(BaseHTTPRequestHandler):
             )
         elif path == "/litegraph-mock":
             # A canvas app that exposes a LiteGraph model via JS globals (as ComfyUI does). The DOM has
-            # only a <canvas>; the functionality (node types + placed nodes) lives in the JS model.
+            # only a <canvas>; the functionality (node types + placed nodes) lives in the JS model. This
+            # mock is drivable: createNode() returns typed I/O schemas and graph.add/remove work.
             self._html(
                 "<html><title>Canvas</title><body><canvas id='c' width='200' height='200'></canvas>"
                 "<script>"
-                "window.LiteGraph={registered_node_types:{KSampler:1,LoadImage:1,SaveImage:1,CLIPTextEncode:1}};"
+                "const SCHEMAS={"
+                "KSampler:{title:'KSampler',inputs:[{name:'model',type:'MODEL'},{name:'seed',type:'INT'}],"
+                "outputs:[{name:'LATENT',type:'LATENT'}],widgets:[{name:'seed',type:'number',value:0}]},"
+                "LoadImage:{title:'Load Image',inputs:[{name:'image',type:'COMBO'}],outputs:[{name:'IMAGE',type:'IMAGE'}],widgets:[]},"
+                "SaveImage:{title:'Save Image',inputs:[{name:'images',type:'IMAGE'}],outputs:[],widgets:[]},"
+                "CLIPTextEncode:{title:'CLIP',inputs:[{name:'text',type:'STRING'}],outputs:[{name:'CONDITIONING',type:'CONDITIONING'}],widgets:[{name:'text',type:'customtext',value:''}]},"
+                "Note:{title:'Note',inputs:[],outputs:[],widgets:[{name:'text',type:'text',value:''}]}};"
+                "window.LiteGraph={registered_node_types:{KSampler:1,LoadImage:1,SaveImage:1,CLIPTextEncode:1,Note:1},"
+                "createNode:function(t){const s=SCHEMAS[t];if(!s)return null;"
+                "return {type:t,title:s.title,pos:[0,0],inputs:s.inputs,outputs:s.outputs,widgets:s.widgets};}};"
                 "window.app={graph:{_nodes:["
-                "{type:'KSampler',title:'KSampler',pos:[10,20],widgets:[{name:'seed',value:42},{name:'steps',value:20}]},"
-                "{type:'LoadImage',title:'Load Image',pos:[200,20],widgets:[]}]}};"
+                "{id:1,type:'KSampler',title:'KSampler',pos:[10,20],widgets:[{name:'seed',value:42},{name:'steps',value:20}]},"
+                "{id:2,type:'LoadImage',title:'Load Image',pos:[200,20],widgets:[]}],"
+                "links:{},add:function(n){this._nodes.push(n);},remove:function(n){const i=this._nodes.indexOf(n);if(i>=0)this._nodes.splice(i,1);}}};"
+                "</script></body></html>"
+            )
+        elif path == "/reactflow-mock":
+            # React Flow renders nodes as DOM elements (not canvas) — extractable from the DOM.
+            self._html(
+                "<html><title>Flow</title><body><div class='react-flow'><div class='react-flow__renderer'>"
+                "<div class='react-flow__node react-flow__node-input' data-id='n1'>Start</div>"
+                "<div class='react-flow__node react-flow__node-default' data-id='n2'>Process</div>"
+                "<div class='react-flow__edge' data-source='n1' data-target='n2'></div>"
+                "</div></div></body></html>"
+            )
+        elif path == "/generic-graph-mock":
+            # A graph editor stored on an arbitrary global, exposing getNodes() — caught by the sweep.
+            self._html(
+                "<html><title>Editor</title><body><canvas></canvas><script>"
+                "window.myEditor={getNodes:function(){return ["
+                "{id:'a',label:'Source',type:'source'},{id:'b',label:'Sink',type:'sink'}];}};"
+                "</script></body></html>"
+            )
+        elif path == "/cytoscape-mock":
+            self._html(
+                "<html><title>Cy</title><body><canvas></canvas><script>"
+                "const N=[{id:'x',label:'X',type:'t1'},{id:'y',label:'Y',type:'t2'}];"
+                "const E=[{source:'x',target:'y'}];"
+                "window.cytoscape=function(){};"
+                "window.cy={nodes:function(){return N.map(d=>({id:()=>d.id,data:k=>d[k]}));},"
+                "edges:function(){return E.map(d=>({data:k=>d[k]}));}};"
                 "</script></body></html>"
             )
         elif path == "/login-form":
@@ -574,16 +612,58 @@ def test_canvas_probe_introspects_litegraph_model(fixture_url: str) -> None:
     inv = probe_url(f"{fixture_url}litegraph-mock", wait_ms=800)
     assert inv is not None and inv.is_introspectable
     assert inv.framework == "litegraph"
-    assert inv.canvas_count == 1
-    assert inv.node_type_count == 4
+    assert inv.node_type_count == 5
     assert "KSampler" in inv.registered_node_types and "CLIPTextEncode" in inv.registered_node_types
-    assert len(inv.current_nodes) == 2
-    assert inv.current_nodes[0]["type"] == "KSampler"
-    assert {w["name"] for w in inv.current_nodes[0]["widgets"]} == {"seed", "steps"}
+    assert len(inv.nodes) == 2
+    assert inv.nodes[0]["type"] == "KSampler"
+    assert {w["name"] for w in inv.nodes[0]["widgets"]} == {"seed", "steps"}
+
+
+def test_canvas_probe_extends_beyond_litegraph(fixture_url: str) -> None:
+    """Introspection generalizes beyond LiteGraph: React Flow (DOM nodes), a generic editor stored on a
+    global (swept by shape), and Cytoscape (window.cy)."""
+    from agent1.canvas_probe import probe_url
+
+    rf = probe_url(f"{fixture_url}reactflow-mock", wait_ms=400)
+    assert rf is not None and rf.framework == "reactflow"
+    assert {n["id"] for n in rf.nodes} == {"n1", "n2"}
+    assert any(e["from"] == "n1" and e["to"] == "n2" for e in rf.edges)
+
+    gen = probe_url(f"{fixture_url}generic-graph-mock", wait_ms=400)
+    assert gen is not None and gen.framework == "generic:myEditor"
+    assert {n["label"] for n in gen.nodes} == {"Source", "Sink"}
+
+    cy = probe_url(f"{fixture_url}cytoscape-mock", wait_ms=400)
+    assert cy is not None and cy.framework == "cytoscape"
+    assert {n["id"] for n in cy.nodes} == {"x", "y"}
+    assert any(e["from"] == "x" and e["to"] == "y" for e in cy.edges)
+
+
+def test_canvas_probe_drives_litegraph_schemas_and_add_remove(fixture_url: str) -> None:
+    """Driving: instantiate node types to read their full I/O schemas, and prove the graph is drivable
+    by adding then removing a node (client-side only; never executed; graph restored)."""
+    from agent1.canvas_probe import on_page, drive_node_schemas, demonstrate_drive
+
+    def act(page):
+        schemas = drive_node_schemas(page, limit=10)
+        demo = demonstrate_drive(page, "Note")
+        return schemas, demo
+
+    schemas, demo = on_page(f"{fixture_url}litegraph-mock", act, wait_ms=800)
+    by_type = {s.type: s for s in schemas if s.created}
+    assert "KSampler" in by_type
+    ks = by_type["KSampler"]
+    assert {i["name"] for i in ks.inputs} == {"model", "seed"}
+    assert [o["type"] for o in ks.outputs] == ["LATENT"]
+    assert any(w["name"] == "seed" for w in ks.widgets)
+    # drive demo: node added then removed, graph restored
+    assert demo is not None
+    assert demo["added_ok"] and demo["removed_ok"]
+    assert demo["after_remove"] == demo["before"]
 
 
 def test_canvas_probe_returns_none_without_graph_model(fixture_url: str) -> None:
-    """A page with no canvas / no introspectable graph model returns None (reported honestly)."""
+    """A page with no canvas / no graph framework returns None (reported honestly)."""
     from agent1.canvas_probe import probe_url
 
     assert probe_url(f"{fixture_url}interactions", wait_ms=400) is None
