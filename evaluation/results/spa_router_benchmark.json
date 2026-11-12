@@ -1,0 +1,70 @@
+[
+ {
+  "arm": "A_frozen",
+  "wall_s": 6.3,
+  "grouped_states": 3,
+  "anon_recall": "2/10",
+  "anon_missed": [
+   "open_dashboard",
+   "dashboard_metric",
+   "open_reports",
+   "report_export",
+   "open_settings",
+   "settings_apply",
+   "profile_load",
+   "open_activity"
+  ],
+  "boot_fired": true,
+  "paths": [
+   "/",
+   "/api/boot",
+   "/api/view?r=profile"
+  ]
+ },
+ {
+  "arm": "B_general_web",
+  "wall_s": 80.5,
+  "grouped_states": 6,
+  "anon_recall": "10/10",
+  "anon_missed": [],
+  "boot_fired": true,
+  "paths": [
+   "/",
+   "/api/boot",
+   "/api/metric",
+   "/api/profile/data",
+   "/api/report/export",
+   "/api/settings/apply",
+   "/api/view?r=activity",
+   "/api/view?r=dashboard",
+   "/api/view?r=profile",
+   "/api/view?r=reports",
+   "/api/view?r=settings"
+  ]
+ },
+ {
+  "arm": "C_general_web_authenticated",
+  "wall_s": 87.4,
+  "grouped_states": 7,
+  "anon_recall": "10/10",
+  "anon_missed": [],
+  "boot_fired": true,
+  "paths": [
+   "/",
+   "/api/admin/audit",
+   "/api/boot",
+   "/api/metric",
+   "/api/profile/data",
+   "/api/report/export",
+   "/api/settings/apply",
+   "/api/view?r=activity",
+   "/api/view?r=admin",
+   "/api/view?r=dashboard",
+   "/api/view?r=profile",
+   "/api/view?r=reports",
+   "/api/view?r=settings"
+  ],
+  "member_recall": "2/2",
+  "member_missed": []
+ }
+]
