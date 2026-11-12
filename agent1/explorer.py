@@ -735,6 +735,13 @@ class BrowserSession:
             config = self.config
 
             def bounded_route(route: Any, request: Any) -> None:
+                # Browser-internal pseudo-URLs (blob:, data:, about:, filesystem:) contact no external
+                # server — a blob: URL's content and origin come from the page itself — so scope does not
+                # apply and they must not be charged or aborted. Blocking them breaks apps that load
+                # modules/workers from blob: URLs (e.g. comfyui loads script modules as blob: URLs).
+                if request.url.split(":", 1)[0].lower() in {"blob", "data", "about", "filesystem"}:
+                    route.continue_()
+                    return
                 # Playwright routes only the first request of a redirect chain.
                 if not allowed_origin(config.start_url, request.url, config.origin_aliases):
                     budget.blocked += 1
@@ -801,9 +808,15 @@ class BrowserSession:
             # Registered last, so it runs first: a write is judged before scope routing.
             policy = self.write_policy
 
+            neutralize = self.config.neutralize_blocked_writes
+
             def write_gate(route: Any, request: Any) -> None:
                 if policy.decide(request.method, request.url) == "allow":
                     route.fallback()
+                elif neutralize:
+                    # Deny the write without forwarding it (server never sees it) but let the page's
+                    # fetch() resolve, so an SPA that writes during init does not throw and halt.
+                    route.fulfill(status=200, content_type="application/json", body="{}")
                 else:
                     route.abort(ABORT_CODE)
             self.context.route("**/*", write_gate)

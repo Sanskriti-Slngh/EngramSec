@@ -204,15 +204,29 @@ Two precise findings:
    ~2.5 s and gave up. New opt-in **`readiness_await_content`** keeps readiness waiting (bounded by
    `readiness_timeout_ms`) while a scripted page still exposes **no** actionable control. Verified it waits
    (instrumented comfyui run: 15 s, 144 samples) and unit-tested (`test_readiness_await_content_...`).
-2. **But comfyui still yields only 1 control in the agent's context (vs 47 in a plain browser).** After
-   waiting the full 15 s the agent sees `enabled=1`. So the heavy frontend **does not fully initialize
-   inside Agent 1's scoped / HTTP-budgeted / instrumented context** — something its build needs (a
-   subresource or request) is blocked or throttled by the scope router / budget. **This is the real
-   remaining blocker, and it is bounded and fixable** (diagnose which request the router drops; relax scope
-   for same-origin subresources; raise the per-page budget) — not "canvas is unmappable."
+2. **The real blocker: Agent 1's own read-only write policy halted comfyui's init — now fixed.** Capturing
+   the agent-context console revealed `net::ERR_ACCESS_DENIED` on `PUT /api/settings/Comfy.InstalledVersion`
+   → `TypeError: Failed to fetch at ComfyApi.storeSetting`. comfyui performs a **benign write during
+   startup** (stores a setting); the read-only write policy (`effective_write_policy="read_only"`, enforced
+   by default) **aborts** that request, the rejected `fetch()` throws, and comfyui's whole init chain halts
+   — so the DOM toolbar never builds. A plain browser lets the PUT through, so it builds. Diagnosis path
+   ruled out viewport, launch args, readiness poll frequency, the readiness MutationObserver, and the
+   `NetworkRecorder` — all reproduced fine in a plain context; only the write abort did not.
 
-**Honest boundary:** even once the toolbar builds, the LiteGraph `<canvas>` node-graph itself is not
-DOM-enumerable and needs coordinate-based canvas interaction (a separate, larger capability); the WebSocket
-protocol is capturable as evidence but not as driven workflows. `readiness_await_content` is a correct,
-general, tested improvement (patient readiness for any late-building DOM); it is simply not sufficient
-alone for comfyui, whose next lever is the context-initialization fix above.
+   Fix — opt-in **`neutralize_blocked_writes`**: a denied write is **fulfilled with a synthetic empty
+   success instead of aborted**. The server still never receives the write (identical safety: the request is
+   intercepted, never forwarded), but the page's `fetch()` resolves so init proceeds. Result: comfyui goes
+   from **1 state → 14 states** (14 actions executed) — the agent now initializes and actively traverses it.
+   Unit-tested (`test_neutralize_blocked_writes_...`); default off preserves the abort baseline.
+
+   A second, independent drop: when the scope router *is* active (production config via `acg_evidence`), it
+   aborted comfyui's same-origin **`blob:` module scripts** (a `blob:` URL's origin is the page itself, but
+   `allowed_origin` judged it cross-origin). Fixed so the router passes `blob:`/`data:`/`about:` pseudo-URLs
+   (they contact no server); unit-tested (`test_scope_router_allows_blob_url_scripts`).
+
+**Remaining boundary:** comfyui now initializes and its DOM toolbar is traversable (14 states), but
+`functional_workflows=0` — its controls are client-view-change buttons/dialogs over a canvas, not
+server-round-trip workflows. The LiteGraph `<canvas>` node-graph itself is still not DOM-enumerable and
+needs coordinate-based canvas interaction (a separate, larger capability); the WebSocket is capturable as
+evidence, not as driven workflows. But the context-init blocker — the thing that made comfyui a flat zero —
+is resolved.

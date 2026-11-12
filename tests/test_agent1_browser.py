@@ -80,6 +80,32 @@ class FixtureHandler(BaseHTTPRequestHandler):
                 "b.textContent='Hydrated control';document.querySelector('#mount').append(b)},350)</script>"
                 "</main></body></html>"
             )
+        elif path == "/writes-on-load":
+            # An SPA that performs a benign write during init (as comfyui PUTs a setting). Under the
+            # read-only policy the write is denied: aborting makes fetch() reject (#write-failed),
+            # neutralizing fulfils it so fetch() resolves (#after-write) and init continues.
+            self._html(
+                "<html><title>Writes on load</title><body><main><div id='root'></div>"
+                "<script>"
+                "fetch('/api/persist',{method:'PUT',body:'{}'})"
+                ".then(()=>{const b=document.createElement('button');b.id='after-write';"
+                "b.textContent='After write';document.querySelector('#root').appendChild(b);})"
+                ".catch(()=>{const b=document.createElement('button');b.id='write-failed';"
+                "b.textContent='Write failed';document.querySelector('#root').appendChild(b);});"
+                "</script></main></body></html>"
+            )
+        elif path == "/blob-script":
+            # Loads a script from a blob: URL (as comfyui does for its module/worker code). The scope
+            # router must not abort it; if it does, #from-blob never appears.
+            self._html(
+                "<html><title>Blob script</title><body><main><div id='root'></div>"
+                "<script>"
+                "const code=\"const b=document.createElement('button');b.id='from-blob';"
+                "b.textContent='Blob control';document.querySelector('#root').appendChild(b);\";"
+                "const u=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));"
+                "const s=document.createElement('script');s.src=u;document.body.appendChild(s);"
+                "</script></main></body></html>"
+            )
         elif path == "/scripted-shell":
             # A scripted shell with NO actionable controls (like a heavy SPA still building its DOM).
             # readiness_await_content should keep waiting; default readiness declares it usable fast.
@@ -511,6 +537,68 @@ def test_readiness_any_enabled_skips_hydration_wait_for_ready_out_of_main_page(
     assert fast.readiness.duration_ms < 900, fast.readiness.duration_ms
     assert slow.readiness.duration_ms >= 1_200, slow.readiness.duration_ms
     assert fast.readiness.duration_ms < slow.readiness.duration_ms
+
+
+def test_neutralize_blocked_writes_lets_init_write_resolve(fixture_url: str, tmp_path: Path) -> None:
+    """Under read_only, a page's init-time write is denied. Aborting it (default) makes fetch() reject
+    and can halt an SPA's startup; neutralize fulfils it (without forwarding to the server) so the page
+    continues. The server never receives the write either way. Regression guard for comfyui context-init."""
+    from playwright.sync_api import sync_playwright
+    from agent1.write_policy import WritePolicy
+
+    def run(neutralize: bool):
+        config = RunConfig(
+            start_url=f"{fixture_url}writes-on-load", output_dir=tmp_path / f"w{int(neutralize)}",
+            neutralize_blocked_writes=neutralize, robust_readiness=True, readiness_timeout_ms=2_000,
+        )
+        with sync_playwright() as playwright:
+            browser = playwright.chromium.launch(headless=True)
+            try:
+                session = BrowserSession(browser, config)
+                session.write_policy = WritePolicy("read_only")  # what Explorer wires by default
+                session.__enter__()
+                try:
+                    session.goto_start()
+                    assert session.page is not None
+                    session.page.wait_for_timeout(600)
+                    return session.page.evaluate(
+                        "() => ({after: !!document.querySelector('#after-write'),"
+                        " failed: !!document.querySelector('#write-failed')})")
+                finally:
+                    session.__exit__()
+            finally:
+                browser.close()
+
+    abort = run(False)
+    neutral = run(True)
+    assert abort["failed"] and not abort["after"], abort      # default: write rejected
+    assert neutral["after"] and not neutral["failed"], neutral  # neutralized: write resolved
+
+
+def test_scope_router_allows_blob_url_scripts(fixture_url: str, tmp_path: Path) -> None:
+    """The scope router (active when an HTTP budget is configured) must pass browser-internal pseudo-URLs
+    (blob:/data:) rather than aborting them — otherwise apps that load modules/workers from blob: URLs
+    (e.g. comfyui) never build their DOM. Regression guard for the comfyui context-init fix."""
+    from playwright.sync_api import sync_playwright
+
+    config = RunConfig(
+        start_url=f"{fixture_url}blob-script", output_dir=tmp_path / "blob",
+        max_total_http_requests=200,  # enables the bounded scope router
+        robust_readiness=True, readiness_any_enabled=True, readiness_timeout_ms=3_000,
+        readiness_poll_ms=50,
+    )
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        try:
+            with BrowserSession(browser, config) as session:
+                session.goto_start()
+                assert session.page is not None
+                session.page.wait_for_selector("#from-blob", timeout=3_000)
+                obs = session.observe(1)
+            assert any(c.label == "Blob control" for c in obs.controls), \
+                "blob: script was blocked by the scope router"
+        finally:
+            browser.close()
 
 
 def test_readiness_await_content_waits_for_scripted_shell_to_build(

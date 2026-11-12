@@ -187,6 +187,13 @@ class RunConfig(BaseModel):
     # non-destructive writes and requires an operator/harness attestation of a disposable,
     # reset-verified environment.
     write_policy: Literal["read_only", "disposable"] | None = None
+    # How a BLOCKED write is denied at the network layer. "abort" (default) aborts the request
+    # (Chromium net::ERR_ACCESS_DENIED), which is strictest but makes the page's fetch() reject —
+    # breaking SPAs that perform a benign write during init (e.g. comfyui PUTs a setting, and the
+    # thrown rejection halts its whole startup). "neutralize" instead fulfils the request with a
+    # synthetic empty success WITHOUT forwarding it to the server: the server still never receives
+    # the write (identical safety), but the app's fetch resolves so initialization can continue.
+    neutralize_blocked_writes: bool = False
     environment_attestation: str | None = Field(default=None, max_length=200)
     max_write_requests: int = Field(default=50, ge=0, le=10_000)
     allow_destructive: bool = False
