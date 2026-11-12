@@ -1004,6 +1004,16 @@ class BrowserSession:
                     sample.enabled_control_count == 0
                     and sample.disabled_control_count > 0
                 )
+                # Heavy SPAs (e.g. a canvas app + plugin manager) build their entire DOM toolbar
+                # from a large JS bundle over many seconds; the early DOM is a scripted shell with
+                # NO actionable controls at all. Without this, readiness declares the empty-but-stable
+                # shell "usable" and the explorer gives up at ~1 action. readiness_await_content keeps
+                # waiting (bounded by readiness_timeout_ms) until some enabled control appears.
+                or (
+                    self.config.readiness_await_content
+                    and sample.script_count > 0
+                    and sample.enabled_control_count == 0
+                )
             )
             if http_status in {401, 403, 407, 429}:
                 final_status = "blocked"

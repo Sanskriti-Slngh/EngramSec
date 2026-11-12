@@ -86,6 +86,7 @@ class RunConfig(BaseModel):
     search_probe_contrast: str | None = Field(default=None, max_length=80)
     robust_readiness: bool = False
     readiness_any_enabled: bool = False
+    readiness_await_content: bool = False
     loopback_origin_equivalence: bool = False
     ignore_https_errors: bool = False
     readiness_timeout_ms: int = Field(default=2_500, ge=250, le=15_000)

@@ -148,6 +148,71 @@ loopback spellings (never a different host/port/scheme). No writes are enabled b
 path keeps its disposable-attestation gate. 44+ explorer/write-policy/readiness tests green plus the 7 new
 loopback tests.
 
-*Artifacts: `agent1/schema.py` (`loopback_origin_equivalence`, `ignore_https_errors`),
-`agent1/explorer.py` (context `ignore_https_errors` wiring), `tests/test_loopback_origin.py`.
-Diagnosis scripts in session scratchpad. Nothing committed.*
+*Artifacts: `agent1/schema.py` (`readiness_any_enabled`, `loopback_origin_equivalence`,
+`ignore_https_errors`), `agent1/explorer.py`, `tests/test_loopback_origin.py`,
+`tests/test_agent1_browser.py` (behavioral readiness test). Committed as `584b61c` (not pushed).*
+
+## Roadblock #3 (measurement) — made provable with a second measurable SPA
+
+Track B has no ground truth, so SPA gains could only be *inferred*. Added `development_apps/spa_router_lab.py`
+— a client-rendered SPA with **client-side `pushState` routing**, controls **outside `<main>`**, delayed
+hydration, nested interaction-gated controls, and a member-cookie role dimension. Each client view fires a
+tracking GET, so the server log is a clean capability oracle. Deliberately unlike `js_heavy_lab` so passing
+it is real generalization.
+
+Benchmark (`evaluation/spa_router_benchmark.py`), baseline vs general-web config:
+
+| arm | anonymous recall | note |
+|---|---|---|
+| A frozen | **1–2/10** | nav disabled pre-hydration; only `/` reached |
+| B general-web | **10/10** | every pushState view + nested control reached |
+
+This both confirms the agent **handles pushState SPA routing** and gives a *provable* 1→10/10 coverage gain
+independent of `js_heavy_lab`. Committed as `dfc0b95`.
+
+## Roadblock #2 (auth) — the mechanism exists (`storage_state_path`); provisioning is the real work
+
+Agent 1 never types credentials; authenticated surface is reached via an operator-provided Playwright
+session (`storage_state_path`). Proven measurably on `spa_router_lab`:
+
+| arm | anonymous | member | total |
+|---|---|---|---|
+| general-web (no session) | 10/10 | 0/2 | 10/12 |
+| general-web + `storage_state` | 10/10 | **2/2** | **12/12** |
+
+**Live-app finding (white-jotter):** an **API-only** login (`POST /api/login`, which succeeded with the
+seed account `admin`/`123`) set the Shiro **session cookie** but did **not** unlock the admin surface —
+because the Vue frontend gates login state on **client state** (`localStorage['username']`,
+store/index.js), not the cookie. Injecting the cookie **and** `localStorage['username']` *still* did not
+surface the admin menu (workflows 55 → 56) — the admin link is additionally gated on the user's **role**
+(fetched into the Vuex store), which a reconstructed partial session does not carry. **General lesson for
+SPA auth provisioning:** the operator session must capture the app's **complete client auth state
+(cookie + localStorage + any role/token in the SPA store)**, which in practice means a genuine **UI
+login** before saving `storage_state` — not an API call or a hand-built partial session. The agent
+mechanism (`storage_state_path`) is proven on the fixture (0/2 → 2/2); live provisioning is
+**app-specific**, and this characterizes what it requires — not an agent capability gap.
+
+## Roadblock #4 (canvas/WebSocket, comfyui) — reframed: it is NOT a canvas wall
+
+The frozen agent gets **1 state / 0 controls** on comfyui, and the general-web config + WS capture did not
+change that. But a **plain browser left open ~15 s sees 47 enabled DOM controls** — a real toolbar
+(`Manager`, `Run`, `Share`, `Unload Models`, workflow controls …) plus 2 canvas elements and a WebSocket.
+So comfyui is **not** pure canvas; it has a mappable DOM surface that builds slowly from a heavy JS bundle.
+
+Two precise findings:
+1. **Readiness patience was the first blocker, and is fixed.** The agent observed comfyui's empty shell at
+   ~2.5 s and gave up. New opt-in **`readiness_await_content`** keeps readiness waiting (bounded by
+   `readiness_timeout_ms`) while a scripted page still exposes **no** actionable control. Verified it waits
+   (instrumented comfyui run: 15 s, 144 samples) and unit-tested (`test_readiness_await_content_...`).
+2. **But comfyui still yields only 1 control in the agent's context (vs 47 in a plain browser).** After
+   waiting the full 15 s the agent sees `enabled=1`. So the heavy frontend **does not fully initialize
+   inside Agent 1's scoped / HTTP-budgeted / instrumented context** — something its build needs (a
+   subresource or request) is blocked or throttled by the scope router / budget. **This is the real
+   remaining blocker, and it is bounded and fixable** (diagnose which request the router drops; relax scope
+   for same-origin subresources; raise the per-page budget) — not "canvas is unmappable."
+
+**Honest boundary:** even once the toolbar builds, the LiteGraph `<canvas>` node-graph itself is not
+DOM-enumerable and needs coordinate-based canvas interaction (a separate, larger capability); the WebSocket
+protocol is capturable as evidence but not as driven workflows. `readiness_await_content` is a correct,
+general, tested improvement (patient readiness for any late-building DOM); it is simply not sufficient
+alone for comfyui, whose next lever is the context-initialization fix above.

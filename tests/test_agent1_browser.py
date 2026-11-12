@@ -80,6 +80,13 @@ class FixtureHandler(BaseHTTPRequestHandler):
                 "b.textContent='Hydrated control';document.querySelector('#mount').append(b)},350)</script>"
                 "</main></body></html>"
             )
+        elif path == "/scripted-shell":
+            # A scripted shell with NO actionable controls (like a heavy SPA still building its DOM).
+            # readiness_await_content should keep waiting; default readiness declares it usable fast.
+            self._html(
+                "<html><title>Scripted shell</title><body><div id='root'></div>"
+                "<script>void 0;</script></body></html>"
+            )
         elif path == "/out-of-main":
             # Controls are enabled and present immediately, but rendered OUTSIDE any <main>
             # (as many SPAs do). A <script> is present so the readiness branch treats it as a
@@ -504,6 +511,36 @@ def test_readiness_any_enabled_skips_hydration_wait_for_ready_out_of_main_page(
     assert fast.readiness.duration_ms < 900, fast.readiness.duration_ms
     assert slow.readiness.duration_ms >= 1_200, slow.readiness.duration_ms
     assert fast.readiness.duration_ms < slow.readiness.duration_ms
+
+
+def test_readiness_await_content_waits_for_scripted_shell_to_build(
+    fixture_url: str, tmp_path: Path
+) -> None:
+    """A scripted shell with no actionable controls: default readiness declares it usable quickly,
+    but readiness_await_content keeps waiting (bounded by readiness_timeout_ms) for content to appear.
+    This is the lever for heavy SPAs (e.g. comfyui) that build their DOM toolbar over many seconds."""
+    from playwright.sync_api import sync_playwright
+
+    common = dict(
+        start_url=f"{fixture_url}scripted-shell", output_dir=tmp_path / "shell",
+        robust_readiness=True, readiness_timeout_ms=800, readiness_poll_ms=50,
+        idle_page_wait_ms=300, passive_page_wait_ms=100, readiness_strategy="fixed",
+    )
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
+        try:
+            with BrowserSession(browser, RunConfig(**common)) as s:
+                s.goto_start()
+                default = s.last_readiness
+            with BrowserSession(browser, RunConfig(**{**common, "readiness_await_content": True})) as s:
+                s.goto_start()
+                awaited = s.last_readiness
+        finally:
+            browser.close()
+
+    # Default gives up quickly on the empty-but-stable shell; await_content waits out the timeout.
+    assert default.status == "usable" and default.duration_ms < 500, default
+    assert awaited.status == "timeout" and awaited.duration_ms >= 700, awaited
 
 
 def test_history_return_is_verified_and_keeps_graph_evidence_complete(
