@@ -192,6 +192,16 @@ login** before saving `storage_state` — not an API call or a hand-built partia
 mechanism (`storage_state_path`) is proven on the fixture (0/2 → 2/2); live provisioning is
 **app-specific**, and this characterizes what it requires — not an agent capability gap.
 
+**Resolution — a UI-login helper (`agent1/auth_capture.py`).** `capture_login_session()` drives a real
+login form in a browser (auto-detecting username/password/submit fields, or using given selectors) and
+saves the **full client state — cookies *and* localStorage/sessionStorage** — to a `storage_state` file the
+operator passes to `storage_state_path`. Running the app's own login code captures exactly the client state
+a token/role-gated SPA needs. Unit-tested (`test_ui_login_helper_...`) and **validated live on
+white-jotter**: UI login (`admin`/`123`) redirected to `/admin/dashboard` and captured
+`localStorage['username']` + 2 cookies; the authenticated agent run then reached **39 states vs 18
+anonymous** (2.2×) — traversing the authenticated/admin surface the anonymous run could not. (The agent
+still never types credentials; this is the operator-side provisioning step.)
+
 ## Roadblock #4 (canvas/WebSocket, comfyui) — reframed: it is NOT a canvas wall
 
 The frozen agent gets **1 state / 0 controls** on comfyui, and the general-web config + WS capture did not

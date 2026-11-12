@@ -80,6 +80,21 @@ class FixtureHandler(BaseHTTPRequestHandler):
                 "b.textContent='Hydrated control';document.querySelector('#mount').append(b)},350)</script>"
                 "</main></body></html>"
             )
+        elif path == "/login-form":
+            # A minimal SPA-style login: on submit, JS writes BOTH a cookie and a localStorage flag,
+            # then changes the URL. Exercises the UI-login helper capturing full client state.
+            self._html(
+                "<html><title>Login</title><body><main><form id='f'>"
+                "<input name='username' type='text' placeholder='user'>"
+                "<input name='password' type='password' placeholder='pass'>"
+                "<button type='submit'>Sign in</button></form>"
+                "<script>document.querySelector('#f').addEventListener('submit', e => {"
+                "e.preventDefault();"
+                "const u=document.querySelector('[name=username]').value;"
+                "window.localStorage.setItem('app_user', JSON.stringify(u));"
+                "document.cookie='app_session=ok; path=/';"
+                "location.href='/?logged_in=1';});</script></main></body></html>"
+            )
         elif path == "/writes-on-load":
             # An SPA that performs a benign write during init (as comfyui PUTs a setting). Under the
             # read-only policy the write is denied: aborting makes fetch() reject (#write-failed),
@@ -537,6 +552,26 @@ def test_readiness_any_enabled_skips_hydration_wait_for_ready_out_of_main_page(
     assert fast.readiness.duration_ms < 900, fast.readiness.duration_ms
     assert slow.readiness.duration_ms >= 1_200, slow.readiness.duration_ms
     assert fast.readiness.duration_ms < slow.readiness.duration_ms
+
+
+def test_ui_login_helper_captures_cookie_and_localstorage(fixture_url: str, tmp_path: Path) -> None:
+    """The UI-login helper drives a real login form and saves BOTH the cookie and the localStorage the
+    app writes — the full client state a token/role-gated SPA needs (not just the cookie)."""
+    from agent1.auth_capture import capture_login_session
+
+    out = tmp_path / "session.json"
+    result = capture_login_session(
+        f"{fixture_url}login-form", "admin", "secret", out,
+        success_url_contains="logged_in", wait_ms=2_000,
+    )
+    assert out.exists()
+    assert result.verified is True
+    assert result.cookies >= 1
+    state = json.loads(out.read_text())
+    cookie_names = {c["name"] for c in state.get("cookies", [])}
+    assert "app_session" in cookie_names
+    ls_keys = {k for keys in result.local_storage_keys.values() for k in keys}
+    assert "app_user" in ls_keys, result.local_storage_keys
 
 
 def test_neutralize_blocked_writes_lets_init_write_resolve(fixture_url: str, tmp_path: Path) -> None:
