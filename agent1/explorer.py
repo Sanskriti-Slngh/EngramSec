@@ -735,6 +735,21 @@ class BrowserSession:
             config = self.config
 
             def bounded_route(route: Any, request: Any) -> None:
+                def _fulfill(**kw: Any) -> None:
+                    # Relaying a fetched response can fail with "Fetch response has been disposed" on some
+                    # keep-alive/chunked backends (seen on white-jotter's Spring Boot). Scope and budget are
+                    # already enforced above, so fall back to a native browser fetch instead of crashing the
+                    # whole run; abort only as a last resort so the page still gets a resolved route.
+                    try:
+                        route.fulfill(**kw)
+                    except PlaywrightError:
+                        try:
+                            route.continue_()
+                        except PlaywrightError:
+                            try:
+                                route.abort("failed")
+                            except PlaywrightError:
+                                pass
                 # Browser-internal pseudo-URLs (blob:, data:, about:, filesystem:) contact no external
                 # server — a blob: URL's content and origin come from the page itself — so scope does not
                 # apply and they must not be charged or aborted. Blocking them breaks apps that load
@@ -754,7 +769,7 @@ class BrowserSession:
                 if eligible:
                     hit = cache.get(request.url)
                     if hit is not None:
-                        route.fulfill(status=hit["status"], headers=hit["headers"], body=hit["body"])
+                        _fulfill(status=hit["status"], headers=hit["headers"], body=hit["body"])
                         return
                 if not budget.consume("browser"):
                     route.abort("blockedbyclient")
@@ -787,12 +802,12 @@ class BrowserSession:
                     try:
                         body = response.body()
                     except PlaywrightError:
-                        route.fulfill(response=response)
+                        _fulfill(response=response)
                         return
                     cache.put(request.url, response.status, dict(response.headers), body)
-                    route.fulfill(status=response.status, headers=response.headers, body=body)
+                    _fulfill(status=response.status, headers=response.headers, body=body)
                     return
-                route.fulfill(response=response)
+                _fulfill(response=response)
 
             def charge_redirect_hop(request: Any) -> None:
                 if request.redirected_from is None:
