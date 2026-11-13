@@ -291,3 +291,104 @@ skipping it, so the operator sees exactly what functionality is gated. Default o
 is client-side and reversible; workflow *execution* is a real write, gated behind `allow_canvas_execution`
 + disposable attestation, with a RED roadblock recorded when not authorized. Generic-sweep extraction is
 best-effort for frameworks that keep their instance off a global.
+
+
+## Roadblock #6 (interactive exploration / write-chaining) — the biggest remaining layer
+
+**Problem.** After the SPA/auth/canvas fixes, the residual misses on the measurable fixtures were all
+*interactive*: controls that only appear or only fire after a prior action (multi-step), handlers wired in
+script rather than in HTML attributes (listener `<div>`s, redefined handlers), and writes performed by a
+JavaScript handler so the form's DOM method stays `GET`. ZAP's **Crawlground** testbed measures exactly
+this axis.
+
+**What actually moved the needle.** Most of this layer was unlocked by *composing capabilities the frozen
+benchmark config left off* — one genuinely new, two existing:
+
+1. **`runtime_listener_observation="revisit"`** (existing). The DOM snapshot recognizes controls by
+   semantics (links, buttons, ARIA, inline handlers). It cannot see a plain `<div>` that got a listener via
+   `addEventListener`, nor a control whose handler was *replaced* in place. The opt-in DevTools listener
+   observer can, and `revisit` re-fires a control whose handler changed. This is what the residual
+   `replay_lab` misses needed (listener-`<div>` chains; a button redefined after first click).
+   → **replay_lab 17/22 → 21/22** (only the destructive `wipe_records` remains, skipped by design).
+
+2. **`exploration_mode="persistent"`** (existing). `fresh` mode restores each action by *replaying a path
+   from the start*. On a **stateful** app the list page mutates (a create/counter inserts a row), so the
+   replayed source state no longer matches and the attempt is abandoned *before the control is even
+   clicked* — which is why `view_record`/`create_record`/`update_record` never fired. Persistent mode
+   explores from the live state (click → observe → go back), so a drifting page is no obstacle.
+   → **stateful_lab 3/7 → 6/7** (only the destructive `delete_all` remains). Verified with the correct
+   per-benchmark oracle that persistent mode does **not** regress the SPA fixtures (js_heavy 13/13,
+   spa_router 12/12 in both fresh and persistent) — an earlier "regression" was an artifact of an ad-hoc
+   scorer that stripped `?r=…` query routes; the dedicated `spa_router_benchmark.py` oracle is correct.
+
+3. **`execute_js_driven_writes`** (NEW, opt-in, default off). The authorized write sweep used to promote a
+   control only if its *DOM method* was non-GET (`<form method=post>`). A write done from a handler
+   (`fetch(url,{method:'POST'})` wired in a `<script>`) leaves the form's method `GET`, so the sweep never
+   promoted it — the write was deprioritized in discovery *and* invisible to the sweep. The new flag makes
+   SAFE, same-origin `form_submit`/`button` controls promotable candidates, **only** on an attested
+   disposable environment; the live write gate + `would_allow` still bound the real request (write cap,
+   destructive-route block) and `control.safe` already excludes destructive labels. On the small fixtures
+   the writes fire in persistent discovery (so the flag is redundant there), but on a larger app where such
+   a write is deferred past the discovery budget to the sweep, this flag is the only thing that executes it
+   — verified on a controlled fixture (sweep `promotable` 0→1 and the `POST` fires). With the flag off the
+   sweep predicate is byte-identical to the frozen baseline
+   (`tests/test_agent1_browser.py::test_execute_js_driven_writes_promotes_get_method_handler_writes`).
+
+**Recommended config** (all opt-in; frozen baseline byte-identical when unset):
+`exploration_mode="persistent", runtime_listener_observation="revisit", robust_readiness=True,
+readiness_any_enabled=True, readiness_strategy="adaptive", loopback_origin_equivalence=True,
+neutralize_blocked_writes=True, allow_post_forms=True, write_policy="disposable",
+write_execution_policy="focused_adaptive", execute_js_driven_writes=True` (+ `storage_state_path` for an
+authenticated surface). This one config maxes every measurable fixture.
+
+### Measurable fixtures — frozen → corrected (persistent + listener + jswrite)
+
+| fixture | kind | frozen | corrected | remaining miss |
+|---|---|---|---|---|
+| js_heavy_lab | SPA, 2 roles | 3/13 | **13/13** | — |
+| spa_router_lab | SPA, pushState, 2 roles | 1/12 | **12/12** (10/10 anon + 2/2 member) | — |
+| replay_lab | listener/multi-step | 17/22 | **21/22** | `wipe_records` (destructive, by design) |
+| stateful_lab | CRUD + destructive | 2/7 | **6/7** | `delete_all` (destructive, by design) |
+
+Every non-destructive capability is now covered; the only misses are the two intentionally-skipped
+destructive ops (they would fire under `allow_destructive` in an authorized disposable run).
+
+### External benchmark — ZAP Crawlground (interactive-control coverage, server-scored)
+
+59 pages, one control each (button, link, form, JS event, frame, multi-step); reaching the hidden
+`/score/<cat>/<id>` marker *through* the control scores it. The ZAP website publishes ~76% for its **three
+spiders combined** (standard + AJAX + client).
+
+**Agent 1, single config: 35/59 = 59.3%.** All 59 pages were reached (server log), so remaining misses are
+control-exercise gaps, not coverage:
+
+| category | score | |
+|---|---|---|
+| frames | 4/4 | iframe srcdoc/src, nested |
+| js-events | 13/14 | listener observation; one bespoke custom-event missed |
+| dynamic-content | 8/10 | injected-then-clicked content |
+| forms | 6/12 | GET/POST submit, XHR POST, radio, formaction, **multi-step wizard** |
+| links | 2/7 | plain + SVG anchors; misses js-built href, `javascript:`, image-map, `target=_blank`, noscript |
+| buttons | 1/2 | |
+| navigation | 1/9 | **next frontier** — client-side/delayed navigation |
+| other | 0/1 | deliberate bot-detection trap |
+
+The dominant remaining gap is **navigation** — meta-refresh, `setTimeout`→`location`, `history.pushState`/
+`replaceState`, hash routing, `window.replace`, an HTTP-redirect link, `base href`: the crawler must
+*follow a client-side or delayed navigation after landing*, a distinct capability from exercising a
+control. Clean next layer.
+
+### External benchmark — Google Security Crawl Maze (resource discovery)
+
+A deep directory tree of 84 (+7 framework-SPA, Docker-only) pages, each linking a `.found` marker via a
+different mechanism (href, src, srcset, CSS, meta, headers, JS). Scores *resource extraction* — a different
+axis from Agent 1's functional focus; the resource spider is the relevant subsystem.
+
+**Agent 1 (persistent + resource spider, raised fetch budgets, 300s): 58/84 = 69.0%** of the Flask-served
+cases (css 1/1, headers 3/4, html 38/57, javascript 14/20, misc 2/2). Extraction itself is solid — a
+single-page probe confirms `<a href>`, `<img src/srcset>`, `<link href>`, `<meta>` are all extracted when a
+page is reached. Misses are (a) deep pages not reached within budget, (b) rare/legacy attributes the spider
+does not parse (`applet archive/codebase`, `object codebase`, `img dynsrc/lowsrc/longdesc`, `isindex`,
+`a ping`, `background`), (c) resources referenced only inside JavaScript strings, and (d) interactive-write
+cases (`js-post`, `js-delete`) that the *read-only* discovery config intentionally blocks. The 7
+framework-SPA cases need the Docker bundle build and were not included.

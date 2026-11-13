@@ -777,6 +777,48 @@ def test_neutralize_blocked_writes_lets_init_write_resolve(fixture_url: str, tmp
     assert neutral["after"] and not neutral["failed"], neutral  # neutralized: write resolved
 
 
+def _descriptor(**kw):
+    from agent1.schema import ActionDescriptor
+    base = dict(control_id="c1", kind="form_submit", label="Save", role="button",
+                css_path="form button", target="http://127.0.0.1:9/", method="GET",
+                signature="sig1", interaction="click")
+    base.update(kw)
+    return ActionDescriptor(**base)
+
+
+def test_execute_js_driven_writes_promotes_get_method_handler_writes(tmp_path: Path) -> None:
+    """A write performed by a JS handler leaves the form's DOM method GET, so the sweep's static
+    non-GET test misses it. `execute_js_driven_writes` makes such SAFE same-origin controls promotable
+    (form_submit and button), while real non-GET writes, view-only interactions and cross-origin targets
+    are handled exactly as before -- and the flag OFF is byte-identical to the frozen predicate."""
+    start = "http://127.0.0.1:9/"
+    off = Explorer(RunConfig(start_url=start, output_dir=tmp_path / "off",
+                             execute_js_driven_writes=False), Path(__file__).resolve().parents[1])
+    on = Explorer(RunConfig(start_url=start, output_dir=tmp_path / "on",
+                            execute_js_driven_writes=True), Path(__file__).resolve().parents[1])
+
+    get_form = _descriptor(kind="form_submit", method="GET")
+    get_button = _descriptor(kind="button", method=None, label="Add")
+    scroll_button = _descriptor(kind="button", method=None, interaction="scroll_container")
+    cross_origin = _descriptor(kind="form_submit", method="GET", target="http://evil.example/x")
+    plain_link = _descriptor(kind="link", method=None, target=f"{start}page")
+
+    # OFF: the candidate path never fires -> frozen baseline (only true non-GET writes are promotable).
+    assert off._is_candidate_js_write(get_form) is False
+    assert off._is_sweep_write(get_form) is False
+    # ON: safe same-origin GET-method form_submit / button become promotable candidates.
+    assert on._is_candidate_js_write(get_form) is True
+    assert on._is_sweep_write(get_form) is True
+    assert on._is_candidate_js_write(get_button) is True
+    # ON but never: view-only interactions, cross-origin targets, and plain links.
+    assert on._is_candidate_js_write(scroll_button) is False
+    assert on._is_candidate_js_write(cross_origin) is False
+    assert on._is_candidate_js_write(plain_link) is False
+    # A real non-GET write is NOT a "candidate" (it is a genuine promotable write handled by the
+    # existing path), so the flag does not change its classification.
+    assert on._is_candidate_js_write(_descriptor(method="POST")) is False
+
+
 def test_scope_router_allows_blob_url_scripts(fixture_url: str, tmp_path: Path) -> None:
     """The scope router (active when an HTTP budget is configured) must pass browser-internal pseudo-URLs
     (blob:/data:) rather than aborting them — otherwise apps that load modules/workers from blob: URLs

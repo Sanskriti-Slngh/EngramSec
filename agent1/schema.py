@@ -153,6 +153,19 @@ class RunConfig(BaseModel):
     focus_to_budget: bool = False
     fair_subtree_rotation: bool = False
     focus_stagnation_limit: int = Field(default=0, ge=0, le=50)
+    # Opt-in (default off -> frozen baseline). The authorized write sweep normally promotes only controls
+    # whose DOM method is non-GET (`<form method=post>`). Many real apps instead perform the write from a
+    # JavaScript handler (`fetch(url,{method:'POST'})` wired in a <script> via onsubmit/onclick/
+    # addEventListener), so the form's DOM method stays GET and the mutation is invisible statically. With
+    # this flag, and ONLY on an attested disposable environment, the sweep ALSO promotes SAFE,
+    # non-destructive form_submit/button/listener controls whose DOM method is GET/empty and whose target is
+    # same-origin-or-null -- i.e. controls that MAY write through a handler. Nothing is assumed: the actual
+    # request still passes the live write gate and `would_allow` (so a genuine write is bounded by
+    # max_write_requests and the destructive-route block, and a control that turns out to be a harmless GET
+    # just costs one bounded sweep action). `control.safe` already excludes destructive labels/targets, so
+    # a "Delete all" button is never promoted. This is what lets create/update-style JS writes, and
+    # interactive controls generally (cf. ZAP Crawlground), actually get triggered.
+    execute_js_driven_writes: bool = False
     # Opt-in Stage-2 restoration saver (defaults off -> frozen baseline). When Agent 1 has reached a
     # verified, plain-GET, non-destructive parent state with several DISTINCT (novel-route) children still
     # queued, execute a bounded batch of them without independently restoring the parent per child: each

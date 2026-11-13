@@ -2455,6 +2455,35 @@ class Explorer:
             return False
         return self.write_policy.would_allow(method, action.target or self.config.start_url)
 
+    def _is_candidate_js_write(self, action: Any) -> bool:
+        """Opt-in (`execute_js_driven_writes`): a SAFE control that may perform a write through a
+        JavaScript handler even though its DOM method is GET/empty -- the mutation is wired in a <script>
+        via onsubmit/onclick/addEventListener, so `<form method=post>` static detection misses it. The
+        actual request still passes the live write gate and `would_allow` (so a genuine write stays under
+        max_write_requests and the destructive-route block), and `control.safe` already excludes
+        destructive labels/targets, so a control that turns out to be a plain GET or a no-op just costs
+        one bounded sweep action. Only reached inside `_authorized_write_sweep`, which runs only on an
+        attested disposable environment."""
+        if not self.config.execute_js_driven_writes:
+            return False
+        if getattr(action, "kind", None) not in {"form_submit", "button"}:
+            return False
+        method = (getattr(action, "method", None) or "").upper()
+        if method not in {"", "GET", "HEAD", "OPTIONS"}:
+            return False                       # a real non-GET write: _is_promotable_write covers it
+        if getattr(action, "interaction", None) in {
+                "scroll_viewport", "scroll_container", "hover", "focus"}:
+            return False                       # view-only interactions never write
+        target = getattr(action, "target", None)
+        if target and not allowed_origin(self.config.start_url, target, self.config.origin_aliases):
+            return False                       # never leaves the configured origin
+        return True
+
+    def _is_sweep_write(self, action: Any) -> bool:
+        """Controls the authorized sweep promotes: true non-GET form writes, plus (opt-in) candidate
+        JS-driven writes. Equals `_is_promotable_write` exactly when `execute_js_driven_writes` is off."""
+        return self._is_promotable_write(action) or self._is_candidate_js_write(action)
+
     def _adaptive_subtrees(self, seen_routes: set[str]) -> dict[str, str]:
         """Subtrees unlocked during ORDINARY discovery whose children are still queued (for
         focused_adaptive). A subtree is seeded only on evidence of genuinely new functionality: its
@@ -2507,7 +2536,7 @@ class Explorer:
         policy = self.config.write_execution_policy
         focus = policy in {"focused_subtree", "focused_adaptive"}
         seen_routes = {route_pattern(o.url).split("?")[0] for o in self.artifact.observations}
-        promoted = sum(1 for it in self.frontier if self._is_promotable_write(it.action))
+        promoted = sum(1 for it in self.frontier if self._is_sweep_write(it.action))
         # focused_adaptive also continues subtrees unlocked during ordinary discovery.
         seeds = self._adaptive_subtrees(seen_routes) if policy == "focused_adaptive" else {}
         if not promoted and not seeds:
@@ -2516,7 +2545,7 @@ class Explorer:
                                                  "focus": focus, "focus_steps": 0, "adaptive_seeds": 0}
             return
         for it in self.frontier:
-            if self._is_promotable_write(it.action):
+            if self._is_sweep_write(it.action):
                 it.priority += 1000.0          # sort ahead of ordinary items for this phase only
         self._sort_frontier()
         floor = self.config.write_sweep_replay_floor
@@ -2603,7 +2632,7 @@ class Explorer:
                                 cand = order[(start + k) % len(order)]
                                 j = None
                                 for pred in (lambda it: novel(it) and reachable(it), novel,
-                                             lambda it: self._is_promotable_write(it.action)):
+                                             lambda it: self._is_sweep_write(it.action)):
                                     j = next((i for i, it in enumerate(self.frontier)
                                               if root_of(it.action.target) == cand and pred(it)), None)
                                     if j is not None:
@@ -2629,7 +2658,7 @@ class Explorer:
                         if idx is None:
                             idx = pick(novel)                                       # re-anchor to a child
                         if idx is None:                                            # a nested safe write inside
-                            idx = pick(lambda it: self._is_promotable_write(it.action))
+                            idx = pick(lambda it: self._is_sweep_write(it.action))
                         if idx is not None:
                             focused = True
                             active_root = root_of(self.frontier[idx].action.target)
@@ -2637,7 +2666,7 @@ class Explorer:
                         step_root = active_root
                 if idx is None:       # 3) else the highest-priority promotable write (restored to its page)
                     idx = next((i for i, it in enumerate(self.frontier)
-                                if self._is_promotable_write(it.action)), None)
+                                if self._is_sweep_write(it.action)), None)
                 if idx is None:       # 4) else the global top
                     idx = 0
                 item = self.frontier[idx]
@@ -2670,7 +2699,7 @@ class Explorer:
                         except (PlaywrightError, RuntimeError):
                             pass
                 obs_before = len(self.artifact.observations)
-                promotable = self._is_promotable_write(item.action)
+                promotable = self._is_sweep_write(item.action)
                 updated = self._attempt_frontier(browser, item, persistent_session=session,
                                                  live_source=live, live_path=live_path)
                 if focused:
