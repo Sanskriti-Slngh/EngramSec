@@ -212,6 +212,14 @@ class FixtureHandler(BaseHTTPRequestHandler):
                 "<html><head><meta http-equiv='refresh' content='0.5;url=/redirected'></head>"
                 "<body><p>Waiting for the delayed redirect.</p></body></html>"
             )
+        elif path == "/timer-redirect":
+            # No actionable control other than site chrome; a timer navigates away (like Crawlground's
+            # window.location-timeout). follow_client_navigation should linger and follow it.
+            self._html(
+                "<html><title>Timer redirect</title><body><nav><a href='/'>Home</a></nav>"
+                "<main><p>Navigating shortly.</p></main>"
+                "<script>setTimeout(function(){window.location.href='/redirected';}, 500);</script></body></html>"
+            )
         elif path == "/redirected":
             self._html("<html><title>Redirect destination</title><body><main>Reached destination.</main></body></html>")
         elif path.startswith("/catalog/"):
@@ -817,6 +825,30 @@ def test_execute_js_driven_writes_promotes_get_method_handler_writes(tmp_path: P
     # A real non-GET write is NOT a "candidate" (it is a genuine promotable write handled by the
     # existing path), so the flag does not change its classification.
     assert on._is_candidate_js_write(_descriptor(method="POST")) is False
+
+
+def test_follow_client_navigation_follows_timer_redirect(fixture_url: str, tmp_path: Path) -> None:
+    """A page whose only behaviour is a `setTimeout`-driven navigation (no actionable control but the site
+    chrome) is reached and its destination recorded as a client-navigation transition only when
+    `follow_client_navigation` is on. Off (default), Agent 1 does not chase it (no such transition)."""
+    root = Path(__file__).resolve().parents[1]
+
+    def run(flag: bool):
+        config = RunConfig(
+            start_url=f"{fixture_url}timer-redirect", output_dir=tmp_path / f"fcn{int(flag)}",
+            follow_client_navigation=flag, follow_navigation_timeout_ms=2500,
+            exploration_mode="persistent", robust_readiness=True, readiness_any_enabled=True,
+            max_seconds=20, max_transitions=8, max_browser_actions=80,
+        )
+        art = Explorer(config, root).run()
+        reached = any(o.url.endswith("/redirected") for o in art.observations)
+        followed = any(getattr(t.action, "provenance", "") == "client_navigation" for t in art.transitions)
+        return reached, followed
+
+    on_reached, on_followed = run(True)
+    _off_reached, off_followed = run(False)
+    assert on_reached and on_followed, "follow_client_navigation should reach and record the timer redirect"
+    assert not off_followed, "default must not record a followed client navigation"
 
 
 def test_scope_router_allows_blob_url_scripts(fixture_url: str, tmp_path: Path) -> None:

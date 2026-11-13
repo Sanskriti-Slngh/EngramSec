@@ -2762,6 +2762,10 @@ class Explorer:
             local_burst = 0
             self._record_observation(live, [])
             self._enqueue(live, [])
+            if self.config.follow_client_navigation:
+                followed = self._follow_client_navigation(session, live, live_path)
+                if followed is not None:
+                    live, live_path = followed
             while self.frontier:
                 if self._elapsed() >= self._exploration_deadline():
                     break
@@ -2789,16 +2793,27 @@ class Explorer:
                     if (candidate.expected_source_group == live.group_signature
                             and session.find_current(live, candidate.action) is not None):
                         local_index = selected_index
-                elif local_burst < 8:
-                    local_index = next(
-                        (
+                else:
+                    burst_cap = (self.config.local_control_sweep_max
+                                 if self.config.exhaustive_local_controls else 8)
+                    if local_burst < burst_cap:
+                        local_candidates = [
                             index
                             for index, candidate in enumerate(self.frontier)
                             if candidate.expected_source_group == live.group_signature
                             and session.find_current(live, candidate.action) is not None
-                        ),
-                        None,
-                    )
+                        ]
+                        if self.config.exhaustive_local_controls and local_candidates:
+                            # Exercise the current page's OWN controls before paying restoration for global
+                            # breadth; prefer a local control that reaches a novel route (a page's effect-
+                            # producing control) so the standing form/write deprioritization cannot strand it.
+                            seen = {route_pattern(o.url).split("?")[0] for o in self.artifact.observations}
+                            novel = [i for i in local_candidates
+                                     if route_pattern(self.frontier[i].action.target or "").split("?")[0]
+                                     not in seen]
+                            local_index = novel[0] if novel else local_candidates[0]
+                        elif local_candidates:
+                            local_index = local_candidates[0]
                 chosen_index = selected_index if selected_index is not None else (local_index if local_index is not None else 0)
                 local = local_index is not None
                 if self.hybrid is not None and planner is None:
@@ -2841,7 +2856,94 @@ class Explorer:
                     live_path = list(
                         self.artifact.return_paths.get(key, observed_path)
                     )
+                    if self.config.follow_client_navigation:
+                        followed = self._follow_client_navigation(session, live, live_path)
+                        if followed is not None:
+                            live, live_path = followed
                 self.save_checkpoint()
+
+    def _follow_client_navigation(
+        self, session: BrowserSession, live: Observation, live_path: list[ActionDescriptor]
+    ) -> tuple[Observation, list[ActionDescriptor]] | None:
+        """Opt-in: follow a PENDING client-side navigation from a page whose only behavior is to navigate
+        itself -- a `<meta http-equiv=refresh>`, a timer that sets `location`, `window.location.replace`,
+        or hash/pushState routing. Records the hop as an ordinary same-origin navigation transition (so the
+        map shows it); never leaves the configured origin and issues no write. Only a page that looks
+        terminal (a scheduled refresh, or no enabled actionable control) pays the bounded URL poll."""
+        page = session.page
+        if page is None:
+            return None
+        before = page.url
+        try:
+            has_refresh = bool(page.evaluate(
+                "() => { const m=document.querySelector('meta[http-equiv=\"refresh\" i]');"
+                " return !!(m && /url=/i.test(m.getAttribute('content')||'')); }"))
+        except PlaywrightError:
+            has_refresh = False
+        def _is_global(c: Any) -> bool:
+            return bool(re.match(r"^(nav|header|footer|aside)(?::|$)", c.component, re.I)
+                        or ":navigation" in c.component.lower())
+        # A page whose only controls are the site chrome (nav/header/footer/breadcrumb) is terminal for our
+        # purposes: its distinctive behaviour is the pending navigation, so count only NON-global controls.
+        actionable = sum(
+            1 for c in live.controls
+            if c.safe and c.interaction not in {"scroll_viewport", "scroll_container", "hover", "focus"}
+            and not _is_global(c)
+        )
+        if not has_refresh and actionable > 0:
+            return None                      # an ordinary page: do not pay the speculative poll
+        cap = self.config.follow_navigation_timeout_ms if has_refresh \
+            else min(self.config.follow_navigation_timeout_ms, 1800)
+        waited, step, changed = 0, 150, False
+        while waited < cap:
+            try:
+                page.wait_for_timeout(step)
+            except PlaywrightError:
+                break
+            waited += step
+            if page.url != before:
+                changed = True
+                break
+        if not changed:
+            return None
+        try:
+            page.wait_for_load_state("domcontentloaded", timeout=self.config.action_timeout_ms)
+        except PlaywrightTimeoutError:
+            pass
+        dest = page.url
+        if not allowed_origin(self.config.start_url, dest, self.config.origin_aliases):
+            return None
+        network = session.network.drain() if session.network else []
+        try:
+            result = session.observe(self._next_sequence())
+        except PlaywrightError:
+            return None
+        action = ActionDescriptor(
+            control_id="nav_follow", kind="navigate", label="(client navigation)", role="navigation",
+            css_path="", target=dest, method="GET",
+            signature="client_nav:" + route_pattern(dest).split("?")[0],
+            interaction="navigate", provenance="client_navigation",
+        )
+        workflow_path = list(live_path) + [action]
+        self._record_observation(result, workflow_path)
+        transition = Transition(
+            id="tr_" + digest([self.run_id, live.id, "nav_follow", result.id], 20),
+            source_observation_id=live.id,
+            source_state_signature=live.state_signature,
+            source_group_signature=live.group_signature,
+            action=action, workflow_path=workflow_path,
+            result_observation_id=result.id,
+            result_state_signature=result.state_signature,
+            result_group_signature=result.group_signature,
+            status=EvidenceStatus.OBSERVED, network=network,
+            behavior=classify_behavior(live, action, result, network),
+            started_at=utc_now(), ended_at=utc_now(), run_id=self.run_id,
+        )
+        self.artifact.transitions.append(transition)
+        self.artifact.metrics.transitions_observed += 1
+        self._enqueue(result, workflow_path)
+        key = result.behavior_signature or result.group_signature
+        return result, list(self.artifact.return_paths.get(key, workflow_path))
 
     def _attempt_frontier(
         self,

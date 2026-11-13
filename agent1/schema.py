@@ -166,6 +166,28 @@ class RunConfig(BaseModel):
     # a "Delete all" button is never promoted. This is what lets create/update-style JS writes, and
     # interactive controls generally (cf. ZAP Crawlground), actually get triggered.
     execute_js_driven_writes: bool = False
+    # Opt-in (default off -> frozen baseline). Some controls do not reach their effect synchronously: the
+    # landed page navigates itself after a delay or through client-side routing -- `<meta http-equiv=
+    # refresh>`, a `setTimeout`/`requestAnimationFrame` that sets `location`, `window.location.replace`,
+    # `history.pushState/replaceState` + a hash change. A crawler that observes immediately and moves on
+    # never reaches the destination (cf. ZAP Crawlground's `navigation` tests). With this flag, after an
+    # action settles, Agent 1 looks for a PENDING client navigation and follows it: it reads a meta-refresh
+    # target, and briefly polls for a same-origin URL change, bounded by `follow_navigation_timeout_ms`.
+    # A followed navigation is recorded as an ordinary navigation transition (so the map shows it); it never
+    # leaves the configured origin and issues no write. Only pages that look terminal (a scheduled refresh,
+    # or no actionable control after readiness) pay the poll, so an ordinary page is not slowed.
+    follow_client_navigation: bool = False
+    follow_navigation_timeout_ms: int = Field(default=2500, ge=0, le=15_000)
+    # Opt-in (default off -> frozen baseline). In a breadth-first crawl a leaf page's own control (its one
+    # button/form/link that produces the page's effect) competes with the whole frontier and is often left
+    # unexercised before the budget is spent -- the page is mapped but its functionality is not. With this
+    # flag the persistent loop, on each newly reached state, exercises that state's OWN safe, novel local
+    # controls first (raising the local burst and NOT applying the standing write/form deprioritization to a
+    # control that is reachable right here), before spending expensive restoration on global breadth. Bounded
+    # by `local_control_sweep_max` per state; writes still pass the write policy, destructive routes are
+    # still excluded, and nothing changes which controls are discovered -- only the order they are driven.
+    exhaustive_local_controls: bool = False
+    local_control_sweep_max: int = Field(default=16, ge=1, le=200)
     # Opt-in Stage-2 restoration saver (defaults off -> frozen baseline). When Agent 1 has reached a
     # verified, plain-GET, non-destructive parent state with several DISTINCT (novel-route) children still
     # queued, execute a bounded batch of them without independently restoring the parent per child: each

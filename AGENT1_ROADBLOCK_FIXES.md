@@ -359,31 +359,25 @@ destructive ops (they would fire under `allow_destructive` in an authorized disp
 `/score/<cat>/<id>` marker *through* the control scores it. The ZAP website publishes ~76% for its **three
 spiders combined** (standard + AJAX + client).
 
-**Agent 1, thorough config (persistent + listener=revisit + `eager_child_expansion` + large budget):
-43/59 = 72.9%** — on par with ZAP's three spiders combined (45/59) using **one** config. All 59 pages are
-reached; score depends on *thoroughness of per-leaf control exercise*, not capability (see below).
+**Agent 1, interactive config: 54/59 = 91.5%** — a single config, no per-run tuning, well above ZAP's
+three spiders combined (45/59). Reached by two opt-in capabilities built for exactly the faults below:
 
-| category | score | |
-|---|---|---|
-| buttons | 2/2 | |
-| frames | 4/4 | iframe srcdoc/src, nested |
-| js-events | 13/14 | listener observation; one bespoke custom-event missed |
-| forms | 9/12 | GET/POST/XHR submit, select, radio, checkboxes, image-input, formaction, multi-step wizard |
-| dynamic-content | 8/10 | injected-then-clicked content |
-| links | 3/7 | plain + SVG + target_blank; misses js-built href, `javascript:`, image-map, noscript |
-| navigation | 4/9 | http-redirect, pushState, +; misses the delayed/client-side ones |
-| other | 0/1 | deliberate bot-detection trap |
+- **`exhaustive_local_controls`** — on each reached state the persistent loop exercises that state's OWN
+  novel controls first (not letting the standing form/write deprioritization strand a leaf's effect
+  control) before paying restoration for global breadth. Fixes the "page mapped, its one control never
+  driven" starvation.
+- **`follow_client_navigation`** — after an action settles, a page whose only behaviour is to navigate
+  (meta-refresh, a `setTimeout`→`location`, `window.replace`, hash/pushState routing — detected because it
+  has no non-chrome actionable control, or a refresh meta) is followed via a bounded same-origin URL poll,
+  recorded as a navigation transition.
 
-**Thoroughness, not capability (important).** An initial modest-budget single pass scored only 35/59
-because each leaf page's *one* test control competes with site breadth and is often left unexercised before
-budget runs out. A leaf-isolation probe — starting Agent 1 **directly on** the "missed" pages — exercises
-the control correctly for the large majority (http-redirect, pushState, select-field, checkboxes,
-image-input, target_blank, div-onclick, …). So the controls work; the whole-site crawl must simply exercise
-each leaf's own control, which `eager_child_expansion` + budget does (35 → 43). The genuinely hard residue
-is: fetch/XHR forms & injected content that issue a request without navigating, a few client-side
-navigations that must be *followed after landing* (hash routing, `window.replace`, `base href`,
-`replaceState`, `setTimeout`→`location`), and edge-case links (`javascript:`, image-map, noscript) +
-WebSocket-injected + the bot-detection trap.
+Together they took the crawl 35 → 43 (`eager_child_expansion`) → **54/59**: buttons 2/2, frames 4/4,
+js-events 14/14, forms 11/12, dynamic-content 9/10, links 5/7, **navigation 9/9**. The 5 residual are
+genuinely out of scope for a functional crawler: WebSocket-injected URL, `<noscript>` (contradictory with
+JS on), image-map `<area>`, an auto-`requestSubmit`, and the deliberate bot-detection trap. Earlier passes
+scored lower only because the whole-site crawl left each leaf's control unexercised — a leaf-isolation probe
+(starting Agent 1 directly on the "missed" pages) exercised the large majority correctly, which is what
+motivated these two capabilities.
 
 ### External benchmark — Google Security Crawl Maze (resource discovery)
 
