@@ -1567,6 +1567,7 @@ class BrowserSession:
             input_refs.extend(refs)
             action_count += fills
         prior_pages = set(self.context.pages) if self.context else {self.page}
+        url_before_action = self.page.url
         if control.interaction == "navigate":
             if not control.target:
                 raise RuntimeError("navigation candidate has no observed target")
@@ -1625,6 +1626,20 @@ class BrowserSession:
                     self.last_popup_opened = True
                 else:
                     popup.close()
+        if (self.config.await_spa_route_change
+                and control.interaction not in {
+                    "navigate", "scroll_viewport", "scroll_container", "hover", "focus"}
+                and not self.last_popup_opened):
+            # A client-side (history-mode SPA) route change fires no load event, so the snapshot below
+            # would capture the pre-navigation page and record the click as a self-loop. Poll briefly for
+            # the URL to change; if it does, the readiness wait then settles the new route before the
+            # snapshot. A genuine in-page click just pays this bounded poll once.
+            waited, step = 0, 100
+            while waited < self.config.spa_route_settle_ms:
+                if self.page.url != url_before_action:
+                    break
+                self.page.wait_for_timeout(step)
+                waited += step
         try:
             self.page.wait_for_load_state("domcontentloaded", timeout=self.config.action_timeout_ms)
         except PlaywrightTimeoutError:

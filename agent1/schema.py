@@ -188,6 +188,15 @@ class RunConfig(BaseModel):
     # still excluded, and nothing changes which controls are discovered -- only the order they are driven.
     exhaustive_local_controls: bool = False
     local_control_sweep_max: int = Field(default=16, ge=1, le=200)
+    # Opt-in (default off -> frozen baseline). A history-mode SPA (Vue/React router) changes the route
+    # CLIENT-SIDE on a click: the URL becomes e.g. /index -> /login but no page-load event fires, so the
+    # post-click `wait_for_load_state("domcontentloaded")` returns immediately and the snapshot is taken
+    # before the new route renders -- the navigation is then recorded as a self-loop on the old page. With
+    # this flag, after a click-type action Agent 1 briefly polls for a same-page URL change (bounded by
+    # `spa_route_settle_ms`); if the route changed, the normal readiness wait then settles the new route
+    # before the snapshot. A genuine in-page click (no URL change) just pays the bounded poll once.
+    await_spa_route_change: bool = False
+    spa_route_settle_ms: int = Field(default=1500, ge=0, le=10_000)
     # Opt-in Stage-2 restoration saver (defaults off -> frozen baseline). When Agent 1 has reached a
     # verified, plain-GET, non-destructive parent state with several DISTINCT (novel-route) children still
     # queued, execute a bounded batch of them without independently restoring the parent per child: each

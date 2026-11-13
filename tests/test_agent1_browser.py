@@ -222,6 +222,21 @@ class FixtureHandler(BaseHTTPRequestHandler):
             )
         elif path == "/redirected":
             self._html("<html><title>Redirect destination</title><body><main>Reached destination.</main></body></html>")
+        elif path == "/spa-home":
+            # History-mode SPA: clicking the button changes the route CLIENT-SIDE (pushState) with no page
+            # load, then renders new content. await_spa_route_change must notice the URL change before the
+            # snapshot, otherwise this looks like a self-loop on /spa-home.
+            self._html(
+                "<html><title>SPA home</title><body><main><h1>SPA home</h1>"
+                "<button id='go'>Open detail</button><div id='view'></div></main>"
+                "<script>document.getElementById('go').addEventListener('click',function(){"
+                "setTimeout(function(){history.pushState({},'', '/spa-detail');"
+                "document.getElementById('view').innerHTML="
+                "'<a href=\"/spa-home\">Back</a><p>Detail view</p>';},1200);});</script></body></html>"
+            )
+        elif path == "/spa-detail":
+            self._html("<html><title>SPA detail</title><body><main><h1>Detail view</h1>"
+                       "<a href='/spa-home'>Back</a></main></body></html>")
         elif path.startswith("/catalog/"):
             item = path.rsplit("/", 1)[-1]
             self._html(
@@ -849,6 +864,26 @@ def test_follow_client_navigation_follows_timer_redirect(fixture_url: str, tmp_p
     _off_reached, off_followed = run(False)
     assert on_reached and on_followed, "follow_client_navigation should reach and record the timer redirect"
     assert not off_followed, "default must not record a followed client navigation"
+
+
+def test_await_spa_route_change_captures_client_side_route(fixture_url: str, tmp_path: Path) -> None:
+    """A click that changes the route CLIENT-SIDE (async pushState, as a history-mode SPA router does)
+    fires no page-load event. With await_spa_route_change the snapshot waits for the URL to change so the
+    new route is mapped; without it (default) the snapshot is taken too early and the new route is missed."""
+    root = Path(__file__).resolve().parents[1]
+
+    def reached_detail(flag: bool) -> bool:
+        config = RunConfig(
+            start_url=f"{fixture_url}spa-home", output_dir=tmp_path / f"spa{int(flag)}",
+            await_spa_route_change=flag, spa_route_settle_ms=2500,
+            exploration_mode="persistent", robust_readiness=True, readiness_any_enabled=True,
+            max_seconds=25, max_transitions=10, max_browser_actions=80,
+        )
+        art = Explorer(config, root).run()
+        return any(o.url.endswith("/spa-detail") for o in art.observations)
+
+    assert reached_detail(True), "with await_spa_route_change the pushState route should be captured"
+    assert not reached_detail(False), "default snapshots too early and misses the async pushState route"
 
 
 def test_scope_router_allows_blob_url_scripts(fixture_url: str, tmp_path: Path) -> None:
