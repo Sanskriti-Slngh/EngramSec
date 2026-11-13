@@ -359,24 +359,31 @@ destructive ops (they would fire under `allow_destructive` in an authorized disp
 `/score/<cat>/<id>` marker *through* the control scores it. The ZAP website publishes ~76% for its **three
 spiders combined** (standard + AJAX + client).
 
-**Agent 1, single config: 35/59 = 59.3%.** All 59 pages were reached (server log), so remaining misses are
-control-exercise gaps, not coverage:
+**Agent 1, thorough config (persistent + listener=revisit + `eager_child_expansion` + large budget):
+43/59 = 72.9%** — on par with ZAP's three spiders combined (45/59) using **one** config. All 59 pages are
+reached; score depends on *thoroughness of per-leaf control exercise*, not capability (see below).
 
 | category | score | |
 |---|---|---|
+| buttons | 2/2 | |
 | frames | 4/4 | iframe srcdoc/src, nested |
 | js-events | 13/14 | listener observation; one bespoke custom-event missed |
+| forms | 9/12 | GET/POST/XHR submit, select, radio, checkboxes, image-input, formaction, multi-step wizard |
 | dynamic-content | 8/10 | injected-then-clicked content |
-| forms | 6/12 | GET/POST submit, XHR POST, radio, formaction, **multi-step wizard** |
-| links | 2/7 | plain + SVG anchors; misses js-built href, `javascript:`, image-map, `target=_blank`, noscript |
-| buttons | 1/2 | |
-| navigation | 1/9 | **next frontier** — client-side/delayed navigation |
+| links | 3/7 | plain + SVG + target_blank; misses js-built href, `javascript:`, image-map, noscript |
+| navigation | 4/9 | http-redirect, pushState, +; misses the delayed/client-side ones |
 | other | 0/1 | deliberate bot-detection trap |
 
-The dominant remaining gap is **navigation** — meta-refresh, `setTimeout`→`location`, `history.pushState`/
-`replaceState`, hash routing, `window.replace`, an HTTP-redirect link, `base href`: the crawler must
-*follow a client-side or delayed navigation after landing*, a distinct capability from exercising a
-control. Clean next layer.
+**Thoroughness, not capability (important).** An initial modest-budget single pass scored only 35/59
+because each leaf page's *one* test control competes with site breadth and is often left unexercised before
+budget runs out. A leaf-isolation probe — starting Agent 1 **directly on** the "missed" pages — exercises
+the control correctly for the large majority (http-redirect, pushState, select-field, checkboxes,
+image-input, target_blank, div-onclick, …). So the controls work; the whole-site crawl must simply exercise
+each leaf's own control, which `eager_child_expansion` + budget does (35 → 43). The genuinely hard residue
+is: fetch/XHR forms & injected content that issue a request without navigating, a few client-side
+navigations that must be *followed after landing* (hash routing, `window.replace`, `base href`,
+`replaceState`, `setTimeout`→`location`), and edge-case links (`javascript:`, image-map, noscript) +
+WebSocket-injected + the bot-detection trap.
 
 ### External benchmark — Google Security Crawl Maze (resource discovery)
 
