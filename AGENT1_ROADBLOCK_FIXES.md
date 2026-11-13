@@ -391,11 +391,15 @@ A deep directory tree of 84 (+7 framework-SPA, Docker-only) pages, each linking 
 different mechanism (href, src, srcset, CSS, meta, headers, JS). Scores *resource extraction* — a different
 axis from Agent 1's functional focus; the resource spider is the relevant subsystem.
 
-**Agent 1 (persistent + resource spider, raised fetch budgets, 300s): 58/84 = 69.0%** of the Flask-served
-cases (css 1/1, headers 3/4, html 38/57, javascript 14/20, misc 2/2). Extraction itself is solid — a
-single-page probe confirms `<a href>`, `<img src/srcset>`, `<link href>`, `<meta>` are all extracted when a
-page is reached. Misses are (a) deep pages not reached within budget, (b) rare/legacy attributes the spider
-does not parse (`applet archive/codebase`, `object codebase`, `img dynsrc/lowsrc/longdesc`, `isindex`,
-`a ping`, `background`), (c) resources referenced only inside JavaScript strings, and (d) interactive-write
-cases (`js-post`, `js-delete`) that the *read-only* discovery config intentionally blocks. The 7
-framework-SPA cases need the Docker bundle build and were not included.
+**Agent 1 on the full Docker image: 62/91 = 68.1%** (css 1/1, headers 3/4, html 37/57, javascript 14/20,
+misc 2/2, **framework-SPA 5/7**). The Docker build bundles the Angular/Polymer/React single-page apps, and
+Agent 1's SPA config (persistent + listener + hydration wait) renders and exercises them — recovering 5 of
+the 7 framework cases (Angular event-handler + router-outlet, Polymer event-handler + router, React
+route-path; misses `angularjs/ng-href`, `react/.../search`). On the Flask-only subset (no framework build)
+the same crawl scores **57–58/84 ≈ 69%**. Extraction itself is solid — a single-page probe confirms
+`<a href>`, `<img src/srcset>`, `<link href>`, `<meta>` are all extracted when a page is reached. The
+remaining misses are (a) deep pages not reached within budget, (b) rare/legacy attributes the spider does
+not parse (`applet archive/codebase`, `object codebase`, `img dynsrc/lowsrc/longdesc`, `isindex`, `a ping`,
+`background`), (c) resources referenced only inside JavaScript strings, and (d) interactive-write cases
+(`js-post`, `js-delete`) that the *read-only* discovery config intentionally blocks. **62/91 matches the
+prior 63/91 within one case — no regression.**
