@@ -101,6 +101,15 @@ def test_text_candidates_are_conservative_and_speculative():
     assert not any("and/or" in url or url.endswith("/2") or url.endswith("a/b") for url in urls)
 
 
+def test_text_candidates_handle_multi_segment_relative_paths():
+    # A multi-level ../ relative URL in free text was not matched at all (the token regex handled only one
+    # ../ segment); crawlers routinely find such strings. A token of only dots/slashes stays rejected.
+    found = refs("<p>loads ../../assets/js/app.bundle.js at runtime; also ./ and ../ alone.</p>")
+    urls = {url for url, _k, _c, _m in found}
+    assert BASE + "assets/js/app.bundle.js" in urls          # ../../ from /shelf/item.html -> /
+    assert not any(u.rstrip("/").endswith(("/.", "/..")) or u == BASE for u in urls)
+
+
 def test_script_extraction_beyond_sinks_keeps_methods_and_uncertainty():
     js = ('const base = "/media/"; const icon = base + "icons/star.svg"; // legacy: /v1/legacy.js\n'
           'var cfg = {endpoint: "https://127.0.0.1:9100/status.json"};\n'

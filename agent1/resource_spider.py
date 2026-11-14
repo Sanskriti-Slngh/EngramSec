@@ -81,8 +81,8 @@ def _normalized(raw: str, base: str, *, kind: str, source_type: str, source: str
 # Conservative URL-like token: absolute/protocol-relative URLs, or root/dot
 # relative paths. Path-like tokens must end in a file extension or "/" so that
 # ordinary prose ("and/or", "1/2") is not treated as a URL.
-_URL_TOKEN = re.compile(r"""(?<![\w@.:/-])((?:https?:)?//[A-Za-z0-9.-]+(?::\d+)?(?:/[^\s"'<>()\[\]{}`,;]*)?|\.{0,2}/[A-Za-z0-9_~%-][^\s"'<>()\[\]{}`,;]*)""")
-_PATH_SHAPE = re.compile(r"^(?:\.{0,2}/)(?:[A-Za-z0-9_~%.-]+/)*(?:[A-Za-z0-9_~%-][A-Za-z0-9_~%.-]*\.[A-Za-z0-9]{1,6}|[A-Za-z0-9_~%.-]*/)$")
+_URL_TOKEN = re.compile(r"""(?<![\w@.:/-])((?:https?:)?//[A-Za-z0-9.-]+(?::\d+)?(?:/[^\s"'<>()\[\]{}`,;]*)?|(?:\.{0,2}/)+[A-Za-z0-9_~%-][^\s"'<>()\[\]{}`,;]*)""")
+_PATH_SHAPE = re.compile(r"^(?:\.{0,2}/)+(?:[A-Za-z0-9_~%.-]+/)*(?:[A-Za-z0-9_~%-][A-Za-z0-9_~%.-]*\.[A-Za-z0-9]{1,6}|[A-Za-z0-9_~%.-]*/)$")
 MAX_SPECULATIVE_PER_SOURCE = 32
 
 
@@ -92,7 +92,8 @@ def _url_like(token: str) -> bool:
         return False
     if token.startswith(("http://", "https://", "//")):
         return True
-    return bool(_PATH_SHAPE.match(token)) and token not in {"./", "../", "/"}
+    # Reject tokens made only of dots and slashes (./, ../, /, ../../), keep real relative paths.
+    return bool(_PATH_SHAPE.match(token)) and not re.fullmatch(r"[./]+", token)
 
 
 def speculative_text_candidates(text: str, base: str, *, source_type: str, source: str) -> list[ResourceReference]:
