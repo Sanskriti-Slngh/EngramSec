@@ -99,3 +99,12 @@ agent1/experiments/perception_ablation/
 agent1/experiments/restoration_ab/
 agent1/experiments/recovery_transfer/
 agent1/experiments/model_scaling/
+
+# Legacy run-artifacts under experiment dirs are regenerable outputs, not source. Commit only the
+# aggregate/summary JSON and the whitelisted ground-truth graph_a.json archives (kept above / by tests).
+agent1/experiments/**/metrics.json
+agent1/experiments/**/graph_a.mmd
+agent1/experiments/**/report.md
+agent1/experiments/**/experiment_config.json
+agent1/experiments/**/*.txt
+agent1/experiments/**/*.log
