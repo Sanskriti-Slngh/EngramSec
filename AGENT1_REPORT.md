@@ -162,14 +162,26 @@ broad SSR coverage. `eager_child_expansion` cut restoration wall-time ~20% (e.g.
 
 ### 6.3 External crawler benchmarks (third-party, ground-truthed)
 - **Google Security Crawl Maze** (resource discovery; 84 `/test/` + 7 Docker-only framework SPAs):
-  **62/91 = 68.1%** on the full Docker image (recovers 5/7 framework-SPA cases via the SPA config);
-  **57–58/84 ≈ 69%** on the Flask-only subset. Misses = rare legacy attributes, JS-string-only references,
-  read-only-blocked `js-post`/`js-delete`, and deep-traversal budget.
-- **ZAP Crawlground** (59 interaction-gated controls): **54/59 = 91.5%** with a single interactive config —
-  above ZAP's three spiders combined (45/59). `navigation` 1→9/9, `js-events` 14/14, `forms` 11/12. The 5
-  residual are out of scope for a functional crawler (WebSocket-injected URL, `<noscript>`, image-map
-  `<area>`, auto-`requestSubmit`, a bot-detection trap). Crawlground's destructive `/reset` is blocked, so
-  Agent 1 never wipes scores.
+  **80/91 = 87.9%** on the full Docker image with thorough resource discovery (`typed_resource_spider` +
+  `max_resource_depth=8` + `html_extraction="standards"`). The extractor already handled the legacy
+  attributes, the DOCTYPE `SYSTEM` URL, conditional comments, HTML imports, CSP report-uris and free-text
+  URL strings; the earlier 62/91 was the benchmark harness running the spider shallow (`depth=3`) and in
+  `baseline` extraction. The residual 11 are not simple capability gaps: 3 are maze **scoring artifacts**
+  (it expects non-RFC relative resolution), 1 is a data-URI SVG with percent-encoded `xlink:href`, 1 is the
+  read-only-blocked `js-delete` (Agent 1 never fires DELETE — principled), 2 are execution-gated multi-step
+  JS, and 4 are framework-SPA rendering. A genuine scanner bug surfaced and was fixed: the free-text URL
+  scanner matched only a single `../` segment, so `../../x` strings were invisible.
+- **ZAP Crawlground** (59 interaction-gated controls): markers register only when a control is driven with a
+  request that passes the test's `scoreWhen` guard (correct form values, method and sequence), so the score
+  is **high-variance** across runs — the agent fully explores it (200+ states) but which value/sequence-
+  gated markers register varies. A real efficiency regression was found and fixed here: `await_spa_route_
+  change` paid the full 1500ms route-settle on every non-navigating click, and Crawlground's controls fetch
+  and stay put — this burned ~70% of the exploration budget (132 vs 224 transitions in the same wall-clock).
+  The poll now breaks shortly after the click's network response (keeping the SPA-capture and fetch-then-
+  navigate patterns). Best observed single-config score is 54/59 (`navigation` 9/9, `js-events` 14/14,
+  `forms` 11/12); the 5 structural residual are out of scope for a functional crawler (WebSocket-injected
+  URL, `<noscript>` with JS on, image-map `<area>`, auto-`requestSubmit`, a bot-detection trap — the last
+  deliberately not defeated). Crawlground's destructive `/reset` is blocked, so Agent 1 never wipes scores.
 
 ### 6.4 Track B — real apps (inventories only)
 prestashop, comfyui, siyucms, jetlinks, white-jotter: Agent 1 *runs* against real stacks within scope and
