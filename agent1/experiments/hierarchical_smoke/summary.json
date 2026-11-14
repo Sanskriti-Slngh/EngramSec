@@ -1,0 +1,197 @@
+[
+  {
+    "advertised_unexecuted": 56,
+    "app": "crawlmaze",
+    "browser_actions": 46,
+    "discovery_root_reloads": 10,
+    "distinct_validated_feature_workflows": 9,
+    "duplicate_controls_suppressed": 0,
+    "dynamic_interaction_actions": 0,
+    "elapsed_seconds": 20.851,
+    "external_discovery_records": 344,
+    "external_discovery_rejected": 0,
+    "external_elapsed_seconds": 2.043,
+    "external_request_upper_bound": 344,
+    "frame_observations": 0,
+    "functional_unresolved": 1,
+    "functional_validation_failures": 0,
+    "functional_workflows_verified": 0,
+    "graph_connections_complete": 969,
+    "graph_connections_missing_evidence": 0,
+    "graph_connections_total": 969,
+    "grouped_states": 11,
+    "incorrect_state_merges": 0,
+    "ineffective_transitions": 0,
+    "interactive_readiness_wait_ms": 0,
+    "live_state_reuses": 2,
+    "live_state_stale": 0,
+    "model_calls": 0,
+    "model_failures": 0,
+    "model_input_tokens": 0,
+    "model_output_tokens": 0,
+    "monetary_cost_usd": 0.0,
+    "navigation_categories_replay_validated": 9,
+    "navigation_network_events_recorded": 19,
+    "navigation_requests": 19,
+    "network_events_recorded": 50,
+    "observed_http_requests": 50,
+    "passive_readiness_wait_ms": 14701,
+    "popup_navigations": 0,
+    "progress": [
+      {
+        "browser_actions": 3,
+        "elapsed_seconds": 2.101,
+        "transitions_observed": 1,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 5,
+        "elapsed_seconds": 3.018,
+        "transitions_observed": 2,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 7,
+        "elapsed_seconds": 3.923,
+        "transitions_observed": 3,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 9,
+        "elapsed_seconds": 4.828,
+        "transitions_observed": 4,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 11,
+        "elapsed_seconds": 5.62,
+        "transitions_observed": 5,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 12,
+        "elapsed_seconds": 6.068,
+        "transitions_observed": 6,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 15,
+        "elapsed_seconds": 7.321,
+        "transitions_observed": 7,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 18,
+        "elapsed_seconds": 8.595,
+        "transitions_observed": 8,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 21,
+        "elapsed_seconds": 9.873,
+        "transitions_observed": 9,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 24,
+        "elapsed_seconds": 11.125,
+        "transitions_observed": 10,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 26,
+        "elapsed_seconds": 12.011,
+        "transitions_observed": 10,
+        "validated_workflows": 1
+      },
+      {
+        "browser_actions": 28,
+        "elapsed_seconds": 12.86,
+        "transitions_observed": 10,
+        "validated_workflows": 2
+      },
+      {
+        "browser_actions": 30,
+        "elapsed_seconds": 13.754,
+        "transitions_observed": 10,
+        "validated_workflows": 3
+      },
+      {
+        "browser_actions": 32,
+        "elapsed_seconds": 14.596,
+        "transitions_observed": 10,
+        "validated_workflows": 4
+      },
+      {
+        "browser_actions": 34,
+        "elapsed_seconds": 15.446,
+        "transitions_observed": 10,
+        "validated_workflows": 5
+      },
+      {
+        "browser_actions": 37,
+        "elapsed_seconds": 16.734,
+        "transitions_observed": 10,
+        "validated_workflows": 6
+      },
+      {
+        "browser_actions": 40,
+        "elapsed_seconds": 18.136,
+        "transitions_observed": 10,
+        "validated_workflows": 7
+      },
+      {
+        "browser_actions": 43,
+        "elapsed_seconds": 19.482,
+        "transitions_observed": 10,
+        "validated_workflows": 8
+      },
+      {
+        "browser_actions": 46,
+        "elapsed_seconds": 20.79,
+        "transitions_observed": 10,
+        "validated_workflows": 9
+      },
+      {
+        "browser_actions": 46,
+        "elapsed_seconds": 20.851,
+        "transitions_observed": 10,
+        "validated_workflows": 9
+      }
+    ],
+    "raw_states": 11,
+    "redundant_states": 0,
+    "replay_attempts": 9,
+    "replay_failures": 0,
+    "replay_navigation_successes": 9,
+    "replay_success_denominator": 9,
+    "replay_success_numerator": 9,
+    "replay_untested_paths": 1,
+    "resource_fetch_budget_exhausted": 0,
+    "resource_fetch_class_budget_exhausted": 125,
+    "resource_fetch_failures": 2,
+    "resource_fetches_attempted": 90,
+    "resource_fetches_succeeded": 88,
+    "resource_new_references": 92,
+    "resource_references_discovered": 227,
+    "resource_references_excluded": 12,
+    "resource_references_extracted": 155,
+    "resource_references_queued": 83,
+    "resource_responses_with_body": 88,
+    "resource_unresolved_candidates": 0,
+    "restoration_actions": 4,
+    "root_reloads": 19,
+    "run_id": "agent1-20261030T202530Z",
+    "server_request_counts": {},
+    "startup_readiness_failures": 0,
+    "static_navigation_actions": 10,
+    "total_http_budget_blocked": 0,
+    "total_http_budget_used": 482,
+    "transitions_attempted": 10,
+    "transitions_failed": 0,
+    "transitions_observed": 10,
+    "unsupported_connections": 0,
+    "variant": "adaptive_readiness_combined",
+    "verification_root_reloads": 9
+  }
+]

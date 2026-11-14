@@ -1,0 +1,1081 @@
+{
+  "advertised_unexecuted": [
+    {
+      "control": {
+        "css_path": "#success",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_65067832667774f549",
+        "kind": "button",
+        "label": "C verify success",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "7f4ef5f590643bf2",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_17311734aedb9b6daf94_ctl_65067832667774f549",
+      "source_group_signature": "6677b05c6373c767",
+      "source_observation_id": "obs_17311734aedb9b6daf94",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#failure",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_439a721b051c839f34",
+        "kind": "button",
+        "label": "B show validation failure",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "37a252e7c9689fff",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_17311734aedb9b6daf94_ctl_439a721b051c839f34",
+      "source_group_signature": "6677b05c6373c767",
+      "source_observation_id": "obs_17311734aedb9b6daf94",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#untested",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_4e5c4ba68c70ad49a7",
+        "kind": "button",
+        "label": "A leave untested",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "4d24c7853e214e45",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_17311734aedb9b6daf94_ctl_4e5c4ba68c70ad49a7",
+      "source_group_signature": "6677b05c6373c767",
+      "source_observation_id": "obs_17311734aedb9b6daf94",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#failure",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_439a721b051c839f34",
+        "kind": "button",
+        "label": "B show validation failure",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "37a252e7c9689fff",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_f69df993421506fc9723_ctl_439a721b051c839f34",
+      "source_group_signature": "6677b05c6373c767",
+      "source_observation_id": "obs_f69df993421506fc9723",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#untested",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_4e5c4ba68c70ad49a7",
+        "kind": "button",
+        "label": "A leave untested",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "4d24c7853e214e45",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_f69df993421506fc9723_ctl_4e5c4ba68c70ad49a7",
+      "source_group_signature": "6677b05c6373c767",
+      "source_observation_id": "obs_f69df993421506fc9723",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#success",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_65067832667774f549",
+        "kind": "button",
+        "label": "C verify success",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "7f4ef5f590643bf2",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_47c26a87bec171efe233_ctl_65067832667774f549",
+      "source_group_signature": "6f91a5706cbac5a2",
+      "source_observation_id": "obs_47c26a87bec171efe233",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#failure",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_439a721b051c839f34",
+        "kind": "button",
+        "label": "B show validation failure",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "37a252e7c9689fff",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_47c26a87bec171efe233_ctl_439a721b051c839f34",
+      "source_group_signature": "6f91a5706cbac5a2",
+      "source_observation_id": "obs_47c26a87bec171efe233",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#untested",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_4e5c4ba68c70ad49a7",
+        "kind": "button",
+        "label": "A leave untested",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "4d24c7853e214e45",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_47c26a87bec171efe233_ctl_4e5c4ba68c70ad49a7",
+      "source_group_signature": "6f91a5706cbac5a2",
+      "source_observation_id": "obs_47c26a87bec171efe233",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#success",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_65067832667774f549",
+        "kind": "button",
+        "label": "C verify success",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "7f4ef5f590643bf2",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_b4294b7608d01460396a_ctl_65067832667774f549",
+      "source_group_signature": "6677b05c6373c767",
+      "source_observation_id": "obs_b4294b7608d01460396a",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#untested",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_4e5c4ba68c70ad49a7",
+        "kind": "button",
+        "label": "A leave untested",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "4d24c7853e214e45",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_b4294b7608d01460396a_ctl_4e5c4ba68c70ad49a7",
+      "source_group_signature": "6677b05c6373c767",
+      "source_observation_id": "obs_b4294b7608d01460396a",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#success",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_65067832667774f549",
+        "kind": "button",
+        "label": "C verify success",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "7f4ef5f590643bf2",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_5e438e04ec5e0c10c82b_ctl_65067832667774f549",
+      "source_group_signature": "6600b821f97fd630",
+      "source_observation_id": "obs_5e438e04ec5e0c10c82b",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#failure",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_439a721b051c839f34",
+        "kind": "button",
+        "label": "B show validation failure",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "37a252e7c9689fff",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_5e438e04ec5e0c10c82b_ctl_439a721b051c839f34",
+      "source_group_signature": "6600b821f97fd630",
+      "source_observation_id": "obs_5e438e04ec5e0c10c82b",
+      "status": "advertised",
+      "test_status": "not_tested"
+    },
+    {
+      "control": {
+        "css_path": "#untested",
+        "fields": [],
+        "form_index": null,
+        "id": "ctl_4e5c4ba68c70ad49a7",
+        "kind": "button",
+        "label": "A leave untested",
+        "method": null,
+        "role": "button",
+        "safe": true,
+        "signature": "4d24c7853e214e45",
+        "skip_reason": null,
+        "target": null
+      },
+      "id": "advertised_obs_5e438e04ec5e0c10c82b_ctl_4e5c4ba68c70ad49a7",
+      "source_group_signature": "6600b821f97fd630",
+      "source_observation_id": "obs_5e438e04ec5e0c10c82b",
+      "status": "advertised",
+      "test_status": "not_tested"
+    }
+  ],
+  "connection_evidence": [
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_17311734aedb9b6daf94"
+      ],
+      "id": "conn_f91bfd963dd1bd2e",
+      "missing": [],
+      "subject_id": "ctl_65067832667774f549"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_17311734aedb9b6daf94"
+      ],
+      "id": "conn_96a43fa2b723b625",
+      "missing": [],
+      "subject_id": "ctl_439a721b051c839f34"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_17311734aedb9b6daf94"
+      ],
+      "id": "conn_10269a984350363b",
+      "missing": [],
+      "subject_id": "ctl_4e5c4ba68c70ad49a7"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_f69df993421506fc9723"
+      ],
+      "id": "conn_368d07533a70d9bb",
+      "missing": [],
+      "subject_id": "ctl_65067832667774f549"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_f69df993421506fc9723"
+      ],
+      "id": "conn_41a16df0a9ee5a91",
+      "missing": [],
+      "subject_id": "ctl_439a721b051c839f34"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_f69df993421506fc9723"
+      ],
+      "id": "conn_fbad0a8dfd7ea083",
+      "missing": [],
+      "subject_id": "ctl_4e5c4ba68c70ad49a7"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_47c26a87bec171efe233"
+      ],
+      "id": "conn_a87e6365d9580a7f",
+      "missing": [],
+      "subject_id": "ctl_65067832667774f549"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_47c26a87bec171efe233"
+      ],
+      "id": "conn_1a98a958fc2b98c0",
+      "missing": [],
+      "subject_id": "ctl_439a721b051c839f34"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_47c26a87bec171efe233"
+      ],
+      "id": "conn_b86ceb9c256588b3",
+      "missing": [],
+      "subject_id": "ctl_4e5c4ba68c70ad49a7"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_b4294b7608d01460396a"
+      ],
+      "id": "conn_5ec76d46793738ad",
+      "missing": [],
+      "subject_id": "ctl_65067832667774f549"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_b4294b7608d01460396a"
+      ],
+      "id": "conn_61b69051fab96a46",
+      "missing": [],
+      "subject_id": "ctl_439a721b051c839f34"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_b4294b7608d01460396a"
+      ],
+      "id": "conn_f17b1251d8567878",
+      "missing": [],
+      "subject_id": "ctl_4e5c4ba68c70ad49a7"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_5e438e04ec5e0c10c82b"
+      ],
+      "id": "conn_b927dc8b8ee7fc04",
+      "missing": [],
+      "subject_id": "ctl_65067832667774f549"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_5e438e04ec5e0c10c82b"
+      ],
+      "id": "conn_67e60393f338af40",
+      "missing": [],
+      "subject_id": "ctl_439a721b051c839f34"
+    },
+    {
+      "claim_type": "advertised_control",
+      "complete": true,
+      "evidence_ids": [
+        "obs_5e438e04ec5e0c10c82b"
+      ],
+      "id": "conn_6e4a1efd594cfd68",
+      "missing": [],
+      "subject_id": "ctl_4e5c4ba68c70ad49a7"
+    },
+    {
+      "claim_type": "source_action",
+      "complete": true,
+      "evidence_ids": [
+        "obs_f69df993421506fc9723"
+      ],
+      "id": "conn_58d123c352e51f47",
+      "missing": [],
+      "subject_id": "tr_c8d71c6b067061171a55"
+    },
+    {
+      "claim_type": "action_result",
+      "complete": true,
+      "evidence_ids": [
+        "obs_47c26a87bec171efe233"
+      ],
+      "id": "conn_946d423d9b5ed25c",
+      "missing": [],
+      "subject_id": "tr_c8d71c6b067061171a55"
+    },
+    {
+      "claim_type": "source_action",
+      "complete": true,
+      "evidence_ids": [
+        "obs_b4294b7608d01460396a"
+      ],
+      "id": "conn_d91db99fbe3228b0",
+      "missing": [],
+      "subject_id": "tr_c5f86acbdbcaedad00e9"
+    },
+    {
+      "claim_type": "action_result",
+      "complete": true,
+      "evidence_ids": [
+        "obs_5e438e04ec5e0c10c82b"
+      ],
+      "id": "conn_8e8f0d59895f9844",
+      "missing": [],
+      "subject_id": "tr_c5f86acbdbcaedad00e9"
+    },
+    {
+      "claim_type": "replay",
+      "complete": true,
+      "evidence_ids": [
+        "tr_c5f86acbdbcaedad00e9",
+        "obs_4c13f6b3218f85d38d65"
+      ],
+      "id": "conn_c0f29de4bb325db3",
+      "missing": [],
+      "subject_id": "replay_d17bfbe3558856cff9fe"
+    },
+    {
+      "claim_type": "replay",
+      "complete": true,
+      "evidence_ids": [
+        "tr_c8d71c6b067061171a55",
+        "obs_00a49694a4d7f07cda8f"
+      ],
+      "id": "conn_1d1cbe8894169f8a",
+      "missing": [],
+      "subject_id": "replay_73a8ee0dbe6d736268a2"
+    }
+  ],
+  "edges": [
+    {
+      "evidence_transition_id": "tr_c8d71c6b067061171a55",
+      "source": "state_6677b05c6373c767",
+      "status": "replay_validated",
+      "target": "action_tr_c8d71c6b067061171a55",
+      "type": "offers_or_executes"
+    },
+    {
+      "evidence_transition_id": "tr_c8d71c6b067061171a55",
+      "source": "action_tr_c8d71c6b067061171a55",
+      "status": "replay_validated",
+      "target": "state_6f91a5706cbac5a2",
+      "type": "results_in"
+    },
+    {
+      "evidence_transition_id": "tr_c5f86acbdbcaedad00e9",
+      "source": "state_6677b05c6373c767",
+      "status": "replay_validated",
+      "target": "action_tr_c5f86acbdbcaedad00e9",
+      "type": "offers_or_executes"
+    },
+    {
+      "evidence_transition_id": "tr_c5f86acbdbcaedad00e9",
+      "source": "action_tr_c5f86acbdbcaedad00e9",
+      "status": "replay_validated",
+      "target": "state_6600b821f97fd630",
+      "type": "results_in"
+    },
+    {
+      "source": "state_6677b05c6373c767",
+      "source_observation_id": "obs_17311734aedb9b6daf94",
+      "status": "not_tested",
+      "target": "advertised_obs_17311734aedb9b6daf94_ctl_65067832667774f549",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6677b05c6373c767",
+      "source_observation_id": "obs_17311734aedb9b6daf94",
+      "status": "not_tested",
+      "target": "advertised_obs_17311734aedb9b6daf94_ctl_439a721b051c839f34",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6677b05c6373c767",
+      "source_observation_id": "obs_17311734aedb9b6daf94",
+      "status": "not_tested",
+      "target": "advertised_obs_17311734aedb9b6daf94_ctl_4e5c4ba68c70ad49a7",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6677b05c6373c767",
+      "source_observation_id": "obs_f69df993421506fc9723",
+      "status": "not_tested",
+      "target": "advertised_obs_f69df993421506fc9723_ctl_439a721b051c839f34",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6677b05c6373c767",
+      "source_observation_id": "obs_f69df993421506fc9723",
+      "status": "not_tested",
+      "target": "advertised_obs_f69df993421506fc9723_ctl_4e5c4ba68c70ad49a7",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6f91a5706cbac5a2",
+      "source_observation_id": "obs_47c26a87bec171efe233",
+      "status": "not_tested",
+      "target": "advertised_obs_47c26a87bec171efe233_ctl_65067832667774f549",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6f91a5706cbac5a2",
+      "source_observation_id": "obs_47c26a87bec171efe233",
+      "status": "not_tested",
+      "target": "advertised_obs_47c26a87bec171efe233_ctl_439a721b051c839f34",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6f91a5706cbac5a2",
+      "source_observation_id": "obs_47c26a87bec171efe233",
+      "status": "not_tested",
+      "target": "advertised_obs_47c26a87bec171efe233_ctl_4e5c4ba68c70ad49a7",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6677b05c6373c767",
+      "source_observation_id": "obs_b4294b7608d01460396a",
+      "status": "not_tested",
+      "target": "advertised_obs_b4294b7608d01460396a_ctl_65067832667774f549",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6677b05c6373c767",
+      "source_observation_id": "obs_b4294b7608d01460396a",
+      "status": "not_tested",
+      "target": "advertised_obs_b4294b7608d01460396a_ctl_4e5c4ba68c70ad49a7",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6600b821f97fd630",
+      "source_observation_id": "obs_5e438e04ec5e0c10c82b",
+      "status": "not_tested",
+      "target": "advertised_obs_5e438e04ec5e0c10c82b_ctl_65067832667774f549",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6600b821f97fd630",
+      "source_observation_id": "obs_5e438e04ec5e0c10c82b",
+      "status": "not_tested",
+      "target": "advertised_obs_5e438e04ec5e0c10c82b_ctl_439a721b051c839f34",
+      "type": "offers_untested"
+    },
+    {
+      "source": "state_6600b821f97fd630",
+      "source_observation_id": "obs_5e438e04ec5e0c10c82b",
+      "status": "not_tested",
+      "target": "advertised_obs_5e438e04ec5e0c10c82b_ctl_4e5c4ba68c70ad49a7",
+      "type": "offers_untested"
+    },
+    {
+      "source": "feature_09e4b3368f3e49cc",
+      "status": "replay_validated",
+      "target": "state_6677b05c6373c767",
+      "type": "starts_at"
+    },
+    {
+      "source": "feature_09e4b3368f3e49cc",
+      "status": "replay_validated",
+      "target": "state_6f91a5706cbac5a2",
+      "type": "ends_at"
+    },
+    {
+      "source": "feature_60f20b42163cf955",
+      "status": "replay_validated",
+      "target": "state_6677b05c6373c767",
+      "type": "starts_at"
+    },
+    {
+      "source": "feature_60f20b42163cf955",
+      "status": "replay_validated",
+      "target": "state_6600b821f97fd630",
+      "type": "ends_at"
+    },
+    {
+      "evidence_transition_id": "tr_c8d71c6b067061171a55",
+      "replay_id": "replay_73a8ee0dbe6d736268a2",
+      "source": "workflow_df3e8e5e87f8e9122b",
+      "status": "functional_verified",
+      "target": "action_tr_c8d71c6b067061171a55",
+      "type": "validated_from_path_instance"
+    },
+    {
+      "evidence_transition_id": "tr_c5f86acbdbcaedad00e9",
+      "replay_id": "replay_d17bfbe3558856cff9fe",
+      "source": "workflow_c514a362c0b7eedf18",
+      "status": "validation_failure",
+      "target": "action_tr_c5f86acbdbcaedad00e9",
+      "type": "validated_from_path_instance"
+    }
+  ],
+  "metrics": {
+    "advertised_unexecuted": 13,
+    "browser_actions": 9,
+    "distinct_validated_feature_workflows": 2,
+    "elapsed_seconds": 3.883,
+    "functional_unresolved": 0,
+    "functional_validation_failures": 1,
+    "functional_workflows_verified": 1,
+    "graph_connections_complete": 21,
+    "graph_connections_missing_evidence": 0,
+    "graph_connections_total": 21,
+    "grouped_states": 3,
+    "incorrect_state_merges": 0,
+    "model_calls": 0,
+    "model_failures": 0,
+    "model_input_tokens": 0,
+    "model_output_tokens": 0,
+    "monetary_cost_usd": 0.0,
+    "navigation_categories_replay_validated": 2,
+    "navigation_requests": 5,
+    "network_events_recorded": 0,
+    "progress": [
+      {
+        "browser_actions": 3,
+        "elapsed_seconds": 1.463,
+        "transitions_observed": 1,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 5,
+        "elapsed_seconds": 2.277,
+        "transitions_observed": 2,
+        "validated_workflows": 0
+      },
+      {
+        "browser_actions": 7,
+        "elapsed_seconds": 3.067,
+        "transitions_observed": 2,
+        "validated_workflows": 1
+      },
+      {
+        "browser_actions": 9,
+        "elapsed_seconds": 3.859,
+        "transitions_observed": 2,
+        "validated_workflows": 2
+      },
+      {
+        "browser_actions": 9,
+        "elapsed_seconds": 3.883,
+        "transitions_observed": 2,
+        "validated_workflows": 2
+      }
+    ],
+    "raw_states": 3,
+    "redundant_states": 0,
+    "replay_attempts": 2,
+    "replay_failures": 0,
+    "replay_navigation_successes": 2,
+    "replay_success_denominator": 2,
+    "replay_success_numerator": 2,
+    "replay_untested_paths": 0,
+    "transitions_attempted": 2,
+    "transitions_failed": 0,
+    "transitions_observed": 2,
+    "unsupported_connections": 0
+  },
+  "nodes": {
+    "actions_evidence": [
+      {
+        "control_id": "ctl_65067832667774f549",
+        "error": null,
+        "id": "action_tr_c8d71c6b067061171a55",
+        "input_references": [],
+        "kind": "button",
+        "label": "C verify success",
+        "network": [],
+        "outcome_signals": [
+          {
+            "fingerprint": "d7c18ea91114e3c7",
+            "kind": "unknown",
+            "source": "class-or-live",
+            "text_excerpt": "Profile saved successfully"
+          },
+          {
+            "fingerprint": "a62330773b7a02e4",
+            "kind": "success",
+            "source": "data-outcome",
+            "text_excerpt": "Profile saved successfully"
+          }
+        ],
+        "result_observation_id": "obs_47c26a87bec171efe233",
+        "run_id": "agent1-20261028T133450Z",
+        "status": "replay_validated",
+        "type": "action_evidence",
+        "workflow_path_length": 1
+      },
+      {
+        "control_id": "ctl_439a721b051c839f34",
+        "error": null,
+        "id": "action_tr_c5f86acbdbcaedad00e9",
+        "input_references": [],
+        "kind": "button",
+        "label": "B show validation failure",
+        "network": [],
+        "outcome_signals": [
+          {
+            "fingerprint": "65445b0ad49d6e30",
+            "kind": "unknown",
+            "source": "class-or-live",
+            "text_excerpt": "Required field is missing"
+          },
+          {
+            "fingerprint": "3934cc9484f57396",
+            "kind": "validation_error",
+            "source": "data-outcome",
+            "text_excerpt": "Required field is missing"
+          }
+        ],
+        "result_observation_id": "obs_5e438e04ec5e0c10c82b",
+        "run_id": "agent1-20261028T133450Z",
+        "status": "replay_validated",
+        "type": "action_evidence",
+        "workflow_path_length": 1
+      }
+    ],
+    "advertised_actions": [
+      {
+        "id": "advertised_obs_17311734aedb9b6daf94_ctl_65067832667774f549",
+        "kind": "button",
+        "label": "C verify success",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_17311734aedb9b6daf94_ctl_439a721b051c839f34",
+        "kind": "button",
+        "label": "B show validation failure",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_17311734aedb9b6daf94_ctl_4e5c4ba68c70ad49a7",
+        "kind": "button",
+        "label": "A leave untested",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_f69df993421506fc9723_ctl_439a721b051c839f34",
+        "kind": "button",
+        "label": "B show validation failure",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_f69df993421506fc9723_ctl_4e5c4ba68c70ad49a7",
+        "kind": "button",
+        "label": "A leave untested",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_47c26a87bec171efe233_ctl_65067832667774f549",
+        "kind": "button",
+        "label": "C verify success",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_47c26a87bec171efe233_ctl_439a721b051c839f34",
+        "kind": "button",
+        "label": "B show validation failure",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_47c26a87bec171efe233_ctl_4e5c4ba68c70ad49a7",
+        "kind": "button",
+        "label": "A leave untested",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_b4294b7608d01460396a_ctl_65067832667774f549",
+        "kind": "button",
+        "label": "C verify success",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_b4294b7608d01460396a_ctl_4e5c4ba68c70ad49a7",
+        "kind": "button",
+        "label": "A leave untested",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_5e438e04ec5e0c10c82b_ctl_65067832667774f549",
+        "kind": "button",
+        "label": "C verify success",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_5e438e04ec5e0c10c82b_ctl_439a721b051c839f34",
+        "kind": "button",
+        "label": "B show validation failure",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      },
+      {
+        "id": "advertised_obs_5e438e04ec5e0c10c82b_ctl_4e5c4ba68c70ad49a7",
+        "kind": "button",
+        "label": "A leave untested",
+        "status": "advertised",
+        "test_status": "not_tested",
+        "type": "advertised_action"
+      }
+    ],
+    "features": [
+      {
+        "description": "C verify success leads to Outcome examples",
+        "evidence_transition_ids": [
+          "tr_c8d71c6b067061171a55"
+        ],
+        "failed_transition_ids": [],
+        "id": "feature_09e4b3368f3e49cc",
+        "replay_ids": [
+          "replay_73a8ee0dbe6d736268a2"
+        ],
+        "status": "replay_validated",
+        "type": "feature",
+        "untested_transition_ids": [],
+        "validated_transition_ids": [
+          "tr_c8d71c6b067061171a55"
+        ]
+      },
+      {
+        "description": "B show validation failure leads to Outcome examples",
+        "evidence_transition_ids": [
+          "tr_c5f86acbdbcaedad00e9"
+        ],
+        "failed_transition_ids": [],
+        "id": "feature_60f20b42163cf955",
+        "replay_ids": [
+          "replay_d17bfbe3558856cff9fe"
+        ],
+        "status": "replay_validated",
+        "type": "feature",
+        "untested_transition_ids": [],
+        "validated_transition_ids": [
+          "tr_c5f86acbdbcaedad00e9"
+        ]
+      }
+    ],
+    "functional_workflows": [
+      {
+        "action_label": "C verify success",
+        "id": "workflow_df3e8e5e87f8e9122b",
+        "outcome_signal_fingerprints": [
+          "success:a62330773b7a02e4",
+          "unknown:d7c18ea91114e3c7"
+        ],
+        "path_length": 1,
+        "replay_id": "replay_73a8ee0dbe6d736268a2",
+        "result_observation_id": "obs_47c26a87bec171efe233",
+        "source_observation_id": "obs_f69df993421506fc9723",
+        "status": "functional_verified",
+        "transition_id": "tr_c8d71c6b067061171a55",
+        "type": "functional_workflow"
+      },
+      {
+        "action_label": "B show validation failure",
+        "id": "workflow_c514a362c0b7eedf18",
+        "outcome_signal_fingerprints": [
+          "unknown:65445b0ad49d6e30",
+          "validation_error:3934cc9484f57396"
+        ],
+        "path_length": 1,
+        "replay_id": "replay_d17bfbe3558856cff9fe",
+        "result_observation_id": "obs_5e438e04ec5e0c10c82b",
+        "source_observation_id": "obs_b4294b7608d01460396a",
+        "status": "validation_failure",
+        "transition_id": "tr_c5f86acbdbcaedad00e9",
+        "type": "functional_workflow"
+      }
+    ],
+    "states": [
+      {
+        "group_signature": "6600b821f97fd630",
+        "id": "state_6600b821f97fd630",
+        "observation_ids": [
+          "obs_5e438e04ec5e0c10c82b"
+        ],
+        "raw_state_signatures": [
+          "dbf4f394c2e59965"
+        ],
+        "return_path_length": 1,
+        "route_pattern": "/outcomes",
+        "session_context": "fixture:outcomes",
+        "title": "Outcome examples",
+        "type": "state"
+      },
+      {
+        "group_signature": "6677b05c6373c767",
+        "id": "state_6677b05c6373c767",
+        "observation_ids": [
+          "obs_17311734aedb9b6daf94",
+          "obs_f69df993421506fc9723",
+          "obs_b4294b7608d01460396a"
+        ],
+        "raw_state_signatures": [
+          "fec87bc8af2aabd3"
+        ],
+        "return_path_length": 0,
+        "route_pattern": "/outcomes",
+        "session_context": "fixture:outcomes",
+        "title": "Outcome examples",
+        "type": "state"
+      },
+      {
+        "group_signature": "6f91a5706cbac5a2",
+        "id": "state_6f91a5706cbac5a2",
+        "observation_ids": [
+          "obs_47c26a87bec171efe233"
+        ],
+        "raw_state_signatures": [
+          "982f8ef560c3e666"
+        ],
+        "return_path_length": 1,
+        "route_pattern": "/outcomes",
+        "session_context": "fixture:outcomes",
+        "title": "Outcome examples",
+        "type": "state"
+      }
+    ]
+  },
+  "notes": [
+    "Website-only browser evidence; target source and verifier internals were not inspected.",
+    "A browser-observed edge is not counted as a validated feature until its complete path replays.",
+    "Query values with sensitive-looking keys are redacted from stored network evidence."
+  ],
+  "replays": [
+    {
+      "actual_group_signature": "6600b821f97fd630",
+      "actual_observation_id": "obs_4c13f6b3218f85d38d65",
+      "browser_actions": 2,
+      "ended_at": "2026-10-28T13:34:53.442511+00:00",
+      "error": null,
+      "expected_group_signature": "6600b821f97fd630",
+      "functional_status": "validation_failure",
+      "id": "replay_d17bfbe3558856cff9fe",
+      "outcome_checks": {
+        "content_fingerprint": true,
+        "group_signature": true,
+        "outcome_signals": true,
+        "route_pattern": true,
+        "title": true
+      },
+      "path_length": 1,
+      "started_at": "2026-10-28T13:34:52.656795+00:00",
+      "status": "replay_validated",
+      "transition_id": "tr_c5f86acbdbcaedad00e9"
+    },
+    {
+      "actual_group_signature": "6f91a5706cbac5a2",
+      "actual_observation_id": "obs_00a49694a4d7f07cda8f",
+      "browser_actions": 2,
+      "ended_at": "2026-10-28T13:34:54.234243+00:00",
+      "error": null,
+      "expected_group_signature": "6f91a5706cbac5a2",
+      "functional_status": "functional_verified",
+      "id": "replay_73a8ee0dbe6d736268a2",
+      "outcome_checks": {
+        "content_fingerprint": true,
+        "group_signature": true,
+        "outcome_signals": true,
+        "route_pattern": true,
+        "title": true
+      },
+      "path_length": 1,
+      "started_at": "2026-10-28T13:34:53.444945+00:00",
+      "status": "replay_validated",
+      "transition_id": "tr_c8d71c6b067061171a55"
+    }
+  ],
+  "run": {
+    "code_revision": "778bbbda008081c489afdaee836c6397c4cff93a+mapper-c159484a7625",
+    "config": {
+      "action_timeout_ms": 5000,
+      "allow_post_forms": true,
+      "context_label": "fixture:outcomes",
+      "focus_query": null,
+      "headless": true,
+      "max_browser_actions": 120,
+      "max_form_retries": 1,
+      "max_seconds": 12.0,
+      "max_transitions": 2,
+      "model_form_assistance": false,
+      "model_name": null,
+      "model_provider": "none",
+      "output_dir": "agent1/experiments/validation_content_outcomes_v3/outcomes",
+      "paid_budget_usd": 20.0,
+      "paid_calls_enabled": false,
+      "paid_stop_usd": 18.0,
+      "policy": "grouped",
+      "replay_reserve_fraction": 0.45,
+      "resume_from": null,
+      "run_id": null,
+      "settle_ms": 350,
+      "start_url": "http://127.0.0.1:49653/outcomes"
+    },
+    "ended_at": "2026-10-28T13:34:54.257623+00:00",
+    "run_id": "agent1-20261028T133450Z",
+    "started_at": "2026-10-28T13:34:50.390258+00:00"
+  },
+  "schema_version": "graph-a-1.1"
+}

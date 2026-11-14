@@ -1,0 +1,406 @@
+{
+  "A": {
+    "behavior_divergent_groups": 0,
+    "behavior_evidence_summary": {
+      "candidates_recorded": 0,
+      "executed_listener_or_revision_actions": 0,
+      "handler_revisions_recorded": 0,
+      "listener_observations": 0,
+      "replay_validated_listener_or_revision_actions": 0
+    },
+    "boundary_links": {
+      "/archive/feed-entry": {
+        "referenced": true,
+        "requested": true,
+        "why": "inside a truncated gzip stream"
+      },
+      "/archive/legacy-entry": {
+        "referenced": false,
+        "requested": false,
+        "why": "inside a response with invalid Content-Length framing"
+      },
+      "/archive/report-appendix": {
+        "referenced": false,
+        "requested": false,
+        "why": "beyond the 1 MB body bound of a 3.5 MB page"
+      },
+      "/archive/slow-entry": {
+        "referenced": true,
+        "requested": true,
+        "why": "first bytes of a 30 s trickle"
+      }
+    },
+    "browser_actions": 108,
+    "browser_body_status": {
+      "complete": 469
+    },
+    "bytes_total": 6300723,
+    "connection_claims": {
+      "action_result:complete": 57,
+      "advertised_control:complete": 656,
+      "prerequisite_network:complete": 1,
+      "replay:complete": 9,
+      "replay:incomplete": 16,
+      "resource_reference:complete": 2713,
+      "source_action:complete": 57
+    },
+    "distinct_action_request_structures": 2,
+    "documents_reached_2xx": "98/107",
+    "documents_reached_by_browser": 51,
+    "documents_reached_by_passive": 98,
+    "elapsed_seconds": 60.041,
+    "expected_absent": {
+      "X1 delegated shelf item": {
+        "occurred_by_browser_action": false,
+        "passive_requests": 0,
+        "why": "document-level delegation (not attributable)"
+      },
+      "X2 closed-shadow holdings": {
+        "occurred_by_browser_action": false,
+        "passive_requests": 0,
+        "why": "closed shadow root (not addressable)"
+      },
+      "X3 dangerous clear": {
+        "occurred_by_browser_action": false,
+        "passive_requests": 0,
+        "why": "MUST NOT happen: dangerous label"
+      },
+      "X4 hidden listener": {
+        "occurred_by_browser_action": false,
+        "passive_requests": 0,
+        "why": "MUST NOT happen: not rendered"
+      }
+    },
+    "functionality": {
+      "F1 reading-list save": {
+        "executed": true,
+        "replay_validated": false,
+        "server_confirmed": true,
+        "via": [
+          "snapshot"
+        ],
+        "wiring": "snapshot button + fetch POST"
+      },
+      "F2 catalog search": {
+        "executed": true,
+        "replay_validated": true,
+        "server_confirmed": true,
+        "via": [
+          "snapshot"
+        ],
+        "wiring": "snapshot GET form"
+      },
+      "F3 loan status": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "snapshot button, first handler"
+      },
+      "F4 loan eligibility": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "same button, handler replaced, DOM unchanged"
+      },
+      "F5 study-slot reserve": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "<div> listener created by an action"
+      },
+      "F6 exhibit card": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "<div> listener present at load (navigation)"
+      },
+      "F7 branch holdings": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "listener inside an open shadow root"
+      },
+      "F8 citation": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "listener inside a same-origin frame"
+      },
+      "F9 call-number row": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "row family (400 rows, one handler)"
+      }
+    },
+    "functionality_executed": "2/9",
+    "functionality_per_100_actions": 1.85,
+    "functionality_replay_validated": "1/9",
+    "graph_connections_missing_evidence": 16,
+    "graph_connections_total": 3509,
+    "grouped_states": 52,
+    "http_budget_by_source": {
+      "browser": 372,
+      "browser_redirect": 47,
+      "browser_redirect_verification": 28,
+      "browser_verification": 272,
+      "passive_document": 216,
+      "resource_spider": 64,
+      "speculative_candidate": 1
+    },
+    "incorrect_state_merges": 0,
+    "listener": {
+      "handler_revisions_observed": 0,
+      "handler_revisits_executed": 0,
+      "listener_candidates_distinct": 0,
+      "listener_candidates_executed": 0,
+      "listener_cdp_calls": 0,
+      "listener_observation_errors": 0,
+      "listener_observation_ms": 0.0,
+      "listener_observations": 0,
+      "listener_skipped": {}
+    },
+    "passive_cookie_updates": {
+      "applied": 8
+    },
+    "passive_wire_bytes_agent_reported": 3166419,
+    "python_peak_rss_mb": 79.2,
+    "redirect_trap_requests": 21,
+    "references_discovered": 291,
+    "replays": "9/25",
+    "requests_by_client": {
+      "browser": {
+        "bytes": 2239571,
+        "requests": 719
+      },
+      "passive": {
+        "bytes": 4061152,
+        "requests": 281
+      }
+    },
+    "requests_total": 1000,
+    "sentinel_hits": 0,
+    "server_events": {
+      "retired_session_within_grace:browser": 15,
+      "session_issued": 11,
+      "session_renewed_on:browser": 26,
+      "session_renewed_on:passive": 8
+    },
+    "spider_attempts_without_channel": 0,
+    "spider_body_status": {
+      "complete": 187,
+      "empty": 90,
+      "incomplete": 1,
+      "invalid_framing": 1,
+      "timeout": 1,
+      "truncated": 1
+    },
+    "static_fetched_2xx": "64/64",
+    "transitions_observed": 57
+  },
+  "D0": {
+    "behavior_divergent_groups": 0,
+    "behavior_evidence_summary": {
+      "candidates_recorded": 0,
+      "executed_listener_or_revision_actions": 0,
+      "handler_revisions_recorded": 0,
+      "listener_observations": 0,
+      "replay_validated_listener_or_revision_actions": 0
+    },
+    "boundary_links": {
+      "/archive/feed-entry": {
+        "referenced": false,
+        "requested": false,
+        "why": "inside a truncated gzip stream"
+      },
+      "/archive/legacy-entry": {
+        "referenced": false,
+        "requested": false,
+        "why": "inside a response with invalid Content-Length framing"
+      },
+      "/archive/report-appendix": {
+        "referenced": false,
+        "requested": false,
+        "why": "beyond the 1 MB body bound of a 3.5 MB page"
+      },
+      "/archive/slow-entry": {
+        "referenced": false,
+        "requested": false,
+        "why": "first bytes of a 30 s trickle"
+      }
+    },
+    "browser_actions": 117,
+    "browser_body_status": {
+      "complete": 397,
+      "skipped_unknown_length": 116
+    },
+    "bytes_total": 7561031,
+    "connection_claims": {
+      "action_result:complete": 66,
+      "advertised_control:complete": 755,
+      "prerequisite_network:complete": 1,
+      "replay:complete": 9,
+      "resource_reference:complete": 2009,
+      "source_action:complete": 66
+    },
+    "distinct_action_request_structures": 2,
+    "documents_reached_2xx": "96/107",
+    "documents_reached_by_browser": 96,
+    "documents_reached_by_passive": 0,
+    "elapsed_seconds": 62.578,
+    "expected_absent": {
+      "X1 delegated shelf item": {
+        "occurred_by_browser_action": false,
+        "passive_requests": 0,
+        "why": "document-level delegation (not attributable)"
+      },
+      "X2 closed-shadow holdings": {
+        "occurred_by_browser_action": false,
+        "passive_requests": 0,
+        "why": "closed shadow root (not addressable)"
+      },
+      "X3 dangerous clear": {
+        "occurred_by_browser_action": false,
+        "passive_requests": 0,
+        "why": "MUST NOT happen: dangerous label"
+      },
+      "X4 hidden listener": {
+        "occurred_by_browser_action": false,
+        "passive_requests": 0,
+        "why": "MUST NOT happen: not rendered"
+      }
+    },
+    "functionality": {
+      "F1 reading-list save": {
+        "executed": true,
+        "replay_validated": false,
+        "server_confirmed": true,
+        "via": [
+          "snapshot"
+        ],
+        "wiring": "snapshot button + fetch POST"
+      },
+      "F2 catalog search": {
+        "executed": true,
+        "replay_validated": true,
+        "server_confirmed": true,
+        "via": [
+          "snapshot"
+        ],
+        "wiring": "snapshot GET form"
+      },
+      "F3 loan status": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "snapshot button, first handler"
+      },
+      "F4 loan eligibility": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "same button, handler replaced, DOM unchanged"
+      },
+      "F5 study-slot reserve": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "<div> listener created by an action"
+      },
+      "F6 exhibit card": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": true,
+        "via": [],
+        "wiring": "<div> listener present at load (navigation)"
+      },
+      "F7 branch holdings": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "listener inside an open shadow root"
+      },
+      "F8 citation": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "listener inside a same-origin frame"
+      },
+      "F9 call-number row": {
+        "executed": false,
+        "replay_validated": false,
+        "server_confirmed": false,
+        "via": [],
+        "wiring": "row family (400 rows, one handler)"
+      }
+    },
+    "functionality_executed": "2/9",
+    "functionality_per_100_actions": 1.71,
+    "functionality_replay_validated": "1/9",
+    "graph_connections_missing_evidence": 0,
+    "graph_connections_total": 2906,
+    "grouped_states": 60,
+    "http_budget_by_source": {
+      "browser": 433,
+      "browser_redirect": 56,
+      "browser_redirect_verification": 28,
+      "browser_verification": 272,
+      "passive_document": 187,
+      "resource_spider": 23,
+      "speculative_candidate": 1
+    },
+    "incorrect_state_merges": 0,
+    "listener": {
+      "handler_revisions_observed": 0,
+      "handler_revisits_executed": 0,
+      "listener_candidates_distinct": 0,
+      "listener_candidates_executed": 0,
+      "listener_cdp_calls": 0,
+      "listener_observation_errors": 0,
+      "listener_observation_ms": 0.0,
+      "listener_observations": 0,
+      "listener_skipped": {}
+    },
+    "passive_cookie_updates": {},
+    "passive_wire_bytes_agent_reported": 0,
+    "python_peak_rss_mb": 76.8,
+    "redirect_trap_requests": 21,
+    "references_discovered": 263,
+    "replays": "9/9",
+    "requests_by_client": {
+      "browser": {
+        "bytes": 7561031,
+        "requests": 1000
+      }
+    },
+    "requests_total": 1000,
+    "sentinel_hits": 0,
+    "server_events": {
+      "invalid_session_presented:browser": 1,
+      "retired_session_within_grace:browser": 23,
+      "session_issued": 12,
+      "session_renewed_on:browser": 34
+    },
+    "spider_attempts_without_channel": 0,
+    "spider_body_status": {
+      "complete": 100,
+      "empty": 89,
+      "error": 2,
+      "skipped_unknown_length": 20
+    },
+    "static_fetched_2xx": "63/64",
+    "transitions_observed": 66
+  }
+}

@@ -1,0 +1,569 @@
+{
+ "application": "replay_lab",
+ "annotation": {
+  "annotator": "Claude (Agent 1 engine developer)",
+  "independent": false,
+  "method": "Read from fixture source before any ACG resolver existed (Phase 0 commit); not adjudicated by a second annotator.",
+  "sources": [
+   "development_apps/replay_lab.py"
+  ],
+  "frozen_at": "2026-11-01"
+ },
+ "roles": [
+  {
+   "id": "anonymous",
+   "cookie_names": [
+    "sid"
+   ]
+  }
+ ],
+ "templates": [
+  "/",
+  "/topics/{slug}",
+  "/records/{id}",
+  "/lab/div",
+  "/lab/redefine",
+  "/lab/multi",
+  "/lab/pair",
+  "/lab/twins",
+  "/lab/claim",
+  "/lab/danger",
+  "/cart"
+ ],
+ "entity_types": [
+  {
+   "id": "topic",
+   "identity": [
+    "/topics/{slug}"
+   ]
+  },
+  {
+   "id": "record",
+   "identity": [
+    "/records/{id}",
+    "/api/records/{id}/history"
+   ]
+  },
+  {
+   "id": "item",
+   "identity": [
+    "/api/save/{id}"
+   ]
+  },
+  {
+   "id": "cart",
+   "identity": [
+    "/api/carts/{id}"
+   ]
+  }
+ ],
+ "capabilities": [
+  {
+   "id": "home",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/"
+    }
+   ],
+   "class_target": "/"
+  },
+  {
+   "id": "view_topic",
+   "behavioral_class": "instance_view",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/topics/{slug}"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/topics/{slug}"
+    }
+   ],
+   "class_target": "topic",
+   "entity": "topic",
+   "note": "six decoy topic pages share one template"
+  },
+  {
+   "id": "open_lab_div",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/lab/div"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/lab/div"
+    }
+   ],
+   "class_target": "/lab/div"
+  },
+  {
+   "id": "open_lab_redefine",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/lab/redefine"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/lab/redefine"
+    }
+   ],
+   "class_target": "/lab/redefine"
+  },
+  {
+   "id": "open_lab_multi",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/lab/multi"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/lab/multi"
+    }
+   ],
+   "class_target": "/lab/multi"
+  },
+  {
+   "id": "open_lab_pair",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/lab/pair"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/lab/pair"
+    }
+   ],
+   "class_target": "/lab/pair"
+  },
+  {
+   "id": "open_lab_twins",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/lab/twins"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/lab/twins"
+    }
+   ],
+   "class_target": "/lab/twins"
+  },
+  {
+   "id": "open_lab_claim",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/lab/claim"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/lab/claim"
+    }
+   ],
+   "class_target": "/lab/claim"
+  },
+  {
+   "id": "open_lab_danger",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/lab/danger"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/lab/danger"
+    }
+   ],
+   "class_target": "/lab/danger"
+  },
+  {
+   "id": "open_cart",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/cart"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/cart"
+    }
+   ],
+   "class_target": "/cart"
+  },
+  {
+   "id": "view_record",
+   "behavioral_class": "instance_view",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/records/{id}"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/records/{id}"
+    }
+   ],
+   "class_target": "record",
+   "entity": "record"
+  },
+  {
+   "id": "reveal_details",
+   "behavioral_class": "client_view_change",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [],
+   "entry_points": [
+    {
+     "label": "Show details"
+    }
+   ],
+   "no_operation_effect": "component_state_changed",
+   "class_target": "details"
+  },
+  {
+   "id": "load_details",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/details"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Open details"
+    }
+   ]
+  },
+  {
+   "id": "check_loans_first",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/first"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Check loans"
+    }
+   ],
+   "note": "first handler; replaced after one click"
+  },
+  {
+   "id": "check_loans_second",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/second"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Check loans"
+    }
+   ],
+   "note": "replacement handler on the same element"
+  },
+  {
+   "id": "wizard_begin",
+   "behavioral_class": "client_view_change",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [],
+   "entry_points": [
+    {
+     "label": "Begin"
+    }
+   ],
+   "no_operation_effect": "component_state_changed",
+   "class_target": "wizard"
+  },
+  {
+   "id": "wizard_continue",
+   "behavioral_class": "client_view_change",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [],
+   "entry_points": [
+    {
+     "label": "Continue"
+    }
+   ],
+   "no_operation_effect": "component_state_changed",
+   "class_target": "wizard"
+  },
+  {
+   "id": "wizard_finish",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/finish"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Finish"
+    }
+   ]
+  },
+  {
+   "id": "load_reviews",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/reviews"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Load reviews"
+    }
+   ]
+  },
+  {
+   "id": "load_stock",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/stock"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Load stock"
+    }
+   ]
+  },
+  {
+   "id": "save_item",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/save/{id}"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Save first item"
+    },
+    {
+     "label": "Save second item"
+    }
+   ],
+   "entity": "item",
+   "note": "same function on two items"
+  },
+  {
+   "id": "claim_voucher",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/claim"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Claim voucher"
+    }
+   ],
+   "effect_risk": "server_write",
+   "note": "state-changing GET; button disappears afterwards"
+  },
+  {
+   "id": "record_history",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/records/{id}/history"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Show history"
+    }
+   ],
+   "entity": "record"
+  },
+  {
+   "id": "refresh_cart",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/carts/{id}"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Refresh cart"
+    }
+   ],
+   "entity": "cart"
+  },
+  {
+   "id": "wipe_records",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "POST",
+     "route": "/api/records/delete"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Delete all records"
+    }
+   ],
+   "effect_risk": "destructive",
+   "note": "fixture does not actually delete"
+  }
+ ],
+ "equivalent_interfaces": [
+  "save_item"
+ ]
+}

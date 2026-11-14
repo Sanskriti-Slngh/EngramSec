@@ -1,0 +1,287 @@
+{
+ "config": {
+  "max_seconds": 140.0,
+  "max_browser_actions": 600,
+  "max_transitions": 300,
+  "state_aware_exploration": true,
+  "record_aware_graph": true,
+  "interaction_profile": "extended",
+  "typed_resource_spider": false,
+  "allow_post_forms": true,
+  "write_policy": "disposable",
+  "max_write_requests": 60,
+  "replay_policy": "structure",
+  "replay_structure_attempts": 2,
+  "acg_evidence": true,
+  "record_unexecuted_frontier": true,
+  "restoration_shortcut": "direct_url",
+  "write_execution_policy": "focused_adaptive",
+  "write_sweep_replay_floor": 0.25
+ },
+ "fixture": "breadth_starved_lab",
+ "inventory": 50,
+ "sample_k": 2,
+ "trials": [
+  {
+   "trial": 0,
+   "executed_total": 30,
+   "inventory": 50,
+   "executed_always": 18,
+   "always_total": 18,
+   "executed_tdistinct_deep": 12,
+   "tdistinct_total": 26,
+   "executed_semantic_deep": 0,
+   "semantic_total": 6,
+   "deep_reached": 12,
+   "deep_total": 32,
+   "max_workflow_depth": 3,
+   "breadth_wasted_actions": 15,
+   "breadth_wasted_time_s": 14.3,
+   "total_tx_time_s": 88.0,
+   "median_tx_s": 0.94,
+   "time_to_first_deep_s": 17.3,
+   "top_breadth_templates": [
+    [
+     "/products",
+     9
+    ],
+    [
+     "/people",
+     7
+    ],
+    [
+     "/media",
+     4
+    ],
+    [
+     "/directory",
+     3
+    ]
+   ],
+   "replays_validated": 22,
+   "replay_attempts": 26,
+   "replay_failures": 4,
+   "transitions_failed": 0,
+   "unsafe_restorations_suppressed": 0,
+   "total_browser_actions": 251,
+   "elapsed_s": 140.613,
+   "http_requests": null,
+   "state_changing_requests": 0,
+   "wall_seconds": 141.37,
+   "missed": [
+    "ops_audit",
+    "ops_audit_log",
+    "ops_imports",
+    "ops_imports_status",
+    "ops_reconcile_status",
+    "release_14_changelog",
+    "release_21_changelog",
+    "release_27_changelog",
+    "release_33_changelog",
+    "release_3_changelog",
+    "release_9_changelog",
+    "reports_funnel",
+    "reports_funnel_detail",
+    "reports_funnel_summary",
+    "reports_retention_detail",
+    "reports_retention_summary",
+    "reports_revenue_detail",
+    "reports_revenue_summary",
+    "reports_usage_detail",
+    "reports_usage_summary"
+   ]
+  },
+  {
+   "trial": 1,
+   "executed_total": 29,
+   "inventory": 50,
+   "executed_always": 18,
+   "always_total": 18,
+   "executed_tdistinct_deep": 11,
+   "tdistinct_total": 26,
+   "executed_semantic_deep": 0,
+   "semantic_total": 6,
+   "deep_reached": 11,
+   "deep_total": 32,
+   "max_workflow_depth": 3,
+   "breadth_wasted_actions": 16,
+   "breadth_wasted_time_s": 15.3,
+   "total_tx_time_s": 87.9,
+   "median_tx_s": 0.94,
+   "time_to_first_deep_s": 17.2,
+   "top_breadth_templates": [
+    [
+     "/products",
+     9
+    ],
+    [
+     "/people",
+     8
+    ],
+    [
+     "/media",
+     4
+    ],
+    [
+     "/directory",
+     3
+    ]
+   ],
+   "replays_validated": 23,
+   "replay_attempts": 27,
+   "replay_failures": 4,
+   "transitions_failed": 0,
+   "unsafe_restorations_suppressed": 0,
+   "total_browser_actions": 253,
+   "elapsed_s": 141.509,
+   "http_requests": null,
+   "state_changing_requests": 0,
+   "wall_seconds": 142.27,
+   "missed": [
+    "ops_audit",
+    "ops_audit_log",
+    "ops_imports",
+    "ops_imports_status",
+    "ops_reconcile_status",
+    "release_14_changelog",
+    "release_21_changelog",
+    "release_27_changelog",
+    "release_33_changelog",
+    "release_3_changelog",
+    "release_9_changelog",
+    "reports_funnel",
+    "reports_funnel_detail",
+    "reports_funnel_summary",
+    "reports_retention_detail",
+    "reports_retention_summary",
+    "reports_revenue_detail",
+    "reports_revenue_summary",
+    "reports_usage_detail",
+    "reports_usage_summary",
+    "settings_security_sessions"
+   ]
+  },
+  {
+   "trial": 2,
+   "executed_total": 30,
+   "inventory": 50,
+   "executed_always": 18,
+   "always_total": 18,
+   "executed_tdistinct_deep": 12,
+   "tdistinct_total": 26,
+   "executed_semantic_deep": 0,
+   "semantic_total": 6,
+   "deep_reached": 12,
+   "deep_total": 32,
+   "max_workflow_depth": 3,
+   "breadth_wasted_actions": 16,
+   "breadth_wasted_time_s": 15.3,
+   "total_tx_time_s": 88.7,
+   "median_tx_s": 0.94,
+   "time_to_first_deep_s": 17.2,
+   "top_breadth_templates": [
+    [
+     "/products",
+     9
+    ],
+    [
+     "/people",
+     8
+    ],
+    [
+     "/media",
+     4
+    ],
+    [
+     "/directory",
+     3
+    ]
+   ],
+   "replays_validated": 22,
+   "replay_attempts": 27,
+   "replay_failures": 5,
+   "transitions_failed": 0,
+   "unsafe_restorations_suppressed": 0,
+   "total_browser_actions": 254,
+   "elapsed_s": 141.347,
+   "http_requests": null,
+   "state_changing_requests": 0,
+   "wall_seconds": 142.13,
+   "missed": [
+    "ops_audit",
+    "ops_audit_log",
+    "ops_imports",
+    "ops_imports_status",
+    "ops_reconcile_status",
+    "release_14_changelog",
+    "release_21_changelog",
+    "release_27_changelog",
+    "release_33_changelog",
+    "release_3_changelog",
+    "release_9_changelog",
+    "reports_funnel",
+    "reports_funnel_detail",
+    "reports_funnel_summary",
+    "reports_retention_detail",
+    "reports_retention_summary",
+    "reports_revenue_detail",
+    "reports_revenue_summary",
+    "reports_usage_detail",
+    "reports_usage_summary"
+   ]
+  }
+ ],
+ "diagnosis": {
+  "stable_missed": [
+   "ops_audit",
+   "ops_audit_log",
+   "ops_imports",
+   "ops_imports_status",
+   "ops_reconcile_status",
+   "release_14_changelog",
+   "release_21_changelog",
+   "release_27_changelog",
+   "release_33_changelog",
+   "release_3_changelog",
+   "release_9_changelog",
+   "reports_funnel",
+   "reports_funnel_detail",
+   "reports_funnel_summary",
+   "reports_retention_detail",
+   "reports_retention_summary",
+   "reports_revenue_detail",
+   "reports_revenue_summary",
+   "reports_usage_detail",
+   "reports_usage_summary"
+  ],
+  "classes": {
+   "tdistinct_stranded": [
+    "ops_audit",
+    "ops_audit_log",
+    "ops_imports",
+    "ops_imports_status",
+    "ops_reconcile_status",
+    "reports_funnel",
+    "reports_funnel_detail",
+    "reports_funnel_summary",
+    "reports_retention_detail",
+    "reports_retention_summary",
+    "reports_revenue_detail",
+    "reports_revenue_summary",
+    "reports_usage_detail",
+    "reports_usage_summary"
+   ],
+   "tdistinct_undiscovered": [],
+   "semantic_stranded": [
+    "release_14_changelog",
+    "release_21_changelog",
+    "release_27_changelog",
+    "release_33_changelog",
+    "release_3_changelog",
+    "release_9_changelog"
+   ],
+   "semantic_undiscovered": [],
+   "other": []
+  }
+ }
+}

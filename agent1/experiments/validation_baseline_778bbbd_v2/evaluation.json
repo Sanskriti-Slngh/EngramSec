@@ -1,0 +1,81 @@
+{
+  "cases": [
+    {
+      "case": "search",
+      "distinct_results_emitted": 2,
+      "emitted_results": [
+        "Result Alpha",
+        "Result Beta"
+      ],
+      "functional_verification_available": false,
+      "groups": 1,
+      "raw_states": 1,
+      "replays_attempted": 1,
+      "replays_succeeded": 1,
+      "result_texts_share_group": true
+    },
+    {
+      "case": "form",
+      "failure_counted_as_replay_success": true,
+      "functional_verification_available": false,
+      "groups": 1,
+      "raw_states": 1,
+      "replays_attempted": 1,
+      "replays_succeeded": 1,
+      "submissions": [
+        false,
+        false
+      ],
+      "success_observed": false,
+      "validation_failure_observed": true
+    },
+    {
+      "case": "multi",
+      "event_sequence": [
+        "setup",
+        "setup",
+        "completion",
+        "setup",
+        "setup",
+        "setup",
+        "setup",
+        "completion",
+        "setup",
+        "setup"
+      ],
+      "functional_verification_available": false,
+      "groups": 2,
+      "raw_states": 2,
+      "replays_attempted": 3,
+      "replays_succeeded": 3,
+      "successful_completion": true,
+      "successful_completion_with_prerequisite": true
+    },
+    {
+      "case": "records",
+      "functional_verification_available": false,
+      "groups": 2,
+      "raw_states": 2,
+      "record_visits": [
+        "2",
+        "1"
+      ],
+      "replays_attempted": 1,
+      "replays_succeeded": 1,
+      "wrong_instance_accepted": true,
+      "wrong_instance_replay_possible": true
+    },
+    {
+      "case": "cosmetic",
+      "functional_verification_available": false,
+      "groups": 1,
+      "observations": 3,
+      "raw_states": 1,
+      "replays_attempted": 1,
+      "replays_succeeded": 1,
+      "unnecessary_splits": 0
+    }
+  ],
+  "elapsed_seconds": 18.937,
+  "schema_version": "validation-fixtures-1.0"
+}

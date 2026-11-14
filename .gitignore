@@ -1,0 +1,110 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+*.py[cod]
+
+# Runtime artifacts that can contain browser state or local model caches.
+agent1/.auth/
+agent1/.cache/
+
+# Full browser evidence remains local and reproducible; commit compact reports,
+# metrics, manifests, and diagrams instead of hundreds of MB of duplicate JSON.
+agent1/experiments/**/checkpoint.json
+agent1/experiments/**/run.json
+agent1/experiments/**/trace.jsonl
+agent1/experiments/**/graph_a.json
+# Raw external-evaluator exports can contain per-case expectations. Keep them
+# segregated locally; commit only aggregate/category summaries.
+agent1/experiments/**/crawlground_results.json
+!agent1/experiments/siyucms_10m_comparison/grouped-r1/audited_v2/graph_a.json
+!agent1/experiments/validation_content_outcomes_v3/outcomes/graph_a.json
+!agent1/experiments/siyucms_search_milestone/graph_a.json
+!agent1/experiments/siyucms_search_integrated_v2/graph_a.json
+
+# Preserve exploratory fixture iterations locally; checkpoint the corrected
+# baseline/final runs and reports without cluttering Git with setup-only reruns.
+agent1/experiments/validation_baseline_778bbbd/
+agent1/experiments/validation_content_outcomes_v1/
+agent1/experiments/validation_content_outcomes_v2/
+agent1/experiments/validation_baseline_778bbbd_v2/posthoc_evaluation.json
+
+# Keep full adversarial fixture runs local; checkpoint their compact measured summaries.
+agent1/experiments/search_verifier_adversarial_baseline/**
+!agent1/experiments/search_verifier_adversarial_baseline/summary.json
+agent1/experiments/search_verifier_adversarial_link_delta/**
+agent1/experiments/search_verifier_adversarial_link_delta_final/**
+!agent1/experiments/search_verifier_adversarial_link_delta_final/summary.json
+
+# Keep 2026-10-30 crawler raw graphs, traces, and checkpoints locally. The
+# reviewed aggregate and selected diagrams are saved in crawler_breakthrough_20261030/.
+agent1/experiments/budget_ablation/
+agent1/experiments/depth_ablation/
+agent1/experiments/document_quota_ablation/
+agent1/experiments/fast_ablation/
+agent1/experiments/fifo_repeats/
+agent1/experiments/frontier_matrix/
+agent1/experiments/frontier_state_ablation/
+agent1/experiments/heldout_shop_crawler_transfer/
+agent1/experiments/js_heavy_agent1_generalization_adaptive_default/
+agent1/experiments/js_heavy_agent1_generalization_adaptive_explicit/
+agent1/experiments/js_heavy_agent1_generalization_r1/
+agent1/experiments/parser_ablation/
+agent1/experiments/readiness_ablation/
+agent1/experiments/readiness_repeats/
+agent1/experiments/replay_ablation/
+agent1/experiments/serious_budget/
+
+# Stateful whiteboard runs can contain session-linked traces and record IDs;
+# commit only aggregate measurements, never browser state or raw traces.
+agent1/experiments/state_aware_whiteboard_20261031/**
+!agent1/experiments/state_aware_whiteboard_20261031/summary.json
+agent1/experiments/state_aware_whiteboard_final_20261031/**
+!agent1/experiments/state_aware_whiteboard_final_20261031/summary.json
+agent1/experiments/state_aware_crawlmaze_20261031/**
+!agent1/experiments/state_aware_crawlmaze_20261031/summary.json
+!agent1/experiments/state_aware_whiteboard_final_20261031/posthoc_reanalysis.json
+!agent1/experiments/stateful_fixture_example/graph_a.json
+agent1/experiments/state_aware_whiteboard_repeat_20261031/**
+!agent1/experiments/state_aware_whiteboard_repeat_20261031/summary.json
+!agent1/experiments/state_aware_whiteboard_repeat_20261031/posthoc_reanalysis.json
+
+# Offline ACG runs: evidence logs and exports can carry record identifiers.
+agent1/experiments/**/acg_evidence.jsonl
+agent1/experiments/**/acg.json
+agent1/experiments/acg_m1_*/**/score.json
+
+# Phase 1b per-run simulator records (regenerable; aggregates are committed)
+evaluation/results/t2_runs.json
+evaluation/results/t2r_runs.json
+evaluation/results/t2v_runs.json
+
+# Phase 2 live shadow runs: raw per-run evidence stays local; only summary.json and analysis.json are committed
+agent1/experiments/live_shadow_*/*/**
+
+# Phase 3 active A/B and diagnostics: raw per-trial runs stay local (aggregates live in evaluation/results)
+agent1/experiments/active_ab_*/
+agent1/experiments/active_posthoc_*/
+
+# Grounded A/B raw per-trial runs (aggregates live in evaluation/results)
+agent1/experiments/grounded_ab_*/
+# Capability-aware hybrid comparison runs (local only; summary in evaluation/results/hybrid_ab.json)
+agent1/experiments/hybrid_ab_*/
+# Comprehensive benchmark evaluation: raw run directories stay local (may hold protected benchmark evidence)
+agent1/experiments/comprehensive_*/
+agent1/experiments/perception_ablation/
+agent1/experiments/restoration_ab/
+agent1/experiments/recovery_transfer/
+agent1/experiments/model_scaling/
+
+# Legacy run-artifacts under experiment dirs are regenerable outputs, not source. Commit only the
+# aggregate/summary JSON and the whitelisted ground-truth graph_a.json archives (kept above / by tests).
+agent1/experiments/**/metrics.json
+agent1/experiments/**/graph_a.mmd
+agent1/experiments/**/report.md
+agent1/experiments/**/experiment_config.json
+agent1/experiments/**/*.txt
+agent1/experiments/**/*.log

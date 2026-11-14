@@ -1,0 +1,542 @@
+{
+  "application": "heldout_shop",
+  "areas": [
+    {
+      "id": "home",
+      "route": "/",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "lantern",
+      "route": "/products/{instance}",
+      "scope": "applicable",
+      "status": "covered_replayed",
+      "via_target_suffix": "/products/101"
+    },
+    {
+      "id": "kettle",
+      "route": "/products/{instance}",
+      "scope": "applicable",
+      "status": "covered_replayed",
+      "via_target_suffix": "/products/202"
+    },
+    {
+      "id": "outdoors",
+      "route": "/category/outdoors",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "deals",
+      "route": "/deals",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "returns",
+      "route": "/returns",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "cart",
+      "route": "/cart",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "checkout",
+      "route": "/checkout",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "admin",
+      "route": "/admin",
+      "scope": "blocked",
+      "status": "discovered_blocked"
+    }
+  ],
+  "contexts": [
+    {
+      "cookie_name": null,
+      "id": "anonymous",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "cookie_name": "shop_cart",
+      "id": "cart",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    }
+  ],
+  "controls": [
+    {
+      "id": "lantern",
+      "kind": "link",
+      "label": "Trail lantern",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "kettle",
+      "kind": "link",
+      "label": "Camp kettle",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "categories",
+      "kind": "button",
+      "label": "Browse categories",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "outdoors",
+      "kind": "link",
+      "label": "Outdoor collection",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "deals_tab",
+      "kind": "button",
+      "label": "Current deals",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "deals",
+      "kind": "link",
+      "label": "See all deals",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "returns_summary",
+      "kind": "button",
+      "label": "Shipping and returns",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "returns",
+      "kind": "link",
+      "label": "Returns guide",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "reviews",
+      "kind": "button",
+      "label": "Load customer reviews",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "cart_add",
+      "kind": "form_submit",
+      "label": "Add sample to cart",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "checkout",
+      "kind": "link",
+      "label": "Begin checkout",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "admin",
+      "kind": "form_submit",
+      "label": "Admin login",
+      "scope": "blocked",
+      "status": "discovered_blocked"
+    }
+  ],
+  "counts": {
+    "browser_actions": 137,
+    "covered_areas": 8,
+    "covered_controls": 11,
+    "covered_requests": 8,
+    "elapsed_seconds": 60.827,
+    "graph_connections_missing_evidence": 0,
+    "grouped_states": 18,
+    "incorrect_state_merges_self_audit": 0,
+    "raw_states": 18,
+    "replay_attempts": 16,
+    "replay_successes": 16
+  },
+  "denominators": {
+    "areas": 8,
+    "blocked_areas_excluded": 1,
+    "contexts": 2,
+    "controls": 11,
+    "instances": 2,
+    "outside_areas_excluded": 0,
+    "paths": 8,
+    "requests": 8
+  },
+  "instances": [
+    {
+      "id": "product_101",
+      "scope": "applicable",
+      "status": "covered_replayed",
+      "target_suffix": "/products/101"
+    },
+    {
+      "id": "product_202",
+      "scope": "applicable",
+      "status": "covered_replayed",
+      "target_suffix": "/products/202"
+    }
+  ],
+  "metrics": {
+    "context_recall": 1.0,
+    "control_action_recall": 1.0,
+    "covered_surfaces_per_browser_action": 0.19708029197080293,
+    "covered_surfaces_per_minute": 26.63290972758808,
+    "instance_recall": 1.0,
+    "instances_distinct": true,
+    "prerequisite_path_coverage": 0.75,
+    "replay_reliability": 1.0,
+    "request_precision": 0.9705882352941176,
+    "request_surface_recall": 1.0,
+    "state_interface_recall": 1.0
+  },
+  "observed_request_structures": [
+    {
+      "action_id": "action_tr_7eb8dcbc90c67ffbd9ea",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_6e932ad09b61402c9713",
+      "method": "POST",
+      "params": [
+        "sku"
+      ],
+      "path": "/cart/items",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_6e932ad09b61402c9713",
+      "method": "GET",
+      "params": [],
+      "path": "/cart",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_658e93f938d4658ae77f",
+      "method": "GET",
+      "params": [],
+      "path": "/checkout",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_5b30ef2b4397eb12c149",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_3484bc5d40bb4c6865b6",
+      "method": "POST",
+      "params": [
+        "sku"
+      ],
+      "path": "/cart/items",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_3484bc5d40bb4c6865b6",
+      "method": "GET",
+      "params": [],
+      "path": "/cart",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_684b0f2024ce594bba79",
+      "method": "GET",
+      "params": [],
+      "path": "/returns",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_22157578809e74f29a67",
+      "method": "GET",
+      "params": [],
+      "path": "/deals",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_2032f962a901c834d329",
+      "method": "GET",
+      "params": [],
+      "path": "/category/outdoors",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_e2babf4baf697d1044cd",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_1aa991ee3942cf0b5ce1",
+      "method": "GET",
+      "params": [
+        "limit",
+        "product"
+      ],
+      "path": "/api/reviews",
+      "resource_type": "fetch"
+    },
+    {
+      "action_id": "action_tr_0d9062628f8d8c081cc5",
+      "method": "POST",
+      "params": [
+        "sku"
+      ],
+      "path": "/cart/items",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_0d9062628f8d8c081cc5",
+      "method": "GET",
+      "params": [],
+      "path": "/cart",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_bd3c0ab5db285d40b958",
+      "method": "GET",
+      "params": [],
+      "path": "/",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_4e2ee72cbcfcaaa0ddeb",
+      "method": "GET",
+      "params": [],
+      "path": "/cart",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_0b09ce07f7401f264146",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_077dd61f9150b54c7436",
+      "method": "GET",
+      "params": [],
+      "path": "/deals",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_72af02b4f9b35301501c",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_becdcaf6688c90172f62",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_fbe123f99b6aaa0466f1",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_4ad1cb6b439b0a0f75ed",
+      "method": "GET",
+      "params": [
+        "limit",
+        "product"
+      ],
+      "path": "/api/reviews",
+      "resource_type": "fetch"
+    },
+    {
+      "action_id": "action_tr_036b6027d8c1abf9e4a5",
+      "method": "POST",
+      "params": [
+        "sku"
+      ],
+      "path": "/cart/items",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_036b6027d8c1abf9e4a5",
+      "method": "GET",
+      "params": [],
+      "path": "/cart",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_0a20934e5568b4213dcb",
+      "method": "GET",
+      "params": [
+        "limit",
+        "product"
+      ],
+      "path": "/api/reviews",
+      "resource_type": "fetch"
+    },
+    {
+      "action_id": "action_tr_30662b4bc5d84f7d0080",
+      "method": "GET",
+      "params": [
+        "limit",
+        "product"
+      ],
+      "path": "/api/reviews",
+      "resource_type": "fetch"
+    },
+    {
+      "action_id": "action_tr_7adb597074cf7b28c440",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_70cf2d07c57d81d4311b",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_f1061ebf940390b2da37",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_797d3bdf18e1b3190689",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_a5c9fc9bd495472f7922",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_02f258b82c26d01a6a64",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_32e54c9dbb98cb6baef8",
+      "method": "GET",
+      "params": [],
+      "path": "/returns",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_f60b16754230cd310b34",
+      "method": "GET",
+      "params": [],
+      "path": "/deals",
+      "resource_type": "document"
+    }
+  ],
+  "requests": [
+    {
+      "id": "product",
+      "method": "GET",
+      "params": [],
+      "path": "/products/{instance}",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "outdoors",
+      "method": "GET",
+      "params": [],
+      "path": "/category/outdoors",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "deals",
+      "method": "GET",
+      "params": [],
+      "path": "/deals",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "returns",
+      "method": "GET",
+      "params": [],
+      "path": "/returns",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "reviews",
+      "method": "GET",
+      "params": [
+        "limit",
+        "product"
+      ],
+      "path": "/api/reviews",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "cart_post",
+      "method": "POST",
+      "params": [
+        "sku"
+      ],
+      "path": "/cart/items",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "cart",
+      "method": "GET",
+      "params": [],
+      "path": "/cart",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "checkout",
+      "method": "GET",
+      "params": [],
+      "path": "/checkout",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    }
+  ]
+}

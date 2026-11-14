@@ -1,0 +1,289 @@
+{
+ "crawlground": {
+  "status": "ok",
+  "cycles": 2,
+  "containers_per_cycle": [
+   1,
+   1
+  ],
+  "container_ids_disjoint_between_cycles": true,
+  "volume_names_disjoint_between_cycles": true,
+  "mount_profile_identical_between_cycles": true,
+  "mount_profile_digest": "fac5e81017912139",
+  "services": 1,
+  "services_with_tmpfs": 0,
+  "tmpfs_mounts": 0,
+  "volume_mounts": 1,
+  "writable_bind_mounts": 0,
+  "named_volumes_before_start": [
+   0,
+   0
+  ],
+  "pre_start_down_exit": [
+   0,
+   0
+  ],
+  "teardown_exit": [
+   0,
+   0
+  ],
+  "residual_containers_after_teardown": [
+   0,
+   0
+  ],
+  "trial_volumes_remaining_after_teardown": [
+   0,
+   0
+  ],
+  "up_seconds": [
+   8.3,
+   31.7
+  ]
+ },
+ "whiteboard": {
+  "status": "ok",
+  "cycles": 2,
+  "containers_per_cycle": [
+   3,
+   3
+  ],
+  "container_ids_disjoint_between_cycles": true,
+  "volume_names_disjoint_between_cycles": true,
+  "mount_profile_identical_between_cycles": true,
+  "mount_profile_digest": "a0557b9af7ffbd68",
+  "services": 3,
+  "services_with_tmpfs": 0,
+  "tmpfs_mounts": 0,
+  "volume_mounts": 1,
+  "writable_bind_mounts": 0,
+  "named_volumes_before_start": [
+   0,
+   0
+  ],
+  "pre_start_down_exit": [
+   0,
+   0
+  ],
+  "teardown_exit": [
+   0,
+   0
+  ],
+  "residual_containers_after_teardown": [
+   0,
+   0
+  ],
+  "trial_volumes_remaining_after_teardown": [
+   0,
+   0
+  ],
+  "up_seconds": [
+   34.2,
+   4.3
+  ]
+ },
+ "siyucms": {
+  "status": "ok",
+  "cycles": 2,
+  "containers_per_cycle": [
+   4,
+   4
+  ],
+  "container_ids_disjoint_between_cycles": true,
+  "volume_names_disjoint_between_cycles": true,
+  "mount_profile_identical_between_cycles": true,
+  "mount_profile_digest": "07abf0c2a6b78fa1",
+  "services": 4,
+  "services_with_tmpfs": 1,
+  "tmpfs_mounts": 1,
+  "volume_mounts": 0,
+  "writable_bind_mounts": 1,
+  "named_volumes_before_start": [
+   0,
+   0
+  ],
+  "pre_start_down_exit": [
+   0,
+   0
+  ],
+  "teardown_exit": [
+   0,
+   0
+  ],
+  "residual_containers_after_teardown": [
+   0,
+   0
+  ],
+  "trial_volumes_remaining_after_teardown": [
+   0,
+   0
+  ],
+  "up_seconds": [
+   18.4,
+   19.8
+  ]
+ },
+ "prestashop": {
+  "status": "ok",
+  "cycles": 2,
+  "containers_per_cycle": [
+   4,
+   4
+  ],
+  "container_ids_disjoint_between_cycles": true,
+  "volume_names_disjoint_between_cycles": true,
+  "mount_profile_identical_between_cycles": true,
+  "mount_profile_digest": "be3bfcce4137e16b",
+  "services": 4,
+  "services_with_tmpfs": 1,
+  "tmpfs_mounts": 1,
+  "volume_mounts": 0,
+  "writable_bind_mounts": 1,
+  "named_volumes_before_start": [
+   0,
+   0
+  ],
+  "pre_start_down_exit": [
+   0,
+   0
+  ],
+  "teardown_exit": [
+   0,
+   0
+  ],
+  "residual_containers_after_teardown": [
+   0,
+   0
+  ],
+  "trial_volumes_remaining_after_teardown": [
+   0,
+   0
+  ],
+  "up_seconds": [
+   111.0,
+   57.3
+  ]
+ },
+ "comfyui": {
+  "status": "ok",
+  "cycles": 2,
+  "containers_per_cycle": [
+   3,
+   3
+  ],
+  "container_ids_disjoint_between_cycles": true,
+  "volume_names_disjoint_between_cycles": true,
+  "mount_profile_identical_between_cycles": true,
+  "mount_profile_digest": "61f33e5a3b43733b",
+  "services": 3,
+  "services_with_tmpfs": 2,
+  "tmpfs_mounts": 2,
+  "volume_mounts": 0,
+  "writable_bind_mounts": 1,
+  "named_volumes_before_start": [
+   0,
+   0
+  ],
+  "pre_start_down_exit": [
+   0,
+   0
+  ],
+  "teardown_exit": [
+   0,
+   0
+  ],
+  "residual_containers_after_teardown": [
+   0,
+   0
+  ],
+  "trial_volumes_remaining_after_teardown": [
+   0,
+   0
+  ],
+  "up_seconds": [
+   17.3,
+   18.8
+  ]
+ },
+ "jetlinks": {
+  "status": "ok",
+  "cycles": 2,
+  "containers_per_cycle": [
+   8,
+   8
+  ],
+  "container_ids_disjoint_between_cycles": true,
+  "volume_names_disjoint_between_cycles": true,
+  "mount_profile_identical_between_cycles": true,
+  "mount_profile_digest": "6b6056b64ae5eb7b",
+  "services": 8,
+  "services_with_tmpfs": 5,
+  "tmpfs_mounts": 5,
+  "volume_mounts": 0,
+  "writable_bind_mounts": 1,
+  "named_volumes_before_start": [
+   0,
+   0
+  ],
+  "pre_start_down_exit": [
+   0,
+   0
+  ],
+  "teardown_exit": [
+   0,
+   0
+  ],
+  "residual_containers_after_teardown": [
+   0,
+   0
+  ],
+  "trial_volumes_remaining_after_teardown": [
+   0,
+   0
+  ],
+  "up_seconds": [
+   97.5,
+   98.8
+  ]
+ },
+ "white-jotter": {
+  "status": "ok",
+  "cycles": 2,
+  "containers_per_cycle": [
+   5,
+   5
+  ],
+  "container_ids_disjoint_between_cycles": true,
+  "volume_names_disjoint_between_cycles": true,
+  "mount_profile_identical_between_cycles": true,
+  "mount_profile_digest": "df5d3156e0d6d792",
+  "services": 5,
+  "services_with_tmpfs": 2,
+  "tmpfs_mounts": 2,
+  "volume_mounts": 0,
+  "writable_bind_mounts": 1,
+  "named_volumes_before_start": [
+   0,
+   0
+  ],
+  "pre_start_down_exit": [
+   0,
+   0
+  ],
+  "teardown_exit": [
+   0,
+   0
+  ],
+  "residual_containers_after_teardown": [
+   0,
+   0
+  ],
+  "trial_volumes_remaining_after_teardown": [
+   0,
+   0
+  ],
+  "up_seconds": [
+   44.7,
+   31.2
+  ]
+ }
+}

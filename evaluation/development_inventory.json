@@ -1,0 +1,603 @@
+{
+ "crawl_maze": {
+  "annotation": null,
+  "archives": [
+   {
+    "actions_by_status": {
+     "failed": 1,
+     "observed": 102
+    },
+    "archive": "agent1/experiments/replay_crawlmaze_3x3/adaptive_readiness_R0_s0/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": true,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 133,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 103,
+     "capture_manifest": 1,
+     "observation": 173,
+     "replay": 24
+    },
+    "replays_by_kind": {
+     "standard": 24
+    },
+    "sha256": "9d44ae500694abadc41ab6844999995f6f3025c3a179948d7cdf170dc55720d8"
+   },
+   {
+    "actions_by_status": {
+     "failed": 1,
+     "observed": 103
+    },
+    "archive": "agent1/experiments/replay_crawlmaze_3x3/adaptive_readiness_R1_s0/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": true,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 132,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 104,
+     "capture_manifest": 1,
+     "observation": 174,
+     "replay": 25
+    },
+    "replays_by_kind": {
+     "standard": 25
+    },
+    "sha256": "736ff148c4393a997cb4560b91ae886753a8ea28e2de097112fa70cb7af012ee"
+   },
+   {
+    "actions_by_status": {
+     "failed": 1,
+     "observed": 103
+    },
+    "archive": "agent1/experiments/replay_crawlmaze_3x3/adaptive_readiness_R2_s0/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": true,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 132,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 104,
+     "capture_manifest": 1,
+     "observation": 170,
+     "replay": 21
+    },
+    "replays_by_kind": {
+     "standard": 21
+    },
+    "sha256": "526007492989b1496ebce9c60b131103621d8a84e55f197bff8c8d414c2e0c81"
+   },
+   {
+    "actions_by_status": {
+     "failed": 1,
+     "observed": 102
+    },
+    "archive": "agent1/experiments/state_aware_crawlmaze_20261031/adaptive_readiness_final/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": true,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 131,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 103,
+     "capture_manifest": 1,
+     "observation": 170,
+     "replay": 23
+    },
+    "replays_by_kind": {
+     "standard": 23
+    },
+    "sha256": "6ebe727e8b0b52960207e07dc9268fcfe6d6a3ab6f8f15736302defe2fa55f7a"
+   }
+  ],
+  "role": "diagnostic"
+ },
+ "js_heavy_lab": {
+  "annotation": "js_heavy_lab",
+  "archives": [
+   {
+    "actions_by_status": {
+     "observed": 30
+    },
+    "archive": "agent1/experiments/js_heavy_p2_r1/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": false,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "replay_requests",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 60,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 30,
+     "capture_manifest": 1,
+     "observation": 60,
+     "replay": 25
+    },
+    "replays_by_kind": {
+     "standard": 25
+    },
+    "sha256": "82916de081ad397e37f56f8889485e668bc8bfb829e8e6ecfd54cf9abad2d5d0"
+   },
+   {
+    "actions_by_status": {
+     "observed": 30
+    },
+    "archive": "agent1/experiments/js_heavy_p2_r2/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": false,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "replay_requests",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 60,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 30,
+     "capture_manifest": 1,
+     "observation": 60,
+     "replay": 24
+    },
+    "replays_by_kind": {
+     "standard": 24
+    },
+    "sha256": "7b90bb81b9887eecf7ffff83b7a1f7763382e69ab5b3c1d927f5996b64acf6b5"
+   },
+   {
+    "actions_by_status": {
+     "observed": 30
+    },
+    "archive": "agent1/experiments/js_heavy_p2_r3/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": false,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "replay_requests",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 60,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 30,
+     "capture_manifest": 1,
+     "observation": 60,
+     "replay": 24
+    },
+    "replays_by_kind": {
+     "standard": 24
+    },
+    "sha256": "e241ecef789fdc976b5ea87579bd8c793bfeb5c52d04b9764276981545624bef"
+   },
+   {
+    "actions_by_status": {
+     "observed": 30
+    },
+    "archive": "agent1/experiments/js_heavy_p2_r4/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": false,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "replay_requests",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 60,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 30,
+     "capture_manifest": 1,
+     "observation": 60,
+     "replay": 24
+    },
+    "replays_by_kind": {
+     "standard": 24
+    },
+    "sha256": "0c3b6d81c7272c13a994d85eb34f02e231958c20a032bb96e303fdad389abe4d"
+   }
+  ],
+  "role": "primary"
+ },
+ "replay_lab": {
+  "annotation": "replay_lab",
+  "archives": [
+   {
+    "actions_by_status": {
+     "observed": 34
+    },
+    "archive": "agent1/experiments/replay_lab_probe_20261031/structure/checkpoint.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": true,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "checkpoint",
+    "not_captured": [
+     "instance_fields",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 66,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 34,
+     "capture_manifest": 1,
+     "observation": 66,
+     "replay": 16
+    },
+    "replays_by_kind": {
+     "standard": 16
+    },
+    "sha256": "52e3abbb3f7437e1f39f71024169cbc6df534afbe6e225af45db6253351b02ef"
+   }
+  ],
+  "role": "primary"
+ },
+ "stateful_lab": {
+  "annotation": "stateful_lab",
+  "archives": [
+   {
+    "actions_by_status": {
+     "failed": 2,
+     "not_tested": 2,
+     "observed": 26
+    },
+    "archive": "agent1/experiments/stateful_fixture_example/graph_a.json",
+    "capture": {
+     "dom_affordances": false,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": true,
+     "response_shapes": false,
+     "storage_key_names": false,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "graph_a",
+    "not_captured": [
+     "dom_affordances",
+     "instance_fields",
+     "response_shapes",
+     "storage_key_names",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 3,
+    "observations_with_group_representative_url": 17,
+    "records": {
+     "action": 30,
+     "capture_manifest": 1,
+     "observation": 36,
+     "replay": 3
+    },
+    "replays_by_kind": {
+     "standard": 3
+    },
+    "sha256": "e3843e9d086e3487af7dd8496e27e82f51f933b7bcb0a31b441b6e5cdbaa0bf5"
+   }
+  ],
+  "role": "primary"
+ },
+ "whiteboard": {
+  "annotation": "whiteboard",
+  "archives": [
+   {
+    "actions_by_status": {
+     "failed": 9,
+     "observed": 13
+    },
+    "archive": "agent1/experiments/state_aware_whiteboard_final_20261031/A_baseline/adaptive_readiness/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": false,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "replay_requests",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 24,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 22,
+     "capture_manifest": 1,
+     "observation": 24
+    },
+    "replays_by_kind": {},
+    "sha256": "7ce97aaf12e6fb4691b3e6c1a7d934d2ea61290aa9c1e508a39c526723bf268c"
+   },
+   {
+    "actions_by_status": {
+     "not_tested": 8,
+     "observed": 43
+    },
+    "archive": "agent1/experiments/state_aware_whiteboard_final_20261031/B_state/adaptive_readiness/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": true,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 59,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 51,
+     "capture_manifest": 1,
+     "observation": 59,
+     "replay": 7
+    },
+    "replays_by_kind": {
+     "standard": 7
+    },
+    "sha256": "731b96217c7b5492df7ac18397628ba92c79cf50cacdfb12b3ec62a54add82fe"
+   },
+   {
+    "actions_by_status": {
+     "failed": 1,
+     "not_tested": 7,
+     "observed": 43
+    },
+    "archive": "agent1/experiments/state_aware_whiteboard_final_20261031/C_state_record_1/adaptive_readiness/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": true,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 60,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 51,
+     "capture_manifest": 1,
+     "observation": 60,
+     "replay": 7
+    },
+    "replays_by_kind": {
+     "standard": 7
+    },
+    "sha256": "c2aebbaaf20a896bf3290f56a5c6ec023b426ecf8e7d5a788ad186162897fce9"
+   },
+   {
+    "actions_by_status": {
+     "not_tested": 8,
+     "observed": 43
+    },
+    "archive": "agent1/experiments/state_aware_whiteboard_final_20261031/C_state_record_2/adaptive_readiness/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": true,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 59,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 51,
+     "capture_manifest": 1,
+     "observation": 59,
+     "replay": 7
+    },
+    "replays_by_kind": {
+     "standard": 7
+    },
+    "sha256": "f1f7bcbeb366ce405d2a376160151d36e3d13a254299a930a6a802132e170e63"
+   },
+   {
+    "actions_by_status": {
+     "not_tested": 10,
+     "observed": 43
+    },
+    "archive": "agent1/experiments/state_aware_whiteboard_final_20261031/C_state_record_3/adaptive_readiness/run.json",
+    "capture": {
+     "dom_affordances": true,
+     "http_query_values": true,
+     "http_requests": true,
+     "instance_fields": false,
+     "replay_requests": true,
+     "response_shapes": false,
+     "storage_key_names": true,
+     "visual_regions": false,
+     "websocket": false
+    },
+    "exists": true,
+    "format": "run",
+    "not_captured": [
+     "instance_fields",
+     "response_shapes",
+     "visual_regions",
+     "websocket"
+    ],
+    "observations_with_affordances": 55,
+    "observations_with_group_representative_url": 0,
+    "records": {
+     "action": 53,
+     "capture_manifest": 1,
+     "observation": 55,
+     "replay": 7
+    },
+    "replays_by_kind": {
+     "standard": 7
+    },
+    "sha256": "df31e85231673d88eaef6eeb6a0e9ecb346de6763a63a5bafe79a46219bce9ed"
+   }
+  ],
+  "role": "identity"
+ }
+}

@@ -1,0 +1,80 @@
+{
+  "development": [
+    {
+      "name": "baseline_6082c6d_grouped",
+      "areas": [6, 10],
+      "controls": [11, 17],
+      "requests": [6, 10],
+      "replayed_paths": [5, 10],
+      "replay": [19, 19],
+      "browser_actions": 142,
+      "elapsed_seconds": 11.596,
+      "covered_surfaces_per_action": 0.1619718309859155
+    },
+    {
+      "name": "iteration1_semantic_grouped",
+      "areas": [6, 10],
+      "controls": [15, 17],
+      "requests": [4, 10],
+      "replayed_paths": [6, 10],
+      "replay": [21, 21],
+      "browser_actions": 143,
+      "elapsed_seconds": 11.2,
+      "covered_surfaces_per_action": 0.17482517482517482
+    },
+    {
+      "name": "iteration2_coverage_frontier",
+      "areas": [10, 10],
+      "controls": [17, 17],
+      "requests": [9, 10],
+      "replayed_paths": [7, 10],
+      "replay": [17, 17],
+      "browser_actions": 140,
+      "elapsed_seconds": 11.302,
+      "covered_surfaces_per_action": 0.2571428571428571
+    },
+    {
+      "name": "iteration3_request_context_evidence",
+      "areas": [10, 10],
+      "controls": [17, 17],
+      "requests": [10, 10],
+      "replayed_paths": [8, 10],
+      "replay": [17, 17],
+      "browser_actions": 140,
+      "elapsed_seconds": 10.93,
+      "covered_surfaces_per_action": 0.2642857142857143
+    }
+  ],
+  "heldout": [
+    {
+      "name": "heldout_grouped",
+      "areas": [7, 8],
+      "controls": [11, 11],
+      "requests": [7, 8],
+      "replayed_paths": [6, 8],
+      "replay": [21, 21],
+      "browser_actions": 140,
+      "elapsed_seconds": 12.422,
+      "covered_surfaces_per_action": 0.17857142857142858
+    },
+    {
+      "name": "heldout_coverage",
+      "areas": [8, 8],
+      "controls": [11, 11],
+      "requests": [8, 8],
+      "replayed_paths": [5, 8],
+      "replay": [19, 19],
+      "browser_actions": 141,
+      "elapsed_seconds": 10.965,
+      "covered_surfaces_per_action": 0.19148936170212766
+    }
+  ],
+  "external_cost_usd": 0.0,
+  "browser_elapsed_seconds_total_including_clean_revision_repeats": 91.315,
+  "notes": [
+    "Blocked and outside-origin surfaces are excluded from applicable recall denominators.",
+    "SiyuCMS history and WebExploitBench were not used as generalization evidence.",
+    "The mapper was frozen before the held-out results were inspected.",
+    "The first held-out coverage run replayed 6/8 paths; the clean-revision repeat replayed 5/8 while surface recall and 19/19 attempted replay reliability were stable."
+  ]
+}

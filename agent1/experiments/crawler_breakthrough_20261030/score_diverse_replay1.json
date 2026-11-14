@@ -1,0 +1,617 @@
+{
+  "categories": [
+    "css",
+    "headers",
+    "html",
+    "javascript",
+    "misc"
+  ],
+  "results": {
+    "combined_adaptive_ready_diverse_replay": {
+      "application_observations": {
+        "actions": 639,
+        "browser_actions": 299,
+        "browser_actions_per_marker": 11.96,
+        "browser_http_requests_accounted": 420,
+        "browser_network_events": 420,
+        "distinct_routes": 84,
+        "elapsed_seconds": 166.27,
+        "external_cost_usd": 0.0,
+        "graph_connections_complete": 1293,
+        "graph_connections_missing": 0,
+        "graph_connections_total": 1293,
+        "model_calls": 0,
+        "observed_transitions": 103,
+        "replay_attempts": 23,
+        "replay_failures": 0,
+        "replay_successes": 23,
+        "reported_false_merges": 0,
+        "resource_references_excluded": 0,
+        "resource_references_extracted": 137,
+        "resource_references_queued": 111,
+        "resource_unresolved_candidates": 0,
+        "states": 89,
+        "typed_resource_budget_limited": 0,
+        "typed_resource_class_budget_limited": 21,
+        "typed_resource_failures": 2,
+        "typed_resource_fetch_successes": 89,
+        "typed_resource_fetches": 91,
+        "untested_paths": 80
+      },
+      "coverage_by_category": {
+        "css": {
+          "any_fetch": 0,
+          "browser_fetched": 0,
+          "expected": 1,
+          "referenced": 1,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        },
+        "headers": {
+          "any_fetch": 3,
+          "browser_fetched": 1,
+          "expected": 4,
+          "referenced": 3,
+          "replay_requested": 0,
+          "spider_fetched": 3,
+          "ui_state_reached": 1
+        },
+        "html": {
+          "any_fetch": 19,
+          "browser_fetched": 10,
+          "expected": 57,
+          "referenced": 18,
+          "replay_requested": 2,
+          "spider_fetched": 14,
+          "ui_state_reached": 1
+        },
+        "javascript": {
+          "any_fetch": 3,
+          "browser_fetched": 3,
+          "expected": 27,
+          "referenced": 13,
+          "replay_requested": 3,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        },
+        "misc": {
+          "any_fetch": 0,
+          "browser_fetched": 0,
+          "expected": 2,
+          "referenced": 0,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        }
+      },
+      "coverage_total": {
+        "any_fetch": 25,
+        "browser_fetched": 14,
+        "expected": 91,
+        "referenced": 35,
+        "replay_requested": 5,
+        "spider_fetched": 17,
+        "ui_state_reached": 2
+      },
+      "discovery_funnel": {
+        "browser_requested_successfully": 14,
+        "candidate_references": 35,
+        "expected": 91,
+        "not_referenced": 56,
+        "queue_admitted": 21,
+        "replay_requested": 5,
+        "spider_attempted": 17,
+        "spider_succeeded": 17,
+        "ui_state_reached": 2
+      },
+      "recall": {
+        "any_fetch": 0.27472527472527475,
+        "browser_fetched": 0.15384615384615385,
+        "referenced": 0.38461538461538464,
+        "replay_requested": 0.054945054945054944,
+        "spider_fetched": 0.18681318681318682,
+        "ui_state_reached": 0.02197802197802198
+      },
+      "resource_yield": {
+        "new_unique_references": 111,
+        "new_unique_references_per_response": 1.247191011235955,
+        "responses_with_yield_measure": 89,
+        "successful_spider_marker_paths_per_get": 0.18681318681318682
+      },
+      "time_to_coverage": {
+        "120s": 24,
+        "180s": 25,
+        "300s": 25,
+        "30s": 6,
+        "600s": 25,
+        "60s": 15
+      }
+    },
+    "fifo_fixed_budget": {
+      "application_observations": {
+        "actions": 517,
+        "browser_actions": 285,
+        "browser_actions_per_marker": 13.571428571428571,
+        "browser_http_requests_accounted": 395,
+        "browser_network_events": 395,
+        "distinct_routes": 69,
+        "elapsed_seconds": 182.465,
+        "external_cost_usd": 0.0,
+        "graph_connections_complete": 1121,
+        "graph_connections_missing": 0,
+        "graph_connections_total": 1121,
+        "model_calls": 0,
+        "observed_transitions": 85,
+        "replay_attempts": 32,
+        "replay_failures": 0,
+        "replay_successes": 32,
+        "reported_false_merges": 0,
+        "resource_references_excluded": 0,
+        "resource_references_extracted": 137,
+        "resource_references_queued": 111,
+        "resource_unresolved_candidates": 0,
+        "states": 74,
+        "typed_resource_budget_limited": 0,
+        "typed_resource_class_budget_limited": 16,
+        "typed_resource_failures": 2,
+        "typed_resource_fetch_successes": 87,
+        "typed_resource_fetches": 89,
+        "untested_paths": 53
+      },
+      "coverage_by_category": {
+        "css": {
+          "any_fetch": 0,
+          "browser_fetched": 0,
+          "expected": 1,
+          "referenced": 1,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        },
+        "headers": {
+          "any_fetch": 3,
+          "browser_fetched": 1,
+          "expected": 4,
+          "referenced": 3,
+          "replay_requested": 1,
+          "spider_fetched": 3,
+          "ui_state_reached": 1
+        },
+        "html": {
+          "any_fetch": 15,
+          "browser_fetched": 7,
+          "expected": 57,
+          "referenced": 15,
+          "replay_requested": 1,
+          "spider_fetched": 12,
+          "ui_state_reached": 0
+        },
+        "javascript": {
+          "any_fetch": 3,
+          "browser_fetched": 3,
+          "expected": 27,
+          "referenced": 8,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        },
+        "misc": {
+          "any_fetch": 0,
+          "browser_fetched": 0,
+          "expected": 2,
+          "referenced": 0,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        }
+      },
+      "coverage_total": {
+        "any_fetch": 21,
+        "browser_fetched": 11,
+        "expected": 91,
+        "referenced": 27,
+        "replay_requested": 2,
+        "spider_fetched": 15,
+        "ui_state_reached": 1
+      },
+      "discovery_funnel": {
+        "browser_requested_successfully": 11,
+        "candidate_references": 27,
+        "expected": 91,
+        "not_referenced": 64,
+        "queue_admitted": 19,
+        "replay_requested": 2,
+        "spider_attempted": 15,
+        "spider_succeeded": 15,
+        "ui_state_reached": 1
+      },
+      "recall": {
+        "any_fetch": 0.23076923076923078,
+        "browser_fetched": 0.12087912087912088,
+        "referenced": 0.2967032967032967,
+        "replay_requested": 0.02197802197802198,
+        "spider_fetched": 0.16483516483516483,
+        "ui_state_reached": 0.01098901098901099
+      },
+      "resource_yield": {
+        "new_unique_references": 111,
+        "new_unique_references_per_response": 1.2758620689655173,
+        "responses_with_yield_measure": 87,
+        "successful_spider_marker_paths_per_get": 0.16853932584269662
+      },
+      "time_to_coverage": {
+        "120s": 20,
+        "180s": 21,
+        "300s": 21,
+        "30s": 6,
+        "600s": 21,
+        "60s": 14
+      }
+    },
+    "marginal_value_fixed_budget": {
+      "application_observations": {
+        "actions": 517,
+        "browser_actions": 285,
+        "browser_actions_per_marker": 13.571428571428571,
+        "browser_http_requests_accounted": 389,
+        "browser_network_events": 389,
+        "distinct_routes": 69,
+        "elapsed_seconds": 180.625,
+        "external_cost_usd": 0.0,
+        "graph_connections_complete": 1121,
+        "graph_connections_missing": 0,
+        "graph_connections_total": 1121,
+        "model_calls": 0,
+        "observed_transitions": 85,
+        "replay_attempts": 32,
+        "replay_failures": 0,
+        "replay_successes": 32,
+        "reported_false_merges": 0,
+        "resource_references_excluded": 0,
+        "resource_references_extracted": 137,
+        "resource_references_queued": 111,
+        "resource_unresolved_candidates": 0,
+        "states": 74,
+        "typed_resource_budget_limited": 0,
+        "typed_resource_class_budget_limited": 16,
+        "typed_resource_failures": 2,
+        "typed_resource_fetch_successes": 87,
+        "typed_resource_fetches": 89,
+        "untested_paths": 53
+      },
+      "coverage_by_category": {
+        "css": {
+          "any_fetch": 0,
+          "browser_fetched": 0,
+          "expected": 1,
+          "referenced": 1,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        },
+        "headers": {
+          "any_fetch": 3,
+          "browser_fetched": 1,
+          "expected": 4,
+          "referenced": 3,
+          "replay_requested": 1,
+          "spider_fetched": 3,
+          "ui_state_reached": 1
+        },
+        "html": {
+          "any_fetch": 15,
+          "browser_fetched": 7,
+          "expected": 57,
+          "referenced": 15,
+          "replay_requested": 0,
+          "spider_fetched": 12,
+          "ui_state_reached": 0
+        },
+        "javascript": {
+          "any_fetch": 3,
+          "browser_fetched": 3,
+          "expected": 27,
+          "referenced": 8,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        },
+        "misc": {
+          "any_fetch": 0,
+          "browser_fetched": 0,
+          "expected": 2,
+          "referenced": 0,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        }
+      },
+      "coverage_total": {
+        "any_fetch": 21,
+        "browser_fetched": 11,
+        "expected": 91,
+        "referenced": 27,
+        "replay_requested": 1,
+        "spider_fetched": 15,
+        "ui_state_reached": 1
+      },
+      "discovery_funnel": {
+        "browser_requested_successfully": 11,
+        "candidate_references": 27,
+        "expected": 91,
+        "not_referenced": 64,
+        "queue_admitted": 19,
+        "replay_requested": 1,
+        "spider_attempted": 15,
+        "spider_succeeded": 15,
+        "ui_state_reached": 1
+      },
+      "recall": {
+        "any_fetch": 0.23076923076923078,
+        "browser_fetched": 0.12087912087912088,
+        "referenced": 0.2967032967032967,
+        "replay_requested": 0.01098901098901099,
+        "spider_fetched": 0.16483516483516483,
+        "ui_state_reached": 0.01098901098901099
+      },
+      "resource_yield": {
+        "new_unique_references": 111,
+        "new_unique_references_per_response": 1.2758620689655173,
+        "responses_with_yield_measure": 87,
+        "successful_spider_marker_paths_per_get": 0.16853932584269662
+      },
+      "time_to_coverage": {
+        "120s": 20,
+        "180s": 21,
+        "300s": 21,
+        "30s": 6,
+        "600s": 21,
+        "60s": 14
+      }
+    },
+    "random_fixed_budget": {
+      "application_observations": {
+        "actions": 517,
+        "browser_actions": 289,
+        "browser_actions_per_marker": 13.761904761904763,
+        "browser_http_requests_accounted": 393,
+        "browser_network_events": 393,
+        "distinct_routes": 69,
+        "elapsed_seconds": 180.968,
+        "external_cost_usd": 0.0,
+        "graph_connections_complete": 1122,
+        "graph_connections_missing": 0,
+        "graph_connections_total": 1122,
+        "model_calls": 0,
+        "observed_transitions": 85,
+        "replay_attempts": 33,
+        "replay_failures": 0,
+        "replay_successes": 33,
+        "reported_false_merges": 0,
+        "resource_references_excluded": 0,
+        "resource_references_extracted": 137,
+        "resource_references_queued": 111,
+        "resource_unresolved_candidates": 0,
+        "states": 74,
+        "typed_resource_budget_limited": 0,
+        "typed_resource_class_budget_limited": 16,
+        "typed_resource_failures": 2,
+        "typed_resource_fetch_successes": 87,
+        "typed_resource_fetches": 89,
+        "untested_paths": 52
+      },
+      "coverage_by_category": {
+        "css": {
+          "any_fetch": 0,
+          "browser_fetched": 0,
+          "expected": 1,
+          "referenced": 1,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        },
+        "headers": {
+          "any_fetch": 3,
+          "browser_fetched": 1,
+          "expected": 4,
+          "referenced": 3,
+          "replay_requested": 1,
+          "spider_fetched": 3,
+          "ui_state_reached": 1
+        },
+        "html": {
+          "any_fetch": 15,
+          "browser_fetched": 7,
+          "expected": 57,
+          "referenced": 15,
+          "replay_requested": 1,
+          "spider_fetched": 12,
+          "ui_state_reached": 0
+        },
+        "javascript": {
+          "any_fetch": 3,
+          "browser_fetched": 3,
+          "expected": 27,
+          "referenced": 8,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        },
+        "misc": {
+          "any_fetch": 0,
+          "browser_fetched": 0,
+          "expected": 2,
+          "referenced": 0,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        }
+      },
+      "coverage_total": {
+        "any_fetch": 21,
+        "browser_fetched": 11,
+        "expected": 91,
+        "referenced": 27,
+        "replay_requested": 2,
+        "spider_fetched": 15,
+        "ui_state_reached": 1
+      },
+      "discovery_funnel": {
+        "browser_requested_successfully": 11,
+        "candidate_references": 27,
+        "expected": 91,
+        "not_referenced": 64,
+        "queue_admitted": 19,
+        "replay_requested": 2,
+        "spider_attempted": 15,
+        "spider_succeeded": 15,
+        "ui_state_reached": 1
+      },
+      "recall": {
+        "any_fetch": 0.23076923076923078,
+        "browser_fetched": 0.12087912087912088,
+        "referenced": 0.2967032967032967,
+        "replay_requested": 0.02197802197802198,
+        "spider_fetched": 0.16483516483516483,
+        "ui_state_reached": 0.01098901098901099
+      },
+      "resource_yield": {
+        "new_unique_references": 111,
+        "new_unique_references_per_response": 1.2758620689655173,
+        "responses_with_yield_measure": 87,
+        "successful_spider_marker_paths_per_get": 0.16853932584269662
+      },
+      "time_to_coverage": {
+        "120s": 20,
+        "180s": 21,
+        "300s": 21,
+        "30s": 6,
+        "600s": 21,
+        "60s": 14
+      }
+    },
+    "route_diverse_fixed_budget": {
+      "application_observations": {
+        "actions": 517,
+        "browser_actions": 289,
+        "browser_actions_per_marker": 13.761904761904763,
+        "browser_http_requests_accounted": 395,
+        "browser_network_events": 395,
+        "distinct_routes": 69,
+        "elapsed_seconds": 181.589,
+        "external_cost_usd": 0.0,
+        "graph_connections_complete": 1122,
+        "graph_connections_missing": 0,
+        "graph_connections_total": 1122,
+        "model_calls": 0,
+        "observed_transitions": 85,
+        "replay_attempts": 33,
+        "replay_failures": 0,
+        "replay_successes": 33,
+        "reported_false_merges": 0,
+        "resource_references_excluded": 0,
+        "resource_references_extracted": 137,
+        "resource_references_queued": 111,
+        "resource_unresolved_candidates": 0,
+        "states": 74,
+        "typed_resource_budget_limited": 0,
+        "typed_resource_class_budget_limited": 16,
+        "typed_resource_failures": 2,
+        "typed_resource_fetch_successes": 87,
+        "typed_resource_fetches": 89,
+        "untested_paths": 52
+      },
+      "coverage_by_category": {
+        "css": {
+          "any_fetch": 0,
+          "browser_fetched": 0,
+          "expected": 1,
+          "referenced": 1,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        },
+        "headers": {
+          "any_fetch": 3,
+          "browser_fetched": 1,
+          "expected": 4,
+          "referenced": 3,
+          "replay_requested": 1,
+          "spider_fetched": 3,
+          "ui_state_reached": 1
+        },
+        "html": {
+          "any_fetch": 15,
+          "browser_fetched": 7,
+          "expected": 57,
+          "referenced": 15,
+          "replay_requested": 1,
+          "spider_fetched": 12,
+          "ui_state_reached": 0
+        },
+        "javascript": {
+          "any_fetch": 3,
+          "browser_fetched": 3,
+          "expected": 27,
+          "referenced": 8,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        },
+        "misc": {
+          "any_fetch": 0,
+          "browser_fetched": 0,
+          "expected": 2,
+          "referenced": 0,
+          "replay_requested": 0,
+          "spider_fetched": 0,
+          "ui_state_reached": 0
+        }
+      },
+      "coverage_total": {
+        "any_fetch": 21,
+        "browser_fetched": 11,
+        "expected": 91,
+        "referenced": 27,
+        "replay_requested": 2,
+        "spider_fetched": 15,
+        "ui_state_reached": 1
+      },
+      "discovery_funnel": {
+        "browser_requested_successfully": 11,
+        "candidate_references": 27,
+        "expected": 91,
+        "not_referenced": 64,
+        "queue_admitted": 19,
+        "replay_requested": 2,
+        "spider_attempted": 15,
+        "spider_succeeded": 15,
+        "ui_state_reached": 1
+      },
+      "recall": {
+        "any_fetch": 0.23076923076923078,
+        "browser_fetched": 0.12087912087912088,
+        "referenced": 0.2967032967032967,
+        "replay_requested": 0.02197802197802198,
+        "spider_fetched": 0.16483516483516483,
+        "ui_state_reached": 0.01098901098901099
+      },
+      "resource_yield": {
+        "new_unique_references": 111,
+        "new_unique_references_per_response": 1.2758620689655173,
+        "responses_with_yield_measure": 87,
+        "successful_spider_marker_paths_per_get": 0.16853932584269662
+      },
+      "time_to_coverage": {
+        "120s": 20,
+        "180s": 21,
+        "300s": 21,
+        "30s": 6,
+        "600s": 21,
+        "60s": 14
+      }
+    }
+  },
+  "scoring_interface": "documented post-run fetch-expected-results"
+}

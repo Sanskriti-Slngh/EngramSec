@@ -1,0 +1,205 @@
+{
+ "arms": {
+  "anon": {
+   "arm": "anon",
+   "role": "anonymous",
+   "write_inventory": [],
+   "safe_writes_discovered": {},
+   "blocked_writes_discovered": {},
+   "safe_writes_executed": [],
+   "non_get_requests_total": 0,
+   "first_safe_write_available_at_obs": null,
+   "total_observations": 111,
+   "actions_chosen_after_write_available": {},
+   "write_is_prerequisite_for_new_route": false,
+   "termination_signals": {
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "browser_actions": 188,
+    "max_browser_actions": 260,
+    "elapsed_s": 86.41,
+    "max_seconds": 110.0,
+    "transitions_failed": 0,
+    "unsafe_restorations_suppressed": 0,
+    "replay_untested_paths": 46
+   }
+  },
+  "user": {
+   "arm": "user",
+   "role": "registered_user",
+   "write_inventory": [
+    "order_create",
+    "profile_update"
+   ],
+   "safe_writes_discovered": {
+    "profile_update": {
+     "first_obs_index": 24,
+     "safe": true,
+     "skip_reason": null,
+     "count": 1
+    },
+    "order_create": {
+     "first_obs_index": 56,
+     "safe": true,
+     "skip_reason": null,
+     "count": 1
+    }
+   },
+   "blocked_writes_discovered": {},
+   "safe_writes_executed": [],
+   "non_get_requests_total": 0,
+   "first_safe_write_available_at_obs": 24,
+   "total_observations": 111,
+   "actions_chosen_after_write_available": {
+    "link": 43
+   },
+   "write_is_prerequisite_for_new_route": false,
+   "termination_signals": {
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "browser_actions": 196,
+    "max_browser_actions": 260,
+    "elapsed_s": 90.791,
+    "max_seconds": 110.0,
+    "transitions_failed": 0,
+    "unsafe_restorations_suppressed": 0,
+    "replay_untested_paths": 43
+   }
+  },
+  "admin": {
+   "arm": "admin",
+   "role": "admin",
+   "write_inventory": [
+    "admin_settings_update",
+    "admin_user_delete",
+    "order_create",
+    "profile_update"
+   ],
+   "safe_writes_discovered": {
+    "profile_update": {
+     "first_obs_index": 24,
+     "safe": true,
+     "skip_reason": null,
+     "count": 1
+    },
+    "admin_settings_update": {
+     "first_obs_index": 42,
+     "safe": true,
+     "skip_reason": null,
+     "count": 1
+    },
+    "order_create": {
+     "first_obs_index": 56,
+     "safe": true,
+     "skip_reason": null,
+     "count": 1
+    }
+   },
+   "blocked_writes_discovered": {
+    "admin_user_delete": {
+     "first_obs_index": 26,
+     "safe": false,
+     "skip_reason": "dangerous_label_or_target",
+     "count": 2
+    }
+   },
+   "safe_writes_executed": [],
+   "non_get_requests_total": 0,
+   "first_safe_write_available_at_obs": 24,
+   "total_observations": 111,
+   "actions_chosen_after_write_available": {
+    "link": 43
+   },
+   "write_is_prerequisite_for_new_route": false,
+   "termination_signals": {
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "browser_actions": 202,
+    "max_browser_actions": 260,
+    "elapsed_s": 94.22,
+    "max_seconds": 110.0,
+    "transitions_failed": 0,
+    "unsafe_restorations_suppressed": 0,
+    "replay_untested_paths": 41
+   }
+  }
+ },
+ "terminal_frontier": {
+  "user": {
+   "discovery_exit_reason": "exploration_time_deadline",
+   "exploration_deadline_s": 77.0,
+   "elapsed_at_exit_s": 77.4,
+   "browser_actions": 168,
+   "max_browser_actions": 260,
+   "transitions": 55,
+   "max_transitions": 180,
+   "remaining_count": 17,
+   "remaining_form_submits": 2,
+   "remaining_write_items": [
+    {
+     "key": "profile_update",
+     "priority": -42.0,
+     "label": "Save",
+     "target": "/profile"
+    },
+    {
+     "key": "order_create",
+     "priority": -42.0,
+     "label": "Place order",
+     "target": "/order/new"
+    }
+   ],
+   "top_remaining_priorities": [
+    1.0,
+    0.8,
+    0.8,
+    0.75,
+    0.6,
+    0.6,
+    0.5,
+    0.4
+   ]
+  },
+  "admin": {
+   "discovery_exit_reason": "exploration_time_deadline",
+   "exploration_deadline_s": 77.0,
+   "elapsed_at_exit_s": 78.3,
+   "browser_actions": 171,
+   "max_browser_actions": 260,
+   "transitions": 56,
+   "max_transitions": 180,
+   "remaining_count": 27,
+   "remaining_form_submits": 3,
+   "remaining_write_items": [
+    {
+     "key": "profile_update",
+     "priority": -42.0,
+     "label": "Save",
+     "target": "/profile"
+    },
+    {
+     "key": "admin_settings_update",
+     "priority": -42.0,
+     "label": "Update",
+     "target": "/admin/settings"
+    },
+    {
+     "key": "order_create",
+     "priority": -42.0,
+     "label": "Place order",
+     "target": "/order/new"
+    }
+   ],
+   "top_remaining_priorities": [
+    1.0,
+    1.0,
+    0.8,
+    0.8,
+    0.8,
+    0.75,
+    0.75,
+    0.6
+   ]
+  }
+ }
+}

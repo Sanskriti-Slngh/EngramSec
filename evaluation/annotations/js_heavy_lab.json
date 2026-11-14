@@ -1,0 +1,353 @@
+{
+ "application": "js_heavy_lab",
+ "annotation": {
+  "annotator": "Claude (Agent 1 engine developer)",
+  "independent": false,
+  "method": "Read from fixture source before any ACG resolver existed (Phase 0 commit); not adjudicated by a second annotator.",
+  "sources": [
+   "development_apps/js_heavy_lab.py; evaluation_ground_truth/js_heavy_lab.json"
+  ],
+  "frozen_at": "2026-11-01"
+ },
+ "roles": [
+  {
+   "id": "anonymous"
+  },
+  {
+   "id": "member",
+   "cookie_names": [
+    "member_session"
+   ]
+  }
+ ],
+ "templates": [
+  "/",
+  "/shallow/a",
+  "/shallow/b",
+  "/alias-area",
+  "/workspace",
+  "/workspace/detail",
+  "/reports",
+  "/member",
+  "/member/preferences"
+ ],
+ "capabilities": [
+  {
+   "id": "nav_home",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/"
+    }
+   ],
+   "class_target": "/"
+  },
+  {
+   "id": "nav_overview",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/shallow/a"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/shallow/a"
+    }
+   ],
+   "class_target": "/shallow/a"
+  },
+  {
+   "id": "nav_news",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/shallow/b"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/shallow/b"
+    }
+   ],
+   "class_target": "/shallow/b"
+  },
+  {
+   "id": "open_workflow",
+   "behavioral_class": "client_view_change",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [],
+   "entry_points": [
+    {
+     "label": "Open workflow"
+    }
+   ],
+   "no_operation_effect": "component_state_changed",
+   "class_target": "workflow"
+  },
+  {
+   "id": "continue_setup",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/workflow/prepare"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Continue setup"
+    }
+   ]
+  },
+  {
+   "id": "open_workspace",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/workspace"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/workspace"
+    }
+   ],
+   "class_target": "/workspace"
+  },
+  {
+   "id": "workspace_detail",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/workspace/detail"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/workspace/detail"
+    }
+   ],
+   "class_target": "/workspace/detail"
+  },
+  {
+   "id": "load_late_reports",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/late"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Load late reports"
+    }
+   ]
+  },
+  {
+   "id": "open_reports",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/reports"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/reports"
+    }
+   ],
+   "class_target": "/reports"
+  },
+  {
+   "id": "alias_area",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/alias-area"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/alias-area"
+    }
+   ],
+   "class_target": "/alias-area"
+  },
+  {
+   "id": "alias_data",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous",
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/alias"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Load alias data"
+    }
+   ]
+  },
+  {
+   "id": "enter_member_mode",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "anonymous"
+   ],
+   "operations": [
+    {
+     "method": "POST",
+     "route": "/session"
+    },
+    {
+     "method": "GET",
+     "route": "/member"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "form_submit",
+     "label": "Enter member mode"
+    }
+   ],
+   "effect_risk": "server_write",
+   "note": "establishes a session; changes the role"
+  },
+  {
+   "id": "member_preferences",
+   "behavioral_class": "navigation",
+   "class_observable_to_role": true,
+   "roles": [
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/member/preferences"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "link",
+     "target_route": "/member/preferences"
+    }
+   ],
+   "class_target": "/member/preferences"
+  },
+  {
+   "id": "load_preferences",
+   "behavioral_class": null,
+   "class_observable_to_role": false,
+   "roles": [
+    "member"
+   ],
+   "operations": [
+    {
+     "method": "GET",
+     "route": "/api/member/preferences"
+    }
+   ],
+   "entry_points": [
+    {
+     "label": "Load preferences"
+    }
+   ]
+  }
+ ],
+ "non_capabilities": [
+  {
+   "id": "refresh_status",
+   "entry_points": [
+    {
+     "label": "Refresh status"
+    }
+   ],
+   "reason": "handler does nothing"
+  },
+  {
+   "id": "external_docs",
+   "entry_points": [
+    {
+     "label": "External documentation"
+    }
+   ],
+   "reason": "outside scope"
+  }
+ ]
+}

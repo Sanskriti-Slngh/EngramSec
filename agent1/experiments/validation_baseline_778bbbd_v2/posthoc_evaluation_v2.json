@@ -1,0 +1,133 @@
+{
+  "cases": [
+    {
+      "case": "search",
+      "connections_missing_evidence": null,
+      "distinct_results_emitted": 2,
+      "emitted_results": [
+        "Result Alpha",
+        "Result Beta"
+      ],
+      "functional_false_negatives": 0,
+      "functional_false_positives": 0,
+      "functional_validation_failures": 0,
+      "functional_verification_available": false,
+      "functional_verified": 0,
+      "groups": 1,
+      "incorrect_merges": 1,
+      "navigation_validation_false_positives": 1,
+      "raw_states": 1,
+      "replays_attempted": 1,
+      "replays_failed": 0,
+      "replays_succeeded": 1,
+      "result_texts_share_group": true,
+      "unnecessary_splits": 0
+    },
+    {
+      "case": "form",
+      "connections_missing_evidence": null,
+      "failure_counted_as_replay_success": true,
+      "functional_false_negatives": 0,
+      "functional_false_positives": 1,
+      "functional_validation_failures": 0,
+      "functional_verification_available": false,
+      "functional_verified": 0,
+      "groups": 1,
+      "incorrect_merges": 0,
+      "navigation_validation_false_positives": 0,
+      "raw_states": 1,
+      "replays_attempted": 1,
+      "replays_failed": 0,
+      "replays_succeeded": 1,
+      "submissions": [
+        false,
+        false
+      ],
+      "success_observed": false,
+      "unnecessary_splits": 0,
+      "validation_failure_observed": true
+    },
+    {
+      "case": "multi",
+      "connections_missing_evidence": null,
+      "event_sequence": [
+        "setup",
+        "setup",
+        "completion",
+        "setup",
+        "setup",
+        "setup",
+        "setup",
+        "completion",
+        "setup",
+        "setup"
+      ],
+      "functional_false_negatives": 1,
+      "functional_false_positives": 0,
+      "functional_validation_failures": 0,
+      "functional_verification_available": false,
+      "functional_verified": 0,
+      "groups": 2,
+      "incorrect_merges": 0,
+      "navigation_validation_false_positives": 0,
+      "raw_states": 2,
+      "replays_attempted": 3,
+      "replays_failed": 0,
+      "replays_succeeded": 3,
+      "successful_completion": true,
+      "successful_completion_with_prerequisite": true,
+      "unnecessary_splits": 0
+    },
+    {
+      "case": "records",
+      "connections_missing_evidence": null,
+      "functional_false_negatives": 0,
+      "functional_false_positives": 0,
+      "functional_validation_failures": 0,
+      "functional_verification_available": false,
+      "functional_verified": 0,
+      "groups": 2,
+      "incorrect_merges": 1,
+      "navigation_validation_false_positives": 1,
+      "raw_states": 2,
+      "record_visits": [
+        "2",
+        "1"
+      ],
+      "replays_attempted": 1,
+      "replays_failed": 0,
+      "replays_succeeded": 1,
+      "unnecessary_splits": 0,
+      "wrong_instance_accepted": true,
+      "wrong_instance_replay_possible": true
+    },
+    {
+      "case": "cosmetic",
+      "connections_missing_evidence": null,
+      "functional_false_negatives": 0,
+      "functional_false_positives": 0,
+      "functional_validation_failures": 0,
+      "functional_verification_available": false,
+      "functional_verified": 0,
+      "groups": 1,
+      "incorrect_merges": 0,
+      "navigation_validation_false_positives": 0,
+      "observations": 3,
+      "raw_states": 1,
+      "replays_attempted": 1,
+      "replays_failed": 0,
+      "replays_succeeded": 1,
+      "unnecessary_splits": 0
+    }
+  ],
+  "raw_evidence_changed": false,
+  "schema_version": "validation-posthoc-1.0",
+  "source_run_dir": "agent1/experiments/validation_baseline_778bbbd_v2",
+  "totals": {
+    "functional_false_negatives": 1,
+    "functional_false_positives": 1,
+    "incorrect_merges": 2,
+    "navigation_validation_false_positives": 2,
+    "unnecessary_splits": 0
+  }
+}

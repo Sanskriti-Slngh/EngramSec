@@ -1,0 +1,401 @@
+{
+ "code": "12e0a7e",
+ "runs": {
+  "wxb_white-jotter_policy_read_only": {
+   "result": null,
+   "browser_actions": 592,
+   "host_sleep_affected": true,
+   "attestation": null,
+   "reset": {
+    "teardown_exit": 0,
+    "mount_profile_matches_frozen": true
+   },
+   "write_policy": {
+    "allowed": 0,
+    "blocked_destructive": 0,
+    "blocked_read_only": 2,
+    "blocked_write_cap": 0,
+    "mode": "read_only"
+   },
+   "write_decisions": [
+    "POST /api/register -> blocked_read_only",
+    "POST /api/login -> blocked_read_only"
+   ],
+   "capability_evidence_state_changes": {
+    "none_observed": 183,
+    "blocked_by_policy": 2
+   },
+   "capability_evidence_examples": [
+    {
+     "trigger": [
+      {
+       "kind": "form_submit",
+       "interaction": "click",
+       "label": "注册",
+       "provenance": "snapshot"
+      }
+     ],
+     "network_effect": [
+      {
+       "channel": "http",
+       "method": "POST",
+       "route": "/api/register",
+       "params": [
+        "email",
+        "name",
+        "password",
+        "phone",
+        "username"
+       ]
+      }
+     ],
+     "response": {},
+     "blocked_requests": [
+      "POST /api/register"
+     ],
+     "state_change": "blocked_by_policy",
+     "security_relevance": {
+      "account_lifecycle": [
+       "regist",
+       "username",
+       "注册"
+      ],
+      "authentication": [
+       "password"
+      ]
+     },
+     "vulnerability_status": "not_assessed"
+    },
+    {
+     "trigger": [
+      {
+       "kind": "form_submit",
+       "interaction": "click",
+       "label": "登录",
+       "provenance": "snapshot"
+      }
+     ],
+     "network_effect": [
+      {
+       "channel": "http",
+       "method": "POST",
+       "route": "/api/login",
+       "params": [
+        "password",
+        "username"
+       ]
+      }
+     ],
+     "response": {},
+     "blocked_requests": [
+      "POST /api/login"
+     ],
+     "state_change": "blocked_by_policy",
+     "security_relevance": {
+      "account_lifecycle": [
+       "username"
+      ],
+      "authentication": [
+       "login",
+       "password",
+       "登录"
+      ]
+     },
+     "vulnerability_status": "not_assessed"
+    }
+   ]
+  },
+  "wxb_white-jotter_policy_disposable": {
+   "result": null,
+   "browser_actions": 564,
+   "host_sleep_affected": true,
+   "attestation": "disposable:targetctl-reset-verified:white-jotter",
+   "reset": {
+    "teardown_exit": 0,
+    "mount_profile_matches_frozen": true
+   },
+   "write_policy": {
+    "allowed": 3,
+    "blocked_destructive": 0,
+    "blocked_read_only": 0,
+    "blocked_write_cap": 0,
+    "environment_attestation": "disposable:targetctl-reset-verified:white-jotter",
+    "mode": "disposable"
+   },
+   "write_decisions": [
+    "POST /api/register -> allowed",
+    "POST /api/register -> allowed",
+    "POST /api/login -> allowed"
+   ],
+   "capability_evidence_state_changes": {
+    "none_observed": 180,
+    "possible_confirm_separately": 2
+   },
+   "capability_evidence_examples": [
+    {
+     "trigger": [
+      {
+       "kind": "form_submit",
+       "interaction": "click",
+       "label": "登录",
+       "provenance": "snapshot"
+      }
+     ],
+     "network_effect": [
+      {
+       "channel": "http",
+       "method": "POST",
+       "route": "/api/login",
+       "params": [
+        "password",
+        "username"
+       ]
+      }
+     ],
+     "response": {
+      "POST /api/login": [
+       200
+      ]
+     },
+     "blocked_requests": [],
+     "state_change": "possible_confirm_separately",
+     "security_relevance": {
+      "account_lifecycle": [
+       "username"
+      ],
+      "authentication": [
+       "login",
+       "password",
+       "登录"
+      ]
+     },
+     "vulnerability_status": "not_assessed"
+    },
+    {
+     "trigger": [
+      {
+       "kind": "form_submit",
+       "interaction": "click",
+       "label": "注册",
+       "provenance": "snapshot"
+      },
+      {
+       "kind": "form_submit",
+       "interaction": "click",
+       "label": "注册",
+       "provenance": "snapshot"
+      }
+     ],
+     "network_effect": [
+      {
+       "channel": "http",
+       "method": "POST",
+       "route": "/api/register",
+       "params": [
+        "email",
+        "name",
+        "password",
+        "phone",
+        "username"
+       ]
+      }
+     ],
+     "response": {
+      "POST /api/register": [
+       200
+      ]
+     },
+     "blocked_requests": [],
+     "state_change": "possible_confirm_separately",
+     "security_relevance": {
+      "account_lifecycle": [
+       "regist",
+       "username",
+       "注册"
+      ],
+      "authentication": [
+       "password"
+      ]
+     },
+     "vulnerability_status": "not_assessed"
+    }
+   ]
+  },
+  "crawlmaze_integrated_180_policy_read_only": {
+   "result": 61,
+   "browser_actions": 299,
+   "host_sleep_affected": false,
+   "attestation": null,
+   "reset": {
+    "teardown_exit": null,
+    "mount_profile_matches_frozen": null
+   },
+   "write_policy": {
+    "allowed": 0,
+    "blocked_destructive": 0,
+    "blocked_read_only": 5,
+    "blocked_write_cap": 0,
+    "mode": "read_only"
+   },
+   "write_decisions": [
+    "POST /test/javascript/interactive/two-listeners-first.found -> blocked_read_only",
+    "POST /test/javascript/interactive/two-listeners-second.found -> blocked_read_only",
+    "POST /test/javascript/interactive/listener-and-event-attribute-second.found -> blocked_read_only",
+    "POST /test/javascript/interactive/listener-and-event-attribute-first.found -> blocked_read_only",
+    "PUT /test/javascript/interactive/js-put.found -> blocked_read_only"
+   ],
+   "capability_evidence_state_changes": {
+    "none_observed": 93,
+    "blocked_by_policy": 3
+   },
+   "capability_evidence_examples": [
+    {
+     "trigger": [
+      {
+       "kind": "button",
+       "interaction": "click",
+       "label": "Submit",
+       "provenance": "snapshot"
+      }
+     ],
+     "network_effect": [
+      {
+       "channel": "http",
+       "method": "POST",
+       "route": "/test/javascript/interactive/listener-and-event-attribute-first.found",
+       "params": []
+      },
+      {
+       "channel": "http",
+       "method": "POST",
+       "route": "/test/javascript/interactive/listener-and-event-attribute-second.found",
+       "params": []
+      }
+     ],
+     "response": {},
+     "blocked_requests": [
+      "POST /test/javascript/interactive/listener-and-event-attribute-first.found",
+      "POST /test/javascript/interactive/listener-and-event-attribute-second.found"
+     ],
+     "state_change": "blocked_by_policy",
+     "security_relevance": {},
+     "vulnerability_status": "not_assessed"
+    },
+    {
+     "trigger": [
+      {
+       "kind": "button",
+       "interaction": "click",
+       "label": "Submit",
+       "provenance": "snapshot"
+      }
+     ],
+     "network_effect": [
+      {
+       "channel": "http",
+       "method": "POST",
+       "route": "/test/javascript/interactive/two-listeners-second.found",
+       "params": []
+      },
+      {
+       "channel": "http",
+       "method": "POST",
+       "route": "/test/javascript/interactive/two-listeners-first.found",
+       "params": []
+      }
+     ],
+     "response": {},
+     "blocked_requests": [
+      "POST /test/javascript/interactive/two-listeners-first.found",
+      "POST /test/javascript/interactive/two-listeners-second.found"
+     ],
+     "state_change": "blocked_by_policy",
+     "security_relevance": {},
+     "vulnerability_status": "not_assessed"
+    },
+    {
+     "trigger": [
+      {
+       "kind": "button",
+       "interaction": "click",
+       "label": "Submit",
+       "provenance": "snapshot"
+      }
+     ],
+     "network_effect": [
+      {
+       "channel": "http",
+       "method": "PUT",
+       "route": "/test/javascript/interactive/js-put.found",
+       "params": []
+      }
+     ],
+     "response": {},
+     "blocked_requests": [
+      "PUT /test/javascript/interactive/js-put.found"
+     ],
+     "state_change": "blocked_by_policy",
+     "security_relevance": {},
+     "vulnerability_status": "not_assessed"
+    }
+   ]
+  },
+  "crawlground_integrated_readonly_600_policy_read_only": {
+   "result": 49,
+   "browser_actions": 599,
+   "host_sleep_affected": false,
+   "attestation": null,
+   "reset": {
+    "teardown_exit": null,
+    "mount_profile_matches_frozen": null
+   },
+   "write_policy": {
+    "allowed": 0,
+    "blocked_destructive": 0,
+    "blocked_read_only": 1,
+    "blocked_write_cap": 0,
+    "mode": "read_only"
+   },
+   "write_decisions": [
+    "POST /score/forms/{instance}-xhr-post -> blocked_read_only"
+   ],
+   "capability_evidence_state_changes": {
+    "none_observed": 106,
+    "blocked_by_policy": 1
+   },
+   "capability_evidence_examples": [
+    {
+     "trigger": [
+      {
+       "kind": "button",
+       "interaction": "click",
+       "label": "Submit via XHR",
+       "provenance": "snapshot"
+      }
+     ],
+     "network_effect": [
+      {
+       "channel": "http",
+       "method": "POST",
+       "route": "/score/forms/12-xhr-post",
+       "params": [
+        "source"
+       ]
+      }
+     ],
+     "response": {},
+     "blocked_requests": [
+      "POST /score/forms/{instance}-xhr-post"
+     ],
+     "state_change": "blocked_by_policy",
+     "security_relevance": {
+      "content_mutation": [
+       "post"
+      ]
+     },
+     "vulnerability_status": "not_assessed"
+    }
+   ]
+  }
+ }
+}

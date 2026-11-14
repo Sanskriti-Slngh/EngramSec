@@ -1,0 +1,805 @@
+{
+ "label": "matched",
+ "matched_config": {
+  "max_seconds": 110.0,
+  "max_browser_actions": 260,
+  "max_transitions": 180,
+  "state_aware_exploration": true,
+  "record_aware_graph": true,
+  "interaction_profile": "extended",
+  "typed_resource_spider": true,
+  "max_resource_fetches": 120,
+  "max_resource_depth": 3,
+  "allow_post_forms": true,
+  "write_policy": "disposable",
+  "max_write_requests": 60,
+  "replay_policy": "structure",
+  "replay_structure_attempts": 2,
+  "acg_evidence": true
+ },
+ "arms": {
+  "anon": [
+   {
+    "arm": "anon",
+    "trial": 0,
+    "status": "ok",
+    "role": "anonymous",
+    "functional_areas": [
+     "/",
+     "/admin",
+     "/catalog",
+     "/item",
+     "/login"
+    ],
+    "functional_area_count": 5,
+    "distinct_capabilities": 6,
+    "executed_keys": [
+     "catalog_browse",
+     "item_view",
+     "search_catalog"
+    ],
+    "executed_in_scope": [
+     "catalog_browse",
+     "item_view",
+     "search_catalog"
+    ],
+    "write_capability_status": {},
+    "capabilities_reproduced": 6,
+    "replay_successes": null,
+    "replay_attempts": 9,
+    "recall": 1.0,
+    "precision": 1.0,
+    "inventory_size": 3,
+    "auth": null,
+    "prerequisite_recorded": false,
+    "session_contexts": [
+     "anonymous"
+    ],
+    "acg_roles": [
+     "anonymous"
+    ],
+    "context_is_role": true,
+    "browser_actions": 188,
+    "max_browser_actions": 260,
+    "elapsed_s": 86.41,
+    "observed_http": 189,
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "transitions_failed": 0,
+    "restoration_actions": 55,
+    "termination": "discovery_replay_reserve_boundary",
+    "deferred_writes_remaining": 0,
+    "actions_per_executed": 62.7,
+    "wall_seconds": 86.5,
+    "writes_allowed": 0,
+    "writes_blocked_destructive": 0,
+    "writes_blocked_cap": 0,
+    "server_access_denied": 30,
+    "executed_above_role": [],
+    "observed_or_better": 6
+   },
+   {
+    "arm": "anon",
+    "trial": 1,
+    "status": "ok",
+    "role": "anonymous",
+    "functional_areas": [
+     "/",
+     "/admin",
+     "/catalog",
+     "/item",
+     "/login"
+    ],
+    "functional_area_count": 5,
+    "distinct_capabilities": 6,
+    "executed_keys": [
+     "catalog_browse",
+     "item_view",
+     "search_catalog"
+    ],
+    "executed_in_scope": [
+     "catalog_browse",
+     "item_view",
+     "search_catalog"
+    ],
+    "write_capability_status": {},
+    "capabilities_reproduced": 6,
+    "replay_successes": null,
+    "replay_attempts": 9,
+    "recall": 1.0,
+    "precision": 1.0,
+    "inventory_size": 3,
+    "auth": null,
+    "prerequisite_recorded": false,
+    "session_contexts": [
+     "anonymous"
+    ],
+    "acg_roles": [
+     "anonymous"
+    ],
+    "context_is_role": true,
+    "browser_actions": 188,
+    "max_browser_actions": 260,
+    "elapsed_s": 86.744,
+    "observed_http": 189,
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "transitions_failed": 0,
+    "restoration_actions": 55,
+    "termination": "discovery_replay_reserve_boundary",
+    "deferred_writes_remaining": 0,
+    "actions_per_executed": 62.7,
+    "wall_seconds": 86.83,
+    "writes_allowed": 0,
+    "writes_blocked_destructive": 0,
+    "writes_blocked_cap": 0,
+    "server_access_denied": 30,
+    "executed_above_role": [],
+    "observed_or_better": 6
+   },
+   {
+    "arm": "anon",
+    "trial": 2,
+    "status": "ok",
+    "role": "anonymous",
+    "functional_areas": [
+     "/",
+     "/admin",
+     "/catalog",
+     "/item",
+     "/login"
+    ],
+    "functional_area_count": 5,
+    "distinct_capabilities": 6,
+    "executed_keys": [
+     "catalog_browse",
+     "item_view",
+     "search_catalog"
+    ],
+    "executed_in_scope": [
+     "catalog_browse",
+     "item_view",
+     "search_catalog"
+    ],
+    "write_capability_status": {},
+    "capabilities_reproduced": 6,
+    "replay_successes": null,
+    "replay_attempts": 9,
+    "recall": 1.0,
+    "precision": 1.0,
+    "inventory_size": 3,
+    "auth": null,
+    "prerequisite_recorded": false,
+    "session_contexts": [
+     "anonymous"
+    ],
+    "acg_roles": [
+     "anonymous"
+    ],
+    "context_is_role": true,
+    "browser_actions": 188,
+    "max_browser_actions": 260,
+    "elapsed_s": 86.386,
+    "observed_http": 189,
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "transitions_failed": 0,
+    "restoration_actions": 55,
+    "termination": "discovery_replay_reserve_boundary",
+    "deferred_writes_remaining": 0,
+    "actions_per_executed": 62.7,
+    "wall_seconds": 86.47,
+    "writes_allowed": 0,
+    "writes_blocked_destructive": 0,
+    "writes_blocked_cap": 0,
+    "server_access_denied": 30,
+    "executed_above_role": [],
+    "observed_or_better": 6
+   }
+  ],
+  "user": [
+   {
+    "arm": "user",
+    "trial": 0,
+    "status": "ok",
+    "role": "registered_user",
+    "functional_areas": [
+     "/",
+     "/admin",
+     "/catalog",
+     "/dashboard",
+     "/item",
+     "/order",
+     "/orders",
+     "/profile"
+    ],
+    "functional_area_count": 8,
+    "distinct_capabilities": 9,
+    "executed_keys": [
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "executed_in_scope": [
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "write_capability_status": {
+     "order_create": "discovered_deferred",
+     "profile_update": "discovered_deferred"
+    },
+    "capabilities_reproduced": 9,
+    "replay_successes": null,
+    "replay_attempts": 12,
+    "recall": 0.75,
+    "precision": 1.0,
+    "inventory_size": 8,
+    "auth": {
+     "status": "authenticated",
+     "role": "registered_user",
+     "source": "operator_credentials",
+     "account_ref": "acct_e0e64bcee97f",
+     "prerequisite": {
+      "kind": "authentication",
+      "method": "form_login",
+      "login_route": "/login",
+      "field_names": [
+       "username_or_email",
+       "password"
+      ],
+      "role": "registered_user",
+      "account_ref": "acct_e0e64bcee97f",
+      "source": "operator_credentials",
+      "verified_by": "authenticated marker present after submit"
+     },
+     "barrier": null,
+     "verification": {
+      "logged_in_marker": true,
+      "logged_out_marker_gone": true,
+      "session_token_present": false,
+      "redirected_to_app_area": true,
+      "url": "/dashboard"
+     }
+    },
+    "prerequisite_recorded": true,
+    "session_contexts": [
+     "registered_user"
+    ],
+    "acg_roles": [
+     "registered_user+rolelab_session"
+    ],
+    "context_is_role": true,
+    "browser_actions": 196,
+    "max_browser_actions": 260,
+    "elapsed_s": 90.791,
+    "observed_http": 184,
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "transitions_failed": 0,
+    "restoration_actions": 54,
+    "termination": "discovery_replay_reserve_boundary",
+    "deferred_writes_remaining": 2,
+    "actions_per_executed": 32.7,
+    "wall_seconds": 90.88,
+    "writes_allowed": 0,
+    "writes_blocked_destructive": 0,
+    "writes_blocked_cap": 0,
+    "server_access_denied": 12,
+    "executed_above_role": [],
+    "observed_or_better": 9
+   },
+   {
+    "arm": "user",
+    "trial": 1,
+    "status": "ok",
+    "role": "registered_user",
+    "functional_areas": [
+     "/",
+     "/admin",
+     "/catalog",
+     "/dashboard",
+     "/item",
+     "/order",
+     "/orders",
+     "/profile"
+    ],
+    "functional_area_count": 8,
+    "distinct_capabilities": 9,
+    "executed_keys": [
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "executed_in_scope": [
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "write_capability_status": {
+     "order_create": "discovered_deferred",
+     "profile_update": "discovered_deferred"
+    },
+    "capabilities_reproduced": 9,
+    "replay_successes": null,
+    "replay_attempts": 12,
+    "recall": 0.75,
+    "precision": 1.0,
+    "inventory_size": 8,
+    "auth": {
+     "status": "authenticated",
+     "role": "registered_user",
+     "source": "operator_credentials",
+     "account_ref": "acct_e0e64bcee97f",
+     "prerequisite": {
+      "kind": "authentication",
+      "method": "form_login",
+      "login_route": "/login",
+      "field_names": [
+       "username_or_email",
+       "password"
+      ],
+      "role": "registered_user",
+      "account_ref": "acct_e0e64bcee97f",
+      "source": "operator_credentials",
+      "verified_by": "authenticated marker present after submit"
+     },
+     "barrier": null,
+     "verification": {
+      "logged_in_marker": true,
+      "logged_out_marker_gone": true,
+      "session_token_present": false,
+      "redirected_to_app_area": true,
+      "url": "/dashboard"
+     }
+    },
+    "prerequisite_recorded": true,
+    "session_contexts": [
+     "registered_user"
+    ],
+    "acg_roles": [
+     "registered_user+rolelab_session"
+    ],
+    "context_is_role": true,
+    "browser_actions": 199,
+    "max_browser_actions": 260,
+    "elapsed_s": 91.637,
+    "observed_http": 187,
+    "transitions_observed": 56,
+    "max_transitions": 180,
+    "transitions_failed": 0,
+    "restoration_actions": 55,
+    "termination": "discovery_replay_reserve_boundary",
+    "deferred_writes_remaining": 2,
+    "actions_per_executed": 33.2,
+    "wall_seconds": 91.72,
+    "writes_allowed": 0,
+    "writes_blocked_destructive": 0,
+    "writes_blocked_cap": 0,
+    "server_access_denied": 13,
+    "executed_above_role": [],
+    "observed_or_better": 9
+   },
+   {
+    "arm": "user",
+    "trial": 2,
+    "status": "ok",
+    "role": "registered_user",
+    "functional_areas": [
+     "/",
+     "/admin",
+     "/catalog",
+     "/dashboard",
+     "/item",
+     "/order",
+     "/orders",
+     "/profile"
+    ],
+    "functional_area_count": 8,
+    "distinct_capabilities": 9,
+    "executed_keys": [
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "executed_in_scope": [
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "write_capability_status": {
+     "order_create": "discovered_deferred",
+     "profile_update": "discovered_deferred"
+    },
+    "capabilities_reproduced": 9,
+    "replay_successes": null,
+    "replay_attempts": 12,
+    "recall": 0.75,
+    "precision": 1.0,
+    "inventory_size": 8,
+    "auth": {
+     "status": "authenticated",
+     "role": "registered_user",
+     "source": "operator_credentials",
+     "account_ref": "acct_e0e64bcee97f",
+     "prerequisite": {
+      "kind": "authentication",
+      "method": "form_login",
+      "login_route": "/login",
+      "field_names": [
+       "username_or_email",
+       "password"
+      ],
+      "role": "registered_user",
+      "account_ref": "acct_e0e64bcee97f",
+      "source": "operator_credentials",
+      "verified_by": "authenticated marker present after submit"
+     },
+     "barrier": null,
+     "verification": {
+      "logged_in_marker": true,
+      "logged_out_marker_gone": true,
+      "session_token_present": false,
+      "redirected_to_app_area": true,
+      "url": "/dashboard"
+     }
+    },
+    "prerequisite_recorded": true,
+    "session_contexts": [
+     "registered_user"
+    ],
+    "acg_roles": [
+     "registered_user+rolelab_session"
+    ],
+    "context_is_role": true,
+    "browser_actions": 196,
+    "max_browser_actions": 260,
+    "elapsed_s": 90.608,
+    "observed_http": 184,
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "transitions_failed": 0,
+    "restoration_actions": 54,
+    "termination": "discovery_replay_reserve_boundary",
+    "deferred_writes_remaining": 2,
+    "actions_per_executed": 32.7,
+    "wall_seconds": 90.71,
+    "writes_allowed": 0,
+    "writes_blocked_destructive": 0,
+    "writes_blocked_cap": 0,
+    "server_access_denied": 12,
+    "executed_above_role": [],
+    "observed_or_better": 9
+   }
+  ],
+  "admin": [
+   {
+    "arm": "admin",
+    "trial": 0,
+    "status": "ok",
+    "role": "admin",
+    "functional_areas": [
+     "/",
+     "/admin",
+     "/catalog",
+     "/dashboard",
+     "/item",
+     "/order",
+     "/orders",
+     "/profile"
+    ],
+    "functional_area_count": 8,
+    "distinct_capabilities": 11,
+    "executed_keys": [
+     "admin_panel_view",
+     "admin_users_view",
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "executed_in_scope": [
+     "admin_panel_view",
+     "admin_users_view",
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "write_capability_status": {
+     "admin_settings_update": "discovered_deferred",
+     "admin_user_delete": "discovered_blocked",
+     "order_create": "discovered_deferred",
+     "profile_update": "discovered_deferred"
+    },
+    "capabilities_reproduced": 11,
+    "replay_successes": null,
+    "replay_attempts": 14,
+    "recall": 0.667,
+    "precision": 1.0,
+    "inventory_size": 12,
+    "auth": {
+     "status": "authenticated",
+     "role": "admin",
+     "source": "operator_credentials",
+     "account_ref": "acct_acab892ee4f8",
+     "prerequisite": {
+      "kind": "authentication",
+      "method": "form_login",
+      "login_route": "/login",
+      "field_names": [
+       "username_or_email",
+       "password"
+      ],
+      "role": "admin",
+      "account_ref": "acct_acab892ee4f8",
+      "source": "operator_credentials",
+      "verified_by": "authenticated marker present after submit"
+     },
+     "barrier": null,
+     "verification": {
+      "logged_in_marker": true,
+      "logged_out_marker_gone": true,
+      "session_token_present": false,
+      "redirected_to_app_area": true,
+      "url": "/dashboard"
+     }
+    },
+    "prerequisite_recorded": true,
+    "session_contexts": [
+     "admin"
+    ],
+    "acg_roles": [
+     "admin+rolelab_session"
+    ],
+    "context_is_role": true,
+    "browser_actions": 202,
+    "max_browser_actions": 260,
+    "elapsed_s": 94.22,
+    "observed_http": 190,
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "transitions_failed": 0,
+    "restoration_actions": 54,
+    "termination": "discovery_replay_reserve_boundary",
+    "deferred_writes_remaining": 3,
+    "actions_per_executed": 25.2,
+    "wall_seconds": 94.31,
+    "writes_allowed": 0,
+    "writes_blocked_destructive": 0,
+    "writes_blocked_cap": 0,
+    "server_access_denied": 0,
+    "executed_above_role": [],
+    "observed_or_better": 11
+   },
+   {
+    "arm": "admin",
+    "trial": 1,
+    "status": "ok",
+    "role": "admin",
+    "functional_areas": [
+     "/",
+     "/admin",
+     "/catalog",
+     "/dashboard",
+     "/item",
+     "/order",
+     "/orders",
+     "/profile"
+    ],
+    "functional_area_count": 8,
+    "distinct_capabilities": 11,
+    "executed_keys": [
+     "admin_panel_view",
+     "admin_users_view",
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "executed_in_scope": [
+     "admin_panel_view",
+     "admin_users_view",
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "write_capability_status": {
+     "admin_settings_update": "discovered_deferred",
+     "admin_user_delete": "discovered_blocked",
+     "order_create": "discovered_deferred",
+     "profile_update": "discovered_deferred"
+    },
+    "capabilities_reproduced": 11,
+    "replay_successes": null,
+    "replay_attempts": 14,
+    "recall": 0.667,
+    "precision": 1.0,
+    "inventory_size": 12,
+    "auth": {
+     "status": "authenticated",
+     "role": "admin",
+     "source": "operator_credentials",
+     "account_ref": "acct_acab892ee4f8",
+     "prerequisite": {
+      "kind": "authentication",
+      "method": "form_login",
+      "login_route": "/login",
+      "field_names": [
+       "username_or_email",
+       "password"
+      ],
+      "role": "admin",
+      "account_ref": "acct_acab892ee4f8",
+      "source": "operator_credentials",
+      "verified_by": "authenticated marker present after submit"
+     },
+     "barrier": null,
+     "verification": {
+      "logged_in_marker": true,
+      "logged_out_marker_gone": true,
+      "session_token_present": false,
+      "redirected_to_app_area": true,
+      "url": "/dashboard"
+     }
+    },
+    "prerequisite_recorded": true,
+    "session_contexts": [
+     "admin"
+    ],
+    "acg_roles": [
+     "admin+rolelab_session"
+    ],
+    "context_is_role": true,
+    "browser_actions": 202,
+    "max_browser_actions": 260,
+    "elapsed_s": 93.189,
+    "observed_http": 190,
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "transitions_failed": 0,
+    "restoration_actions": 54,
+    "termination": "discovery_replay_reserve_boundary",
+    "deferred_writes_remaining": 3,
+    "actions_per_executed": 25.2,
+    "wall_seconds": 93.28,
+    "writes_allowed": 0,
+    "writes_blocked_destructive": 0,
+    "writes_blocked_cap": 0,
+    "server_access_denied": 0,
+    "executed_above_role": [],
+    "observed_or_better": 11
+   },
+   {
+    "arm": "admin",
+    "trial": 2,
+    "status": "ok",
+    "role": "admin",
+    "functional_areas": [
+     "/",
+     "/admin",
+     "/catalog",
+     "/dashboard",
+     "/item",
+     "/order",
+     "/orders",
+     "/profile"
+    ],
+    "functional_area_count": 8,
+    "distinct_capabilities": 11,
+    "executed_keys": [
+     "admin_panel_view",
+     "admin_users_view",
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "executed_in_scope": [
+     "admin_panel_view",
+     "admin_users_view",
+     "catalog_browse",
+     "dashboard_view",
+     "item_view",
+     "orders_view",
+     "profile_view",
+     "search_catalog"
+    ],
+    "write_capability_status": {
+     "admin_settings_update": "discovered_deferred",
+     "admin_user_delete": "discovered_blocked",
+     "order_create": "discovered_deferred",
+     "profile_update": "discovered_deferred"
+    },
+    "capabilities_reproduced": 11,
+    "replay_successes": null,
+    "replay_attempts": 14,
+    "recall": 0.667,
+    "precision": 1.0,
+    "inventory_size": 12,
+    "auth": {
+     "status": "authenticated",
+     "role": "admin",
+     "source": "operator_credentials",
+     "account_ref": "acct_acab892ee4f8",
+     "prerequisite": {
+      "kind": "authentication",
+      "method": "form_login",
+      "login_route": "/login",
+      "field_names": [
+       "username_or_email",
+       "password"
+      ],
+      "role": "admin",
+      "account_ref": "acct_acab892ee4f8",
+      "source": "operator_credentials",
+      "verified_by": "authenticated marker present after submit"
+     },
+     "barrier": null,
+     "verification": {
+      "logged_in_marker": true,
+      "logged_out_marker_gone": true,
+      "session_token_present": false,
+      "redirected_to_app_area": true,
+      "url": "/dashboard"
+     }
+    },
+    "prerequisite_recorded": true,
+    "session_contexts": [
+     "admin"
+    ],
+    "acg_roles": [
+     "admin+rolelab_session"
+    ],
+    "context_is_role": true,
+    "browser_actions": 202,
+    "max_browser_actions": 260,
+    "elapsed_s": 93.187,
+    "observed_http": 190,
+    "transitions_observed": 55,
+    "max_transitions": 180,
+    "transitions_failed": 0,
+    "restoration_actions": 54,
+    "termination": "discovery_replay_reserve_boundary",
+    "deferred_writes_remaining": 3,
+    "actions_per_executed": 25.2,
+    "wall_seconds": 93.3,
+    "writes_allowed": 0,
+    "writes_blocked_destructive": 0,
+    "writes_blocked_cap": 0,
+    "server_access_denied": 0,
+    "executed_above_role": [],
+    "observed_or_better": 11
+   }
+  ]
+ }
+}

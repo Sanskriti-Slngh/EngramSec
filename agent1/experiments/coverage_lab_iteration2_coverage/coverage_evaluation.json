@@ -1,0 +1,600 @@
+{
+  "application": "coverage_lab",
+  "areas": [
+    {
+      "id": "home",
+      "route": "/",
+      "scope": "applicable",
+      "status": "covered_replayed",
+      "title": "Coverage Lab"
+    },
+    {
+      "id": "record_alpha",
+      "route": "/records/{instance}",
+      "scope": "applicable",
+      "status": "covered_replayed",
+      "via_target_suffix": "/records/1"
+    },
+    {
+      "id": "record_beta",
+      "route": "/records/{instance}",
+      "scope": "applicable",
+      "status": "covered_replayed",
+      "via_target_suffix": "/records/2"
+    },
+    {
+      "id": "workspace",
+      "route": "/workspace",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "reports",
+      "route": "/workspace/reports",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "analytics",
+      "route": "/",
+      "scope": "applicable",
+      "status": "covered_replayed",
+      "via_label": "Analytics"
+    },
+    {
+      "id": "settings",
+      "route": "/settings",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "help",
+      "route": "/help",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "member",
+      "route": "/member",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "member_preferences",
+      "route": "/member/preferences",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "admin_backend",
+      "route": "/admin",
+      "scope": "blocked",
+      "status": "discovered_blocked"
+    },
+    {
+      "id": "external_docs",
+      "route": "https://example.test/outside",
+      "scope": "outside",
+      "status": "outside_access_scope"
+    }
+  ],
+  "contexts": [
+    {
+      "cookie_name": null,
+      "id": "anonymous",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "cookie_name": "member",
+      "id": "member",
+      "scope": "applicable",
+      "status": "missed"
+    }
+  ],
+  "controls": [
+    {
+      "id": "record_alpha_link",
+      "kind": "link",
+      "label": "Alpha customer",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "record_beta_link",
+      "kind": "link",
+      "label": "Beta customer",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "summary_button",
+      "kind": "button",
+      "label": "Load summary",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "tools_disclosure",
+      "kind": "button",
+      "label": "Show tools",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "workspace_link",
+      "kind": "link",
+      "label": "Workspace",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "audit_button",
+      "kind": "button",
+      "label": "Audit record",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "analytics_tab",
+      "kind": "button",
+      "label": "Analytics",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "export_button",
+      "kind": "button",
+      "label": "Export analytics",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "settings_disclosure",
+      "kind": "button",
+      "label": "Advanced settings",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "settings_link",
+      "kind": "link",
+      "label": "Open settings",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "help_launcher",
+      "kind": "button",
+      "label": "Help center",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "ineffective",
+      "kind": "button",
+      "label": "Refresh status",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "member_submit",
+      "kind": "form_submit",
+      "label": "Enter member area",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "history_button",
+      "kind": "button",
+      "label": "Load history",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "prepare_button",
+      "kind": "button",
+      "label": "Prepare workspace",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "reports_link",
+      "kind": "link",
+      "label": "Open reports",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "member_preferences_link",
+      "kind": "link",
+      "label": "Member preferences",
+      "scope": "applicable",
+      "status": "covered_structural_not_replayed"
+    },
+    {
+      "id": "admin_submit",
+      "kind": "form_submit",
+      "label": "Admin login",
+      "scope": "blocked",
+      "status": "discovered_blocked"
+    },
+    {
+      "id": "external_link",
+      "kind": "link",
+      "label": "External docs",
+      "scope": "outside",
+      "status": "outside_access_scope"
+    }
+  ],
+  "counts": {
+    "browser_actions": 140,
+    "covered_areas": 10,
+    "covered_controls": 17,
+    "covered_requests": 9,
+    "elapsed_seconds": 11.302,
+    "graph_connections_missing_evidence": 0,
+    "grouped_states": 17,
+    "incorrect_state_merges_self_audit": 0,
+    "raw_states": 17,
+    "replay_attempts": 17,
+    "replay_successes": 17
+  },
+  "denominators": {
+    "areas": 10,
+    "blocked_areas_excluded": 1,
+    "contexts": 2,
+    "controls": 17,
+    "instances": 2,
+    "outside_areas_excluded": 1,
+    "paths": 10,
+    "requests": 10
+  },
+  "instances": [
+    {
+      "id": "record_1",
+      "scope": "applicable",
+      "status": "covered_replayed",
+      "target_suffix": "/records/1"
+    },
+    {
+      "id": "record_2",
+      "scope": "applicable",
+      "status": "covered_replayed",
+      "target_suffix": "/records/2"
+    }
+  ],
+  "metrics": {
+    "context_recall": 0.5,
+    "control_action_recall": 1.0,
+    "covered_surfaces_per_browser_action": 0.2571428571428571,
+    "covered_surfaces_per_minute": 191.11661652804816,
+    "instance_recall": 1.0,
+    "instances_distinct": true,
+    "prerequisite_path_coverage": 0.7,
+    "replay_reliability": 1.0,
+    "request_precision": 0.8666666666666667,
+    "request_surface_recall": 0.9,
+    "state_interface_recall": 1.0
+  },
+  "observed_request_structures": [
+    {
+      "action_id": "action_tr_286d20b8f40a0c44ec54",
+      "method": "POST",
+      "params": [],
+      "path": "/session",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_286d20b8f40a0c44ec54",
+      "method": "GET",
+      "params": [],
+      "path": "/member",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_5e7a12b8a4c0d37edd72",
+      "method": "GET",
+      "params": [
+        "format",
+        "scope"
+      ],
+      "path": "/api/summary",
+      "resource_type": "fetch"
+    },
+    {
+      "action_id": "action_tr_57a125608c083bce31d6",
+      "method": "GET",
+      "params": [],
+      "path": "/help",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_b96eab93219a0dcb0e27",
+      "method": "GET",
+      "params": [
+        "record"
+      ],
+      "path": "/api/audit",
+      "resource_type": "fetch"
+    },
+    {
+      "action_id": "action_tr_975058b6717ba7b77715",
+      "method": "GET",
+      "params": [
+        "range"
+      ],
+      "path": "/api/analytics",
+      "resource_type": "fetch"
+    },
+    {
+      "action_id": "action_tr_f7273379ed6c5e562bdf",
+      "method": "GET",
+      "params": [],
+      "path": "/member/preferences",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_65d5e8712db7ae067a83",
+      "method": "GET",
+      "params": [],
+      "path": "/",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_a817e6c8e70c185576ef",
+      "method": "GET",
+      "params": [],
+      "path": "/records/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_2017bf1ac4c64d4b81e1",
+      "method": "GET",
+      "params": [
+        "limit",
+        "record"
+      ],
+      "path": "/api/history",
+      "resource_type": "fetch"
+    },
+    {
+      "action_id": "action_tr_de780b8b9cc090e37f50",
+      "method": "GET",
+      "params": [],
+      "path": "/records/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_a1fc24246a5ca18b1644",
+      "method": "GET",
+      "params": [],
+      "path": "/settings",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_335074694790cbb7f309",
+      "method": "GET",
+      "params": [],
+      "path": "/workspace",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_5fa24e2ac9add7713092",
+      "method": "GET",
+      "params": [
+        "mode"
+      ],
+      "path": "/api/workspace/bootstrap",
+      "resource_type": "fetch"
+    },
+    {
+      "action_id": "action_tr_27286b926d232c5ef016",
+      "method": "GET",
+      "params": [],
+      "path": "/records/{instance}",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_9a8c2b655086929a9a48",
+      "method": "GET",
+      "params": [],
+      "path": "/workspace/reports",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_cc9de3aa4f6d718dd935",
+      "method": "POST",
+      "params": [],
+      "path": "/session",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_cc9de3aa4f6d718dd935",
+      "method": "GET",
+      "params": [],
+      "path": "/member",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_1dfb175934f14a4983ca",
+      "method": "POST",
+      "params": [],
+      "path": "/session",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_1dfb175934f14a4983ca",
+      "method": "GET",
+      "params": [],
+      "path": "/member",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_38862b6207df8ecb1b73",
+      "method": "POST",
+      "params": [],
+      "path": "/session",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_38862b6207df8ecb1b73",
+      "method": "GET",
+      "params": [],
+      "path": "/member",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_fd2c09708c08f2df32b3",
+      "method": "POST",
+      "params": [],
+      "path": "/session",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_fd2c09708c08f2df32b3",
+      "method": "GET",
+      "params": [],
+      "path": "/member",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_8edaf121657027817410",
+      "method": "POST",
+      "params": [],
+      "path": "/session",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_8edaf121657027817410",
+      "method": "GET",
+      "params": [],
+      "path": "/member",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_aaa2339f30343910d552",
+      "method": "POST",
+      "params": [],
+      "path": "/session",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_aaa2339f30343910d552",
+      "method": "GET",
+      "params": [],
+      "path": "/member",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_9593d44657ad6d2c3dc7",
+      "method": "POST",
+      "params": [],
+      "path": "/session",
+      "resource_type": "document"
+    },
+    {
+      "action_id": "action_tr_9593d44657ad6d2c3dc7",
+      "method": "GET",
+      "params": [],
+      "path": "/member",
+      "resource_type": "document"
+    }
+  ],
+  "requests": [
+    {
+      "id": "record_document",
+      "method": "GET",
+      "params": [],
+      "path": "/records/{instance}",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "summary_fetch",
+      "method": "GET",
+      "params": [
+        "format",
+        "scope"
+      ],
+      "path": "/api/summary",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "audit_fetch",
+      "method": "GET",
+      "params": [
+        "record"
+      ],
+      "path": "/api/audit",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "history_fetch",
+      "method": "GET",
+      "params": [
+        "limit",
+        "record"
+      ],
+      "path": "/api/history",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "workspace_document",
+      "method": "GET",
+      "params": [],
+      "path": "/workspace",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "bootstrap_fetch",
+      "method": "GET",
+      "params": [
+        "mode"
+      ],
+      "path": "/api/workspace/bootstrap",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "reports_document",
+      "method": "GET",
+      "params": [],
+      "path": "/workspace/reports",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "analytics_fetch",
+      "method": "GET",
+      "params": [
+        "range"
+      ],
+      "path": "/api/analytics",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    },
+    {
+      "id": "session_post",
+      "method": "POST",
+      "params": [
+        "member_code"
+      ],
+      "path": "/session",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "member_document",
+      "method": "GET",
+      "params": [],
+      "path": "/member",
+      "scope": "applicable",
+      "status": "covered_replayed"
+    }
+  ]
+}

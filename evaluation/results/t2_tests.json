@@ -1,0 +1,251 @@
+{
+ "T2a": {
+  "pass": false,
+  "samples": 1656,
+  "bins": [
+   {
+    "bin": [
+     0.0,
+     0.1
+    ],
+    "n": 14,
+    "mean_predicted": 0.0926,
+    "empirical": 0.7857,
+    "empirical_truth_new": 0.7857,
+    "populated": false,
+    "within_tolerance": null
+   },
+   {
+    "bin": [
+     0.1,
+     0.2
+    ],
+    "n": 102,
+    "mean_predicted": 0.1665,
+    "empirical": 0.3627,
+    "empirical_truth_new": 0.3824,
+    "populated": true,
+    "within_tolerance": false
+   },
+   {
+    "bin": [
+     0.2,
+     0.3
+    ],
+    "n": 276,
+    "mean_predicted": 0.2482,
+    "empirical": 0.4167,
+    "empirical_truth_new": 0.4565,
+    "populated": true,
+    "within_tolerance": false
+   },
+   {
+    "bin": [
+     0.3,
+     0.4
+    ],
+    "n": 176,
+    "mean_predicted": 0.3498,
+    "empirical": 0.5455,
+    "empirical_truth_new": 0.5852,
+    "populated": true,
+    "within_tolerance": false
+   },
+   {
+    "bin": [
+     0.4,
+     0.5
+    ],
+    "n": 177,
+    "mean_predicted": 0.437,
+    "empirical": 0.6215,
+    "empirical_truth_new": 0.661,
+    "populated": true,
+    "within_tolerance": false
+   },
+   {
+    "bin": [
+     0.5,
+     0.6
+    ],
+    "n": 210,
+    "mean_predicted": 0.5484,
+    "empirical": 0.6667,
+    "empirical_truth_new": 0.6238,
+    "populated": true,
+    "within_tolerance": false
+   },
+   {
+    "bin": [
+     0.6,
+     0.7
+    ],
+    "n": 206,
+    "mean_predicted": 0.6601,
+    "empirical": 0.7816,
+    "empirical_truth_new": 0.6845,
+    "populated": true,
+    "within_tolerance": false
+   },
+   {
+    "bin": [
+     0.7,
+     0.8
+    ],
+    "n": 268,
+    "mean_predicted": 0.7492,
+    "empirical": 0.8022,
+    "empirical_truth_new": 0.6045,
+    "populated": true,
+    "within_tolerance": true
+   },
+   {
+    "bin": [
+     0.8,
+     0.9
+    ],
+    "n": 224,
+    "mean_predicted": 0.8367,
+    "empirical": 0.9062,
+    "empirical_truth_new": 0.6607,
+    "populated": true,
+    "within_tolerance": true
+   },
+   {
+    "bin": [
+     0.9,
+     1.0
+    ],
+    "n": 3,
+    "mean_predicted": 0.9102,
+    "empirical": 0.3333,
+    "empirical_truth_new": 0.0,
+    "populated": false,
+    "within_tolerance": null
+   }
+  ],
+  "threshold": "\u00b10.10 in every bin with >= 30 samples"
+ },
+ "T2b": {
+  "pass": true,
+  "by_policy": {
+   "acg_full": {
+    "max": 3,
+    "mean": 3.0,
+    "seeds_within_bound": 50,
+    "seeds": 50
+   },
+   "acg_uniform": {
+    "max": 3,
+    "mean": 3.0,
+    "seeds_within_bound": 50,
+    "seeds": 50
+   },
+   "acg_no_unlock": {
+    "max": 3,
+    "mean": 3.0,
+    "seeds_within_bound": 50,
+    "seeds": 50
+   },
+   "legacy_frontier": {
+    "max": 18,
+    "mean": 14.72,
+    "seeds_within_bound": 0,
+    "seeds": 50
+   },
+   "bfs": {
+    "max": 49,
+    "mean": 49.0,
+    "seeds_within_bound": 0,
+    "seeds": 50
+   }
+  },
+  "threshold": "<= 3 non-split sampled instances in every seed"
+ },
+ "T2c": {
+  "pass": false,
+  "by_budget": {
+   "100": {
+    "fraction_of_seeds_full_ge_legacy": 0.56,
+    "seeds": 50,
+    "mean_gated_full": 0.3711,
+    "mean_gated_legacy": 0.3533,
+    "other_policies": {
+     "bfs": 0.0,
+     "acg_uniform": 0.3467,
+     "acg_no_unlock": 0.3711
+    },
+    "pass": false
+   },
+   "200": {
+    "fraction_of_seeds_full_ge_legacy": 0.56,
+    "seeds": 50,
+    "mean_gated_full": 0.3711,
+    "mean_gated_legacy": 0.3533,
+    "other_policies": {
+     "bfs": 0.2222,
+     "acg_uniform": 0.3756,
+     "acg_no_unlock": 0.3711
+    },
+    "pass": false
+   },
+   "400": {
+    "fraction_of_seeds_full_ge_legacy": 0.52,
+    "seeds": 50,
+    "mean_gated_full": 0.3711,
+    "mean_gated_legacy": 0.38,
+    "other_policies": {
+     "bfs": 0.2222,
+     "acg_uniform": 0.3756,
+     "acg_no_unlock": 0.3711
+    },
+    "pass": false
+   }
+  },
+  "threshold": ">= legacy gated recall in >= 80% of seeds at each budget"
+ },
+ "T2d": {
+  "pass": false,
+  "auc_full": 0.2089,
+  "auc_bfs": 0.3571,
+  "ratio": 0.585,
+  "other_policies_auc": {
+   "legacy_frontier": 0.4133,
+   "acg_uniform": 0.1948,
+   "acg_no_unlock": 0.2089
+  },
+  "threshold": "AUC_full >= 0.95 x AUC_bfs"
+ },
+ "T2e": {
+  "pass": true,
+  "seeds": 50,
+  "identical": 50
+ },
+ "T2f": {
+  "pass": false,
+  "by_scenario": {
+   "instances": {
+    "mean_full": 0.8672,
+    "mean_uniform": 0.8687,
+    "mean_no_unlock": 0.8672,
+    "mean_difference": -0.0016,
+    "wins": 18,
+    "losses": 22,
+    "ties": 10,
+    "sign_test_p": 0.7852047460783069,
+    "pass": false
+   },
+   "prerequisites": {
+    "mean_full": 0.3711,
+    "mean_uniform": 0.3659,
+    "mean_no_unlock": 0.3711,
+    "mean_difference": 0.0052,
+    "wins": 18,
+    "losses": 7,
+    "ties": 25,
+    "sign_test_p": 0.021642625331878662,
+    "pass": true
+   }
+  }
+ }
+}

@@ -1,0 +1,37 @@
+{
+  "testbed": "zaproxy/crawlground",
+  "commit": "ba52303a5fd43795f461a6df39da45e2fe886c6b",
+  "start_url": "http://127.0.0.1:3456/category/dynamic-content",
+  "denominator": 59,
+  "budget": {
+    "seconds": 60,
+    "max_browser_actions": 140,
+    "max_transitions": 30,
+    "worker_count": 1
+  },
+  "scores": {
+    "p0": {"markers": 1, "percent_rounded_by_crawlground": 2},
+    "p1": {"markers": 1, "percent_rounded_by_crawlground": 2},
+    "p2": {
+      "markers": 5,
+      "percent_rounded_by_crawlground": 8,
+      "final_run": "crawlground_dynamic_p2_budgeted",
+      "browser_actions": 136,
+      "replay_successes": 17,
+      "replay_attempts": 27,
+      "replay_untested_paths": 3
+    }
+  },
+  "markers_reached": {
+    "p0": ["forms.12-xhr-post"],
+    "p1": ["forms.12-xhr-post"],
+    "p2": [
+      "dynamic-content.04-details-toggle",
+      "dynamic-content.08-template-element",
+      "dynamic-content.10-localstorage",
+      "forms.12-xhr-post",
+      "navigation.08-window-open"
+    ]
+  },
+  "note": "Independent marker scores only. They do not establish complete state or replay coverage. The category page exposes navigation outside dynamic-content, so the denominator is Crawlground's full 59-test inventory. The final P2 run includes conservative complete-path action reservations and stayed below the 140-action cap."
+}

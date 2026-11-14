@@ -1,0 +1,1417 @@
+{
+ "config": {
+  "max_seconds": 140.0,
+  "max_browser_actions": 600,
+  "max_transitions": 300,
+  "state_aware_exploration": true,
+  "record_aware_graph": true,
+  "interaction_profile": "extended",
+  "typed_resource_spider": false,
+  "allow_post_forms": true,
+  "write_policy": "disposable",
+  "max_write_requests": 60,
+  "replay_policy": "structure",
+  "replay_structure_attempts": 2,
+  "acg_evidence": true,
+  "record_unexecuted_frontier": true,
+  "restoration_shortcut": "direct_url",
+  "write_execution_policy": "focused_adaptive",
+  "write_sweep_replay_floor": 0.25
+ },
+ "arms": {
+  "A": {},
+  "B": {
+   "eager_child_expansion": true
+  }
+ },
+ "coverage": {
+  "breadth_starved_lab": {
+   "A": {
+    "trials": [
+     {
+      "fixture": "breadth_starved_lab",
+      "arm": "A",
+      "trial": 0,
+      "executed_total": 30,
+      "inventory": 50,
+      "deep_reached": 12,
+      "deep_total": 32,
+      "executed_tdistinct": 12,
+      "tdistinct_total": 26,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "reports": [
+        3,
+        12
+       ],
+       "settings": [
+        8,
+        8
+       ],
+       "ops": [
+        1,
+        6
+       ],
+       "updates": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": null,
+       "final": 0
+      },
+      "auc_over_time": {
+       "auc_norm": 0.3746,
+       "final": 30
+      },
+      "time_to_first_deep_s": 17.32,
+      "caps_per_minute": 12.72,
+      "total_browser_actions": 248,
+      "restoration_actions": 81,
+      "root_reloads": 40,
+      "discovery_root_reloads": 13,
+      "verification_root_reloads": 27,
+      "restoration_browser_actions": 94,
+      "restoration_wall_s": 83.4,
+      "http_requests": 237,
+      "elapsed_s": 141.514,
+      "wall_seconds": 142.28,
+      "eager_batches": 0,
+      "eager_children": 0,
+      "eager_parent_returns": 0,
+      "eager_returns_rejected": 0,
+      "replays_validated": 22,
+      "replay_attempts": 27,
+      "replay_failures": 5,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "breadth_starved_lab",
+      "arm": "A",
+      "trial": 1,
+      "executed_total": 29,
+      "inventory": 50,
+      "deep_reached": 11,
+      "deep_total": 32,
+      "executed_tdistinct": 11,
+      "tdistinct_total": 26,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "reports": [
+        3,
+        12
+       ],
+       "settings": [
+        7,
+        8
+       ],
+       "ops": [
+        1,
+        6
+       ],
+       "updates": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": null,
+       "final": 0
+      },
+      "auc_over_time": {
+       "auc_norm": 0.3728,
+       "final": 29
+      },
+      "time_to_first_deep_s": 16.92,
+      "caps_per_minute": 12.37,
+      "total_browser_actions": 253,
+      "restoration_actions": 83,
+      "root_reloads": 40,
+      "discovery_root_reloads": 13,
+      "verification_root_reloads": 27,
+      "restoration_browser_actions": 96,
+      "restoration_wall_s": 85.4,
+      "http_requests": 242,
+      "elapsed_s": 140.697,
+      "wall_seconds": 141.47,
+      "eager_batches": 0,
+      "eager_children": 0,
+      "eager_parent_returns": 0,
+      "eager_returns_rejected": 0,
+      "replays_validated": 22,
+      "replay_attempts": 27,
+      "replay_failures": 5,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "breadth_starved_lab",
+      "arm": "A",
+      "trial": 2,
+      "executed_total": 29,
+      "inventory": 50,
+      "deep_reached": 11,
+      "deep_total": 32,
+      "executed_tdistinct": 11,
+      "tdistinct_total": 26,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "reports": [
+        3,
+        12
+       ],
+       "settings": [
+        7,
+        8
+       ],
+       "ops": [
+        1,
+        6
+       ],
+       "updates": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": null,
+       "final": 0
+      },
+      "auc_over_time": {
+       "auc_norm": 0.3718,
+       "final": 29
+      },
+      "time_to_first_deep_s": 17.33,
+      "caps_per_minute": 12.37,
+      "total_browser_actions": 252,
+      "restoration_actions": 83,
+      "root_reloads": 39,
+      "discovery_root_reloads": 13,
+      "verification_root_reloads": 26,
+      "restoration_browser_actions": 96,
+      "restoration_wall_s": 85.7,
+      "http_requests": 240,
+      "elapsed_s": 140.673,
+      "wall_seconds": 141.51,
+      "eager_batches": 0,
+      "eager_children": 0,
+      "eager_parent_returns": 0,
+      "eager_returns_rejected": 0,
+      "replays_validated": 22,
+      "replay_attempts": 26,
+      "replay_failures": 4,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     }
+    ],
+    "median": {
+     "executed_total": 29,
+     "deep_reached": 11,
+     "executed_tdistinct": 11,
+     "executed_semantic": 0,
+     "total_browser_actions": 252,
+     "restoration_actions": 83,
+     "root_reloads": 40,
+     "restoration_browser_actions": 96,
+     "restoration_wall_s": 85.4,
+     "http_requests": 240,
+     "replays_validated": 22,
+     "transitions_failed": 0,
+     "eager_batches": 0,
+     "eager_children": 0,
+     "eager_parent_returns": 0,
+     "eager_returns_rejected": 0,
+     "caps_per_minute": 12.37,
+     "state_changing_requests": 0,
+     "auc_req": 0,
+     "auc_time": 0.3728
+    }
+   },
+   "B": {
+    "trials": [
+     {
+      "fixture": "breadth_starved_lab",
+      "arm": "B",
+      "trial": 0,
+      "executed_total": 34,
+      "inventory": 50,
+      "deep_reached": 16,
+      "deep_total": 32,
+      "executed_tdistinct": 16,
+      "tdistinct_total": 26,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "reports": [
+        9,
+        12
+       ],
+       "settings": [
+        4,
+        8
+       ],
+       "ops": [
+        3,
+        6
+       ],
+       "updates": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": null,
+       "final": 0
+      },
+      "auc_over_time": {
+       "auc_norm": 0.4393,
+       "final": 34
+      },
+      "time_to_first_deep_s": 16.79,
+      "caps_per_minute": 14.51,
+      "total_browser_actions": 255,
+      "restoration_actions": 97,
+      "root_reloads": 29,
+      "discovery_root_reloads": 3,
+      "verification_root_reloads": 26,
+      "restoration_browser_actions": 100,
+      "restoration_wall_s": 68.0,
+      "http_requests": 244,
+      "elapsed_s": 140.574,
+      "wall_seconds": 141.36,
+      "eager_batches": 5,
+      "eager_children": 21,
+      "eager_parent_returns": 16,
+      "eager_returns_rejected": 0,
+      "replays_validated": 21,
+      "replay_attempts": 26,
+      "replay_failures": 5,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "breadth_starved_lab",
+      "arm": "B",
+      "trial": 1,
+      "executed_total": 35,
+      "inventory": 50,
+      "deep_reached": 17,
+      "deep_total": 32,
+      "executed_tdistinct": 17,
+      "tdistinct_total": 26,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "reports": [
+        10,
+        12
+       ],
+       "settings": [
+        4,
+        8
+       ],
+       "ops": [
+        3,
+        6
+       ],
+       "updates": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": null,
+       "final": 0
+      },
+      "auc_over_time": {
+       "auc_norm": 0.4439,
+       "final": 35
+      },
+      "time_to_first_deep_s": 16.86,
+      "caps_per_minute": 14.96,
+      "total_browser_actions": 256,
+      "restoration_actions": 97,
+      "root_reloads": 30,
+      "discovery_root_reloads": 3,
+      "verification_root_reloads": 27,
+      "restoration_browser_actions": 100,
+      "restoration_wall_s": 67.2,
+      "http_requests": 246,
+      "elapsed_s": 140.344,
+      "wall_seconds": 141.1,
+      "eager_batches": 5,
+      "eager_children": 21,
+      "eager_parent_returns": 16,
+      "eager_returns_rejected": 0,
+      "replays_validated": 21,
+      "replay_attempts": 27,
+      "replay_failures": 6,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "breadth_starved_lab",
+      "arm": "B",
+      "trial": 2,
+      "executed_total": 34,
+      "inventory": 50,
+      "deep_reached": 16,
+      "deep_total": 32,
+      "executed_tdistinct": 16,
+      "tdistinct_total": 26,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "reports": [
+        9,
+        12
+       ],
+       "settings": [
+        4,
+        8
+       ],
+       "ops": [
+        3,
+        6
+       ],
+       "updates": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": null,
+       "final": 0
+      },
+      "auc_over_time": {
+       "auc_norm": 0.4398,
+       "final": 34
+      },
+      "time_to_first_deep_s": 16.79,
+      "caps_per_minute": 14.43,
+      "total_browser_actions": 256,
+      "restoration_actions": 96,
+      "root_reloads": 30,
+      "discovery_root_reloads": 3,
+      "verification_root_reloads": 27,
+      "restoration_browser_actions": 99,
+      "restoration_wall_s": 67.2,
+      "http_requests": 246,
+      "elapsed_s": 141.338,
+      "wall_seconds": 142.18,
+      "eager_batches": 5,
+      "eager_children": 21,
+      "eager_parent_returns": 16,
+      "eager_returns_rejected": 0,
+      "replays_validated": 22,
+      "replay_attempts": 27,
+      "replay_failures": 5,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     }
+    ],
+    "median": {
+     "executed_total": 34,
+     "deep_reached": 16,
+     "executed_tdistinct": 16,
+     "executed_semantic": 0,
+     "total_browser_actions": 256,
+     "restoration_actions": 97,
+     "root_reloads": 30,
+     "restoration_browser_actions": 100,
+     "restoration_wall_s": 67.2,
+     "http_requests": 246,
+     "replays_validated": 21,
+     "transitions_failed": 0,
+     "eager_batches": 5,
+     "eager_children": 21,
+     "eager_parent_returns": 16,
+     "eager_returns_rejected": 0,
+     "caps_per_minute": 14.51,
+     "state_changing_requests": 0,
+     "auc_req": 0,
+     "auc_time": 0.4398
+    }
+   }
+  },
+  "atlas": {
+   "A": {
+    "trials": [
+     {
+      "fixture": "atlas",
+      "arm": "A",
+      "trial": 0,
+      "executed_total": 31,
+      "inventory": 44,
+      "deep_reached": 13,
+      "deep_total": 26,
+      "executed_tdistinct": 13,
+      "tdistinct_total": 21,
+      "executed_semantic": 0,
+      "semantic_total": 5,
+      "hub_coverage": {
+       "ledgers": [
+        3,
+        9
+       ],
+       "controls": [
+        8,
+        8
+       ],
+       "pipelines": [
+        2,
+        4
+       ],
+       "bulletins": [
+        0,
+        5
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.4615,
+       "final": 31
+      },
+      "auc_over_time": {
+       "auc_norm": 0.4747,
+       "final": 31
+      },
+      "time_to_first_deep_s": 48.74,
+      "caps_per_minute": 13.21,
+      "total_browser_actions": 252,
+      "restoration_actions": 85,
+      "root_reloads": 38,
+      "discovery_root_reloads": 13,
+      "verification_root_reloads": 25,
+      "restoration_browser_actions": 98,
+      "restoration_wall_s": 87.1,
+      "http_requests": 243,
+      "elapsed_s": 140.838,
+      "wall_seconds": 141.54,
+      "eager_batches": 0,
+      "eager_children": 0,
+      "eager_parent_returns": 0,
+      "eager_returns_rejected": 0,
+      "replays_validated": 23,
+      "replay_attempts": 25,
+      "replay_failures": 2,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "atlas",
+      "arm": "A",
+      "trial": 1,
+      "executed_total": 31,
+      "inventory": 44,
+      "deep_reached": 13,
+      "deep_total": 26,
+      "executed_tdistinct": 13,
+      "tdistinct_total": 21,
+      "executed_semantic": 0,
+      "semantic_total": 5,
+      "hub_coverage": {
+       "ledgers": [
+        3,
+        9
+       ],
+       "controls": [
+        8,
+        8
+       ],
+       "pipelines": [
+        2,
+        4
+       ],
+       "bulletins": [
+        0,
+        5
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.4615,
+       "final": 31
+      },
+      "auc_over_time": {
+       "auc_norm": 0.4757,
+       "final": 31
+      },
+      "time_to_first_deep_s": 48.66,
+      "caps_per_minute": 13.13,
+      "total_browser_actions": 253,
+      "restoration_actions": 86,
+      "root_reloads": 37,
+      "discovery_root_reloads": 13,
+      "verification_root_reloads": 24,
+      "restoration_browser_actions": 99,
+      "restoration_wall_s": 88.1,
+      "http_requests": 244,
+      "elapsed_s": 141.612,
+      "wall_seconds": 142.35,
+      "eager_batches": 0,
+      "eager_children": 0,
+      "eager_parent_returns": 0,
+      "eager_returns_rejected": 0,
+      "replays_validated": 23,
+      "replay_attempts": 24,
+      "replay_failures": 1,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "atlas",
+      "arm": "A",
+      "trial": 2,
+      "executed_total": 31,
+      "inventory": 44,
+      "deep_reached": 13,
+      "deep_total": 26,
+      "executed_tdistinct": 13,
+      "tdistinct_total": 21,
+      "executed_semantic": 0,
+      "semantic_total": 5,
+      "hub_coverage": {
+       "ledgers": [
+        3,
+        9
+       ],
+       "controls": [
+        8,
+        8
+       ],
+       "pipelines": [
+        2,
+        4
+       ],
+       "bulletins": [
+        0,
+        5
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.4594,
+       "final": 31
+      },
+      "auc_over_time": {
+       "auc_norm": 0.4755,
+       "final": 31
+      },
+      "time_to_first_deep_s": 48.77,
+      "caps_per_minute": 13.14,
+      "total_browser_actions": 250,
+      "restoration_actions": 84,
+      "root_reloads": 38,
+      "discovery_root_reloads": 13,
+      "verification_root_reloads": 25,
+      "restoration_browser_actions": 97,
+      "restoration_wall_s": 86.3,
+      "http_requests": 240,
+      "elapsed_s": 141.512,
+      "wall_seconds": 142.24,
+      "eager_batches": 0,
+      "eager_children": 0,
+      "eager_parent_returns": 0,
+      "eager_returns_rejected": 0,
+      "replays_validated": 23,
+      "replay_attempts": 25,
+      "replay_failures": 2,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     }
+    ],
+    "median": {
+     "executed_total": 31,
+     "deep_reached": 13,
+     "executed_tdistinct": 13,
+     "executed_semantic": 0,
+     "total_browser_actions": 252,
+     "restoration_actions": 85,
+     "root_reloads": 38,
+     "restoration_browser_actions": 98,
+     "restoration_wall_s": 87.1,
+     "http_requests": 243,
+     "replays_validated": 23,
+     "transitions_failed": 0,
+     "eager_batches": 0,
+     "eager_children": 0,
+     "eager_parent_returns": 0,
+     "eager_returns_rejected": 0,
+     "caps_per_minute": 13.14,
+     "state_changing_requests": 0,
+     "auc_req": 0.4615,
+     "auc_time": 0.4755
+    }
+   },
+   "B": {
+    "trials": [
+     {
+      "fixture": "atlas",
+      "arm": "B",
+      "trial": 0,
+      "executed_total": 32,
+      "inventory": 44,
+      "deep_reached": 14,
+      "deep_total": 26,
+      "executed_tdistinct": 14,
+      "tdistinct_total": 21,
+      "executed_semantic": 0,
+      "semantic_total": 5,
+      "hub_coverage": {
+       "ledgers": [
+        8,
+        9
+       ],
+       "controls": [
+        4,
+        8
+       ],
+       "pipelines": [
+        2,
+        4
+       ],
+       "bulletins": [
+        0,
+        5
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.4943,
+       "final": 32
+      },
+      "auc_over_time": {
+       "auc_norm": 0.5124,
+       "final": 32
+      },
+      "time_to_first_deep_s": 48.03,
+      "caps_per_minute": 13.61,
+      "total_browser_actions": 254,
+      "restoration_actions": 95,
+      "root_reloads": 30,
+      "discovery_root_reloads": 3,
+      "verification_root_reloads": 27,
+      "restoration_browser_actions": 98,
+      "restoration_wall_s": 68.6,
+      "http_requests": 245,
+      "elapsed_s": 141.021,
+      "wall_seconds": 141.7,
+      "eager_batches": 5,
+      "eager_children": 19,
+      "eager_parent_returns": 14,
+      "eager_returns_rejected": 0,
+      "replays_validated": 22,
+      "replay_attempts": 27,
+      "replay_failures": 5,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "atlas",
+      "arm": "B",
+      "trial": 1,
+      "executed_total": 33,
+      "inventory": 44,
+      "deep_reached": 15,
+      "deep_total": 26,
+      "executed_tdistinct": 15,
+      "tdistinct_total": 21,
+      "executed_semantic": 0,
+      "semantic_total": 5,
+      "hub_coverage": {
+       "ledgers": [
+        9,
+        9
+       ],
+       "controls": [
+        4,
+        8
+       ],
+       "pipelines": [
+        2,
+        4
+       ],
+       "bulletins": [
+        0,
+        5
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.4986,
+       "final": 33
+      },
+      "auc_over_time": {
+       "auc_norm": 0.5178,
+       "final": 33
+      },
+      "time_to_first_deep_s": 48.57,
+      "caps_per_minute": 14.05,
+      "total_browser_actions": 252,
+      "restoration_actions": 95,
+      "root_reloads": 30,
+      "discovery_root_reloads": 3,
+      "verification_root_reloads": 27,
+      "restoration_browser_actions": 98,
+      "restoration_wall_s": 67.3,
+      "http_requests": 243,
+      "elapsed_s": 140.902,
+      "wall_seconds": 141.64,
+      "eager_batches": 5,
+      "eager_children": 19,
+      "eager_parent_returns": 14,
+      "eager_returns_rejected": 0,
+      "replays_validated": 21,
+      "replay_attempts": 27,
+      "replay_failures": 6,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "atlas",
+      "arm": "B",
+      "trial": 2,
+      "executed_total": 33,
+      "inventory": 44,
+      "deep_reached": 15,
+      "deep_total": 26,
+      "executed_tdistinct": 15,
+      "tdistinct_total": 21,
+      "executed_semantic": 0,
+      "semantic_total": 5,
+      "hub_coverage": {
+       "ledgers": [
+        9,
+        9
+       ],
+       "controls": [
+        4,
+        8
+       ],
+       "pipelines": [
+        2,
+        4
+       ],
+       "bulletins": [
+        0,
+        5
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.5027,
+       "final": 33
+      },
+      "auc_over_time": {
+       "auc_norm": 0.5198,
+       "final": 33
+      },
+      "time_to_first_deep_s": 48.1,
+      "caps_per_minute": 14.0,
+      "total_browser_actions": 255,
+      "restoration_actions": 95,
+      "root_reloads": 31,
+      "discovery_root_reloads": 3,
+      "verification_root_reloads": 28,
+      "restoration_browser_actions": 98,
+      "restoration_wall_s": 67.3,
+      "http_requests": 247,
+      "elapsed_s": 141.385,
+      "wall_seconds": 142.09,
+      "eager_batches": 5,
+      "eager_children": 19,
+      "eager_parent_returns": 14,
+      "eager_returns_rejected": 0,
+      "replays_validated": 22,
+      "replay_attempts": 28,
+      "replay_failures": 6,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     }
+    ],
+    "median": {
+     "executed_total": 33,
+     "deep_reached": 15,
+     "executed_tdistinct": 15,
+     "executed_semantic": 0,
+     "total_browser_actions": 254,
+     "restoration_actions": 95,
+     "root_reloads": 30,
+     "restoration_browser_actions": 98,
+     "restoration_wall_s": 67.3,
+     "http_requests": 245,
+     "replays_validated": 22,
+     "transitions_failed": 0,
+     "eager_batches": 5,
+     "eager_children": 19,
+     "eager_parent_returns": 14,
+     "eager_returns_rejected": 0,
+     "caps_per_minute": 14.0,
+     "state_changing_requests": 0,
+     "auc_req": 0.4986,
+     "auc_time": 0.5178
+    }
+   }
+  },
+  "orchard": {
+   "A": {
+    "trials": [
+     {
+      "fixture": "orchard",
+      "arm": "A",
+      "trial": 0,
+      "executed_total": 29,
+      "inventory": 48,
+      "deep_reached": 11,
+      "deep_total": 30,
+      "executed_tdistinct": 11,
+      "tdistinct_total": 24,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "yields": [
+        3,
+        12
+       ],
+       "policies": [
+        6,
+        6
+       ],
+       "jobs": [
+        2,
+        6
+       ],
+       "releases": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.3736,
+       "final": 29
+      },
+      "auc_over_time": {
+       "auc_norm": 0.3854,
+       "final": 29
+      },
+      "time_to_first_deep_s": 72.62,
+      "caps_per_minute": 12.33,
+      "total_browser_actions": 255,
+      "restoration_actions": 85,
+      "root_reloads": 41,
+      "discovery_root_reloads": 13,
+      "verification_root_reloads": 28,
+      "restoration_browser_actions": 98,
+      "restoration_wall_s": 85.7,
+      "http_requests": 245,
+      "elapsed_s": 141.157,
+      "wall_seconds": 141.89,
+      "eager_batches": 0,
+      "eager_children": 0,
+      "eager_parent_returns": 0,
+      "eager_returns_rejected": 0,
+      "replays_validated": 22,
+      "replay_attempts": 28,
+      "replay_failures": 6,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "orchard",
+      "arm": "A",
+      "trial": 1,
+      "executed_total": 28,
+      "inventory": 48,
+      "deep_reached": 10,
+      "deep_total": 30,
+      "executed_tdistinct": 10,
+      "tdistinct_total": 24,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "yields": [
+        2,
+        12
+       ],
+       "policies": [
+        6,
+        6
+       ],
+       "jobs": [
+        2,
+        6
+       ],
+       "releases": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.3623,
+       "final": 28
+      },
+      "auc_over_time": {
+       "auc_norm": 0.3773,
+       "final": 28
+      },
+      "time_to_first_deep_s": 72.93,
+      "caps_per_minute": 11.98,
+      "total_browser_actions": 248,
+      "restoration_actions": 84,
+      "root_reloads": 38,
+      "discovery_root_reloads": 13,
+      "verification_root_reloads": 25,
+      "restoration_browser_actions": 97,
+      "restoration_wall_s": 86.3,
+      "http_requests": 238,
+      "elapsed_s": 140.242,
+      "wall_seconds": 141.05,
+      "eager_batches": 0,
+      "eager_children": 0,
+      "eager_parent_returns": 0,
+      "eager_returns_rejected": 0,
+      "replays_validated": 21,
+      "replay_attempts": 25,
+      "replay_failures": 4,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "orchard",
+      "arm": "A",
+      "trial": 2,
+      "executed_total": 28,
+      "inventory": 48,
+      "deep_reached": 10,
+      "deep_total": 30,
+      "executed_tdistinct": 10,
+      "tdistinct_total": 24,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "yields": [
+        2,
+        12
+       ],
+       "policies": [
+        6,
+        6
+       ],
+       "jobs": [
+        2,
+        6
+       ],
+       "releases": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.366,
+       "final": 28
+      },
+      "auc_over_time": {
+       "auc_norm": 0.3779,
+       "final": 28
+      },
+      "time_to_first_deep_s": 73.27,
+      "caps_per_minute": 11.87,
+      "total_browser_actions": 252,
+      "restoration_actions": 84,
+      "root_reloads": 40,
+      "discovery_root_reloads": 13,
+      "verification_root_reloads": 27,
+      "restoration_browser_actions": 97,
+      "restoration_wall_s": 86.7,
+      "http_requests": 242,
+      "elapsed_s": 141.571,
+      "wall_seconds": 142.36,
+      "eager_batches": 0,
+      "eager_children": 0,
+      "eager_parent_returns": 0,
+      "eager_returns_rejected": 0,
+      "replays_validated": 22,
+      "replay_attempts": 27,
+      "replay_failures": 5,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     }
+    ],
+    "median": {
+     "executed_total": 28,
+     "deep_reached": 10,
+     "executed_tdistinct": 10,
+     "executed_semantic": 0,
+     "total_browser_actions": 252,
+     "restoration_actions": 84,
+     "root_reloads": 40,
+     "restoration_browser_actions": 97,
+     "restoration_wall_s": 86.3,
+     "http_requests": 242,
+     "replays_validated": 22,
+     "transitions_failed": 0,
+     "eager_batches": 0,
+     "eager_children": 0,
+     "eager_parent_returns": 0,
+     "eager_returns_rejected": 0,
+     "caps_per_minute": 11.98,
+     "state_changing_requests": 0,
+     "auc_req": 0.366,
+     "auc_time": 0.3779
+    }
+   },
+   "B": {
+    "trials": [
+     {
+      "fixture": "orchard",
+      "arm": "B",
+      "trial": 0,
+      "executed_total": 30,
+      "inventory": 48,
+      "deep_reached": 12,
+      "deep_total": 30,
+      "executed_tdistinct": 12,
+      "tdistinct_total": 24,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "yields": [
+        4,
+        12
+       ],
+       "policies": [
+        5,
+        6
+       ],
+       "jobs": [
+        3,
+        6
+       ],
+       "releases": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.3868,
+       "final": 30
+      },
+      "auc_over_time": {
+       "auc_norm": 0.4025,
+       "final": 30
+      },
+      "time_to_first_deep_s": 72.98,
+      "caps_per_minute": 12.8,
+      "total_browser_actions": 252,
+      "restoration_actions": 94,
+      "root_reloads": 29,
+      "discovery_root_reloads": 3,
+      "verification_root_reloads": 26,
+      "restoration_browser_actions": 97,
+      "restoration_wall_s": 71.1,
+      "http_requests": 242,
+      "elapsed_s": 140.645,
+      "wall_seconds": 141.47,
+      "eager_batches": 4,
+      "eager_children": 17,
+      "eager_parent_returns": 13,
+      "eager_returns_rejected": 0,
+      "replays_validated": 22,
+      "replay_attempts": 26,
+      "replay_failures": 4,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "orchard",
+      "arm": "B",
+      "trial": 1,
+      "executed_total": 31,
+      "inventory": 48,
+      "deep_reached": 13,
+      "deep_total": 30,
+      "executed_tdistinct": 13,
+      "tdistinct_total": 24,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "yields": [
+        4,
+        12
+       ],
+       "policies": [
+        6,
+        6
+       ],
+       "jobs": [
+        3,
+        6
+       ],
+       "releases": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.3968,
+       "final": 31
+      },
+      "auc_over_time": {
+       "auc_norm": 0.4115,
+       "final": 31
+      },
+      "time_to_first_deep_s": 71.64,
+      "caps_per_minute": 13.18,
+      "total_browser_actions": 261,
+      "restoration_actions": 98,
+      "root_reloads": 30,
+      "discovery_root_reloads": 3,
+      "verification_root_reloads": 27,
+      "restoration_browser_actions": 101,
+      "restoration_wall_s": 72.4,
+      "http_requests": 249,
+      "elapsed_s": 141.143,
+      "wall_seconds": 141.86,
+      "eager_batches": 4,
+      "eager_children": 17,
+      "eager_parent_returns": 13,
+      "eager_returns_rejected": 0,
+      "replays_validated": 23,
+      "replay_attempts": 27,
+      "replay_failures": 4,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     },
+     {
+      "fixture": "orchard",
+      "arm": "B",
+      "trial": 2,
+      "executed_total": 32,
+      "inventory": 48,
+      "deep_reached": 14,
+      "deep_total": 30,
+      "executed_tdistinct": 14,
+      "tdistinct_total": 24,
+      "executed_semantic": 0,
+      "semantic_total": 6,
+      "hub_coverage": {
+       "yields": [
+        5,
+        12
+       ],
+       "policies": [
+        6,
+        6
+       ],
+       "jobs": [
+        3,
+        6
+       ],
+       "releases": [
+        0,
+        6
+       ]
+      },
+      "auc_over_requests": {
+       "auc_norm": 0.4032,
+       "final": 32
+      },
+      "auc_over_time": {
+       "auc_norm": 0.4172,
+       "final": 32
+      },
+      "time_to_first_deep_s": 71.14,
+      "caps_per_minute": 13.69,
+      "total_browser_actions": 260,
+      "restoration_actions": 98,
+      "root_reloads": 30,
+      "discovery_root_reloads": 3,
+      "verification_root_reloads": 27,
+      "restoration_browser_actions": 101,
+      "restoration_wall_s": 71.0,
+      "http_requests": 250,
+      "elapsed_s": 140.245,
+      "wall_seconds": 140.92,
+      "eager_batches": 5,
+      "eager_children": 18,
+      "eager_parent_returns": 13,
+      "eager_returns_rejected": 0,
+      "replays_validated": 22,
+      "replay_attempts": 27,
+      "replay_failures": 5,
+      "transitions_failed": 0,
+      "unsafe_restorations_suppressed": 0,
+      "state_changing_requests": 0
+     }
+    ],
+    "median": {
+     "executed_total": 31,
+     "deep_reached": 13,
+     "executed_tdistinct": 13,
+     "executed_semantic": 0,
+     "total_browser_actions": 260,
+     "restoration_actions": 98,
+     "root_reloads": 30,
+     "restoration_browser_actions": 101,
+     "restoration_wall_s": 71.1,
+     "http_requests": 249,
+     "replays_validated": 22,
+     "transitions_failed": 0,
+     "eager_batches": 4,
+     "eager_children": 17,
+     "eager_parent_returns": 13,
+     "eager_returns_rejected": 0,
+     "caps_per_minute": 13.18,
+     "state_changing_requests": 0,
+     "auc_req": 0.3968,
+     "auc_time": 0.4115
+    }
+   }
+  }
+ },
+ "transfer": [
+  {
+   "fixture": "workflow_lab",
+   "arm": "A",
+   "status": "ok",
+   "browser_actions": 259,
+   "transitions": 99,
+   "restoration_actions": 90,
+   "root_reloads": 34,
+   "eager_batches": 0,
+   "eager_children": 0,
+   "eager_parent_returns": 0,
+   "eager_returns_rejected": 0,
+   "replays_validated": 20,
+   "replay_failures": 3,
+   "transitions_failed": 0,
+   "unsafe_restorations_suppressed": 0,
+   "state_changing_allowed": 3,
+   "blocked_destructive": 0,
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  },
+  {
+   "fixture": "workflow_lab",
+   "arm": "B",
+   "status": "ok",
+   "browser_actions": 257,
+   "transitions": 98,
+   "restoration_actions": 97,
+   "root_reloads": 26,
+   "eager_batches": 2,
+   "eager_children": 8,
+   "eager_parent_returns": 6,
+   "eager_returns_rejected": 0,
+   "replays_validated": 20,
+   "replay_failures": 3,
+   "transitions_failed": 0,
+   "unsafe_restorations_suppressed": 0,
+   "state_changing_allowed": 3,
+   "blocked_destructive": 0,
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  },
+  {
+   "fixture": "stateful_lab",
+   "arm": "A",
+   "status": "ok",
+   "browser_actions": 16,
+   "transitions": 12,
+   "restoration_actions": 0,
+   "root_reloads": 13,
+   "eager_batches": 0,
+   "eager_children": 0,
+   "eager_parent_returns": 0,
+   "eager_returns_rejected": 0,
+   "replays_validated": 0,
+   "replay_failures": 0,
+   "transitions_failed": 3,
+   "unsafe_restorations_suppressed": 7,
+   "state_changing_allowed": 1,
+   "blocked_destructive": 0,
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  },
+  {
+   "fixture": "stateful_lab",
+   "arm": "B",
+   "status": "ok",
+   "browser_actions": 24,
+   "transitions": 15,
+   "restoration_actions": 4,
+   "root_reloads": 13,
+   "eager_batches": 1,
+   "eager_children": 2,
+   "eager_parent_returns": 1,
+   "eager_returns_rejected": 0,
+   "replays_validated": 0,
+   "replay_failures": 1,
+   "transitions_failed": 3,
+   "unsafe_restorations_suppressed": 7,
+   "state_changing_allowed": 2,
+   "blocked_destructive": 0,
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  },
+  {
+   "fixture": "heldout_shop",
+   "arm": "A",
+   "status": "ok",
+   "browser_actions": 263,
+   "transitions": 70,
+   "restoration_actions": 91,
+   "root_reloads": 78,
+   "eager_batches": 0,
+   "eager_children": 0,
+   "eager_parent_returns": 0,
+   "eager_returns_rejected": 0,
+   "replays_validated": 16,
+   "replay_failures": 0,
+   "transitions_failed": 0,
+   "unsafe_restorations_suppressed": 2,
+   "state_changing_allowed": 2,
+   "blocked_destructive": 0,
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  },
+  {
+   "fixture": "heldout_shop",
+   "arm": "B",
+   "status": "ok",
+   "browser_actions": 263,
+   "transitions": 70,
+   "restoration_actions": 93,
+   "root_reloads": 76,
+   "eager_batches": 1,
+   "eager_children": 2,
+   "eager_parent_returns": 1,
+   "eager_returns_rejected": 0,
+   "replays_validated": 16,
+   "replay_failures": 0,
+   "transitions_failed": 0,
+   "unsafe_restorations_suppressed": 2,
+   "state_changing_allowed": 2,
+   "blocked_destructive": 0,
+   "destructive_requests_fired": [],
+   "destructive_in_server_log": []
+  }
+ ]
+}

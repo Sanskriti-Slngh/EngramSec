@@ -1,0 +1,234 @@
+{
+ "matched_config": {
+  "max_seconds": 120.0,
+  "max_browser_actions": 400,
+  "max_transitions": 160,
+  "max_total_http_requests": 1500,
+  "typed_resource_spider": true,
+  "max_resource_fetches": 200,
+  "max_resource_depth": 2,
+  "state_aware_exploration": true,
+  "record_aware_graph": true,
+  "interaction_profile": "extended",
+  "replay_policy": "structure"
+ },
+ "arms": {
+  "baseline": [
+   {
+    "arm": "baseline",
+    "trial": 0,
+    "status": "ok",
+    "observed_http": 1485,
+    "http_cap": 1500,
+    "http_budget_used": 1500,
+    "resource_cache": {
+     "enabled": false
+    },
+    "asset_requests_total": 1464,
+    "asset_paths_unique": 52,
+    "asset_refetch_waste": 1412,
+    "functional_executed": [
+     "about_view",
+     "detail_view",
+     "docs_view",
+     "editor_view",
+     "gallery_view",
+     "home_view",
+     "search",
+     "settings_view",
+     "stats_xhr"
+    ],
+    "functional_executed_count": 9,
+    "functional_inventory_size": 9,
+    "functional_recall": 1.0,
+    "replay_validated_transitions": 0,
+    "browser_actions": 31,
+    "elapsed_s": 16.061,
+    "wall_seconds": 16.16,
+    "scope_blocked": 45
+   },
+   {
+    "arm": "baseline",
+    "trial": 1,
+    "status": "ok",
+    "observed_http": 1485,
+    "http_cap": 1500,
+    "http_budget_used": 1500,
+    "resource_cache": {
+     "enabled": false
+    },
+    "asset_requests_total": 1464,
+    "asset_paths_unique": 52,
+    "asset_refetch_waste": 1412,
+    "functional_executed": [
+     "about_view",
+     "detail_view",
+     "docs_view",
+     "editor_view",
+     "gallery_view",
+     "home_view",
+     "search",
+     "settings_view",
+     "stats_xhr"
+    ],
+    "functional_executed_count": 9,
+    "functional_inventory_size": 9,
+    "functional_recall": 1.0,
+    "replay_validated_transitions": 0,
+    "browser_actions": 31,
+    "elapsed_s": 15.713,
+    "wall_seconds": 15.81,
+    "scope_blocked": 45
+   },
+   {
+    "arm": "baseline",
+    "trial": 2,
+    "status": "ok",
+    "observed_http": 1485,
+    "http_cap": 1500,
+    "http_budget_used": 1500,
+    "resource_cache": {
+     "enabled": false
+    },
+    "asset_requests_total": 1464,
+    "asset_paths_unique": 52,
+    "asset_refetch_waste": 1412,
+    "functional_executed": [
+     "about_view",
+     "detail_view",
+     "docs_view",
+     "editor_view",
+     "gallery_view",
+     "home_view",
+     "search",
+     "settings_view",
+     "stats_xhr"
+    ],
+    "functional_executed_count": 9,
+    "functional_inventory_size": 9,
+    "functional_recall": 1.0,
+    "replay_validated_transitions": 0,
+    "browser_actions": 31,
+    "elapsed_s": 15.723,
+    "wall_seconds": 15.82,
+    "scope_blocked": 45
+   }
+  ],
+  "cache": [
+   {
+    "arm": "cache",
+    "trial": 0,
+    "status": "ok",
+    "observed_http": 9595,
+    "http_cap": 1500,
+    "http_budget_used": 294,
+    "resource_cache": {
+     "bytes_cached": 29492,
+     "bytes_saved": 5308560,
+     "enabled": true,
+     "hits": 9360,
+     "stored_entries": 52,
+     "stores": 52
+    },
+    "asset_requests_total": 104,
+    "asset_paths_unique": 52,
+    "asset_refetch_waste": 52,
+    "functional_executed": [
+     "about_view",
+     "detail_view",
+     "docs_view",
+     "editor_view",
+     "gallery_view",
+     "home_view",
+     "search",
+     "settings_view",
+     "stats_xhr"
+    ],
+    "functional_executed_count": 9,
+    "functional_inventory_size": 9,
+    "functional_recall": 1.0,
+    "replay_validated_transitions": 10,
+    "browser_actions": 200,
+    "elapsed_s": 96.385,
+    "wall_seconds": 96.76,
+    "scope_blocked": 0
+   },
+   {
+    "arm": "cache",
+    "trial": 1,
+    "status": "ok",
+    "observed_http": 9436,
+    "http_cap": 1500,
+    "http_budget_used": 291,
+    "resource_cache": {
+     "bytes_cached": 29492,
+     "bytes_saved": 5220084,
+     "enabled": true,
+     "hits": 9204,
+     "stored_entries": 52,
+     "stores": 52
+    },
+    "asset_requests_total": 104,
+    "asset_paths_unique": 52,
+    "asset_refetch_waste": 52,
+    "functional_executed": [
+     "about_view",
+     "detail_view",
+     "docs_view",
+     "editor_view",
+     "gallery_view",
+     "home_view",
+     "search",
+     "settings_view",
+     "stats_xhr"
+    ],
+    "functional_executed_count": 9,
+    "functional_inventory_size": 9,
+    "functional_recall": 1.0,
+    "replay_validated_transitions": 9,
+    "browser_actions": 196,
+    "elapsed_s": 95.223,
+    "wall_seconds": 95.51,
+    "scope_blocked": 0
+   },
+   {
+    "arm": "cache",
+    "trial": 2,
+    "status": "ok",
+    "observed_http": 9595,
+    "http_cap": 1500,
+    "http_budget_used": 294,
+    "resource_cache": {
+     "bytes_cached": 29492,
+     "bytes_saved": 5308560,
+     "enabled": true,
+     "hits": 9360,
+     "stored_entries": 52,
+     "stores": 52
+    },
+    "asset_requests_total": 104,
+    "asset_paths_unique": 52,
+    "asset_refetch_waste": 52,
+    "functional_executed": [
+     "about_view",
+     "detail_view",
+     "docs_view",
+     "editor_view",
+     "gallery_view",
+     "home_view",
+     "search",
+     "settings_view",
+     "stats_xhr"
+    ],
+    "functional_executed_count": 9,
+    "functional_inventory_size": 9,
+    "functional_recall": 1.0,
+    "replay_validated_transitions": 10,
+    "browser_actions": 200,
+    "elapsed_s": 96.071,
+    "wall_seconds": 96.37,
+    "scope_blocked": 0
+   }
+  ]
+ }
+}

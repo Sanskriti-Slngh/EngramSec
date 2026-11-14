@@ -1,0 +1,72 @@
+{
+ "V1_crud": {
+  "mean_a": 0.7043,
+  "mean_b": 0.6173,
+  "mean_difference": 0.087,
+  "wins": 30,
+  "losses": 0,
+  "ties": 0,
+  "p": 9.313225746154785e-10,
+  "pass": true,
+  "vs_legacy": {
+   "mean_a": 0.7043,
+   "mean_b": 0.6665,
+   "mean_difference": 0.0378,
+   "wins": 25,
+   "losses": 3,
+   "ties": 2,
+   "p": 1.372024416923523e-05,
+   "pass": true
+  }
+ },
+ "V2_duplicates": {
+  "mean_a": 0.9271,
+  "mean_b": 0.7043,
+  "mean_difference": 0.2229,
+  "wins": 30,
+  "losses": 0,
+  "ties": 0,
+  "p": 9.313225746154785e-10,
+  "pass": true,
+  "vs_legacy": {
+   "mean_a": 0.9271,
+   "mean_b": 0.6383,
+   "mean_difference": 0.2889,
+   "wins": 13,
+   "losses": 17,
+   "ties": 0,
+   "p": 0.8192026959732175,
+   "pass": false
+  }
+ },
+ "V3_verification": {
+  "waste_v2": 7.2333,
+  "waste_full": 4.4667,
+  "seeds_with_unrestorable": 0,
+  "write_reexecutions": 0,
+  "pass": false
+ },
+ "G1_flat": {
+  "auc_v2": 0.4893,
+  "auc_bfs": 0.3571,
+  "ratio": 1.3702,
+  "pass": true
+ },
+ "G2_prerequisites": {
+  "fraction": 1.0,
+  "mean_v2": 1.0,
+  "mean_legacy": 0.2556,
+  "pass": true
+ },
+ "G3_instances": {
+  "max": 3,
+  "pass": true
+ },
+ "G4_safety": {
+  "gate_refusals": 0,
+  "identical_reruns": 10,
+  "reruns": 10,
+  "pass": true
+ },
+ "success": false
+}

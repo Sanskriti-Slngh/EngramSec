@@ -1,0 +1,71 @@
+{
+ "siyucms": {
+  "disk_free_gb_before": 420.2,
+  "up_to_ready_seconds": 18.9,
+  "containers": 4,
+  "mem_mb_at_ready": 514.8,
+  "mem_mb_ready_plus_30s": 514.2,
+  "loopback_only_verified": true,
+  "status": "ok",
+  "down_seconds": 5.0
+ },
+ "prestashop": {
+  "disk_free_gb_before": 420.2,
+  "up_to_ready_seconds": 32.1,
+  "containers": 4,
+  "mem_mb_at_ready": 837.0,
+  "mem_mb_ready_plus_30s": 837.1,
+  "loopback_only_verified": true,
+  "status": "ok",
+  "down_seconds": 4.7
+ },
+ "comfyui": {
+  "disk_free_gb_before": 420.2,
+  "up_to_ready_seconds": 18.9,
+  "containers": 3,
+  "mem_mb_at_ready": 657.0,
+  "mem_mb_ready_plus_30s": 656.3,
+  "loopback_only_verified": true,
+  "status": "ok",
+  "down_seconds": 7.8
+ },
+ "jetlinks": {
+  "disk_free_gb_before": 420.2,
+  "build_seconds": 136.0,
+  "build_exit": 0,
+  "new_images": [
+   "1.5GB",
+   "434MB",
+   "78.9MB"
+  ],
+  "disk_free_gb_after_build": 425.6,
+  "setup_attempts_before": 1,
+  "previous_status": "setup_failure: targetctl printed no loopback URL",
+  "up_to_ready_seconds": 273.1,
+  "containers": 8,
+  "mem_mb_at_ready": 2707.3,
+  "mem_mb_ready_plus_30s": 2768.6,
+  "loopback_only_verified": true,
+  "status": "ok",
+  "down_seconds": 5.8
+ },
+ "white-jotter": {
+  "disk_free_gb_before": 421.3,
+  "build_seconds": 205.8,
+  "build_exit": 0,
+  "new_images": [
+   "533MB",
+   "1.5GB"
+  ],
+  "disk_free_gb_after_build": 420.8,
+  "setup_attempts_before": 1,
+  "previous_status": "setup_failure: targetctl printed no loopback URL",
+  "up_to_ready_seconds": 27.2,
+  "containers": 5,
+  "mem_mb_at_ready": 1230.3,
+  "mem_mb_ready_plus_30s": 1232.2,
+  "loopback_only_verified": true,
+  "status": "ok",
+  "down_seconds": 3.0
+ }
+}

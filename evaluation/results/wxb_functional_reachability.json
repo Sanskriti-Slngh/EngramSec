@@ -1,0 +1,1633 @@
+{
+ "what_this_measures": "functional mapping of documented vulnerability locations; not vulnerability detection",
+ "ground_truth": "official metadata.json Location (path only)",
+ "runs": {
+  "frozen (5dfee96), 600 s": {
+   "locations": 28,
+   "by_status": {
+    "not_mapped": 22,
+    "observed": 1,
+    "exercised": 4,
+    "area_only": 1
+   },
+   "by_cause": {
+    "not_referenced": 12,
+    "not_referenced (run also budget-limited)": 11,
+    "discovered_not_chosen (budget exhausted)": 1
+   },
+   "detail": [
+    {
+     "target": "prestashop",
+     "vuln_id": "prestashop-001",
+     "location_path": "/admin-dev/index.php",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 28,
+      "elapsed_s": 16.753,
+      "http": 8,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "prestashop",
+     "vuln_id": "prestashop-002",
+     "location_path": "/admin-dev/index.php",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 28,
+      "elapsed_s": 16.753,
+      "http": 8,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "prestashop",
+     "vuln_id": "prestashop-003",
+     "location_path": "/admin-dev/index.php",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 28,
+      "elapsed_s": 16.753,
+      "http": 8,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "prestashop",
+     "vuln_id": "prestashop-004",
+     "location_path": "/admin-dev/index.php",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 28,
+      "elapsed_s": 16.753,
+      "http": 8,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-001",
+     "location_path": "/userdata/",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 29,
+      "elapsed_s": 39.883,
+      "http": 2059,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-002",
+     "location_path": "/userdata/",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 29,
+      "elapsed_s": 39.883,
+      "http": 2059,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-003",
+     "location_path": "/upload/image",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 29,
+      "elapsed_s": 39.883,
+      "http": 2059,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-004",
+     "location_path": "/view",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 29,
+      "elapsed_s": 39.883,
+      "http": 2059,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-005",
+     "location_path": "/manager/channel_url_list",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 29,
+      "elapsed_s": 39.883,
+      "http": 2059,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-006",
+     "location_path": "/manager/queue/install_model",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 29,
+      "elapsed_s": 39.883,
+      "http": 2059,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-001",
+     "location_path": "/admin",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 31,
+      "elapsed_s": 69.588,
+      "http": 1853,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-002",
+     "location_path": "/admin/template/editPost.html",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 31,
+      "elapsed_s": 69.588,
+      "http": 1853,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-003",
+     "location_path": "/index/team.html",
+     "status": "observed",
+     "cause": "discovered_not_chosen (budget exhausted)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 7,
+      "statuses": [
+       200
+      ],
+      "references": 141,
+      "blocked_attempts": 0,
+      "area_paths": 60,
+      "area_examples": [
+       "/index/Article/index.html",
+       "/index/Article/info.html",
+       "/index/User/login.html",
+       "/index/User/register.html",
+       "/index/about.html"
+      ]
+     },
+     "run": {
+      "actions": 31,
+      "elapsed_s": 69.588,
+      "http": 1853,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-004",
+     "location_path": "/admin/upload/index.html",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 31,
+      "elapsed_s": 69.588,
+      "http": 1853,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-005",
+     "location_path": "/admin/template/imgDel.html",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 31,
+      "elapsed_s": 69.588,
+      "http": 1853,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-006",
+     "location_path": "/api/user/editInfo",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 31,
+      "elapsed_s": 69.588,
+      "http": 1853,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "jetlinks",
+     "vuln_id": "jetlinks-001",
+     "location_path": "/protocol/convert",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 2,
+      "elapsed_s": 2.045,
+      "http": 2,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "jetlinks",
+     "vuln_id": "jetlinks-002",
+     "location_path": "/notifier/{notifierId}/_send",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 2,
+      "elapsed_s": 2.045,
+      "http": 2,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "jetlinks",
+     "vuln_id": "jetlinks-003",
+     "location_path": "/system/maintenance/logs/export",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 2,
+      "elapsed_s": 2.045,
+      "http": 2,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "jetlinks",
+     "vuln_id": "jetlinks-004",
+     "location_path": "/system/maintenance/notify/webhook/preview",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 2,
+      "elapsed_s": 2.045,
+      "http": 2,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "jetlinks",
+     "vuln_id": "jetlinks-005",
+     "location_path": "/system/maintenance/gateway/diagnostics/ping",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 2,
+      "elapsed_s": 2.045,
+      "http": 2,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-001",
+     "location_path": "/api/login",
+     "status": "exercised",
+     "cause": null,
+     "evidence": {
+      "exercised_actions": 1,
+      "responses": 1,
+      "statuses": [
+       200
+      ],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 8,
+      "area_examples": [
+       "/api/article/1",
+       "/api/article/2",
+       "/api/article/3",
+       "/api/article/4/1",
+       "/api/books"
+      ]
+     },
+     "run": {
+      "actions": 595,
+      "elapsed_s": 511.446,
+      "http": 1253,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-002",
+     "location_path": "/api/",
+     "status": "exercised",
+     "cause": null,
+     "evidence": {
+      "exercised_actions": 11,
+      "responses": 11,
+      "statuses": [
+       200
+      ],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 595,
+      "elapsed_s": 511.446,
+      "http": 1253,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-003",
+     "location_path": "/api/admin/content/article",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 595,
+      "elapsed_s": 511.446,
+      "http": 1253,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-004",
+     "location_path": "/api/admin/user",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 595,
+      "elapsed_s": 511.446,
+      "http": 1253,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-005",
+     "location_path": "/api/search",
+     "status": "exercised",
+     "cause": null,
+     "evidence": {
+      "exercised_actions": 1,
+      "responses": 1,
+      "statuses": [
+       200
+      ],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 8,
+      "area_examples": [
+       "/api/article/1",
+       "/api/article/2",
+       "/api/article/3",
+       "/api/article/4/1",
+       "/api/books"
+      ]
+     },
+     "run": {
+      "actions": 595,
+      "elapsed_s": 511.446,
+      "http": 1253,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-006",
+     "location_path": "/api/file/",
+     "status": "area_only",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 8,
+      "area_examples": [
+       "/api/article/1",
+       "/api/article/2",
+       "/api/article/3",
+       "/api/article/4/1",
+       "/api/books"
+      ]
+     },
+     "run": {
+      "actions": 595,
+      "elapsed_s": 511.446,
+      "http": 1253,
+      "deployment_fixes": null
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-007",
+     "location_path": "/api/register",
+     "status": "exercised",
+     "cause": null,
+     "evidence": {
+      "exercised_actions": 2,
+      "responses": 2,
+      "statuses": [
+       200
+      ],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 8,
+      "area_examples": [
+       "/api/article/1",
+       "/api/article/2",
+       "/api/article/3",
+       "/api/article/4/1",
+       "/api/books"
+      ]
+     },
+     "run": {
+      "actions": 595,
+      "elapsed_s": 511.446,
+      "http": 1253,
+      "deployment_fixes": null
+     }
+    }
+   ]
+  },
+  "functional (ea16b4f), generous budgets + deployment fixes + disposable": {
+   "locations": 28,
+   "by_status": {
+    "not_mapped": 22,
+    "exercised": 4,
+    "observed": 1,
+    "area_only": 1
+   },
+   "by_cause": {
+    "not_referenced (run also budget-limited)": 15,
+    "not_referenced": 8,
+    "discovered_not_chosen": 1
+   },
+   "detail": [
+    {
+     "target": "prestashop",
+     "vuln_id": "prestashop-001",
+     "location_path": "/admin-dev/index.php",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 573,
+      "elapsed_s": 1645.358,
+      "http": 19311,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:53604/"
+        ],
+        "entry": "http://127.0.0.1:53604/"
+       },
+       "origin_aliases": [
+        "http://prestashop"
+       ],
+       "host_map": {
+        "http://prestashop": "http://127.0.0.1:53604"
+       }
+      }
+     }
+    },
+    {
+     "target": "prestashop",
+     "vuln_id": "prestashop-002",
+     "location_path": "/admin-dev/index.php",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 573,
+      "elapsed_s": 1645.358,
+      "http": 19311,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:53604/"
+        ],
+        "entry": "http://127.0.0.1:53604/"
+       },
+       "origin_aliases": [
+        "http://prestashop"
+       ],
+       "host_map": {
+        "http://prestashop": "http://127.0.0.1:53604"
+       }
+      }
+     }
+    },
+    {
+     "target": "prestashop",
+     "vuln_id": "prestashop-003",
+     "location_path": "/admin-dev/index.php",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 573,
+      "elapsed_s": 1645.358,
+      "http": 19311,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:53604/"
+        ],
+        "entry": "http://127.0.0.1:53604/"
+       },
+       "origin_aliases": [
+        "http://prestashop"
+       ],
+       "host_map": {
+        "http://prestashop": "http://127.0.0.1:53604"
+       }
+      }
+     }
+    },
+    {
+     "target": "prestashop",
+     "vuln_id": "prestashop-004",
+     "location_path": "/admin-dev/index.php",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 573,
+      "elapsed_s": 1645.358,
+      "http": 19311,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:53604/"
+        ],
+        "entry": "http://127.0.0.1:53604/"
+       },
+       "origin_aliases": [
+        "http://prestashop"
+       ],
+       "host_map": {
+        "http://prestashop": "http://127.0.0.1:53604"
+       }
+      }
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-001",
+     "location_path": "/userdata/",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 217,
+      "elapsed_s": 427.415,
+      "http": 18768,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:50189/"
+        ],
+        "entry": "http://127.0.0.1:50189/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-002",
+     "location_path": "/userdata/",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 217,
+      "elapsed_s": 427.415,
+      "http": 18768,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:50189/"
+        ],
+        "entry": "http://127.0.0.1:50189/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-003",
+     "location_path": "/upload/image",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 217,
+      "elapsed_s": 427.415,
+      "http": 18768,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:50189/"
+        ],
+        "entry": "http://127.0.0.1:50189/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-004",
+     "location_path": "/view",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 217,
+      "elapsed_s": 427.415,
+      "http": 18768,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:50189/"
+        ],
+        "entry": "http://127.0.0.1:50189/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-005",
+     "location_path": "/manager/channel_url_list",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 217,
+      "elapsed_s": 427.415,
+      "http": 18768,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:50189/"
+        ],
+        "entry": "http://127.0.0.1:50189/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "comfyui",
+     "vuln_id": "comfyui-006",
+     "location_path": "/manager/queue/install_model",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 217,
+      "elapsed_s": 427.415,
+      "http": 18768,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:50189/"
+        ],
+        "entry": "http://127.0.0.1:50189/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-001",
+     "location_path": "/admin",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 369,
+      "elapsed_s": 942.702,
+      "http": 19723,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:57448/"
+        ],
+        "entry": "http://127.0.0.1:57448/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-002",
+     "location_path": "/admin/template/editPost.html",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 369,
+      "elapsed_s": 942.702,
+      "http": 19723,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:57448/"
+        ],
+        "entry": "http://127.0.0.1:57448/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-003",
+     "location_path": "/index/team.html",
+     "status": "exercised",
+     "cause": null,
+     "evidence": {
+      "exercised_actions": 10,
+      "responses": 15,
+      "statuses": [
+       200
+      ],
+      "references": 753,
+      "blocked_attempts": 0,
+      "area_paths": 66,
+      "area_examples": [
+       "/index/Article/index.html",
+       "/index/Article/info.html",
+       "/index/User/login.html",
+       "/index/User/register.html",
+       "/index/about.html"
+      ]
+     },
+     "run": {
+      "actions": 369,
+      "elapsed_s": 942.702,
+      "http": 19723,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:57448/"
+        ],
+        "entry": "http://127.0.0.1:57448/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-004",
+     "location_path": "/admin/upload/index.html",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 369,
+      "elapsed_s": 942.702,
+      "http": 19723,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:57448/"
+        ],
+        "entry": "http://127.0.0.1:57448/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-005",
+     "location_path": "/admin/template/imgDel.html",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 369,
+      "elapsed_s": 942.702,
+      "http": 19723,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:57448/"
+        ],
+        "entry": "http://127.0.0.1:57448/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "siyucms",
+     "vuln_id": "siyucms-006",
+     "location_path": "/api/user/editInfo",
+     "status": "not_mapped",
+     "cause": "not_referenced (run also budget-limited)",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 369,
+      "elapsed_s": 942.702,
+      "http": 19723,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:57448/"
+        ],
+        "entry": "http://127.0.0.1:57448/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "jetlinks",
+     "vuln_id": "jetlinks-001",
+     "location_path": "/protocol/convert",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 36,
+      "elapsed_s": 42.338,
+      "http": 242,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:52864/",
+         "http://127.0.0.1:52865/"
+        ],
+        "entry": "http://127.0.0.1:52865/"
+       },
+       "origin_aliases": [
+        "http://127.0.0.1:52864"
+       ],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "jetlinks",
+     "vuln_id": "jetlinks-002",
+     "location_path": "/notifier/{notifierId}/_send",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 36,
+      "elapsed_s": 42.338,
+      "http": 242,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:52864/",
+         "http://127.0.0.1:52865/"
+        ],
+        "entry": "http://127.0.0.1:52865/"
+       },
+       "origin_aliases": [
+        "http://127.0.0.1:52864"
+       ],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "jetlinks",
+     "vuln_id": "jetlinks-003",
+     "location_path": "/system/maintenance/logs/export",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 36,
+      "elapsed_s": 42.338,
+      "http": 242,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:52864/",
+         "http://127.0.0.1:52865/"
+        ],
+        "entry": "http://127.0.0.1:52865/"
+       },
+       "origin_aliases": [
+        "http://127.0.0.1:52864"
+       ],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "jetlinks",
+     "vuln_id": "jetlinks-004",
+     "location_path": "/system/maintenance/notify/webhook/preview",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 36,
+      "elapsed_s": 42.338,
+      "http": 242,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:52864/",
+         "http://127.0.0.1:52865/"
+        ],
+        "entry": "http://127.0.0.1:52865/"
+       },
+       "origin_aliases": [
+        "http://127.0.0.1:52864"
+       ],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "jetlinks",
+     "vuln_id": "jetlinks-005",
+     "location_path": "/system/maintenance/gateway/diagnostics/ping",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 36,
+      "elapsed_s": 42.338,
+      "http": 242,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:52864/",
+         "http://127.0.0.1:52865/"
+        ],
+        "entry": "http://127.0.0.1:52865/"
+       },
+       "origin_aliases": [
+        "http://127.0.0.1:52864"
+       ],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-001",
+     "location_path": "/api/login",
+     "status": "observed",
+     "cause": "discovered_not_chosen",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 1,
+      "statuses": [
+       200
+      ],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 14,
+      "area_examples": [
+       "/api/article/1",
+       "/api/article/2",
+       "/api/article/3",
+       "/api/article/4/1",
+       "/api/books"
+      ]
+     },
+     "run": {
+      "actions": 1607,
+      "elapsed_s": 1812.823,
+      "http": 5189,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:59776/"
+        ],
+        "entry": "http://127.0.0.1:59776/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-002",
+     "location_path": "/api/",
+     "status": "exercised",
+     "cause": null,
+     "evidence": {
+      "exercised_actions": 84,
+      "responses": 85,
+      "statuses": [
+       200
+      ],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 1607,
+      "elapsed_s": 1812.823,
+      "http": 5189,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:59776/"
+        ],
+        "entry": "http://127.0.0.1:59776/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-003",
+     "location_path": "/api/admin/content/article",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 1607,
+      "elapsed_s": 1812.823,
+      "http": 5189,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:59776/"
+        ],
+        "entry": "http://127.0.0.1:59776/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-004",
+     "location_path": "/api/admin/user",
+     "status": "not_mapped",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 0,
+      "area_examples": []
+     },
+     "run": {
+      "actions": 1607,
+      "elapsed_s": 1812.823,
+      "http": 5189,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:59776/"
+        ],
+        "entry": "http://127.0.0.1:59776/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-005",
+     "location_path": "/api/search",
+     "status": "exercised",
+     "cause": null,
+     "evidence": {
+      "exercised_actions": 6,
+      "responses": 6,
+      "statuses": [
+       200
+      ],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 14,
+      "area_examples": [
+       "/api/article/1",
+       "/api/article/2",
+       "/api/article/3",
+       "/api/article/4/1",
+       "/api/books"
+      ]
+     },
+     "run": {
+      "actions": 1607,
+      "elapsed_s": 1812.823,
+      "http": 5189,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:59776/"
+        ],
+        "entry": "http://127.0.0.1:59776/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-006",
+     "location_path": "/api/file/",
+     "status": "area_only",
+     "cause": "not_referenced",
+     "evidence": {
+      "exercised_actions": 0,
+      "responses": 0,
+      "statuses": [],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 14,
+      "area_examples": [
+       "/api/article/1",
+       "/api/article/2",
+       "/api/article/3",
+       "/api/article/4/1",
+       "/api/books"
+      ]
+     },
+     "run": {
+      "actions": 1607,
+      "elapsed_s": 1812.823,
+      "http": 5189,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:59776/"
+        ],
+        "entry": "http://127.0.0.1:59776/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    },
+    {
+     "target": "white-jotter",
+     "vuln_id": "white-jotter-007",
+     "location_path": "/api/register",
+     "status": "exercised",
+     "cause": null,
+     "evidence": {
+      "exercised_actions": 2,
+      "responses": 2,
+      "statuses": [
+       200
+      ],
+      "references": 0,
+      "blocked_attempts": 0,
+      "area_paths": 14,
+      "area_examples": [
+       "/api/article/1",
+       "/api/article/2",
+       "/api/article/3",
+       "/api/article/4/1",
+       "/api/books"
+      ]
+     },
+     "run": {
+      "actions": 1607,
+      "elapsed_s": 1812.823,
+      "http": 5189,
+      "deployment_fixes": {
+       "entry_choice": {
+        "printed_urls": [
+         "http://127.0.0.1:59776/"
+        ],
+        "entry": "http://127.0.0.1:59776/"
+       },
+       "origin_aliases": [],
+       "host_map": null
+      }
+     }
+    }
+   ]
+  }
+ }
+}

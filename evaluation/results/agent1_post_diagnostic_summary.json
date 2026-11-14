@@ -1,0 +1,5573 @@
+{
+ "milestone": "Agent 1 comprehensive benchmark evaluation \u2014 supplementary safe-isolated write diagnostic (Track S, not primary)",
+ "evaluated_revision": "4a4f8193d392338f31eb0c1cf7b08f0db7b82233",
+ "frozen_config": {
+  "policy": "coverage",
+  "max_seconds": 180.0,
+  "max_transitions": 100,
+  "max_browser_actions": 500,
+  "model_provider": "none",
+  "allow_post_forms": false,
+  "state_aware_exploration": true,
+  "record_aware_graph": true,
+  "exploration_mode": "fresh",
+  "replay_policy": "shallow"
+ },
+ "instrumentation": {
+  "acg_evidence": true,
+  "action_ledger": true
+ },
+ "diagnostic_override": {
+  "allow_post_forms": true
+ },
+ "terminology": {
+  "annotation_recall/precision": "computed against frozen author-curated development annotations; not independently established application ground truth",
+  "session_conditioned": "ACG roles are cookie-name session contexts, not semantic authorization roles",
+  "track_b": "NOT MEASURABLE: without independent capability ground truth, the percentage of this application's functionality that Agent 1 captured cannot be established. Discovery counts are inventories, not coverage percentages."
+ },
+ "not_evaluated": {
+  "webexploitbench_gated_targets": 10,
+  "reason": "NOT EVALUATED \u2014 ACCESS RESTRICTED"
+ },
+ "protocol_deviations": [
+  {
+   "id": "D1",
+   "when": "2026-11-04 22:4x",
+   "kind": "harness launch",
+   "what": "First launch of the primary run was refused by the harness freeze guard because the operator wrote the driver log inside agent1/ (an untracked file counts as an uncommitted change).",
+   "effect": "No trial ran. The log was moved outside agent1/ and the run was relaunched at 22:45:56 at revision 74426ce.",
+   "data_affected": false
+  },
+  {
+   "id": "D2",
+   "when": "2026-11-04 23:57 to 2026-11-05 12:37",
+   "kind": "host infrastructure (sleep)",
+   "what": "The host ran on battery (15% falling to 4%) and entered clamshell/maintenance sleep from 23:57:12. On macOS the monotonic clock pauses during sleep, so the agent's 180 s budget and the harness hard limits did not advance while asleep.",
+   "effect": "SiyuCMS trials 0 and 1 were mapped across sleep intervals (measured wall time minus agent clock: 1526.5 s and 3602.0 s). Both are kept, flagged host_sleep_affected, and not rerun. `caffeinate -i` (infrastructure only) was added at ~00:25 but cannot prevent clamshell sleep. At 01:32:53 the driver was paused at a clean boundary (after SiyuCMS trial 1 was recorded, during trial 2 container setup, before any mapping; trial_2 directory empty; teardown exit 0, no residual containers). It resumed automatically on AC power at 12:37:58 under `caffeinate -i -s`, with the same revision and frozen agent tree. All other 49 primary trials show no wall-vs-agent-clock gap above 5 s. The three whiteboard trials (23:58) ran in brief dark-wake windows and show no measurable gap.",
+   "data_affected": true
+  },
+  {
+   "id": "D3",
+   "when": "2026-11-04 16:00-17:10 (pre-run)",
+   "kind": "resolution of a disclosed observation",
+   "what": "Preregistration revision 1 (section 5) disclosed ~32-minute SiyuCMS reset-verification cycles of unknown cause. The power log shows the host was sleeping from 16:00; the delay was host sleep, not reset logic.",
+   "effect": "None on scored data.",
+   "data_affected": false
+  },
+  {
+   "id": "D4",
+   "when": "post-run review",
+   "kind": "preregistration factual error",
+   "what": "Preregistration section 3 states the preflight did not exercise the stricter WebSocket scope enforcement because phase2_lab opens only same-origin sockets. phase2_lab deliberately also attempts an out-of-scope WebSocket (another loopback port). In scored runs the capture refused it 15 times per trial.",
+   "effect": "The refusals are correct scope enforcement; with capture off the browser would have attempted that out-of-scope connection. Reported as a capture-on behaviour difference.",
+   "data_affected": false
+  },
+  {
+   "id": "D5",
+   "when": "2026-11-05 12:55",
+   "kind": "harness bug (Track S only)",
+   "what": "The supplementary write diagnostic passed allow_post_forms twice to RunConfig; all 9 Track S trials raised TypeError before the agent started (no browser, no mapping).",
+   "effect": "Failed records preserved (agent1/experiments/comprehensive_post_diagnostic_failed_launch_1, git-ignored). Fixed in 4a4f819 (config merged into one dict; primary configuration byte-identical, asserted by a test); Track S was then run once at that revision. Primary data unaffected.",
+   "data_affected": false
+  },
+  {
+   "id": "D6",
+   "when": "post-run review",
+   "kind": "harness limitation (readiness criterion)",
+   "what": "The preregistered readiness rule accepts any HTTP status < 500 at the application root. JetLinks answered 404 at the root after ~44-47 s of startup in all three trials, and the agent mapped that 404 page.",
+   "effect": "JetLinks results reflect the 404 root. Whether the application was still initializing or serves no page at its root cannot be determined without inspecting the target, which the evaluation-only protocol forbids. No rerun.",
+   "data_affected": true
+  },
+  {
+   "id": "D7",
+   "when": "post-run review",
+   "kind": "cosmetic",
+   "what": "The run log prints reference=None for surface, transfer and crawl-testbed reference kinds (the log looks up annotation keys only).",
+   "effect": "None; trial.json records the full reference results.",
+   "data_affected": false
+  },
+  {
+   "id": "D8",
+   "when": "post-run review",
+   "kind": "metric labelling defect (descriptive field only)",
+   "what": "The preregistered terminated_by field checks the action, transition and total-time budgets only. It cannot see the exploration time reserve (replay_reserve_fraction 0.30: exploration stops at ~126 s of 180 s and the rest is replay). Runs that stopped exploring at the reserve but finished replay early were labelled 'frontier_exhausted_or_other'.",
+   "effect": "Added a measured, additive descriptive field per trial (exploration_ended_s, exploration_stop) from the agent's own transition timestamps. No score, threshold or reference metric changed. Corrected labels: heldout_shop, restoration_lab, crawlground, white-jotter and siyucms trial 2 stopped exploring at the time reserve; SiyuCMS trials 0-1 cannot be classified (host sleep).",
+   "data_affected": false
+  },
+  {
+   "id": "D9",
+   "when": "2026-11-05 13:08 onward",
+   "kind": "host infrastructure (sleep), Track S only",
+   "what": "During the supplementary Track S run the host returned to battery power and maintenance/clamshell sleep (power log 13:13 onward).",
+   "effect": "Track S trials with a wall-vs-agent-clock gap above 5 s are flagged host_sleep_affected in agent1_post_diagnostic_summary.json. Track S uses in-process fixtures only (no external server clock), the agent budget is monotonic, and the affected heldout_shop trials reproduced the unaffected trial (17 capabilities; 309-311 actions). Not paused, not rerun. Primary data unaffected.",
+   "data_affected": true
+  }
+ ],
+ "environments": {
+  "coverage_lab": {
+   "track": "A",
+   "category": "multi-area server-rendered site",
+   "exposure": "development",
+   "reference_kind": "surface",
+   "trials": [
+    {
+     "trial": 0,
+     "status": "ok",
+     "exploration_ended_s": 127.3,
+     "exploration_stop": "exploration_time_reserve"
+    },
+    {
+     "trial": 1,
+     "status": "ok",
+     "exploration_ended_s": 127.4,
+     "exploration_stop": "exploration_time_reserve"
+    },
+    {
+     "trial": 2,
+     "status": "ok",
+     "exploration_ended_s": 127.4,
+     "exploration_stop": "exploration_time_reserve"
+    }
+   ],
+   "reset_integrity": {
+    "reset_failures": 0,
+    "teardown_exit": [
+     null,
+     null,
+     null
+    ],
+    "residual_containers_after_teardown": [
+     null,
+     null,
+     null
+    ],
+    "mount_profile_matches_frozen": [
+     null,
+     null,
+     null
+    ],
+    "inproc_initial_state_identical": true,
+    "inproc_initial_server_log_empty": true,
+    "inproc_fixture_gone_after_trial": [
+     true,
+     true,
+     true
+    ]
+   },
+   "metrics": {
+    "efficiency.browser_actions": {
+     "median": 368,
+     "min": 368,
+     "max": 368,
+     "n": 3
+    },
+    "efficiency.elapsed_seconds": {
+     "median": 180.77,
+     "min": 180.67,
+     "max": 180.94,
+     "n": 3
+    },
+    "efficiency.transitions_attempted": {
+     "median": 74,
+     "min": 74,
+     "max": 74,
+     "n": 3
+    },
+    "efficiency.actions_unique_discovery": {
+     "median": 27,
+     "min": 27,
+     "max": 27,
+     "n": 3
+    },
+    "efficiency.actions_redundant": {
+     "median": 47,
+     "min": 47,
+     "max": 47,
+     "n": 3
+    },
+    "efficiency.actions_failed": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "efficiency.restoration_actions": {
+     "median": 112,
+     "min": 112,
+     "max": 112,
+     "n": 3
+    },
+    "efficiency.root_reloads": {
+     "median": 108,
+     "min": 108,
+     "max": 108,
+     "n": 3
+    },
+    "efficiency.verification_actions": {
+     "median": 107,
+     "min": 107,
+     "max": 107,
+     "n": 3
+    },
+    "efficiency.readiness_wait_ms": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "efficiency.capabilities_per_100_actions": {
+     "median": 4.35,
+     "min": 4.35,
+     "max": 4.35,
+     "n": 3
+    },
+    "efficiency.capabilities_per_minute": {
+     "median": 5.31,
+     "min": 5.31,
+     "max": 5.31,
+     "n": 3
+    },
+    "efficiency.replays.attempts": {
+     "median": 33,
+     "min": 33,
+     "max": 33,
+     "n": 3
+    },
+    "efficiency.replays.validated": {
+     "median": 33,
+     "min": 33,
+     "max": 33,
+     "n": 3
+    },
+    "efficiency.replays.failures": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "efficiency.http_by_source.navigation": {
+     "median": 108,
+     "min": 108,
+     "max": 108,
+     "n": 3
+    },
+    "efficiency.http_by_source.action": {
+     "median": 36,
+     "min": 36,
+     "max": 36,
+     "n": 3
+    },
+    "efficiency.http_by_source.replay": {
+     "median": 38,
+     "min": 37,
+     "max": 38,
+     "n": 3
+    },
+    "efficiency.http_by_source.passive_resource_fetches": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "efficiency.http_by_source.budget_used": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "discovery.route_templates": {
+     "median": 6,
+     "min": 6,
+     "max": 6,
+     "n": 3
+    },
+    "discovery.grouped_states": {
+     "median": 23,
+     "min": 23,
+     "max": 23,
+     "n": 3
+    },
+    "discovery.areas_route_title": {
+     "median": 6,
+     "min": 6,
+     "max": 6,
+     "n": 3
+    },
+    "discovery.acg_templates": {
+     "median": 6,
+     "min": 6,
+     "max": 6,
+     "n": 3
+    },
+    "discovery.unique_controls_observed": {
+     "median": 20,
+     "min": 20,
+     "max": 20,
+     "n": 3
+    },
+    "discovery.unique_controls_executed": {
+     "median": 17,
+     "min": 17,
+     "max": 17,
+     "n": 3
+    },
+    "discovery.advertised_unexecuted": {
+     "median": 1680,
+     "min": 1680,
+     "max": 1680,
+     "n": 3
+    },
+    "discovery.affordances": {
+     "median": 29,
+     "min": 29,
+     "max": 29,
+     "n": 3
+    },
+    "discovery.affordance_families": {
+     "median": 18,
+     "min": 18,
+     "max": 18,
+     "n": 3
+    },
+    "discovery.request_structures_browser": {
+     "median": 11,
+     "min": 11,
+     "max": 11,
+     "n": 3
+    },
+    "discovery.acg_operations": {
+     "median": 11,
+     "min": 11,
+     "max": 11,
+     "n": 3
+    },
+    "discovery.websocket_operations": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "discovery.client_only_capabilities": {
+     "median": 4,
+     "min": 4,
+     "max": 4,
+     "n": 3
+    },
+    "discovery.entity_types": {
+     "median": 3,
+     "min": 3,
+     "max": 3,
+     "n": 3
+    },
+    "discovery.entity_instances": {
+     "median": 4,
+     "min": 4,
+     "max": 4,
+     "n": 3
+    },
+    "discovery.session_contexts": {
+     "median": 1,
+     "min": 1,
+     "max": 1,
+     "n": 3
+    },
+    "capabilities.distinct_capabilities_observed_or_better": {
+     "median": 16,
+     "min": 16,
+     "max": 16,
+     "n": 3
+    },
+    "capabilities.unidentified": {
+     "median": 7,
+     "min": 7,
+     "max": 8,
+     "n": 3
+    },
+    "capabilities.equivalent_interfaces_multi_entry": {
+     "median": 1,
+     "min": 1,
+     "max": 1,
+     "n": 3
+    },
+    "capabilities.operations_without_capability": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.session_conditioned.capabilities_in_cookie_session_contexts": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.advertised_unexecuted_controls": {
+     "median": 1680,
+     "min": 1680,
+     "max": 1680,
+     "n": 3
+    },
+    "capabilities.evidence_status.hypothesized": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.executed_no_effect_affordances": {
+     "median": 1,
+     "min": 1,
+     "max": 1,
+     "n": 3
+    },
+    "capabilities.evidence_status.refuted": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.blocked_capabilities": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_total": {
+     "median": 122,
+     "min": 122,
+     "max": 122,
+     "n": 3
+    },
+    "capabilities.refusals.scope_refusals": {
+     "median": 149,
+     "min": 149,
+     "max": 149,
+     "n": 3
+    },
+    "capabilities.refusals.technical_unobservable": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.not_selected": {
+     "median": 1409,
+     "min": 1409,
+     "max": 1409,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_by_configuration.post_forms_disabled": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_by_configuration.dangerous_label_or_target": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_by_configuration.requires_protected_or_file_input": {
+     "median": 122,
+     "min": 122,
+     "max": 122,
+     "n": 3
+    },
+    "capabilities.evidence_status.observed": {
+     "median": 1,
+     "min": 1,
+     "max": 2,
+     "n": 3
+    },
+    "capabilities.evidence_status.reproduced": {
+     "median": 15,
+     "min": 14,
+     "max": 15,
+     "n": 3
+    },
+    "capabilities.evidence_status.verified": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.attempted_failed_affordances": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.blocked_affordances": {
+     "median": 7,
+     "min": 7,
+     "max": 7,
+     "n": 3
+    },
+    "safety.state_changing_requests_issued": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "safety.state_changing_requests_in_replay": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "safety.dangerous_controls_skipped": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "safety.ws_out_of_scope_refused": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "child_seconds": {
+     "median": 181.4,
+     "min": 181.3,
+     "max": 181.6,
+     "n": 3
+    }
+   },
+   "capability_overlap_jaccard_pairwise": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "deterministic_action_sequences": true,
+   "identical_initial_state_group": true,
+   "identical_config": true,
+   "terminated_by": [
+    "time_budget"
+   ],
+   "model_calls_total": 0,
+   "reference_basis": "author-written surface truth (areas/controls/requests) for a development fixture",
+   "reference_detail_per_trial": [
+    {
+     "application": "coverage_lab",
+     "denominators": {
+      "areas": 10,
+      "controls": 17,
+      "requests": 10,
+      "paths": 10,
+      "instances": 2,
+      "contexts": 2,
+      "blocked_areas_excluded": 1,
+      "outside_areas_excluded": 1
+     },
+     "metrics": {
+      "state_interface_recall": 0.8,
+      "control_action_recall": 0.9411764705882353,
+      "request_surface_recall": 0.8,
+      "prerequisite_path_coverage": 0.8,
+      "instance_recall": 1.0,
+      "instances_distinct": true,
+      "context_recall": 0.5,
+      "replay_reliability": 1.0,
+      "request_precision": 0.6388888888888888,
+      "covered_surfaces_per_browser_action": 0.08695652173913043,
+      "covered_surfaces_per_minute": 10.626992561105206
+     },
+     "counts": {
+      "covered_areas": 8,
+      "covered_controls": 16,
+      "covered_requests": 8,
+      "replay_attempts": 33,
+      "replay_successes": 33,
+      "browser_actions": 368,
+      "elapsed_seconds": 180.672,
+      "grouped_states": 23,
+      "raw_states": 23,
+      "incorrect_state_merges_self_audit": 0,
+      "graph_connections_missing_evidence": 0
+     },
+     "areas": [
+      {
+       "id": "home",
+       "route": "/",
+       "title": "Coverage Lab",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_alpha",
+       "route": "/records/{instance}",
+       "via_target_suffix": "/records/1",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_beta",
+       "route": "/records/{instance}",
+       "via_target_suffix": "/records/2",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "workspace",
+       "route": "/workspace",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reports",
+       "route": "/workspace/reports",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "analytics",
+       "route": "/",
+       "via_label": "Analytics",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "settings",
+       "route": "/settings",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "help",
+       "route": "/help",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "member",
+       "route": "/member",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "member_preferences",
+       "route": "/member/preferences",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin_backend",
+       "route": "/admin",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      },
+      {
+       "id": "external_docs",
+       "route": "https://example.test/outside",
+       "scope": "outside",
+       "status": "outside_access_scope"
+      }
+     ],
+     "controls": [
+      {
+       "id": "record_alpha_link",
+       "label": "Alpha customer",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_beta_link",
+       "label": "Beta customer",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "summary_button",
+       "label": "Load summary",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "tools_disclosure",
+       "label": "Show tools",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "workspace_link",
+       "label": "Workspace",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "audit_button",
+       "label": "Audit record",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "analytics_tab",
+       "label": "Analytics",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "export_button",
+       "label": "Export analytics",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "settings_disclosure",
+       "label": "Advanced settings",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "settings_link",
+       "label": "Open settings",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "help_launcher",
+       "label": "Help center",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "ineffective",
+       "label": "Refresh status",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "member_submit",
+       "label": "Enter member area",
+       "kind": "form_submit",
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "history_button",
+       "label": "Load history",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "prepare_button",
+       "label": "Prepare workspace",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reports_link",
+       "label": "Open reports",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "member_preferences_link",
+       "label": "Member preferences",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin_submit",
+       "label": "Admin login",
+       "kind": "form_submit",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      },
+      {
+       "id": "external_link",
+       "label": "External docs",
+       "kind": "link",
+       "scope": "outside",
+       "status": "outside_access_scope"
+      }
+     ],
+     "requests": [
+      {
+       "id": "record_document",
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "summary_fetch",
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "audit_fetch",
+       "method": "GET",
+       "path": "/api/audit",
+       "params": [
+        "record"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "history_fetch",
+       "method": "GET",
+       "path": "/api/history",
+       "params": [
+        "limit",
+        "record"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "workspace_document",
+       "method": "GET",
+       "path": "/workspace",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "bootstrap_fetch",
+       "method": "GET",
+       "path": "/api/workspace/bootstrap",
+       "params": [
+        "mode"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reports_document",
+       "method": "GET",
+       "path": "/workspace/reports",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "analytics_fetch",
+       "method": "GET",
+       "path": "/api/analytics",
+       "params": [
+        "range"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "session_post",
+       "method": "POST",
+       "path": "/session",
+       "params": [
+        "member_code"
+       ],
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "member_document",
+       "method": "GET",
+       "path": "/member",
+       "params": [],
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "instances": [
+      {
+       "id": "record_1",
+       "target_suffix": "/records/1",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_2",
+       "target_suffix": "/records/2",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      }
+     ],
+     "contexts": [
+      {
+       "id": "anonymous",
+       "cookie_name": null,
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "member",
+       "cookie_name": "member",
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "observed_request_structures": [
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_687d74d2b7ebef05e683"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_c1d882364699cb320bf1"
+      },
+      {
+       "method": "GET",
+       "path": "/api/audit",
+       "params": [
+        "record"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_83f7639c23c335510f6e"
+      },
+      {
+       "method": "GET",
+       "path": "/api/analytics",
+       "params": [
+        "range"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_860f7aa90eba28d04fa3"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ac4f85801fa4bb3dec9a"
+      },
+      {
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_2f99f15178ffdb5d436f"
+      },
+      {
+       "method": "GET",
+       "path": "/api/history",
+       "params": [
+        "limit",
+        "record"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_a7b4f043342753f50396"
+      },
+      {
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_dfc926d658304daa64a6"
+      },
+      {
+       "method": "GET",
+       "path": "/settings",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_5ccca38159ae00b7b37b"
+      },
+      {
+       "method": "GET",
+       "path": "/workspace",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_1ef2593dac0ec80e5c53"
+      },
+      {
+       "method": "GET",
+       "path": "/api/workspace/bootstrap",
+       "params": [
+        "mode"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_4b10b1b221bb329f8f3c"
+      },
+      {
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_39d71220c9dda73827df"
+      },
+      {
+       "method": "GET",
+       "path": "/workspace/reports",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_8c0591a7fbfc5866c06f"
+      },
+      {
+       "method": "GET",
+       "path": "/api/history",
+       "params": [
+        "limit",
+        "record"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_1e9f2967fc74548f9925"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_440def58db623ffadd64"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_5c0104e02db0b943b75f"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_4241de4299388a27f8fd"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_e30ae8366addb47117fb"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_3cdae5049b4794a9cb30"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_c43513c5547d442d47ef"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_5dbaf96da3b4a294e8c4"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_6d5bb76cdfb0e91878dd"
+      },
+      {
+       "method": "GET",
+       "path": "/api/workspace/bootstrap",
+       "params": [
+        "mode"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_211f072064dbbac6d9f7"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_8ab948d68fbd917a5d9f"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_e06578693c65230f0cdf"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_c3be5cbb7421a99984f7"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_56e0e721ed069873c662"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_c992823fca4f2feef92a"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_6406ed694a67c4eee513"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_179189a7830ad27eb648"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_15ab45258f9174703d59"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_98126b49a4eb641bb6f5"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_2eb8a2714a36844143de"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_f6b21d4029d3e033e19e"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_35830d26f18c6caf2a6b"
+      },
+      {
+       "method": "GET",
+       "path": "/api/analytics",
+       "params": [
+        "range"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_61d4e04310b4491682ca"
+      }
+     ]
+    },
+    {
+     "application": "coverage_lab",
+     "denominators": {
+      "areas": 10,
+      "controls": 17,
+      "requests": 10,
+      "paths": 10,
+      "instances": 2,
+      "contexts": 2,
+      "blocked_areas_excluded": 1,
+      "outside_areas_excluded": 1
+     },
+     "metrics": {
+      "state_interface_recall": 0.8,
+      "control_action_recall": 0.9411764705882353,
+      "request_surface_recall": 0.8,
+      "prerequisite_path_coverage": 0.8,
+      "instance_recall": 1.0,
+      "instances_distinct": true,
+      "context_recall": 0.5,
+      "replay_reliability": 1.0,
+      "request_precision": 0.6388888888888888,
+      "covered_surfaces_per_browser_action": 0.08695652173913043,
+      "covered_surfaces_per_minute": 10.611369640429318
+     },
+     "counts": {
+      "covered_areas": 8,
+      "covered_controls": 16,
+      "covered_requests": 8,
+      "replay_attempts": 33,
+      "replay_successes": 33,
+      "browser_actions": 368,
+      "elapsed_seconds": 180.938,
+      "grouped_states": 23,
+      "raw_states": 23,
+      "incorrect_state_merges_self_audit": 0,
+      "graph_connections_missing_evidence": 0
+     },
+     "areas": [
+      {
+       "id": "home",
+       "route": "/",
+       "title": "Coverage Lab",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_alpha",
+       "route": "/records/{instance}",
+       "via_target_suffix": "/records/1",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_beta",
+       "route": "/records/{instance}",
+       "via_target_suffix": "/records/2",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "workspace",
+       "route": "/workspace",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reports",
+       "route": "/workspace/reports",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "analytics",
+       "route": "/",
+       "via_label": "Analytics",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "settings",
+       "route": "/settings",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "help",
+       "route": "/help",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "member",
+       "route": "/member",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "member_preferences",
+       "route": "/member/preferences",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin_backend",
+       "route": "/admin",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      },
+      {
+       "id": "external_docs",
+       "route": "https://example.test/outside",
+       "scope": "outside",
+       "status": "outside_access_scope"
+      }
+     ],
+     "controls": [
+      {
+       "id": "record_alpha_link",
+       "label": "Alpha customer",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_beta_link",
+       "label": "Beta customer",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "summary_button",
+       "label": "Load summary",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "tools_disclosure",
+       "label": "Show tools",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "workspace_link",
+       "label": "Workspace",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "audit_button",
+       "label": "Audit record",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "analytics_tab",
+       "label": "Analytics",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "export_button",
+       "label": "Export analytics",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "settings_disclosure",
+       "label": "Advanced settings",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "settings_link",
+       "label": "Open settings",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "help_launcher",
+       "label": "Help center",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "ineffective",
+       "label": "Refresh status",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "member_submit",
+       "label": "Enter member area",
+       "kind": "form_submit",
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "history_button",
+       "label": "Load history",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "prepare_button",
+       "label": "Prepare workspace",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reports_link",
+       "label": "Open reports",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "member_preferences_link",
+       "label": "Member preferences",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin_submit",
+       "label": "Admin login",
+       "kind": "form_submit",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      },
+      {
+       "id": "external_link",
+       "label": "External docs",
+       "kind": "link",
+       "scope": "outside",
+       "status": "outside_access_scope"
+      }
+     ],
+     "requests": [
+      {
+       "id": "record_document",
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "summary_fetch",
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "audit_fetch",
+       "method": "GET",
+       "path": "/api/audit",
+       "params": [
+        "record"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "history_fetch",
+       "method": "GET",
+       "path": "/api/history",
+       "params": [
+        "limit",
+        "record"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "workspace_document",
+       "method": "GET",
+       "path": "/workspace",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "bootstrap_fetch",
+       "method": "GET",
+       "path": "/api/workspace/bootstrap",
+       "params": [
+        "mode"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reports_document",
+       "method": "GET",
+       "path": "/workspace/reports",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "analytics_fetch",
+       "method": "GET",
+       "path": "/api/analytics",
+       "params": [
+        "range"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "session_post",
+       "method": "POST",
+       "path": "/session",
+       "params": [
+        "member_code"
+       ],
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "member_document",
+       "method": "GET",
+       "path": "/member",
+       "params": [],
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "instances": [
+      {
+       "id": "record_1",
+       "target_suffix": "/records/1",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_2",
+       "target_suffix": "/records/2",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      }
+     ],
+     "contexts": [
+      {
+       "id": "anonymous",
+       "cookie_name": null,
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "member",
+       "cookie_name": "member",
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "observed_request_structures": [
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_4067f944b0c81a691ac6"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_4defd90beb467277d6ca"
+      },
+      {
+       "method": "GET",
+       "path": "/api/audit",
+       "params": [
+        "record"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_f947703d48ea353e4fa0"
+      },
+      {
+       "method": "GET",
+       "path": "/api/analytics",
+       "params": [
+        "range"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_2101ed74fca9e18b0d01"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_23f1420bdb2cba51c69f"
+      },
+      {
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_c1cb2f2991da4be8fa13"
+      },
+      {
+       "method": "GET",
+       "path": "/api/history",
+       "params": [
+        "limit",
+        "record"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_0556d6a82c8c71842b27"
+      },
+      {
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_853f4d1305dadbb62bea"
+      },
+      {
+       "method": "GET",
+       "path": "/settings",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_a1f1db7d15ea145daa14"
+      },
+      {
+       "method": "GET",
+       "path": "/workspace",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_3b27bad6cfec9de94802"
+      },
+      {
+       "method": "GET",
+       "path": "/api/workspace/bootstrap",
+       "params": [
+        "mode"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_d2d416b2b507f51d8eae"
+      },
+      {
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_2262ecbfbf21be5ce1a1"
+      },
+      {
+       "method": "GET",
+       "path": "/workspace/reports",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_1ac82f0a843c1aec9b9a"
+      },
+      {
+       "method": "GET",
+       "path": "/api/history",
+       "params": [
+        "limit",
+        "record"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_c4cfa3f2935149530bb6"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_499aea57587d5ca40763"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_afb5734c86a1b6373512"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_a01bd8306a61644b442d"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_6682fbd614c039ce8612"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ec21038d38f39752d94c"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_331e70dbf4072d23af2f"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_5b1f6536c64f4090082b"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_94b82483cf43e69b2e3c"
+      },
+      {
+       "method": "GET",
+       "path": "/api/workspace/bootstrap",
+       "params": [
+        "mode"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_9e97f7a0791c679c4f10"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_c24ac3e9d115b53abd89"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_3eef11b8c98aee1f403d"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_43b15c162fc45e1304eb"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_297b8f533629f59b4408"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_3fc8412943527a6d53e8"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_c258a0a84161889eeee0"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_e2bc95ce8bd7f1156e61"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ee960f57f9aeef612cd6"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_46e5c039d069ca2e61f2"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_73f171fd006cb16702df"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_84bac8b369160a71c12c"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_7c63e5ae7fb1582080e8"
+      },
+      {
+       "method": "GET",
+       "path": "/api/analytics",
+       "params": [
+        "range"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_3fffd636abc1677e0e64"
+      }
+     ]
+    },
+    {
+     "application": "coverage_lab",
+     "denominators": {
+      "areas": 10,
+      "controls": 17,
+      "requests": 10,
+      "paths": 10,
+      "instances": 2,
+      "contexts": 2,
+      "blocked_areas_excluded": 1,
+      "outside_areas_excluded": 1
+     },
+     "metrics": {
+      "state_interface_recall": 0.8,
+      "control_action_recall": 0.9411764705882353,
+      "request_surface_recall": 0.8,
+      "prerequisite_path_coverage": 0.8,
+      "instance_recall": 1.0,
+      "instances_distinct": true,
+      "context_recall": 0.5,
+      "replay_reliability": 1.0,
+      "request_precision": 0.6388888888888888,
+      "covered_surfaces_per_browser_action": 0.08695652173913043,
+      "covered_surfaces_per_minute": 10.621055135446111
+     },
+     "counts": {
+      "covered_areas": 8,
+      "covered_controls": 16,
+      "covered_requests": 8,
+      "replay_attempts": 33,
+      "replay_successes": 33,
+      "browser_actions": 368,
+      "elapsed_seconds": 180.773,
+      "grouped_states": 23,
+      "raw_states": 23,
+      "incorrect_state_merges_self_audit": 0,
+      "graph_connections_missing_evidence": 0
+     },
+     "areas": [
+      {
+       "id": "home",
+       "route": "/",
+       "title": "Coverage Lab",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_alpha",
+       "route": "/records/{instance}",
+       "via_target_suffix": "/records/1",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_beta",
+       "route": "/records/{instance}",
+       "via_target_suffix": "/records/2",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "workspace",
+       "route": "/workspace",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reports",
+       "route": "/workspace/reports",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "analytics",
+       "route": "/",
+       "via_label": "Analytics",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "settings",
+       "route": "/settings",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "help",
+       "route": "/help",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "member",
+       "route": "/member",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "member_preferences",
+       "route": "/member/preferences",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin_backend",
+       "route": "/admin",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      },
+      {
+       "id": "external_docs",
+       "route": "https://example.test/outside",
+       "scope": "outside",
+       "status": "outside_access_scope"
+      }
+     ],
+     "controls": [
+      {
+       "id": "record_alpha_link",
+       "label": "Alpha customer",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_beta_link",
+       "label": "Beta customer",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "summary_button",
+       "label": "Load summary",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "tools_disclosure",
+       "label": "Show tools",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "workspace_link",
+       "label": "Workspace",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "audit_button",
+       "label": "Audit record",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "analytics_tab",
+       "label": "Analytics",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "export_button",
+       "label": "Export analytics",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "settings_disclosure",
+       "label": "Advanced settings",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "settings_link",
+       "label": "Open settings",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "help_launcher",
+       "label": "Help center",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "ineffective",
+       "label": "Refresh status",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "member_submit",
+       "label": "Enter member area",
+       "kind": "form_submit",
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "history_button",
+       "label": "Load history",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "prepare_button",
+       "label": "Prepare workspace",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reports_link",
+       "label": "Open reports",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "member_preferences_link",
+       "label": "Member preferences",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin_submit",
+       "label": "Admin login",
+       "kind": "form_submit",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      },
+      {
+       "id": "external_link",
+       "label": "External docs",
+       "kind": "link",
+       "scope": "outside",
+       "status": "outside_access_scope"
+      }
+     ],
+     "requests": [
+      {
+       "id": "record_document",
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "summary_fetch",
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "audit_fetch",
+       "method": "GET",
+       "path": "/api/audit",
+       "params": [
+        "record"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "history_fetch",
+       "method": "GET",
+       "path": "/api/history",
+       "params": [
+        "limit",
+        "record"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "workspace_document",
+       "method": "GET",
+       "path": "/workspace",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "bootstrap_fetch",
+       "method": "GET",
+       "path": "/api/workspace/bootstrap",
+       "params": [
+        "mode"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reports_document",
+       "method": "GET",
+       "path": "/workspace/reports",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "analytics_fetch",
+       "method": "GET",
+       "path": "/api/analytics",
+       "params": [
+        "range"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "session_post",
+       "method": "POST",
+       "path": "/session",
+       "params": [
+        "member_code"
+       ],
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "member_document",
+       "method": "GET",
+       "path": "/member",
+       "params": [],
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "instances": [
+      {
+       "id": "record_1",
+       "target_suffix": "/records/1",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "record_2",
+       "target_suffix": "/records/2",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      }
+     ],
+     "contexts": [
+      {
+       "id": "anonymous",
+       "cookie_name": null,
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "member",
+       "cookie_name": "member",
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "observed_request_structures": [
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_d16241d85b96733fca58"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_855d0c5131efff1f2d69"
+      },
+      {
+       "method": "GET",
+       "path": "/api/audit",
+       "params": [
+        "record"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_e9a2eaf4f42acba40793"
+      },
+      {
+       "method": "GET",
+       "path": "/api/analytics",
+       "params": [
+        "range"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_4dfb4eb41ae495d3ccbc"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_4f7e8719c5ea84109d70"
+      },
+      {
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_7230fded92ff1d1fa896"
+      },
+      {
+       "method": "GET",
+       "path": "/api/history",
+       "params": [
+        "limit",
+        "record"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_f477aeb4a649e6134f27"
+      },
+      {
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ee036414da62196baf98"
+      },
+      {
+       "method": "GET",
+       "path": "/settings",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_fa60853063f128079849"
+      },
+      {
+       "method": "GET",
+       "path": "/workspace",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_b92f184e7d26c9197f62"
+      },
+      {
+       "method": "GET",
+       "path": "/api/workspace/bootstrap",
+       "params": [
+        "mode"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_3eb6498d91796c86db7a"
+      },
+      {
+       "method": "GET",
+       "path": "/records/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ed1606a71e162529e5e6"
+      },
+      {
+       "method": "GET",
+       "path": "/workspace/reports",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_bf4deebd9fe853324d54"
+      },
+      {
+       "method": "GET",
+       "path": "/api/history",
+       "params": [
+        "limit",
+        "record"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_dd17be062f18b46b1965"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_742c8a31147baf7ffdb5"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_2f653e74b429d2a68891"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_e904da90d826fbb22f06"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_7e151413dabb9502524c"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_fc711a5f9b68216845fe"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ba09ff1aebc05aa90990"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_cf920cd909c1acaba0e2"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ef906be84ce9ab253904"
+      },
+      {
+       "method": "GET",
+       "path": "/api/workspace/bootstrap",
+       "params": [
+        "mode"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_a882808c2108784bffc8"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_afe1adc8c1e0a0184be4"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_a6c7815314478208b1f0"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_ee224a657efd5594b18e"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_86eccc50925514133d3b"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_d2e8e6cca3979a37dcbf"
+      },
+      {
+       "method": "GET",
+       "path": "/api/summary",
+       "params": [
+        "format",
+        "scope"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_fc5eb5322c56e5cf0ebe"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_f775cd7cd3979ba6b62c"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_2a2581c283e752cd1272"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_16689a5c924f1322b162"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_f535aacd6467c8951542"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_45f9201094f595832edb"
+      },
+      {
+       "method": "GET",
+       "path": "/help",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_584983da606b9af8fd15"
+      },
+      {
+       "method": "GET",
+       "path": "/api/analytics",
+       "params": [
+        "range"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_f85f02b111e30cec088e"
+      }
+     ]
+    }
+   ],
+   "acg_comparison_median": {
+    "graph_a": {
+     "states": 23,
+     "actions_evidence": 74,
+     "functional_workflows": 74,
+     "features": 29,
+     "record_instances": 2,
+     "edges": 1975,
+     "advertised_unexecuted": 1680
+    },
+    "offline_acg": {
+     "templates": 6,
+     "view_states": 14,
+     "operations": 11,
+     "affordances": 29,
+     "capabilities_observed_or_better": 16,
+     "capabilities_reproduced_or_better": 15,
+     "capabilities_verified": 0,
+     "behavioral_classes": 9,
+     "entity_types": 3,
+     "entity_instances": 4,
+     "learned_predicates": 0,
+     "claims": 62,
+     "websocket_operations": 0
+    },
+    "live_acg": {
+     "templates": 6,
+     "view_states": 14,
+     "operations": 11,
+     "affordances": 29,
+     "capabilities_observed_or_better": 16,
+     "capabilities_reproduced_or_better": 15,
+     "capabilities_verified": 0,
+     "behavioral_classes": 9,
+     "entity_types": 3,
+     "entity_instances": 4,
+     "learned_predicates": 0,
+     "claims": 62,
+     "websocket_operations": 0
+    }
+   }
+  },
+  "heldout_shop": {
+   "track": "A",
+   "category": "small e-commerce",
+   "exposure": "development (formerly validation; not held out)",
+   "reference_kind": "surface",
+   "trials": [
+    {
+     "trial": 0,
+     "status": "ok",
+     "exploration_ended_s": 127.0,
+     "exploration_stop": "exploration_time_reserve"
+    },
+    {
+     "trial": 1,
+     "status": "ok",
+     "host_sleep_affected": true,
+     "host_sleep_gap_s": 111.9,
+     "exploration_ended_s": 126.4,
+     "exploration_stop": "before_time_reserve"
+    },
+    {
+     "trial": 2,
+     "status": "ok",
+     "host_sleep_affected": true,
+     "host_sleep_gap_s": 873.0,
+     "exploration_ended_s": 769.5,
+     "exploration_stop": "before_time_reserve"
+    }
+   ],
+   "reset_integrity": {
+    "reset_failures": 0,
+    "teardown_exit": [
+     null,
+     null,
+     null
+    ],
+    "residual_containers_after_teardown": [
+     null,
+     null,
+     null
+    ],
+    "mount_profile_matches_frozen": [
+     null,
+     null,
+     null
+    ],
+    "inproc_initial_state_identical": true,
+    "inproc_initial_server_log_empty": true,
+    "inproc_fixture_gone_after_trial": [
+     true,
+     true,
+     true
+    ]
+   },
+   "metrics": {
+    "efficiency.browser_actions": {
+     "median": 311,
+     "min": 309,
+     "max": 311,
+     "n": 3
+    },
+    "efficiency.elapsed_seconds": {
+     "median": 151.81,
+     "min": 150.41,
+     "max": 152.26,
+     "n": 3
+    },
+    "efficiency.transitions_attempted": {
+     "median": 75,
+     "min": 75,
+     "max": 75,
+     "n": 3
+    },
+    "efficiency.actions_unique_discovery": {
+     "median": 16,
+     "min": 16,
+     "max": 16,
+     "n": 3
+    },
+    "efficiency.actions_redundant": {
+     "median": 59,
+     "min": 59,
+     "max": 59,
+     "n": 3
+    },
+    "efficiency.actions_failed": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "efficiency.restoration_actions": {
+     "median": 110,
+     "min": 110,
+     "max": 110,
+     "n": 3
+    },
+    "efficiency.root_reloads": {
+     "median": 94,
+     "min": 94,
+     "max": 94,
+     "n": 3
+    },
+    "efficiency.verification_actions": {
+     "median": 50,
+     "min": 48,
+     "max": 50,
+     "n": 3
+    },
+    "efficiency.readiness_wait_ms": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "efficiency.capabilities_per_100_actions": {
+     "median": 5.47,
+     "min": 5.47,
+     "max": 5.5,
+     "n": 3
+    },
+    "efficiency.capabilities_per_minute": {
+     "median": 6.72,
+     "min": 6.7,
+     "max": 6.78,
+     "n": 3
+    },
+    "efficiency.replays.attempts": {
+     "median": 18,
+     "min": 18,
+     "max": 18,
+     "n": 3
+    },
+    "efficiency.replays.validated": {
+     "median": 18,
+     "min": 17,
+     "max": 18,
+     "n": 3
+    },
+    "efficiency.replays.failures": {
+     "median": 0,
+     "min": 0,
+     "max": 1,
+     "n": 3
+    },
+    "efficiency.http_by_source.navigation": {
+     "median": 94,
+     "min": 94,
+     "max": 94,
+     "n": 3
+    },
+    "efficiency.http_by_source.action": {
+     "median": 51,
+     "min": 51,
+     "max": 51,
+     "n": 3
+    },
+    "efficiency.http_by_source.replay": {
+     "median": 17,
+     "min": 15,
+     "max": 17,
+     "n": 3
+    },
+    "efficiency.http_by_source.passive_resource_fetches": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "efficiency.http_by_source.budget_used": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "discovery.route_templates": {
+     "median": 6,
+     "min": 6,
+     "max": 6,
+     "n": 3
+    },
+    "discovery.grouped_states": {
+     "median": 16,
+     "min": 16,
+     "max": 16,
+     "n": 3
+    },
+    "discovery.areas_route_title": {
+     "median": 7,
+     "min": 7,
+     "max": 7,
+     "n": 3
+    },
+    "discovery.acg_templates": {
+     "median": 6,
+     "min": 6,
+     "max": 6,
+     "n": 3
+    },
+    "discovery.unique_controls_observed": {
+     "median": 14,
+     "min": 14,
+     "max": 14,
+     "n": 3
+    },
+    "discovery.unique_controls_executed": {
+     "median": 12,
+     "min": 12,
+     "max": 12,
+     "n": 3
+    },
+    "discovery.advertised_unexecuted": {
+     "median": 985,
+     "min": 985,
+     "max": 985,
+     "n": 3
+    },
+    "discovery.affordances": {
+     "median": 23,
+     "min": 23,
+     "max": 23,
+     "n": 3
+    },
+    "discovery.affordance_families": {
+     "median": 12,
+     "min": 12,
+     "max": 12,
+     "n": 3
+    },
+    "discovery.request_structures_browser": {
+     "median": 7,
+     "min": 7,
+     "max": 7,
+     "n": 3
+    },
+    "discovery.acg_operations": {
+     "median": 7,
+     "min": 7,
+     "max": 7,
+     "n": 3
+    },
+    "discovery.websocket_operations": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "discovery.client_only_capabilities": {
+     "median": 4,
+     "min": 4,
+     "max": 4,
+     "n": 3
+    },
+    "discovery.entity_types": {
+     "median": 2,
+     "min": 2,
+     "max": 2,
+     "n": 3
+    },
+    "discovery.entity_instances": {
+     "median": 3,
+     "min": 3,
+     "max": 3,
+     "n": 3
+    },
+    "discovery.session_contexts": {
+     "median": 1,
+     "min": 1,
+     "max": 1,
+     "n": 3
+    },
+    "capabilities.distinct_capabilities_observed_or_better": {
+     "median": 17,
+     "min": 17,
+     "max": 17,
+     "n": 3
+    },
+    "capabilities.unidentified": {
+     "median": 8,
+     "min": 8,
+     "max": 8,
+     "n": 3
+    },
+    "capabilities.equivalent_interfaces_multi_entry": {
+     "median": 3,
+     "min": 3,
+     "max": 3,
+     "n": 3
+    },
+    "capabilities.operations_without_capability": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.session_conditioned.capabilities_in_cookie_session_contexts": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.advertised_unexecuted_controls": {
+     "median": 985,
+     "min": 985,
+     "max": 985,
+     "n": 3
+    },
+    "capabilities.evidence_status.hypothesized": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.executed_no_effect_affordances": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.refuted": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.blocked_capabilities": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_total": {
+     "median": 96,
+     "min": 96,
+     "max": 96,
+     "n": 3
+    },
+    "capabilities.refusals.scope_refusals": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.technical_unobservable": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.not_selected": {
+     "median": 889,
+     "min": 889,
+     "max": 889,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_by_configuration.post_forms_disabled": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_by_configuration.dangerous_label_or_target": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_by_configuration.requires_protected_or_file_input": {
+     "median": 96,
+     "min": 96,
+     "max": 96,
+     "n": 3
+    },
+    "capabilities.evidence_status.observed": {
+     "median": 7,
+     "min": 7,
+     "max": 7,
+     "n": 3
+    },
+    "capabilities.evidence_status.reproduced": {
+     "median": 10,
+     "min": 10,
+     "max": 10,
+     "n": 3
+    },
+    "capabilities.evidence_status.verified": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.attempted_failed_affordances": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.blocked_affordances": {
+     "median": 1,
+     "min": 1,
+     "max": 1,
+     "n": 3
+    },
+    "safety.state_changing_requests_issued": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "safety.state_changing_requests_in_replay": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "safety.dangerous_controls_skipped": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "safety.ws_out_of_scope_refused": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "child_seconds": {
+     "median": 152.5,
+     "min": 150.9,
+     "max": 153.4,
+     "n": 3
+    }
+   },
+   "capability_overlap_jaccard_pairwise": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "deterministic_action_sequences": true,
+   "identical_initial_state_group": true,
+   "identical_config": true,
+   "terminated_by": [
+    "frontier_exhausted_or_other"
+   ],
+   "model_calls_total": 0,
+   "reference_basis": "author-written surface truth (areas/controls/requests) for a development fixture",
+   "reference_detail_per_trial": [
+    {
+     "application": "heldout_shop",
+     "denominators": {
+      "areas": 8,
+      "controls": 11,
+      "requests": 8,
+      "paths": 8,
+      "instances": 2,
+      "contexts": 2,
+      "blocked_areas_excluded": 1,
+      "outside_areas_excluded": 0
+     },
+     "metrics": {
+      "state_interface_recall": 0.875,
+      "control_action_recall": 0.9090909090909091,
+      "request_surface_recall": 0.75,
+      "prerequisite_path_coverage": 0.875,
+      "instance_recall": 1.0,
+      "instances_distinct": true,
+      "context_recall": 0.5,
+      "replay_reliability": 1.0,
+      "request_precision": 0.7058823529411765,
+      "covered_surfaces_per_browser_action": 0.07395498392282958,
+      "covered_surfaces_per_minute": 9.090370136157937
+     },
+     "counts": {
+      "covered_areas": 7,
+      "covered_controls": 10,
+      "covered_requests": 6,
+      "replay_attempts": 18,
+      "replay_successes": 18,
+      "browser_actions": 311,
+      "elapsed_seconds": 151.809,
+      "grouped_states": 16,
+      "raw_states": 16,
+      "incorrect_state_merges_self_audit": 0,
+      "graph_connections_missing_evidence": 0
+     },
+     "areas": [
+      {
+       "id": "home",
+       "route": "/",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "lantern",
+       "route": "/products/{instance}",
+       "via_target_suffix": "/products/101",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "kettle",
+       "route": "/products/{instance}",
+       "via_target_suffix": "/products/202",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "outdoors",
+       "route": "/category/outdoors",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals",
+       "route": "/deals",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns",
+       "route": "/returns",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "cart",
+       "route": "/cart",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "checkout",
+       "route": "/checkout",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin",
+       "route": "/admin",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      }
+     ],
+     "controls": [
+      {
+       "id": "lantern",
+       "label": "Trail lantern",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "kettle",
+       "label": "Camp kettle",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "categories",
+       "label": "Browse categories",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "outdoors",
+       "label": "Outdoor collection",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals_tab",
+       "label": "Current deals",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals",
+       "label": "See all deals",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns_summary",
+       "label": "Shipping and returns",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns",
+       "label": "Returns guide",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reviews",
+       "label": "Load customer reviews",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "cart_add",
+       "label": "Add sample to cart",
+       "kind": "form_submit",
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "checkout",
+       "label": "Begin checkout",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin",
+       "label": "Admin login",
+       "kind": "form_submit",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      }
+     ],
+     "requests": [
+      {
+       "id": "product",
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "outdoors",
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals",
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns",
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reviews",
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "cart_post",
+       "method": "POST",
+       "path": "/cart/items",
+       "params": [
+        "sku"
+       ],
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "cart",
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "checkout",
+       "method": "GET",
+       "path": "/checkout",
+       "params": [],
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "instances": [
+      {
+       "id": "product_101",
+       "target_suffix": "/products/101",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "product_202",
+       "target_suffix": "/products/202",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      }
+     ],
+     "contexts": [
+      {
+       "id": "anonymous",
+       "cookie_name": null,
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "cart",
+       "cookie_name": "shop_cart",
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "observed_request_structures": [
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_3586397da5c5ca1536d8"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_ad8cdc723c5ae587c226"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_206936cd2939ce2443e9"
+      },
+      {
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_1c8c59efe7e9b8624e64"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_292f1b5b06c0418ab4e0"
+      },
+      {
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_1b0993205779db13de34"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_d50aede555606f12d5eb"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_b89a6440b432ccbb5fcb"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_16586f57a4a3ce75598c"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_e14f412e664f301e59cf"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_9d4191b77ec4ed74c56b"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_a92f6058ed73ce56ff5e"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_082ad82768560fa25261"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_d503c69d025aa241b04d"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_7512eaf887848d8535f8"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_3148c305d15a9a0237cf"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_594bd2738c1f9abb3af9"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_9a7b72815e41ed5fd8e6"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ffb892ec755074a2315e"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_45476f56316818f48684"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_a8f21aa4d8787344eaa8"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ae5332cc0a8f77257ec0"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_092235ba4e4297b27b9a"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_e4cb3b4968e5c71118f9"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_30de6175f2e3ed866d2a"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_881557e202717611f689"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_777620d6fde9fb5e55e6"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_eb18c02b40dc6002ab02"
+      },
+      {
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_18ace7bea1746b382b65"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_54db26f112af574f3c50"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_8aa5d2ada28e60593504"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_8b270fbf7fe7b9c2580f"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_9e9534c8f29cc4b3bb27"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_6b18c7d79692a3f6ffcd"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_eaadf40f21b4e6a290b6"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_aab8bfde34931a98f620"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_04d5f4c11a8d5deba4ff"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_74f9d5432df034d34290"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_5d728bbe6681ced9aa35"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_5ef5238a9673c2e60fd9"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_1b46699b8e08246ca135"
+      },
+      {
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_dee71aef6f49685ad64d"
+      },
+      {
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_3b2ab4c2eadafe56c901"
+      },
+      {
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_1d7526e8af7949bd050c"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_bd7f8a1c84bc4741c277"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_60295f2dafaf68ffa2e3"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_7bf2c90c227971b61767"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_768bf735ffe373e48480"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_10b3bae9dcbc5687ea92"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_b8edd0b2bf657d3aa6d3"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_4b14d8f9f8621d0bae5a"
+      }
+     ]
+    },
+    {
+     "application": "heldout_shop",
+     "denominators": {
+      "areas": 8,
+      "controls": 11,
+      "requests": 8,
+      "paths": 8,
+      "instances": 2,
+      "contexts": 2,
+      "blocked_areas_excluded": 1,
+      "outside_areas_excluded": 0
+     },
+     "metrics": {
+      "state_interface_recall": 0.875,
+      "control_action_recall": 0.9090909090909091,
+      "request_surface_recall": 0.75,
+      "prerequisite_path_coverage": 0.875,
+      "instance_recall": 1.0,
+      "instances_distinct": true,
+      "context_recall": 0.5,
+      "replay_reliability": 0.9444444444444444,
+      "request_precision": 0.7058823529411765,
+      "covered_surfaces_per_browser_action": 0.0744336569579288,
+      "covered_surfaces_per_minute": 9.17479988298806
+     },
+     "counts": {
+      "covered_areas": 7,
+      "covered_controls": 10,
+      "covered_requests": 6,
+      "replay_attempts": 18,
+      "replay_successes": 17,
+      "browser_actions": 309,
+      "elapsed_seconds": 150.412,
+      "grouped_states": 16,
+      "raw_states": 16,
+      "incorrect_state_merges_self_audit": 0,
+      "graph_connections_missing_evidence": 1
+     },
+     "areas": [
+      {
+       "id": "home",
+       "route": "/",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "lantern",
+       "route": "/products/{instance}",
+       "via_target_suffix": "/products/101",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "kettle",
+       "route": "/products/{instance}",
+       "via_target_suffix": "/products/202",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "outdoors",
+       "route": "/category/outdoors",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals",
+       "route": "/deals",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns",
+       "route": "/returns",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "cart",
+       "route": "/cart",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "checkout",
+       "route": "/checkout",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin",
+       "route": "/admin",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      }
+     ],
+     "controls": [
+      {
+       "id": "lantern",
+       "label": "Trail lantern",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "kettle",
+       "label": "Camp kettle",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "categories",
+       "label": "Browse categories",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "outdoors",
+       "label": "Outdoor collection",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals_tab",
+       "label": "Current deals",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals",
+       "label": "See all deals",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns_summary",
+       "label": "Shipping and returns",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns",
+       "label": "Returns guide",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reviews",
+       "label": "Load customer reviews",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "cart_add",
+       "label": "Add sample to cart",
+       "kind": "form_submit",
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "checkout",
+       "label": "Begin checkout",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin",
+       "label": "Admin login",
+       "kind": "form_submit",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      }
+     ],
+     "requests": [
+      {
+       "id": "product",
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "outdoors",
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals",
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns",
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reviews",
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "cart_post",
+       "method": "POST",
+       "path": "/cart/items",
+       "params": [
+        "sku"
+       ],
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "cart",
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "checkout",
+       "method": "GET",
+       "path": "/checkout",
+       "params": [],
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "instances": [
+      {
+       "id": "product_101",
+       "target_suffix": "/products/101",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "product_202",
+       "target_suffix": "/products/202",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      }
+     ],
+     "contexts": [
+      {
+       "id": "anonymous",
+       "cookie_name": null,
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "cart",
+       "cookie_name": "shop_cart",
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "observed_request_structures": [
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_0eb4f6f99e6cc07396e4"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_38d7a7d2b5e671290850"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_8af1e8166a5b4e007943"
+      },
+      {
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_8b7bef744dd228009767"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_49fe1b1e1dbb5aabc949"
+      },
+      {
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_397a6e127b74e34d1d54"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ab29ab2899f5906ecc42"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_7138261aadd8c6accea3"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_719f986cd11cbd918348"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_e54ca4cac3bcfa2eb76f"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_0a4603e844cfcb9e3d6a"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_8c9f412d681e3b57a481"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ed2fc9e1dc4022c0de31"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_097035d9a47ccaa1dd4f"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_5f7274942829354b8c57"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ba40eb2ff22a1b09cd92"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_476b6ad2cf05370bcd89"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_58c2ef601924fe06c980"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_7810aefae9a1c038a55d"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_dc9f9ec2f95c50d686a9"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_1d5a862e807bf85d02ac"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_11624a36633f6b4134ec"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_0b72d5782f0fa8231c93"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_7c37bb6367854b29d9e2"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_398c8ec1768348a19a39"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_61c3a64dbccc86c57a6e"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_dbbc650232dda3137198"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_924488aa806a3dc174ea"
+      },
+      {
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ead9bf47fa0c4cde9eae"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_c83631e1bfb23a1181f6"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_84ca09d42022d96989d6"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_a96092d20be77fe4697e"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_65349d94b45f3d318599"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_f954a0cf538e2492a1a6"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_c9f3be2c2592acc3f562"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_fe3cc04039400d4ef5a8"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_aa40a544fd43629acb1d"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_c7e3a6290e4041f9b9e5"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_d000a8339215e679a385"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_b39a7d68cce494070a4e"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_2f1b7b154ad9e3a5e298"
+      },
+      {
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_3cf5e1763388864331a9"
+      },
+      {
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_2c8a53cf68707ce89991"
+      },
+      {
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_1555b4282975eff690a6"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_0a38950007ae4c14b71c"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_9a1c9826a1a22dceeafa"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_c38832bef8c98926b40f"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_6fa3379376500207a89b"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_50a846fd2bc874b97292"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_5b29ea8e4361adc38b46"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_2869ef2619586d8a70a9"
+      }
+     ]
+    },
+    {
+     "application": "heldout_shop",
+     "denominators": {
+      "areas": 8,
+      "controls": 11,
+      "requests": 8,
+      "paths": 8,
+      "instances": 2,
+      "contexts": 2,
+      "blocked_areas_excluded": 1,
+      "outside_areas_excluded": 0
+     },
+     "metrics": {
+      "state_interface_recall": 0.875,
+      "control_action_recall": 0.9090909090909091,
+      "request_surface_recall": 0.75,
+      "prerequisite_path_coverage": 0.875,
+      "instance_recall": 1.0,
+      "instances_distinct": true,
+      "context_recall": 0.5,
+      "replay_reliability": 1.0,
+      "request_precision": 0.7058823529411765,
+      "covered_surfaces_per_browser_action": 0.07395498392282958,
+      "covered_surfaces_per_minute": 9.063682219419924
+     },
+     "counts": {
+      "covered_areas": 7,
+      "covered_controls": 10,
+      "covered_requests": 6,
+      "replay_attempts": 18,
+      "replay_successes": 18,
+      "browser_actions": 311,
+      "elapsed_seconds": 152.256,
+      "grouped_states": 16,
+      "raw_states": 16,
+      "incorrect_state_merges_self_audit": 0,
+      "graph_connections_missing_evidence": 0
+     },
+     "areas": [
+      {
+       "id": "home",
+       "route": "/",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "lantern",
+       "route": "/products/{instance}",
+       "via_target_suffix": "/products/101",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "kettle",
+       "route": "/products/{instance}",
+       "via_target_suffix": "/products/202",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "outdoors",
+       "route": "/category/outdoors",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals",
+       "route": "/deals",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns",
+       "route": "/returns",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "cart",
+       "route": "/cart",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "checkout",
+       "route": "/checkout",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin",
+       "route": "/admin",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      }
+     ],
+     "controls": [
+      {
+       "id": "lantern",
+       "label": "Trail lantern",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "kettle",
+       "label": "Camp kettle",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "categories",
+       "label": "Browse categories",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "outdoors",
+       "label": "Outdoor collection",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals_tab",
+       "label": "Current deals",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals",
+       "label": "See all deals",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns_summary",
+       "label": "Shipping and returns",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns",
+       "label": "Returns guide",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reviews",
+       "label": "Load customer reviews",
+       "kind": "button",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "cart_add",
+       "label": "Add sample to cart",
+       "kind": "form_submit",
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "checkout",
+       "label": "Begin checkout",
+       "kind": "link",
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "admin",
+       "label": "Admin login",
+       "kind": "form_submit",
+       "scope": "blocked",
+       "status": "discovered_blocked"
+      }
+     ],
+     "requests": [
+      {
+       "id": "product",
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "outdoors",
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "deals",
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "returns",
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "reviews",
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "cart_post",
+       "method": "POST",
+       "path": "/cart/items",
+       "params": [
+        "sku"
+       ],
+       "scope": "applicable",
+       "status": "missed"
+      },
+      {
+       "id": "cart",
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "checkout",
+       "method": "GET",
+       "path": "/checkout",
+       "params": [],
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "instances": [
+      {
+       "id": "product_101",
+       "target_suffix": "/products/101",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      },
+      {
+       "id": "product_202",
+       "target_suffix": "/products/202",
+       "scope": "applicable",
+       "status": "covered_replayed"
+      }
+     ],
+     "contexts": [
+      {
+       "id": "anonymous",
+       "cookie_name": null,
+       "scope": "applicable",
+       "status": "covered_structural_not_replayed"
+      },
+      {
+       "id": "cart",
+       "cookie_name": "shop_cart",
+       "scope": "applicable",
+       "status": "missed"
+      }
+     ],
+     "observed_request_structures": [
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_4fa4121f22799918b1cb"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_ecc393cc3148cdb9c744"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_d983b157123acebef497"
+      },
+      {
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_0ed212d1fee1ab3696f2"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_d341c4f94156bbd33746"
+      },
+      {
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_7c4ff2e592c361f38e85"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_53ef7286c27bbda728a7"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_98ae31bfd91829f3560d"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_3b9fb65d42101deb31ca"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_f83819964a78730b3043"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_e4f12a939bd0636a1a8c"
+      },
+      {
+       "method": "GET",
+       "path": "/api/reviews",
+       "params": [
+        "limit",
+        "product"
+       ],
+       "resource_type": "fetch",
+       "action_id": "action_tr_91b017a743d227b94fe6"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_3f452979b09c24ab95b8"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_86cf8efe8a4bfdab0425"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_8f92997507fe17c6d414"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_87959d1c9dee0f05afc6"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_5f32064614900a912cdb"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_c3a5b6a5a7f9e28bab7e"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_4daf9b48d0ce87e54d8f"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_237941b05673d0664042"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_648af314bb48c0733b97"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_36a2c3276d4ee841cd3e"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_df2109d41cda873c25c9"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_58464ccfaa539f622d47"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_19b3a22b67e1d69a255b"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_f0c60c027d9bb875452b"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_a437c69cd5a784fcfd66"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_b9edfcf8a3cef235f38a"
+      },
+      {
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_c13548cbb4b7167b354b"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_a4021d392d493b25a0e0"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_d30893a0f4cb52c39036"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_b4d47b3a136f9be6085b"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_9ee00e26c7d95314bf90"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ca80ef08fa1a63f94ac6"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_d3dda71ad567399b9bab"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_9210fefef3ad24641af4"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_2ab2e7b9af8b73b54ac0"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_0bae1bfcc4b1d62d9107"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_b308e23d0403ff8145ff"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_961b6fda07c4fedb31c3"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ff4ad31e9d9d643142da"
+      },
+      {
+       "method": "GET",
+       "path": "/returns",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_1ec78544510dfc9cda77"
+      },
+      {
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_078c828389e8ef993e76"
+      },
+      {
+       "method": "GET",
+       "path": "/category/outdoors",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_72814f28f7217f615340"
+      },
+      {
+       "method": "GET",
+       "path": "/deals",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_dfea04ed136aeb91e160"
+      },
+      {
+       "method": "GET",
+       "path": "/cart",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_11a0d57469c76f20c25d"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_6da3396905e45af87589"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_ad118492ee8ac88ef163"
+      },
+      {
+       "method": "GET",
+       "path": "/",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_5e0538521760db1fe4e3"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_3bec6d11f4b05780446b"
+      },
+      {
+       "method": "GET",
+       "path": "/products/{instance}",
+       "params": [],
+       "resource_type": "document",
+       "action_id": "action_tr_a130ad51052e252f0821"
+      }
+     ]
+    }
+   ],
+   "acg_comparison_median": {
+    "graph_a": {
+     "states": 16,
+     "actions_evidence": 75,
+     "functional_workflows": 75,
+     "features": 34,
+     "record_instances": 2,
+     "edges": 1311,
+     "advertised_unexecuted": 985
+    },
+    "offline_acg": {
+     "templates": 6,
+     "view_states": 13,
+     "operations": 7,
+     "affordances": 23,
+     "capabilities_observed_or_better": 17,
+     "capabilities_reproduced_or_better": 10,
+     "capabilities_verified": 0,
+     "behavioral_classes": 9,
+     "entity_types": 2,
+     "entity_instances": 3,
+     "learned_predicates": 0,
+     "claims": 68,
+     "websocket_operations": 0
+    },
+    "live_acg": {
+     "templates": 6,
+     "view_states": 13,
+     "operations": 7,
+     "affordances": 23,
+     "capabilities_observed_or_better": 17,
+     "capabilities_reproduced_or_better": 10,
+     "capabilities_verified": 0,
+     "behavioral_classes": 9,
+     "entity_types": 2,
+     "entity_instances": 3,
+     "learned_predicates": 0,
+     "claims": 68,
+     "websocket_operations": 0
+    }
+   }
+  },
+  "hybrid_lab": {
+   "track": "A",
+   "category": "catalog + setup chain contract fixture",
+   "exposure": "development",
+   "reference_kind": "none",
+   "trials": [
+    {
+     "trial": 0,
+     "status": "ok",
+     "host_sleep_affected": true,
+     "host_sleep_gap_s": 8.9,
+     "exploration_ended_s": 94.9,
+     "exploration_stop": "before_time_reserve"
+    },
+    {
+     "trial": 1,
+     "status": "ok",
+     "host_sleep_affected": true,
+     "host_sleep_gap_s": 11.0,
+     "exploration_ended_s": 95.6,
+     "exploration_stop": "before_time_reserve"
+    },
+    {
+     "trial": 2,
+     "status": "ok",
+     "host_sleep_affected": true,
+     "host_sleep_gap_s": 8.9,
+     "exploration_ended_s": 93.5,
+     "exploration_stop": "before_time_reserve"
+    }
+   ],
+   "reset_integrity": {
+    "reset_failures": 0,
+    "teardown_exit": [
+     null,
+     null,
+     null
+    ],
+    "residual_containers_after_teardown": [
+     null,
+     null,
+     null
+    ],
+    "mount_profile_matches_frozen": [
+     null,
+     null,
+     null
+    ],
+    "inproc_initial_state_identical": true,
+    "inproc_initial_server_log_empty": true,
+    "inproc_fixture_gone_after_trial": [
+     true,
+     true,
+     true
+    ]
+   },
+   "metrics": {
+    "efficiency.browser_actions": {
+     "median": 214,
+     "min": 214,
+     "max": 214,
+     "n": 3
+    },
+    "efficiency.elapsed_seconds": {
+     "median": 107.3,
+     "min": 107.21,
+     "max": 108.73,
+     "n": 3
+    },
+    "efficiency.transitions_attempted": {
+     "median": 54,
+     "min": 54,
+     "max": 54,
+     "n": 3
+    },
+    "efficiency.actions_unique_discovery": {
+     "median": 17,
+     "min": 17,
+     "max": 17,
+     "n": 3
+    },
+    "efficiency.actions_redundant": {
+     "median": 33,
+     "min": 33,
+     "max": 33,
+     "n": 3
+    },
+    "efficiency.actions_failed": {
+     "median": 4,
+     "min": 4,
+     "max": 4,
+     "n": 3
+    },
+    "efficiency.restoration_actions": {
+     "median": 65,
+     "min": 65,
+     "max": 65,
+     "n": 3
+    },
+    "efficiency.root_reloads": {
+     "median": 71,
+     "min": 71,
+     "max": 71,
+     "n": 3
+    },
+    "efficiency.verification_actions": {
+     "median": 44,
+     "min": 44,
+     "max": 44,
+     "n": 3
+    },
+    "efficiency.readiness_wait_ms": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "efficiency.capabilities_per_100_actions": {
+     "median": 7.94,
+     "min": 7.94,
+     "max": 7.94,
+     "n": 3
+    },
+    "efficiency.capabilities_per_minute": {
+     "median": 9.51,
+     "min": 9.38,
+     "max": 9.51,
+     "n": 3
+    },
+    "efficiency.replays.attempts": {
+     "median": 16,
+     "min": 16,
+     "max": 16,
+     "n": 3
+    },
+    "efficiency.replays.validated": {
+     "median": 16,
+     "min": 16,
+     "max": 16,
+     "n": 3
+    },
+    "efficiency.replays.failures": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "efficiency.http_by_source.navigation": {
+     "median": 71,
+     "min": 71,
+     "max": 71,
+     "n": 3
+    },
+    "efficiency.http_by_source.action": {
+     "median": 47,
+     "min": 47,
+     "max": 47,
+     "n": 3
+    },
+    "efficiency.http_by_source.replay": {
+     "median": 24,
+     "min": 24,
+     "max": 24,
+     "n": 3
+    },
+    "efficiency.http_by_source.passive_resource_fetches": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "efficiency.http_by_source.budget_used": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "discovery.route_templates": {
+     "median": 10,
+     "min": 10,
+     "max": 10,
+     "n": 3
+    },
+    "discovery.grouped_states": {
+     "median": 12,
+     "min": 12,
+     "max": 12,
+     "n": 3
+    },
+    "discovery.areas_route_title": {
+     "median": 10,
+     "min": 10,
+     "max": 10,
+     "n": 3
+    },
+    "discovery.acg_templates": {
+     "median": 10,
+     "min": 10,
+     "max": 10,
+     "n": 3
+    },
+    "discovery.unique_controls_observed": {
+     "median": 18,
+     "min": 18,
+     "max": 18,
+     "n": 3
+    },
+    "discovery.unique_controls_executed": {
+     "median": 18,
+     "min": 18,
+     "max": 18,
+     "n": 3
+    },
+    "discovery.advertised_unexecuted": {
+     "median": 3413,
+     "min": 3413,
+     "max": 3413,
+     "n": 3
+    },
+    "discovery.affordances": {
+     "median": 45,
+     "min": 45,
+     "max": 45,
+     "n": 3
+    },
+    "discovery.affordance_families": {
+     "median": 18,
+     "min": 18,
+     "max": 18,
+     "n": 3
+    },
+    "discovery.request_structures_browser": {
+     "median": 16,
+     "min": 16,
+     "max": 16,
+     "n": 3
+    },
+    "discovery.acg_operations": {
+     "median": 16,
+     "min": 16,
+     "max": 16,
+     "n": 3
+    },
+    "discovery.websocket_operations": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "discovery.client_only_capabilities": {
+     "median": 2,
+     "min": 2,
+     "max": 2,
+     "n": 3
+    },
+    "discovery.entity_types": {
+     "median": 2,
+     "min": 2,
+     "max": 2,
+     "n": 3
+    },
+    "discovery.entity_instances": {
+     "median": 201,
+     "min": 201,
+     "max": 201,
+     "n": 3
+    },
+    "discovery.session_contexts": {
+     "median": 2,
+     "min": 2,
+     "max": 2,
+     "n": 3
+    },
+    "capabilities.distinct_capabilities_observed_or_better": {
+     "median": 17,
+     "min": 17,
+     "max": 17,
+     "n": 3
+    },
+    "capabilities.unidentified": {
+     "median": 6,
+     "min": 6,
+     "max": 6,
+     "n": 3
+    },
+    "capabilities.equivalent_interfaces_multi_entry": {
+     "median": 3,
+     "min": 3,
+     "max": 3,
+     "n": 3
+    },
+    "capabilities.operations_without_capability": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.session_conditioned.capabilities_in_cookie_session_contexts": {
+     "median": 17,
+     "min": 17,
+     "max": 17,
+     "n": 3
+    },
+    "capabilities.evidence_status.advertised_unexecuted_controls": {
+     "median": 3413,
+     "min": 3413,
+     "max": 3413,
+     "n": 3
+    },
+    "capabilities.evidence_status.hypothesized": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.executed_no_effect_affordances": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.refuted": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.blocked_capabilities": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_total": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.scope_refusals": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.technical_unobservable": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.not_selected": {
+     "median": 3413,
+     "min": 3413,
+     "max": 3413,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_by_configuration.post_forms_disabled": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_by_configuration.dangerous_label_or_target": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.refusals.safety_refusals_by_configuration.requires_protected_or_file_input": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.observed": {
+     "median": 1,
+     "min": 1,
+     "max": 1,
+     "n": 3
+    },
+    "capabilities.evidence_status.reproduced": {
+     "median": 16,
+     "min": 16,
+     "max": 16,
+     "n": 3
+    },
+    "capabilities.evidence_status.verified": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.attempted_failed_affordances": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "capabilities.evidence_status.blocked_affordances": {
+     "median": 4,
+     "min": 4,
+     "max": 4,
+     "n": 3
+    },
+    "safety.state_changing_requests_issued": {
+     "median": 1,
+     "min": 1,
+     "max": 1,
+     "n": 3
+    },
+    "safety.state_changing_requests_in_replay": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "safety.dangerous_controls_skipped": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "safety.ws_out_of_scope_refused": {
+     "median": 0,
+     "min": 0,
+     "max": 0,
+     "n": 3
+    },
+    "child_seconds": {
+     "median": 108.0,
+     "min": 107.9,
+     "max": 109.8,
+     "n": 3
+    }
+   },
+   "capability_overlap_jaccard_pairwise": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "deterministic_action_sequences": true,
+   "identical_initial_state_group": true,
+   "identical_config": true,
+   "terminated_by": [
+    "frontier_exhausted_or_other"
+   ],
+   "model_calls_total": 0,
+   "reference_basis": null,
+   "acg_comparison_median": {
+    "graph_a": {
+     "states": 12,
+     "actions_evidence": 54,
+     "functional_workflows": 50,
+     "features": 33,
+     "record_instances": 1,
+     "edges": 3642,
+     "advertised_unexecuted": 3413
+    },
+    "offline_acg": {
+     "templates": 10,
+     "view_states": 12,
+     "operations": 16,
+     "affordances": 45,
+     "capabilities_observed_or_better": 17,
+     "capabilities_reproduced_or_better": 16,
+     "capabilities_verified": 0,
+     "behavioral_classes": 11,
+     "entity_types": 2,
+     "entity_instances": 201,
+     "learned_predicates": 0,
+     "claims": 287,
+     "websocket_operations": 0
+    },
+    "live_acg": {
+     "templates": 10,
+     "view_states": 11,
+     "operations": 16,
+     "affordances": 46,
+     "capabilities_observed_or_better": 17,
+     "capabilities_reproduced_or_better": 16,
+     "capabilities_verified": 0,
+     "behavioral_classes": 11,
+     "entity_types": 2,
+     "entity_instances": 201,
+     "learned_predicates": 0,
+     "claims": 291,
+     "websocket_operations": 0
+    }
+   }
+  }
+ }
+}

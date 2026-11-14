@@ -1,0 +1,319 @@
+{
+ "label": "probe",
+ "matched_config": {
+  "max_seconds": 140.0,
+  "max_browser_actions": 600,
+  "max_transitions": 300,
+  "state_aware_exploration": true,
+  "record_aware_graph": true,
+  "interaction_profile": "extended",
+  "typed_resource_spider": false,
+  "allow_post_forms": true,
+  "write_policy": "disposable",
+  "max_write_requests": 60,
+  "replay_policy": "structure",
+  "replay_structure_attempts": 2,
+  "acg_evidence": true,
+  "record_unexecuted_frontier": true,
+  "restoration_shortcut": "direct_url"
+ },
+ "arms_config": {
+  "authorized_fair": {
+   "write_execution_policy": "authorized_fair",
+   "write_sweep_replay_floor": 0.1
+  },
+  "focused": {
+   "write_execution_policy": "focused_subtree",
+   "write_sweep_replay_floor": 0.1
+  },
+  "focused_protected": {
+   "write_execution_policy": "focused_subtree",
+   "write_sweep_replay_floor": 0.25
+  },
+  "adaptive": {
+   "write_execution_policy": "focused_adaptive",
+   "write_sweep_replay_floor": 0.1
+  },
+  "adaptive_protected": {
+   "write_execution_policy": "focused_adaptive",
+   "write_sweep_replay_floor": 0.25
+  }
+ },
+ "fixtures": {
+  "gated_get_lab": {
+   "focused": [
+    {
+     "fixture": "gated_get_lab",
+     "arm": "focused",
+     "trial": 0,
+     "status": "ok",
+     "capabilities_executed": [
+      "dashboard_view",
+      "home",
+      "item_view",
+      "reports_view",
+      "section_view",
+      "settings_view"
+     ],
+     "capabilities_executed_count": 6,
+     "inventory": 8,
+     "write_unlocked_executed": [
+      "reports_view",
+      "settings_view"
+     ],
+     "write_unlocked_count": 2,
+     "deepest_prereq_chain": 2,
+     "functional_areas": 14,
+     "replay_validated_transitions": 16,
+     "replay_validated_unlocked_routes": [
+      "/dashboard/settings"
+     ],
+     "writes_executed": 0,
+     "writes_blocked_destructive": 0,
+     "write_sweep": {
+      "promotable": 0,
+      "writes_executed": 0,
+      "sweep_actions": 0,
+      "unlocked_transitions": 0,
+      "focus": true,
+      "focus_steps": 0,
+      "focus_prefixes": null,
+      "replay_floor": null
+     },
+     "leftover_eligible_in_unlocked_family": 10,
+     "discovery_actions": 95,
+     "sweep_actions": 0,
+     "replay_actions": 40,
+     "total_actions": 135,
+     "replay_attempts": 16,
+     "replay_untested_paths": 31,
+     "replay_failures": 0,
+     "replay_failure_reasons": {},
+     "actions_per_executed": 22.5,
+     "elapsed_s": 71.163,
+     "wall_seconds": 71.51,
+     "projects_created": null,
+     "reports_created": null,
+     "tasks_created": null,
+     "repeat_write_actions_suppressed": 0,
+     "transitions_failed": 0,
+     "unsafe_restorations_suppressed": 0
+    }
+   ],
+   "adaptive": [
+    {
+     "fixture": "gated_get_lab",
+     "arm": "adaptive",
+     "trial": 0,
+     "status": "ok",
+     "capabilities_executed": [
+      "dashboard_view",
+      "home",
+      "item_view",
+      "reports_view",
+      "section_view",
+      "settings_view"
+     ],
+     "capabilities_executed_count": 6,
+     "inventory": 8,
+     "write_unlocked_executed": [
+      "reports_view",
+      "settings_view"
+     ],
+     "write_unlocked_count": 2,
+     "deepest_prereq_chain": 2,
+     "functional_areas": 14,
+     "replay_validated_transitions": 16,
+     "replay_validated_unlocked_routes": [
+      "/dashboard/settings"
+     ],
+     "writes_executed": 0,
+     "writes_blocked_destructive": 0,
+     "write_sweep": {
+      "promotable": 0,
+      "writes_executed": 0,
+      "sweep_actions": 0,
+      "unlocked_transitions": 0,
+      "focus": true,
+      "focus_steps": 0,
+      "focus_prefixes": null,
+      "replay_floor": null
+     },
+     "leftover_eligible_in_unlocked_family": 11,
+     "discovery_actions": 97,
+     "sweep_actions": 0,
+     "replay_actions": 40,
+     "total_actions": 137,
+     "replay_attempts": 16,
+     "replay_untested_paths": 32,
+     "replay_failures": 0,
+     "replay_failure_reasons": {},
+     "actions_per_executed": 22.8,
+     "elapsed_s": 71.183,
+     "wall_seconds": 71.55,
+     "projects_created": null,
+     "reports_created": null,
+     "tasks_created": null,
+     "repeat_write_actions_suppressed": 0,
+     "transitions_failed": 0,
+     "unsafe_restorations_suppressed": 0
+    }
+   ]
+  },
+  "branch_lab": {
+   "focused": [
+    {
+     "fixture": "branch_lab",
+     "arm": "focused",
+     "trial": 0,
+     "status": "ok",
+     "capabilities_executed": [
+      "home",
+      "item_view",
+      "project_create",
+      "project_members",
+      "project_overview",
+      "project_settings",
+      "report_create",
+      "report_export",
+      "report_overview",
+      "report_summary",
+      "section_view",
+      "workspace"
+     ],
+     "capabilities_executed_count": 12,
+     "inventory": 12,
+     "write_unlocked_executed": [
+      "project_members",
+      "project_overview",
+      "project_settings",
+      "report_export",
+      "report_overview",
+      "report_summary"
+     ],
+     "write_unlocked_count": 6,
+     "deepest_prereq_chain": 2,
+     "functional_areas": 16,
+     "replay_validated_transitions": 6,
+     "replay_validated_unlocked_routes": [],
+     "writes_executed": 2,
+     "writes_blocked_destructive": 0,
+     "write_sweep": {
+      "promotable": 2,
+      "writes_executed": 2,
+      "sweep_actions": 29,
+      "unlocked_transitions": 14,
+      "focus": true,
+      "focus_steps": 4,
+      "focus_prefixes": [
+       "/report/1",
+       "/report/1/summary",
+       "/report/1/export",
+       "/project/1",
+       "/project/1/settings",
+       "/project/1/members"
+      ],
+      "replay_floor": 0.1
+     },
+     "leftover_eligible_in_unlocked_family": 0,
+     "discovery_actions": 99,
+     "sweep_actions": 29,
+     "replay_actions": 13,
+     "total_actions": 141,
+     "replay_attempts": 7,
+     "replay_untested_paths": 56,
+     "replay_failures": 1,
+     "replay_failure_reasons": {
+      "control_missing": 1
+     },
+     "actions_per_executed": 11.8,
+     "elapsed_s": 71.101,
+     "wall_seconds": 71.49,
+     "projects_created": 1,
+     "reports_created": 1,
+     "tasks_created": null,
+     "repeat_write_actions_suppressed": 4,
+     "transitions_failed": 0,
+     "unsafe_restorations_suppressed": 0
+    }
+   ],
+   "adaptive": [
+    {
+     "fixture": "branch_lab",
+     "arm": "adaptive",
+     "trial": 0,
+     "status": "ok",
+     "capabilities_executed": [
+      "home",
+      "item_view",
+      "project_create",
+      "project_members",
+      "project_overview",
+      "project_settings",
+      "report_create",
+      "report_export",
+      "report_overview",
+      "report_summary",
+      "section_view",
+      "workspace"
+     ],
+     "capabilities_executed_count": 12,
+     "inventory": 12,
+     "write_unlocked_executed": [
+      "project_members",
+      "project_overview",
+      "project_settings",
+      "report_export",
+      "report_overview",
+      "report_summary"
+     ],
+     "write_unlocked_count": 6,
+     "deepest_prereq_chain": 2,
+     "functional_areas": 16,
+     "replay_validated_transitions": 6,
+     "replay_validated_unlocked_routes": [],
+     "writes_executed": 2,
+     "writes_blocked_destructive": 0,
+     "write_sweep": {
+      "promotable": 2,
+      "writes_executed": 2,
+      "sweep_actions": 27,
+      "unlocked_transitions": 13,
+      "focus": true,
+      "focus_steps": 4,
+      "focus_prefixes": [
+       "/workspace",
+       "/report/1",
+       "/report/1/summary",
+       "/report/1/export",
+       "/project/1",
+       "/project/1/settings",
+       "/project/1/members"
+      ],
+      "replay_floor": 0.1
+     },
+     "leftover_eligible_in_unlocked_family": 0,
+     "discovery_actions": 99,
+     "sweep_actions": 27,
+     "replay_actions": 14,
+     "total_actions": 140,
+     "replay_attempts": 8,
+     "replay_untested_paths": 54,
+     "replay_failures": 2,
+     "replay_failure_reasons": {
+      "control_missing": 2
+     },
+     "actions_per_executed": 11.7,
+     "elapsed_s": 70.689,
+     "wall_seconds": 71.08,
+     "projects_created": 1,
+     "reports_created": 1,
+     "tasks_created": null,
+     "repeat_write_actions_suppressed": 4,
+     "transitions_failed": 0,
+     "unsafe_restorations_suppressed": 0
+    }
+   ]
+  }
+ }
+}

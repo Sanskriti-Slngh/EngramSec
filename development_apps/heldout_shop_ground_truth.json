@@ -1,0 +1,46 @@
+{
+  "application": "heldout_shop",
+  "areas": [
+    {"id": "home", "route": "/", "scope": "applicable"},
+    {"id": "lantern", "route": "/products/{instance}", "via_target_suffix": "/products/101", "scope": "applicable"},
+    {"id": "kettle", "route": "/products/{instance}", "via_target_suffix": "/products/202", "scope": "applicable"},
+    {"id": "outdoors", "route": "/category/outdoors", "scope": "applicable"},
+    {"id": "deals", "route": "/deals", "scope": "applicable"},
+    {"id": "returns", "route": "/returns", "scope": "applicable"},
+    {"id": "cart", "route": "/cart", "scope": "applicable"},
+    {"id": "checkout", "route": "/checkout", "scope": "applicable"},
+    {"id": "admin", "route": "/admin", "scope": "blocked"}
+  ],
+  "controls": [
+    {"id": "lantern", "label": "Trail lantern", "kind": "link", "scope": "applicable"},
+    {"id": "kettle", "label": "Camp kettle", "kind": "link", "scope": "applicable"},
+    {"id": "categories", "label": "Browse categories", "kind": "button", "scope": "applicable"},
+    {"id": "outdoors", "label": "Outdoor collection", "kind": "link", "scope": "applicable"},
+    {"id": "deals_tab", "label": "Current deals", "kind": "button", "scope": "applicable"},
+    {"id": "deals", "label": "See all deals", "kind": "link", "scope": "applicable"},
+    {"id": "returns_summary", "label": "Shipping and returns", "kind": "button", "scope": "applicable"},
+    {"id": "returns", "label": "Returns guide", "kind": "link", "scope": "applicable"},
+    {"id": "reviews", "label": "Load customer reviews", "kind": "button", "scope": "applicable"},
+    {"id": "cart_add", "label": "Add sample to cart", "kind": "form_submit", "scope": "applicable"},
+    {"id": "checkout", "label": "Begin checkout", "kind": "link", "scope": "applicable"},
+    {"id": "admin", "label": "Admin login", "kind": "form_submit", "scope": "blocked"}
+  ],
+  "requests": [
+    {"id": "product", "method": "GET", "path": "/products/{instance}", "params": [], "scope": "applicable"},
+    {"id": "outdoors", "method": "GET", "path": "/category/outdoors", "params": [], "scope": "applicable"},
+    {"id": "deals", "method": "GET", "path": "/deals", "params": [], "scope": "applicable"},
+    {"id": "returns", "method": "GET", "path": "/returns", "params": [], "scope": "applicable"},
+    {"id": "reviews", "method": "GET", "path": "/api/reviews", "params": ["limit", "product"], "scope": "applicable"},
+    {"id": "cart_post", "method": "POST", "path": "/cart/items", "params": ["sku"], "scope": "applicable"},
+    {"id": "cart", "method": "GET", "path": "/cart", "params": [], "scope": "applicable"},
+    {"id": "checkout", "method": "GET", "path": "/checkout", "params": [], "scope": "applicable"}
+  ],
+  "instances": [
+    {"id": "product_101", "target_suffix": "/products/101", "scope": "applicable"},
+    {"id": "product_202", "target_suffix": "/products/202", "scope": "applicable"}
+  ],
+  "contexts": [
+    {"id": "anonymous", "cookie_name": null, "scope": "applicable"},
+    {"id": "cart", "cookie_name": "shop_cart", "scope": "applicable"}
+  ]
+}

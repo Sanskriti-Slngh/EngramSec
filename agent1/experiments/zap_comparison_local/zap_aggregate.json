@@ -1,0 +1,14 @@
+{
+  "target_revision": "2a0dd0a75e39925ded887bcd25016e8b3ce0f2b3",
+  "target_runtime": "Flask 3.1.3, isolated Docker target, localhost publication",
+  "zap_version": "D-2026-10-29",
+  "zap_image_digest": "sha256:42ed9f5219f4301c39f0c88141e074513422e9507bd51da421bbdd6c1fa2d86a",
+  "addons": {"spider": "0.21.0", "client": "0.35.0", "selenium": "15.60.0"},
+  "expected_denominator": 91,
+  "agent1": {"expected_fetched": 25, "unique_successful_paths": 121, "elapsed_seconds": 165.855, "browser_actions": 298, "browser_network_events": 409, "resource_get_attempts": 91, "replay_successes": 24, "replay_attempts": 24, "untested_transitions": 79, "missing_graph_connections": 0},
+  "traditional": {"elapsed_seconds": 2.043, "completed": true, "history_entries": 344, "response_bearing_messages": 212, "status_zero_placeholders_or_unresolved": 132, "unique_successful_paths": 135, "expected_fetched": 13, "new_paths_vs_agent1": 43, "expected_new_vs_agent1": 8, "expected_set_union_with_agent1": 33},
+  "client": {"elapsed_seconds": 180.336, "completed": false, "history_entries": 142, "response_bearing_messages": 78, "status_zero_placeholders_or_unresolved": 64, "unique_successful_paths": 58, "expected_fetched": 7, "new_paths_vs_agent1": 9, "expected_new_vs_agent1": 1, "expected_set_union_with_agent1": 26, "client_map_bytes": 52192, "client_map_dom_component_records": 143, "client_map_yaml_parse": "ParserError"},
+  "combined": {"elapsed_seconds": 180.987, "history_entries": 427, "response_bearing_messages": 287, "status_zero_placeholders_or_unresolved": 140, "unique_successful_paths": 141, "expected_fetched": 16, "new_paths_vs_agent1": 45, "expected_new_vs_agent1": 10, "expected_set_union_with_agent1": 35},
+  "separate_spider_overlap": {"traditional_only_paths": 90, "client_only_paths": 13, "shared_paths": 45, "union_paths": 148, "expected_union": 19},
+  "limits": ["Different request/action budgets; response-bearing ZAP messages are a lower bound on transport attempts, status-zero entries are not verified responses.", "Set unions are post-run analysis, not a live combined Agent 1 experiment.", "Client Map export failed standard YAML parsing after spider stop and re-export.", "No adapter or Agent 1 architecture changes were retained."]
+}

@@ -1,0 +1,4 @@
+name,validated_workflows,replay_success,unsupported_connections,incorrect_state_merges,redundant_states,raw_states,grouped_states,browser_actions,network_events_recorded,elapsed_seconds,wall_elapsed_seconds,model_calls,input_tokens,output_tokens,cost_usd
+exact-r1,7,14/14,0,0,3,13,10,67,14,61.0,61.137,0,0,0,0.0
+grouped-r1,7,14/14,0,0,3,13,10,67,14,60.112,60.247,0,0,0,0.0
+selective_model-r1,3,11/11,0,0,1,7,6,46,6,56.192,56.287,2,4100,188,0.0

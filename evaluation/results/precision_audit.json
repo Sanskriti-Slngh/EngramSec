@@ -1,0 +1,2007 @@
+{
+ "source": "agent1/experiments/grounded_ab_20261102",
+ "runs": {
+  "stateful_lab/grounded_0": {
+   "true_positives": 6,
+   "false_positives": 0,
+   "asserted": 6,
+   "precision": 1.0,
+   "recall": 0.8571428571428571,
+   "recall_matched": 6,
+   "recall_denominator": 7,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "stateful_lab/grounded_1": {
+   "true_positives": 6,
+   "false_positives": 0,
+   "asserted": 6,
+   "precision": 1.0,
+   "recall": 0.8571428571428571,
+   "recall_matched": 6,
+   "recall_denominator": 7,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "stateful_lab/grounded_2": {
+   "true_positives": 6,
+   "false_positives": 0,
+   "asserted": 6,
+   "precision": 1.0,
+   "recall": 0.8571428571428571,
+   "recall_matched": 6,
+   "recall_denominator": 7,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "stateful_lab/legacy_0": {
+   "true_positives": 6,
+   "false_positives": 0,
+   "asserted": 6,
+   "precision": 1.0,
+   "recall": 0.8571428571428571,
+   "recall_matched": 6,
+   "recall_denominator": 7,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "stateful_lab/legacy_1": {
+   "true_positives": 6,
+   "false_positives": 0,
+   "asserted": 6,
+   "precision": 1.0,
+   "recall": 0.8571428571428571,
+   "recall_matched": 6,
+   "recall_denominator": 7,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "stateful_lab/legacy_2": {
+   "true_positives": 6,
+   "false_positives": 0,
+   "asserted": 6,
+   "precision": 1.0,
+   "recall": 0.8571428571428571,
+   "recall_matched": 6,
+   "recall_denominator": 7,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "stateful_lab/tour_0": {
+   "true_positives": 6,
+   "false_positives": 0,
+   "asserted": 6,
+   "precision": 1.0,
+   "recall": 0.8571428571428571,
+   "recall_matched": 6,
+   "recall_denominator": 7,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "stateful_lab/tour_1": {
+   "true_positives": 6,
+   "false_positives": 0,
+   "asserted": 6,
+   "precision": 1.0,
+   "recall": 0.8571428571428571,
+   "recall_matched": 6,
+   "recall_denominator": 7,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "stateful_lab/tour_2": {
+   "true_positives": 6,
+   "false_positives": 0,
+   "asserted": 6,
+   "precision": 1.0,
+   "recall": 0.8571428571428571,
+   "recall_matched": 6,
+   "recall_denominator": 7,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/grounded_0": {
+   "true_positives": 11,
+   "false_positives": 7,
+   "asserted": 18,
+   "precision": 0.6111111111111112,
+   "recall": 0.7857142857142857,
+   "recall_matched": 11,
+   "recall_denominator": 14,
+   "fp_categories": {
+    "role_duplicate": 7,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_ba79d772c259",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workflow",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workflow"
+     ],
+     "non_capability_label": false,
+     "operations": [],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_c2ec47b58736",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workspace",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workspace"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /workspace"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d5b4e16dbbc4",
+     "category": "role_duplicate",
+     "duplicate_of": "continue_setup",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Continue setup"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /api/workflow/prepare"
+     ],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_dedc1f66c6cd",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_home",
+     "role": "js-heavy-lab",
+     "labels": [
+      "JS Lab"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /",
+      "GET /api/bootstrap"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_ecae0c7b4a21",
+     "category": "role_duplicate",
+     "duplicate_of": "open_reports",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open reports"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /reports"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_ef5ae2d4b424",
+     "category": "role_duplicate",
+     "duplicate_of": "workspace_detail",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Workspace detail"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /workspace/detail"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_f0bf6da54176",
+     "category": "role_duplicate",
+     "duplicate_of": "load_late_reports",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Load late reports"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /api/late"
+     ],
+     "effects": [
+      "component_state_changed"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/grounded_1": {
+   "true_positives": 11,
+   "false_positives": 5,
+   "asserted": 16,
+   "precision": 0.6875,
+   "recall": 0.7857142857142857,
+   "recall_matched": 11,
+   "recall_denominator": 14,
+   "fp_categories": {
+    "role_duplicate": 5,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_ba79d772c259",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workflow",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workflow"
+     ],
+     "non_capability_label": false,
+     "operations": [],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_c2ec47b58736",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workspace",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workspace"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /workspace"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d5b4e16dbbc4",
+     "category": "role_duplicate",
+     "duplicate_of": "continue_setup",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Continue setup"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /api/workflow/prepare"
+     ],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_dedc1f66c6cd",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_home",
+     "role": "js-heavy-lab",
+     "labels": [
+      "JS Lab"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /",
+      "GET /api/bootstrap"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_ef5ae2d4b424",
+     "category": "role_duplicate",
+     "duplicate_of": "workspace_detail",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Workspace detail"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /workspace/detail"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/grounded_2": {
+   "true_positives": 11,
+   "false_positives": 7,
+   "asserted": 18,
+   "precision": 0.6111111111111112,
+   "recall": 0.7857142857142857,
+   "recall_matched": 11,
+   "recall_denominator": 14,
+   "fp_categories": {
+    "role_duplicate": 7,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_ba79d772c259",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workflow",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workflow"
+     ],
+     "non_capability_label": false,
+     "operations": [],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_c2ec47b58736",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workspace",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workspace"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /workspace"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d5b4e16dbbc4",
+     "category": "role_duplicate",
+     "duplicate_of": "continue_setup",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Continue setup"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /api/workflow/prepare"
+     ],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_dedc1f66c6cd",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_home",
+     "role": "js-heavy-lab",
+     "labels": [
+      "JS Lab"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /",
+      "GET /api/bootstrap"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_ecae0c7b4a21",
+     "category": "role_duplicate",
+     "duplicate_of": "open_reports",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open reports"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /reports"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_ef5ae2d4b424",
+     "category": "role_duplicate",
+     "duplicate_of": "workspace_detail",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Workspace detail"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /workspace/detail"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_f0bf6da54176",
+     "category": "role_duplicate",
+     "duplicate_of": "load_late_reports",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Load late reports"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /api/late"
+     ],
+     "effects": [
+      "component_state_changed"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/legacy_0": {
+   "true_positives": 12,
+   "false_positives": 4,
+   "asserted": 16,
+   "precision": 0.75,
+   "recall": 0.8571428571428571,
+   "recall_matched": 12,
+   "recall_denominator": 14,
+   "fp_categories": {
+    "role_duplicate": 4,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_ba79d772c259",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workflow",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workflow"
+     ],
+     "non_capability_label": false,
+     "operations": [],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_be02b23a898e",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_overview",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Overview"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /shallow/a"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_dedc1f66c6cd",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_home",
+     "role": "js-heavy-lab",
+     "labels": [
+      "JS Lab"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /",
+      "GET /api/bootstrap"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_dfec3992e28a",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_news",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "News"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /shallow/b"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/legacy_1": {
+   "true_positives": 12,
+   "false_positives": 4,
+   "asserted": 16,
+   "precision": 0.75,
+   "recall": 0.8571428571428571,
+   "recall_matched": 12,
+   "recall_denominator": 14,
+   "fp_categories": {
+    "role_duplicate": 4,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_ba79d772c259",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workflow",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workflow"
+     ],
+     "non_capability_label": false,
+     "operations": [],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_be02b23a898e",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_overview",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Overview"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /shallow/a"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_dedc1f66c6cd",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_home",
+     "role": "js-heavy-lab",
+     "labels": [
+      "JS Lab"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /",
+      "GET /api/bootstrap"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_dfec3992e28a",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_news",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "News"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /shallow/b"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/legacy_2": {
+   "true_positives": 12,
+   "false_positives": 4,
+   "asserted": 16,
+   "precision": 0.75,
+   "recall": 0.8571428571428571,
+   "recall_matched": 12,
+   "recall_denominator": 14,
+   "fp_categories": {
+    "role_duplicate": 4,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_ba79d772c259",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workflow",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workflow"
+     ],
+     "non_capability_label": false,
+     "operations": [],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_be02b23a898e",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_overview",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Overview"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /shallow/a"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_dedc1f66c6cd",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_home",
+     "role": "js-heavy-lab",
+     "labels": [
+      "JS Lab"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /",
+      "GET /api/bootstrap"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_dfec3992e28a",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_news",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "News"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /shallow/b"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/tour_0": {
+   "true_positives": 7,
+   "false_positives": 0,
+   "asserted": 7,
+   "precision": 1.0,
+   "recall": 0.5,
+   "recall_matched": 7,
+   "recall_denominator": 14,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/tour_1": {
+   "true_positives": 7,
+   "false_positives": 0,
+   "asserted": 7,
+   "precision": 1.0,
+   "recall": 0.5,
+   "recall_matched": 7,
+   "recall_denominator": 14,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [],
+   "precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/tour_2": {
+   "true_positives": 11,
+   "false_positives": 7,
+   "asserted": 18,
+   "precision": 0.6111111111111112,
+   "recall": 0.7857142857142857,
+   "recall_matched": 11,
+   "recall_denominator": 14,
+   "fp_categories": {
+    "role_duplicate": 7,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_ba79d772c259",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workflow",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workflow"
+     ],
+     "non_capability_label": false,
+     "operations": [],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_c2ec47b58736",
+     "category": "role_duplicate",
+     "duplicate_of": "open_workspace",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open workspace"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /workspace"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d5b4e16dbbc4",
+     "category": "role_duplicate",
+     "duplicate_of": "continue_setup",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Continue setup"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /api/workflow/prepare"
+     ],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_dedc1f66c6cd",
+     "category": "role_duplicate",
+     "duplicate_of": "nav_home",
+     "role": "js-heavy-lab",
+     "labels": [
+      "JS Lab"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /",
+      "GET /api/bootstrap"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_ecae0c7b4a21",
+     "category": "role_duplicate",
+     "duplicate_of": "open_reports",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Open reports"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /reports"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_ef5ae2d4b424",
+     "category": "role_duplicate",
+     "duplicate_of": "workspace_detail",
+     "role": "js-heavy-lab",
+     "labels": [
+      "Workspace detail"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /workspace/detail"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_f0bf6da54176",
+     "category": "role_duplicate",
+     "duplicate_of": "load_late_reports",
+     "role": "js-heavy-lab+member_session",
+     "labels": [
+      "Load late reports"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /api/late"
+     ],
+     "effects": [
+      "component_state_changed"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 1.0
+  },
+  "replay_lab/grounded_0": {
+   "true_positives": 23,
+   "false_positives": 5,
+   "asserted": 28,
+   "precision": 0.8214285714285714,
+   "recall": 0.92,
+   "recall_matched": 23,
+   "recall_denominator": 25,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 5,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_7d23562d638c",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Science"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/science"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_976df4dd2757",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "History"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/history"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_c38395be7473",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Poetry"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/poetry"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d7af0ea2e145",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Music"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/music"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_f23d92019e7e",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Travel"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/travel"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 0.8214285714285714
+  },
+  "replay_lab/grounded_1": {
+   "true_positives": 23,
+   "false_positives": 5,
+   "asserted": 28,
+   "precision": 0.8214285714285714,
+   "recall": 0.92,
+   "recall_matched": 23,
+   "recall_denominator": 25,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 5,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_7d23562d638c",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Science"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/science"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_976df4dd2757",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "History"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/history"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_c38395be7473",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Poetry"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/poetry"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d7af0ea2e145",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Music"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/music"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_f23d92019e7e",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Travel"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/travel"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 0.8214285714285714
+  },
+  "replay_lab/grounded_2": {
+   "true_positives": 23,
+   "false_positives": 5,
+   "asserted": 28,
+   "precision": 0.8214285714285714,
+   "recall": 0.92,
+   "recall_matched": 23,
+   "recall_denominator": 25,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 5,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_7d23562d638c",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Science"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/science"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_976df4dd2757",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "History"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/history"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_c38395be7473",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Poetry"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/poetry"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d7af0ea2e145",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Music"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/music"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_f23d92019e7e",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Travel"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/travel"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 0.8214285714285714
+  },
+  "replay_lab/legacy_0": {
+   "true_positives": 24,
+   "false_positives": 6,
+   "asserted": 30,
+   "precision": 0.8,
+   "recall": 0.96,
+   "recall_matched": 24,
+   "recall_denominator": 25,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 6,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_7d23562d638c",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Science"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/science"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_976df4dd2757",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "History"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/history"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_c38395be7473",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Poetry"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/poetry"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d7af0ea2e145",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Music"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/music"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_e9a64a9d0da6",
+     "category": "behavioral_split",
+     "duplicate_of": "wizard_begin",
+     "role": "anonymous+sid",
+     "labels": [
+      "Begin"
+     ],
+     "non_capability_label": false,
+     "operations": [],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_f23d92019e7e",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Travel"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/travel"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 0.8
+  },
+  "replay_lab/legacy_1": {
+   "true_positives": 24,
+   "false_positives": 6,
+   "asserted": 30,
+   "precision": 0.8,
+   "recall": 0.96,
+   "recall_matched": 24,
+   "recall_denominator": 25,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 6,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_7d23562d638c",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Science"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/science"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_976df4dd2757",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "History"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/history"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_c38395be7473",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Poetry"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/poetry"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d7af0ea2e145",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Music"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/music"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_e9a64a9d0da6",
+     "category": "behavioral_split",
+     "duplicate_of": "wizard_begin",
+     "role": "anonymous+sid",
+     "labels": [
+      "Begin"
+     ],
+     "non_capability_label": false,
+     "operations": [],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_f23d92019e7e",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Travel"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/travel"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 0.8
+  },
+  "replay_lab/legacy_2": {
+   "true_positives": 24,
+   "false_positives": 6,
+   "asserted": 30,
+   "precision": 0.8,
+   "recall": 0.96,
+   "recall_matched": 24,
+   "recall_denominator": 25,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 6,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_7d23562d638c",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Science"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/science"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_976df4dd2757",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "History"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/history"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_c38395be7473",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Poetry"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/poetry"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d7af0ea2e145",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Music"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/music"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_e9a64a9d0da6",
+     "category": "behavioral_split",
+     "duplicate_of": "wizard_begin",
+     "role": "anonymous+sid",
+     "labels": [
+      "Begin"
+     ],
+     "non_capability_label": false,
+     "operations": [],
+     "effects": [
+      "component_state_changed"
+     ]
+    },
+    {
+     "capability": "cap_f23d92019e7e",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Travel"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/travel"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 0.8
+  },
+  "replay_lab/tour_0": {
+   "true_positives": 23,
+   "false_positives": 5,
+   "asserted": 28,
+   "precision": 0.8214285714285714,
+   "recall": 0.92,
+   "recall_matched": 23,
+   "recall_denominator": 25,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 5,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_7d23562d638c",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Science"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/science"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_976df4dd2757",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "History"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/history"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_c38395be7473",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Poetry"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/poetry"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d7af0ea2e145",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Music"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/music"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_f23d92019e7e",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Travel"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/travel"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 0.8214285714285714
+  },
+  "replay_lab/tour_1": {
+   "true_positives": 23,
+   "false_positives": 5,
+   "asserted": 28,
+   "precision": 0.8214285714285714,
+   "recall": 0.92,
+   "recall_matched": 23,
+   "recall_denominator": 25,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 5,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_7d23562d638c",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Science"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/science"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_976df4dd2757",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "History"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/history"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_c38395be7473",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Poetry"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/poetry"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d7af0ea2e145",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Music"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/music"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_f23d92019e7e",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Travel"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/travel"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 0.8214285714285714
+  },
+  "replay_lab/tour_2": {
+   "true_positives": 23,
+   "false_positives": 5,
+   "asserted": 28,
+   "precision": 0.8214285714285714,
+   "recall": 0.92,
+   "recall_matched": 23,
+   "recall_denominator": 25,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 5,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "unmatched": [
+    {
+     "capability": "cap_7d23562d638c",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Science"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/science"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_976df4dd2757",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "History"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/history"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_c38395be7473",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Poetry"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/poetry"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_d7af0ea2e145",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Music"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/music"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    },
+    {
+     "capability": "cap_f23d92019e7e",
+     "category": "behavioral_split",
+     "duplicate_of": "view_topic",
+     "role": "anonymous+sid",
+     "labels": [
+      "Travel"
+     ],
+     "non_capability_label": false,
+     "operations": [
+      "GET /topics/travel"
+     ],
+     "effects": [
+      "navigated"
+     ]
+    }
+   ],
+   "precision_without_role_duplicates": 0.8214285714285714
+  }
+ },
+ "totals": {
+  "stateful_lab/legacy": {
+   "trials": 3,
+   "true_positives": 18,
+   "false_positives": 0,
+   "mean_precision": 1.0,
+   "mean_recall": 0.8571,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "mean_precision_without_role_duplicates": 1.0
+  },
+  "stateful_lab/tour": {
+   "trials": 3,
+   "true_positives": 18,
+   "false_positives": 0,
+   "mean_precision": 1.0,
+   "mean_recall": 0.8571,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "mean_precision_without_role_duplicates": 1.0
+  },
+  "stateful_lab/grounded": {
+   "trials": 3,
+   "true_positives": 18,
+   "false_positives": 0,
+   "mean_precision": 1.0,
+   "mean_recall": 0.8571,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "mean_precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/legacy": {
+   "trials": 3,
+   "true_positives": 36,
+   "false_positives": 12,
+   "mean_precision": 0.75,
+   "mean_recall": 0.8571,
+   "fp_categories": {
+    "role_duplicate": 12,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "mean_precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/tour": {
+   "trials": 3,
+   "true_positives": 25,
+   "false_positives": 7,
+   "mean_precision": 0.8704,
+   "mean_recall": 0.5952,
+   "fp_categories": {
+    "role_duplicate": 7,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "mean_precision_without_role_duplicates": 1.0
+  },
+  "js_heavy_lab/grounded": {
+   "trials": 3,
+   "true_positives": 33,
+   "false_positives": 19,
+   "mean_precision": 0.6366,
+   "mean_recall": 0.7857,
+   "fp_categories": {
+    "role_duplicate": 19,
+    "repeated_navigation": 0,
+    "behavioral_split": 0,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "mean_precision_without_role_duplicates": 1.0
+  },
+  "replay_lab/legacy": {
+   "trials": 3,
+   "true_positives": 72,
+   "false_positives": 18,
+   "mean_precision": 0.8,
+   "mean_recall": 0.96,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 18,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "mean_precision_without_role_duplicates": 0.8
+  },
+  "replay_lab/tour": {
+   "trials": 3,
+   "true_positives": 69,
+   "false_positives": 15,
+   "mean_precision": 0.8214,
+   "mean_recall": 0.92,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 15,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "mean_precision_without_role_duplicates": 0.8214
+  },
+  "replay_lab/grounded": {
+   "trials": 3,
+   "true_positives": 69,
+   "false_positives": 15,
+   "mean_precision": 0.8214,
+   "mean_recall": 0.92,
+   "fp_categories": {
+    "role_duplicate": 0,
+    "repeated_navigation": 0,
+    "behavioral_split": 15,
+    "absent_from_gt": 0,
+    "unsupported_effect": 0
+   },
+   "mean_precision_without_role_duplicates": 0.8214
+  }
+ }
+}

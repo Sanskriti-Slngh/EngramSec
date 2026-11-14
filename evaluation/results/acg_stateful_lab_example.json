@@ -1,0 +1,1609 @@
+{
+ "schema_version": "acg/1",
+ "application": "stateful_lab",
+ "evidence_log_digest": "c75cfaff29dec74f",
+ "resolver_version": "acg-resolvers/1",
+ "synthetic_evidence": false,
+ "capture": {
+  "dom_affordances": false,
+  "http_requests": true,
+  "http_query_values": true,
+  "storage_key_names": false,
+  "websocket": false,
+  "response_shapes": false,
+  "visual_regions": false,
+  "instance_fields": false,
+  "replay_requests": true
+ },
+ "templates": [
+  {
+   "id": "tpl_88d6174e5d9e",
+   "route": "/records/{id}",
+   "role": "anonymous",
+   "observation_ids": [
+    "obs_0927dc153d97ece70610",
+    "obs_3205092904720177b717",
+    "obs_3d29be050cd381e1f85d",
+    "obs_689361cf1a2903d1c575",
+    "obs_7cc0147e2c6a53a3d00a",
+    "obs_8015936183e11d093949",
+    "obs_87a9136526df351328e4",
+    "obs_8d402f1729d510b17de6",
+    "obs_9b78dcbce913660b2eb9",
+    "obs_a7741cf9e3db7ae17620",
+    "obs_afbe3e80185fcae55d1c",
+    "obs_b044aaafa1b478a4ced1",
+    "obs_ca36728d5eb650781ed5",
+    "obs_cd4af66a67dce5e1c82c",
+    "obs_d486367a9d2d2242ad58",
+    "obs_f60ac1fa6f63012fd894"
+   ],
+   "view_state_ids": [
+    "vs_c53128d901e9"
+   ]
+  },
+  {
+   "id": "tpl_8bbda007e168",
+   "route": "/",
+   "role": "anonymous",
+   "observation_ids": [
+    "obs_0524de928398ca150b8c",
+    "obs_17322529bab251c0de46",
+    "obs_1d606cf2373a58e59503",
+    "obs_1dba432d8471f882659d",
+    "obs_25e174a6227947112cd1",
+    "obs_2a286ccbb0603abaeaed",
+    "obs_3698aa261d4e28a8f890",
+    "obs_42252f793ad3b063b884",
+    "obs_5fd4e7ef18e167613409",
+    "obs_6b58a00129ac741805d6",
+    "obs_74f2e875cad259d679c7",
+    "obs_76b0c7a0d8cc35e8794e",
+    "obs_7b5fcacbde5f9a7a9c27",
+    "obs_7c15d764b2ed08e8c8b9",
+    "obs_81451e5f281c261106fb",
+    "obs_89ddda89c501d038481b",
+    "obs_9defd9bd316fab65d294",
+    "obs_a1cd301144fdd0c3908b",
+    "obs_aee8c69428be5a898b37",
+    "obs_d3bd27bc4d0035fc6932"
+   ],
+   "view_state_ids": [
+    "vs_5be9af199cf9",
+    "vs_7d65d36f121a"
+   ]
+  }
+ ],
+ "view_states": [
+  {
+   "id": "vs_5be9af199cf9",
+   "template_id": "tpl_8bbda007e168",
+   "predicates": [],
+   "observation_ids": [
+    "obs_0524de928398ca150b8c",
+    "obs_76b0c7a0d8cc35e8794e",
+    "obs_d3bd27bc4d0035fc6932"
+   ]
+  },
+  {
+   "id": "vs_7d65d36f121a",
+   "template_id": "tpl_8bbda007e168",
+   "predicates": [
+    {
+     "kind": "affordances_not_captured"
+    }
+   ],
+   "observation_ids": [
+    "obs_17322529bab251c0de46",
+    "obs_1d606cf2373a58e59503",
+    "obs_1dba432d8471f882659d",
+    "obs_25e174a6227947112cd1",
+    "obs_2a286ccbb0603abaeaed",
+    "obs_3698aa261d4e28a8f890",
+    "obs_42252f793ad3b063b884",
+    "obs_5fd4e7ef18e167613409",
+    "obs_6b58a00129ac741805d6",
+    "obs_74f2e875cad259d679c7",
+    "obs_7b5fcacbde5f9a7a9c27",
+    "obs_7c15d764b2ed08e8c8b9",
+    "obs_81451e5f281c261106fb",
+    "obs_89ddda89c501d038481b",
+    "obs_9defd9bd316fab65d294",
+    "obs_a1cd301144fdd0c3908b",
+    "obs_aee8c69428be5a898b37"
+   ]
+  },
+  {
+   "id": "vs_c53128d901e9",
+   "template_id": "tpl_88d6174e5d9e",
+   "predicates": [
+    {
+     "kind": "affordances_not_captured"
+    }
+   ],
+   "observation_ids": [
+    "obs_0927dc153d97ece70610",
+    "obs_3205092904720177b717",
+    "obs_3d29be050cd381e1f85d",
+    "obs_689361cf1a2903d1c575",
+    "obs_7cc0147e2c6a53a3d00a",
+    "obs_8015936183e11d093949",
+    "obs_87a9136526df351328e4",
+    "obs_8d402f1729d510b17de6",
+    "obs_9b78dcbce913660b2eb9",
+    "obs_a7741cf9e3db7ae17620",
+    "obs_afbe3e80185fcae55d1c",
+    "obs_b044aaafa1b478a4ced1",
+    "obs_ca36728d5eb650781ed5",
+    "obs_cd4af66a67dce5e1c82c",
+    "obs_d486367a9d2d2242ad58",
+    "obs_f60ac1fa6f63012fd894"
+   ]
+  }
+ ],
+ "entity_types": [
+  {
+   "id": "E1",
+   "positions": [
+    "/api/records/{id}#2",
+    "/records/{id}#1"
+   ],
+   "label_candidates": [
+    {
+     "text": "records",
+     "evidence_id": "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2"
+    }
+   ]
+  }
+ ],
+ "entity_instances": [
+  {
+   "id": "ei_cc1a32bb7a47",
+   "type_id": "E1",
+   "token": "8bd3238d0b70",
+   "observation_ids": [
+    "obs_8015936183e11d093949",
+    "obs_87a9136526df351328e4",
+    "obs_a7741cf9e3db7ae17620",
+    "obs_f60ac1fa6f63012fd894"
+   ],
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_30fe1b38bf20d9370ba2",
+    "ev:actions_evidence:action_tr_5855a67a664ad930c3c9",
+    "ev:actions_evidence:action_tr_b4651f315fb431ea98e5",
+    "ev:actions_evidence:action_tr_dc6d2e6eeaf9e6d94bfd",
+    "ev:actions_evidence:action_tr_e4b1d2be2e16a15be76e",
+    "ev:actions_evidence:action_tr_f71270066792435915f7",
+    "ev:observations:obs_8015936183e11d093949",
+    "ev:observations:obs_87a9136526df351328e4",
+    "ev:observations:obs_a7741cf9e3db7ae17620",
+    "ev:observations:obs_f60ac1fa6f63012fd894",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "observed_paths": [
+    "/api/records/1",
+    "/records/1"
+   ]
+  },
+  {
+   "id": "ei_08b135459f22",
+   "type_id": "E1",
+   "token": "9eaea244ec7e",
+   "observation_ids": [
+    "obs_3205092904720177b717",
+    "obs_3d29be050cd381e1f85d",
+    "obs_afbe3e80185fcae55d1c",
+    "obs_cd4af66a67dce5e1c82c"
+   ],
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_10eaa3fde59851e92ca2",
+    "ev:actions_evidence:action_tr_3c2503d388d2c157b92e",
+    "ev:actions_evidence:action_tr_567b4828300e3b497476",
+    "ev:actions_evidence:action_tr_69bc1183faaf42b4ca75",
+    "ev:actions_evidence:action_tr_9784d5650a75dba9901f",
+    "ev:actions_evidence:action_tr_b4ff540ef722207681b2",
+    "ev:observations:obs_3205092904720177b717",
+    "ev:observations:obs_3d29be050cd381e1f85d",
+    "ev:observations:obs_afbe3e80185fcae55d1c",
+    "ev:observations:obs_cd4af66a67dce5e1c82c",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "observed_paths": [
+    "/api/records/2",
+    "/records/2"
+   ]
+  },
+  {
+   "id": "ei_4749a4de2895",
+   "type_id": "E1",
+   "token": "ea25c77098f2",
+   "observation_ids": [
+    "obs_0927dc153d97ece70610",
+    "obs_7cc0147e2c6a53a3d00a",
+    "obs_8d402f1729d510b17de6",
+    "obs_9b78dcbce913660b2eb9",
+    "obs_ca36728d5eb650781ed5"
+   ],
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_216f4d91ac5f9f046bce",
+    "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2",
+    "ev:actions_evidence:action_tr_7ac426e7a9b52bc8867c",
+    "ev:actions_evidence:action_tr_a9a3ba300a1f0f455992",
+    "ev:actions_evidence:action_tr_e57b0a6ccd2a7634737b",
+    "ev:observations:obs_0927dc153d97ece70610",
+    "ev:observations:obs_7cc0147e2c6a53a3d00a",
+    "ev:observations:obs_8d402f1729d510b17de6",
+    "ev:observations:obs_9b78dcbce913660b2eb9",
+    "ev:observations:obs_ca36728d5eb650781ed5",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "observed_paths": [
+    "/api/records/3",
+    "/records/3"
+   ]
+  },
+  {
+   "id": "ei_23effa886240",
+   "type_id": "E1",
+   "token": "b6df04b54f6d",
+   "observation_ids": [
+    "obs_689361cf1a2903d1c575",
+    "obs_b044aaafa1b478a4ced1",
+    "obs_d486367a9d2d2242ad58"
+   ],
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_640f6882316bb64bebfc",
+    "ev:actions_evidence:action_tr_f4b6ea6bb5bf06977cff",
+    "ev:actions_evidence:action_tr_ff538b29540081abde68",
+    "ev:observations:obs_689361cf1a2903d1c575",
+    "ev:observations:obs_b044aaafa1b478a4ced1",
+    "ev:observations:obs_d486367a9d2d2242ad58",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "observed_paths": [
+    "/api/records/4",
+    "/records/4"
+   ]
+  }
+ ],
+ "affordances": [
+  {
+   "id": "aff_029652b38435",
+   "template_id": "tpl_8bbda007e168",
+   "family": {
+    "kind": "link",
+    "role": "link",
+    "interaction": "click",
+    "component": "body",
+    "locator": "body > a",
+    "target_route": "/records/{id}",
+    "method": "",
+    "fields": [],
+    "provenance": "snapshot"
+   },
+   "labels": [
+    {
+     "text": "Alpha",
+     "evidence_id": "ev:actions_evidence:action_tr_dc6d2e6eeaf9e6d94bfd"
+    },
+    {
+     "text": "Beta",
+     "evidence_id": "ev:actions_evidence:action_tr_69bc1183faaf42b4ca75"
+    },
+    {
+     "text": "Changed",
+     "evidence_id": "ev:replay_observations:obs_76b0c7a0d8cc35e8794e"
+    },
+    {
+     "text": "GET mutation",
+     "evidence_id": "ev:actions_evidence:action_tr_7ac426e7a9b52bc8867c"
+    },
+    {
+     "text": "New record",
+     "evidence_id": "ev:actions_evidence:action_tr_f4b6ea6bb5bf06977cff"
+    }
+   ],
+   "status": "bound",
+   "capability_ids": [
+    "cap_5dff8107162c"
+   ],
+   "action_ids": [
+    "tr_10eaa3fde59851e92ca2",
+    "tr_216f4d91ac5f9f046bce",
+    "tr_30fe1b38bf20d9370ba2",
+    "tr_3c2503d388d2c157b92e",
+    "tr_567b4828300e3b497476",
+    "tr_5855a67a664ad930c3c9",
+    "tr_69bc1183faaf42b4ca75",
+    "tr_7ac426e7a9b52bc8867c",
+    "tr_9784d5650a75dba9901f",
+    "tr_a9a3ba300a1f0f455992",
+    "tr_dc6d2e6eeaf9e6d94bfd",
+    "tr_e4b1d2be2e16a15be76e",
+    "tr_e57b0a6ccd2a7634737b",
+    "tr_f4b6ea6bb5bf06977cff",
+    "tr_f71270066792435915f7"
+   ],
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_10eaa3fde59851e92ca2",
+    "ev:actions_evidence:action_tr_216f4d91ac5f9f046bce",
+    "ev:actions_evidence:action_tr_30fe1b38bf20d9370ba2",
+    "ev:actions_evidence:action_tr_3c2503d388d2c157b92e",
+    "ev:actions_evidence:action_tr_567b4828300e3b497476",
+    "ev:actions_evidence:action_tr_5855a67a664ad930c3c9",
+    "ev:actions_evidence:action_tr_69bc1183faaf42b4ca75",
+    "ev:actions_evidence:action_tr_7ac426e7a9b52bc8867c",
+    "ev:actions_evidence:action_tr_9784d5650a75dba9901f",
+    "ev:actions_evidence:action_tr_a9a3ba300a1f0f455992",
+    "ev:actions_evidence:action_tr_dc6d2e6eeaf9e6d94bfd",
+    "ev:actions_evidence:action_tr_e4b1d2be2e16a15be76e",
+    "ev:actions_evidence:action_tr_e57b0a6ccd2a7634737b",
+    "ev:actions_evidence:action_tr_f4b6ea6bb5bf06977cff",
+    "ev:actions_evidence:action_tr_f71270066792435915f7",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "reason": null
+  },
+  {
+   "id": "aff_17446c9684e7",
+   "template_id": "tpl_8bbda007e168",
+   "family": {
+    "kind": "button",
+    "role": "button",
+    "interaction": "click",
+    "component": "body",
+    "locator": "#delete",
+    "target_route": "",
+    "method": "",
+    "fields": [],
+    "provenance": "snapshot"
+   },
+   "labels": [
+    {
+     "text": "Delete all records",
+     "evidence_id": "ev:replay_observations:obs_76b0c7a0d8cc35e8794e"
+    }
+   ],
+   "status": "blocked",
+   "capability_ids": [],
+   "action_ids": [],
+   "evidence_ids": [
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "reason": "dangerous_label_or_target"
+  },
+  {
+   "id": "aff_4dd4774a400b",
+   "template_id": "tpl_8bbda007e168",
+   "family": {
+    "kind": "link",
+    "role": "link",
+    "interaction": "click",
+    "component": "body",
+    "locator": "body > a:nth-of-type(3)",
+    "target_route": "/counter",
+    "method": "",
+    "fields": [],
+    "provenance": "snapshot"
+   },
+   "labels": [
+    {
+     "text": "Counter",
+     "evidence_id": "ev:actions_evidence:action_tr_01c0dcfe51fdb24c891f"
+    }
+   ],
+   "status": "bound",
+   "capability_ids": [
+    "cap_5774d8b1acc8"
+   ],
+   "action_ids": [
+    "tr_01c0dcfe51fdb24c891f"
+   ],
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_01c0dcfe51fdb24c891f"
+   ],
+   "reason": null
+  },
+  {
+   "id": "aff_96597cfb24be",
+   "template_id": "tpl_8bbda007e168",
+   "family": {
+    "kind": "form_submit",
+    "role": "button",
+    "interaction": "click",
+    "component": "form:search",
+    "locator": "body > form:nth-of-type(2) > button",
+    "target_route": "/",
+    "method": "GET",
+    "fields": [
+     [
+      "query",
+      "input",
+      false
+     ]
+    ],
+    "provenance": "snapshot"
+   },
+   "labels": [
+    {
+     "text": "Submit",
+     "evidence_id": "ev:replay_observations:obs_76b0c7a0d8cc35e8794e"
+    }
+   ],
+   "status": "bound",
+   "capability_ids": [
+    "cap_7f6c90225cee"
+   ],
+   "action_ids": [
+    "tr_7562ce443f08e40761e8"
+   ],
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_7562ce443f08e40761e8",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "reason": null
+  },
+  {
+   "id": "aff_bcfb81997609",
+   "template_id": "tpl_88d6174e5d9e",
+   "family": {
+    "kind": "form_submit",
+    "role": "button",
+    "interaction": "click",
+    "component": "form:update",
+    "locator": "body > form > button",
+    "target_route": "/records/{id}",
+    "method": "GET",
+    "fields": [
+     [
+      "name",
+      "input",
+      false
+     ]
+    ],
+    "provenance": "snapshot"
+   },
+   "labels": [
+    {
+     "text": "Submit",
+     "evidence_id": "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2"
+    }
+   ],
+   "status": "bound",
+   "capability_ids": [
+    "cap_7307cdaee046"
+   ],
+   "action_ids": [
+    "tr_4637bc760ed2d930b6f2",
+    "tr_b4651f315fb431ea98e5",
+    "tr_b4ff540ef722207681b2",
+    "tr_ff538b29540081abde68"
+   ],
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2",
+    "ev:actions_evidence:action_tr_b4651f315fb431ea98e5",
+    "ev:actions_evidence:action_tr_b4ff540ef722207681b2",
+    "ev:actions_evidence:action_tr_ff538b29540081abde68"
+   ],
+   "reason": null
+  },
+  {
+   "id": "aff_db746f37df42",
+   "template_id": "tpl_88d6174e5d9e",
+   "family": {
+    "kind": "link",
+    "role": "link",
+    "interaction": "click",
+    "component": "body",
+    "locator": "body > a",
+    "target_route": "/",
+    "method": "",
+    "fields": [],
+    "provenance": "snapshot"
+   },
+   "labels": [
+    {
+     "text": "All records",
+     "evidence_id": "ev:actions_evidence:action_tr_78b12b22141672bd0d97"
+    }
+   ],
+   "status": "bound",
+   "capability_ids": [
+    "cap_b30b62c5f2aa"
+   ],
+   "action_ids": [
+    "tr_14f4d394828bac653539",
+    "tr_32d45b64b1e8cf87f559",
+    "tr_78b12b22141672bd0d97",
+    "tr_b2a971706f7ea131733c",
+    "tr_cbdd21128ff00f29c13d",
+    "tr_daf6c6add8297e0e0931",
+    "tr_e747b5cea5d0bea94283",
+    "tr_fb8248943bc21883fe8c"
+   ],
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_14f4d394828bac653539",
+    "ev:actions_evidence:action_tr_32d45b64b1e8cf87f559",
+    "ev:actions_evidence:action_tr_78b12b22141672bd0d97",
+    "ev:actions_evidence:action_tr_b2a971706f7ea131733c",
+    "ev:actions_evidence:action_tr_cbdd21128ff00f29c13d",
+    "ev:actions_evidence:action_tr_daf6c6add8297e0e0931",
+    "ev:actions_evidence:action_tr_e747b5cea5d0bea94283",
+    "ev:actions_evidence:action_tr_fb8248943bc21883fe8c"
+   ],
+   "reason": null
+  },
+  {
+   "id": "aff_e6a6f10bb052",
+   "template_id": "tpl_8bbda007e168",
+   "family": {
+    "kind": "form_submit",
+    "role": "button",
+    "interaction": "click",
+    "component": "form:create",
+    "locator": "body > form:nth-of-type(1) > button",
+    "target_route": "/",
+    "method": "GET",
+    "fields": [
+     [
+      "title",
+      "input",
+      false
+     ]
+    ],
+    "provenance": "snapshot"
+   },
+   "labels": [
+    {
+     "text": "Create record",
+     "evidence_id": "ev:replay_observations:obs_76b0c7a0d8cc35e8794e"
+    }
+   ],
+   "status": "bound",
+   "capability_ids": [
+    "cap_119ab50cfbd5"
+   ],
+   "action_ids": [
+    "tr_640f6882316bb64bebfc"
+   ],
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_640f6882316bb64bebfc",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "reason": null
+  },
+  {
+   "id": "aff_ed4c5ec5e7e4",
+   "template_id": "tpl_8bbda007e168",
+   "family": {
+    "kind": "link",
+    "role": "link",
+    "interaction": "click",
+    "component": "body",
+    "locator": "body > a:nth-of-type(5)",
+    "target_route": "/counter",
+    "method": "",
+    "fields": [],
+    "provenance": "snapshot"
+   },
+   "labels": [
+    {
+     "text": "Counter",
+     "evidence_id": "ev:replay_observations:obs_76b0c7a0d8cc35e8794e"
+    }
+   ],
+   "status": "unbound",
+   "capability_ids": [],
+   "action_ids": [],
+   "evidence_ids": [
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "reason": "observed but never executed"
+  }
+ ],
+ "operations": [
+  {
+   "id": "op_45e66a5bd904",
+   "channel": "http",
+   "method": "POST",
+   "route": "/api/records",
+   "params": [
+    "name"
+   ],
+   "encoding": "json",
+   "dispatch": {},
+   "message_class": null,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_640f6882316bb64bebfc"
+   ]
+  },
+  {
+   "id": "op_5cdec2e2a5a4",
+   "channel": "http",
+   "method": "POST",
+   "route": "/api/search",
+   "params": [
+    "q"
+   ],
+   "encoding": "json",
+   "dispatch": {},
+   "message_class": null,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_7562ce443f08e40761e8"
+   ]
+  },
+  {
+   "id": "op_9752be1018b6",
+   "channel": "http",
+   "method": "POST",
+   "route": "/api/records/{id}",
+   "params": [],
+   "encoding": null,
+   "dispatch": {},
+   "message_class": null,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2",
+    "ev:actions_evidence:action_tr_b4651f315fb431ea98e5",
+    "ev:actions_evidence:action_tr_b4ff540ef722207681b2",
+    "ev:actions_evidence:action_tr_ff538b29540081abde68"
+   ]
+  },
+  {
+   "id": "op_c09fd29cbc34",
+   "channel": "http",
+   "method": "GET",
+   "route": "/counter",
+   "params": [],
+   "encoding": null,
+   "dispatch": {},
+   "message_class": null,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_01c0dcfe51fdb24c891f"
+   ]
+  },
+  {
+   "id": "op_e9d727768575",
+   "channel": "http",
+   "method": "GET",
+   "route": "/records/{id}",
+   "params": [],
+   "encoding": null,
+   "dispatch": {},
+   "message_class": null,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_10eaa3fde59851e92ca2",
+    "ev:actions_evidence:action_tr_216f4d91ac5f9f046bce",
+    "ev:actions_evidence:action_tr_30fe1b38bf20d9370ba2",
+    "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2",
+    "ev:actions_evidence:action_tr_567b4828300e3b497476",
+    "ev:actions_evidence:action_tr_640f6882316bb64bebfc",
+    "ev:actions_evidence:action_tr_7ac426e7a9b52bc8867c",
+    "ev:actions_evidence:action_tr_9784d5650a75dba9901f",
+    "ev:actions_evidence:action_tr_a9a3ba300a1f0f455992",
+    "ev:actions_evidence:action_tr_b4651f315fb431ea98e5",
+    "ev:actions_evidence:action_tr_b4ff540ef722207681b2",
+    "ev:actions_evidence:action_tr_dc6d2e6eeaf9e6d94bfd",
+    "ev:actions_evidence:action_tr_e4b1d2be2e16a15be76e",
+    "ev:actions_evidence:action_tr_e57b0a6ccd2a7634737b",
+    "ev:actions_evidence:action_tr_f4b6ea6bb5bf06977cff",
+    "ev:actions_evidence:action_tr_ff538b29540081abde68"
+   ]
+  },
+  {
+   "id": "op_eecb32f6f071",
+   "channel": "http",
+   "method": "GET",
+   "route": "/",
+   "params": [],
+   "encoding": null,
+   "dispatch": {},
+   "message_class": null,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_01c0dcfe51fdb24c891f",
+    "ev:actions_evidence:action_tr_14f4d394828bac653539",
+    "ev:actions_evidence:action_tr_32d45b64b1e8cf87f559",
+    "ev:actions_evidence:action_tr_78b12b22141672bd0d97",
+    "ev:actions_evidence:action_tr_b2a971706f7ea131733c",
+    "ev:actions_evidence:action_tr_cbdd21128ff00f29c13d",
+    "ev:actions_evidence:action_tr_daf6c6add8297e0e0931",
+    "ev:actions_evidence:action_tr_e747b5cea5d0bea94283",
+    "ev:actions_evidence:action_tr_fb8248943bc21883fe8c"
+   ]
+  }
+ ],
+ "capabilities": [
+  {
+   "id": "cap_119ab50cfbd5",
+   "role": "anonymous",
+   "operation_ids": [
+    "op_45e66a5bd904",
+    "op_e9d727768575"
+   ],
+   "effects": [
+    {
+     "kind": "navigated",
+     "target": "tpl_88d6174e5d9e"
+    }
+   ],
+   "entry_template_id": null,
+   "status": "observed",
+   "p": 0.25,
+   "bindings": [
+    {
+     "affordance_id": "aff_e6a6f10bb052",
+     "action_ids": [
+      "tr_640f6882316bb64bebfc"
+     ]
+    }
+   ],
+   "action_ids": [
+    "tr_640f6882316bb64bebfc"
+   ],
+   "reproduction_ids": [],
+   "behavioral_class": null,
+   "unidentified": true,
+   "reason": "no grounding rule fired at its minimum status",
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_640f6882316bb64bebfc"
+   ],
+   "labels": [
+    {
+     "text": "Create record",
+     "evidence_id": "ev:replay_observations:obs_76b0c7a0d8cc35e8794e"
+    }
+   ]
+  },
+  {
+   "id": "cap_5774d8b1acc8",
+   "role": "anonymous",
+   "operation_ids": [
+    "op_c09fd29cbc34",
+    "op_eecb32f6f071"
+   ],
+   "effects": [
+    {
+     "kind": "navigated",
+     "target": "tpl_8bbda007e168"
+    }
+   ],
+   "entry_template_id": null,
+   "status": "observed",
+   "p": 0.25,
+   "bindings": [
+    {
+     "affordance_id": "aff_4dd4774a400b",
+     "action_ids": [
+      "tr_01c0dcfe51fdb24c891f"
+     ]
+    }
+   ],
+   "action_ids": [
+    "tr_01c0dcfe51fdb24c891f"
+   ],
+   "reproduction_ids": [],
+   "behavioral_class": null,
+   "unidentified": true,
+   "reason": "no grounding rule fired at its minimum status",
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_01c0dcfe51fdb24c891f"
+   ],
+   "labels": [
+    {
+     "text": "Counter",
+     "evidence_id": "ev:actions_evidence:action_tr_01c0dcfe51fdb24c891f"
+    }
+   ]
+  },
+  {
+   "id": "cap_5dff8107162c",
+   "role": "anonymous",
+   "operation_ids": [
+    "op_e9d727768575"
+   ],
+   "effects": [
+    {
+     "kind": "navigated",
+     "target": "tpl_88d6174e5d9e"
+    }
+   ],
+   "entry_template_id": null,
+   "status": "observed",
+   "p": 0.00368,
+   "bindings": [
+    {
+     "affordance_id": "aff_029652b38435",
+     "action_ids": [
+      "tr_10eaa3fde59851e92ca2",
+      "tr_216f4d91ac5f9f046bce",
+      "tr_30fe1b38bf20d9370ba2",
+      "tr_567b4828300e3b497476",
+      "tr_7ac426e7a9b52bc8867c",
+      "tr_9784d5650a75dba9901f",
+      "tr_a9a3ba300a1f0f455992",
+      "tr_dc6d2e6eeaf9e6d94bfd",
+      "tr_e4b1d2be2e16a15be76e",
+      "tr_e57b0a6ccd2a7634737b",
+      "tr_f4b6ea6bb5bf06977cff"
+     ]
+    }
+   ],
+   "action_ids": [
+    "tr_10eaa3fde59851e92ca2",
+    "tr_216f4d91ac5f9f046bce",
+    "tr_30fe1b38bf20d9370ba2",
+    "tr_567b4828300e3b497476",
+    "tr_7ac426e7a9b52bc8867c",
+    "tr_9784d5650a75dba9901f",
+    "tr_a9a3ba300a1f0f455992",
+    "tr_dc6d2e6eeaf9e6d94bfd",
+    "tr_e4b1d2be2e16a15be76e",
+    "tr_e57b0a6ccd2a7634737b",
+    "tr_f4b6ea6bb5bf06977cff"
+   ],
+   "reproduction_ids": [],
+   "behavioral_class": null,
+   "unidentified": true,
+   "reason": "no grounding rule fired at its minimum status",
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_10eaa3fde59851e92ca2",
+    "ev:actions_evidence:action_tr_216f4d91ac5f9f046bce",
+    "ev:actions_evidence:action_tr_30fe1b38bf20d9370ba2",
+    "ev:actions_evidence:action_tr_567b4828300e3b497476",
+    "ev:actions_evidence:action_tr_7ac426e7a9b52bc8867c",
+    "ev:actions_evidence:action_tr_9784d5650a75dba9901f",
+    "ev:actions_evidence:action_tr_a9a3ba300a1f0f455992",
+    "ev:actions_evidence:action_tr_dc6d2e6eeaf9e6d94bfd",
+    "ev:actions_evidence:action_tr_e4b1d2be2e16a15be76e",
+    "ev:actions_evidence:action_tr_e57b0a6ccd2a7634737b",
+    "ev:actions_evidence:action_tr_f4b6ea6bb5bf06977cff",
+    "ev:replays:replay_855727633a11c4cabbb5",
+    "ev:replays:replay_baa26f8189ceb0f9d726"
+   ],
+   "labels": [
+    {
+     "text": "Alpha",
+     "evidence_id": "ev:actions_evidence:action_tr_dc6d2e6eeaf9e6d94bfd"
+    },
+    {
+     "text": "Beta",
+     "evidence_id": "ev:actions_evidence:action_tr_69bc1183faaf42b4ca75"
+    },
+    {
+     "text": "Changed",
+     "evidence_id": "ev:replay_observations:obs_76b0c7a0d8cc35e8794e"
+    },
+    {
+     "text": "GET mutation",
+     "evidence_id": "ev:actions_evidence:action_tr_7ac426e7a9b52bc8867c"
+    },
+    {
+     "text": "New record",
+     "evidence_id": "ev:actions_evidence:action_tr_f4b6ea6bb5bf06977cff"
+    }
+   ]
+  },
+  {
+   "id": "cap_7307cdaee046",
+   "role": "anonymous",
+   "operation_ids": [
+    "op_9752be1018b6",
+    "op_e9d727768575"
+   ],
+   "effects": [
+    {
+     "kind": "navigated",
+     "target": "tpl_88d6174e5d9e"
+    }
+   ],
+   "entry_template_id": null,
+   "status": "observed",
+   "p": 0.25,
+   "bindings": [
+    {
+     "affordance_id": "aff_bcfb81997609",
+     "action_ids": [
+      "tr_4637bc760ed2d930b6f2",
+      "tr_b4651f315fb431ea98e5",
+      "tr_b4ff540ef722207681b2",
+      "tr_ff538b29540081abde68"
+     ]
+    }
+   ],
+   "action_ids": [
+    "tr_4637bc760ed2d930b6f2",
+    "tr_b4651f315fb431ea98e5",
+    "tr_b4ff540ef722207681b2",
+    "tr_ff538b29540081abde68"
+   ],
+   "reproduction_ids": [],
+   "behavioral_class": null,
+   "unidentified": true,
+   "reason": "no grounding rule fired at its minimum status",
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2",
+    "ev:actions_evidence:action_tr_b4651f315fb431ea98e5",
+    "ev:actions_evidence:action_tr_b4ff540ef722207681b2",
+    "ev:actions_evidence:action_tr_ff538b29540081abde68"
+   ],
+   "labels": [
+    {
+     "text": "Submit",
+     "evidence_id": "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2"
+    }
+   ]
+  },
+  {
+   "id": "cap_7f6c90225cee",
+   "role": "anonymous",
+   "operation_ids": [
+    "op_5cdec2e2a5a4"
+   ],
+   "effects": [],
+   "entry_template_id": null,
+   "status": "observed",
+   "p": 0.25,
+   "bindings": [
+    {
+     "affordance_id": "aff_96597cfb24be",
+     "action_ids": [
+      "tr_7562ce443f08e40761e8"
+     ]
+    }
+   ],
+   "action_ids": [
+    "tr_7562ce443f08e40761e8"
+   ],
+   "reproduction_ids": [],
+   "behavioral_class": null,
+   "unidentified": true,
+   "reason": "no grounding rule fired at its minimum status",
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_7562ce443f08e40761e8"
+   ],
+   "labels": [
+    {
+     "text": "Submit",
+     "evidence_id": "ev:replay_observations:obs_76b0c7a0d8cc35e8794e"
+    }
+   ]
+  },
+  {
+   "id": "cap_b30b62c5f2aa",
+   "role": "anonymous",
+   "operation_ids": [
+    "op_eecb32f6f071"
+   ],
+   "effects": [
+    {
+     "kind": "navigated",
+     "target": "tpl_8bbda007e168"
+    }
+   ],
+   "entry_template_id": null,
+   "status": "observed",
+   "p": 0.033898,
+   "bindings": [
+    {
+     "affordance_id": "aff_db746f37df42",
+     "action_ids": [
+      "tr_14f4d394828bac653539",
+      "tr_32d45b64b1e8cf87f559",
+      "tr_78b12b22141672bd0d97",
+      "tr_b2a971706f7ea131733c",
+      "tr_cbdd21128ff00f29c13d",
+      "tr_daf6c6add8297e0e0931",
+      "tr_e747b5cea5d0bea94283",
+      "tr_fb8248943bc21883fe8c"
+     ]
+    }
+   ],
+   "action_ids": [
+    "tr_14f4d394828bac653539",
+    "tr_32d45b64b1e8cf87f559",
+    "tr_78b12b22141672bd0d97",
+    "tr_b2a971706f7ea131733c",
+    "tr_cbdd21128ff00f29c13d",
+    "tr_daf6c6add8297e0e0931",
+    "tr_e747b5cea5d0bea94283",
+    "tr_fb8248943bc21883fe8c"
+   ],
+   "reproduction_ids": [],
+   "behavioral_class": null,
+   "unidentified": true,
+   "reason": "no grounding rule fired at its minimum status",
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_14f4d394828bac653539",
+    "ev:actions_evidence:action_tr_32d45b64b1e8cf87f559",
+    "ev:actions_evidence:action_tr_78b12b22141672bd0d97",
+    "ev:actions_evidence:action_tr_b2a971706f7ea131733c",
+    "ev:actions_evidence:action_tr_cbdd21128ff00f29c13d",
+    "ev:actions_evidence:action_tr_daf6c6add8297e0e0931",
+    "ev:actions_evidence:action_tr_e747b5cea5d0bea94283",
+    "ev:actions_evidence:action_tr_fb8248943bc21883fe8c",
+    "ev:replays:replay_cf33fb0ac52ffa5cac78"
+   ],
+   "labels": [
+    {
+     "text": "All records",
+     "evidence_id": "ev:actions_evidence:action_tr_78b12b22141672bd0d97"
+    }
+   ]
+  }
+ ],
+ "learned_predicates": [],
+ "claims": [
+  {
+   "id": "cl_025cd0a46f77",
+   "subject": "aff_96597cfb24be",
+   "predicate": "binds",
+   "object": "cap_7f6c90225cee",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_7562ce443f08e40761e8"
+   ],
+   "sources": [
+    "actions_evidence"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_1bc517e87b02",
+   "subject": "aff_029652b38435",
+   "predicate": "binds",
+   "object": "cap_5dff8107162c",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_10eaa3fde59851e92ca2",
+    "ev:actions_evidence:action_tr_216f4d91ac5f9f046bce",
+    "ev:actions_evidence:action_tr_30fe1b38bf20d9370ba2",
+    "ev:actions_evidence:action_tr_567b4828300e3b497476",
+    "ev:actions_evidence:action_tr_7ac426e7a9b52bc8867c",
+    "ev:actions_evidence:action_tr_9784d5650a75dba9901f",
+    "ev:actions_evidence:action_tr_a9a3ba300a1f0f455992",
+    "ev:actions_evidence:action_tr_dc6d2e6eeaf9e6d94bfd",
+    "ev:actions_evidence:action_tr_e4b1d2be2e16a15be76e",
+    "ev:actions_evidence:action_tr_e57b0a6ccd2a7634737b",
+    "ev:actions_evidence:action_tr_f4b6ea6bb5bf06977cff"
+   ],
+   "sources": [
+    "actions_evidence"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_262de8a6d35b",
+   "subject": "cap_119ab50cfbd5",
+   "predicate": "has_behavior_signature",
+   "object": "119ab50cfbd5",
+   "status": "observed",
+   "p": 0.25,
+   "support": 1,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_640f6882316bb64bebfc"
+   ],
+   "sources": [
+    "actions_evidence"
+   ],
+   "rule": null,
+   "reason": "untested: no independent replay"
+  },
+  {
+   "id": "cl_2c1897d92b0d",
+   "subject": "cap_b30b62c5f2aa",
+   "predicate": "has_behavior_signature",
+   "object": "b30b62c5f2aa",
+   "status": "observed",
+   "p": 0.033898,
+   "support": 8,
+   "against": 1,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_14f4d394828bac653539",
+    "ev:actions_evidence:action_tr_32d45b64b1e8cf87f559",
+    "ev:actions_evidence:action_tr_78b12b22141672bd0d97",
+    "ev:actions_evidence:action_tr_b2a971706f7ea131733c",
+    "ev:actions_evidence:action_tr_cbdd21128ff00f29c13d",
+    "ev:actions_evidence:action_tr_daf6c6add8297e0e0931",
+    "ev:actions_evidence:action_tr_e747b5cea5d0bea94283",
+    "ev:actions_evidence:action_tr_fb8248943bc21883fe8c",
+    "ev:replays:replay_cf33fb0ac52ffa5cac78"
+   ],
+   "sources": [
+    "actions_evidence",
+    "replays"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_2cd74c0bcc15",
+   "subject": "aff_bcfb81997609",
+   "predicate": "binds",
+   "object": "cap_7307cdaee046",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2",
+    "ev:actions_evidence:action_tr_b4651f315fb431ea98e5",
+    "ev:actions_evidence:action_tr_b4ff540ef722207681b2",
+    "ev:actions_evidence:action_tr_ff538b29540081abde68"
+   ],
+   "sources": [
+    "actions_evidence"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_49e014ec1478",
+   "subject": "ei_4749a4de2895",
+   "predicate": "instance_of",
+   "object": "E1",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_216f4d91ac5f9f046bce",
+    "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2",
+    "ev:actions_evidence:action_tr_7ac426e7a9b52bc8867c",
+    "ev:actions_evidence:action_tr_a9a3ba300a1f0f455992",
+    "ev:actions_evidence:action_tr_e57b0a6ccd2a7634737b",
+    "ev:observations:obs_0927dc153d97ece70610",
+    "ev:observations:obs_7cc0147e2c6a53a3d00a",
+    "ev:observations:obs_8d402f1729d510b17de6",
+    "ev:observations:obs_9b78dcbce913660b2eb9",
+    "ev:observations:obs_ca36728d5eb650781ed5",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "sources": [
+    "actions_evidence",
+    "observations",
+    "replay_observations"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_4ff55994a9b6",
+   "subject": "aff_4dd4774a400b",
+   "predicate": "binds",
+   "object": "cap_5774d8b1acc8",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_01c0dcfe51fdb24c891f"
+   ],
+   "sources": [
+    "actions_evidence"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_69d8e61238ae",
+   "subject": "aff_e6a6f10bb052",
+   "predicate": "binds",
+   "object": "cap_119ab50cfbd5",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_640f6882316bb64bebfc"
+   ],
+   "sources": [
+    "actions_evidence"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_73c7c029d374",
+   "subject": "aff_17446c9684e7",
+   "predicate": "execution",
+   "object": "blocked",
+   "status": "blocked",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "sources": [
+    "replay_observations"
+   ],
+   "rule": null,
+   "reason": "dangerous_label_or_target"
+  },
+  {
+   "id": "cl_78b61fd0f6b4",
+   "subject": "ei_08b135459f22",
+   "predicate": "instance_of",
+   "object": "E1",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_10eaa3fde59851e92ca2",
+    "ev:actions_evidence:action_tr_3c2503d388d2c157b92e",
+    "ev:actions_evidence:action_tr_567b4828300e3b497476",
+    "ev:actions_evidence:action_tr_69bc1183faaf42b4ca75",
+    "ev:actions_evidence:action_tr_9784d5650a75dba9901f",
+    "ev:actions_evidence:action_tr_b4ff540ef722207681b2",
+    "ev:observations:obs_3205092904720177b717",
+    "ev:observations:obs_3d29be050cd381e1f85d",
+    "ev:observations:obs_afbe3e80185fcae55d1c",
+    "ev:observations:obs_cd4af66a67dce5e1c82c",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "sources": [
+    "actions_evidence",
+    "observations",
+    "replay_observations"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_7f960deca181",
+   "subject": "tpl_8bbda007e168",
+   "predicate": "observed_template",
+   "object": "/",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:observations:obs_17322529bab251c0de46",
+    "ev:observations:obs_1d606cf2373a58e59503",
+    "ev:observations:obs_1dba432d8471f882659d",
+    "ev:observations:obs_25e174a6227947112cd1",
+    "ev:observations:obs_2a286ccbb0603abaeaed",
+    "ev:observations:obs_3698aa261d4e28a8f890",
+    "ev:observations:obs_42252f793ad3b063b884",
+    "ev:observations:obs_5fd4e7ef18e167613409",
+    "ev:observations:obs_6b58a00129ac741805d6",
+    "ev:observations:obs_74f2e875cad259d679c7",
+    "ev:observations:obs_7b5fcacbde5f9a7a9c27",
+    "ev:observations:obs_7c15d764b2ed08e8c8b9",
+    "ev:observations:obs_81451e5f281c261106fb",
+    "ev:observations:obs_89ddda89c501d038481b",
+    "ev:observations:obs_9defd9bd316fab65d294",
+    "ev:observations:obs_a1cd301144fdd0c3908b",
+    "ev:observations:obs_aee8c69428be5a898b37",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "sources": [
+    "observations",
+    "replay_observations"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_95404b46f1fd",
+   "subject": "ei_cc1a32bb7a47",
+   "predicate": "instance_of",
+   "object": "E1",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_30fe1b38bf20d9370ba2",
+    "ev:actions_evidence:action_tr_5855a67a664ad930c3c9",
+    "ev:actions_evidence:action_tr_b4651f315fb431ea98e5",
+    "ev:actions_evidence:action_tr_dc6d2e6eeaf9e6d94bfd",
+    "ev:actions_evidence:action_tr_e4b1d2be2e16a15be76e",
+    "ev:actions_evidence:action_tr_f71270066792435915f7",
+    "ev:observations:obs_8015936183e11d093949",
+    "ev:observations:obs_87a9136526df351328e4",
+    "ev:observations:obs_a7741cf9e3db7ae17620",
+    "ev:observations:obs_f60ac1fa6f63012fd894",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "sources": [
+    "actions_evidence",
+    "observations",
+    "replay_observations"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_ba969d527451",
+   "subject": "ei_23effa886240",
+   "predicate": "instance_of",
+   "object": "E1",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_640f6882316bb64bebfc",
+    "ev:actions_evidence:action_tr_f4b6ea6bb5bf06977cff",
+    "ev:actions_evidence:action_tr_ff538b29540081abde68",
+    "ev:observations:obs_689361cf1a2903d1c575",
+    "ev:observations:obs_b044aaafa1b478a4ced1",
+    "ev:observations:obs_d486367a9d2d2242ad58",
+    "ev:replay_observations:obs_0524de928398ca150b8c",
+    "ev:replay_observations:obs_76b0c7a0d8cc35e8794e",
+    "ev:replay_observations:obs_d3bd27bc4d0035fc6932"
+   ],
+   "sources": [
+    "actions_evidence",
+    "observations",
+    "replay_observations"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_c77f88d3b9aa",
+   "subject": "cap_7f6c90225cee",
+   "predicate": "has_behavior_signature",
+   "object": "7f6c90225cee",
+   "status": "observed",
+   "p": 0.25,
+   "support": 1,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_7562ce443f08e40761e8"
+   ],
+   "sources": [
+    "actions_evidence"
+   ],
+   "rule": null,
+   "reason": "untested: no independent replay"
+  },
+  {
+   "id": "cl_cd960d07e993",
+   "subject": "cap_5dff8107162c",
+   "predicate": "has_behavior_signature",
+   "object": "5dff8107162c",
+   "status": "observed",
+   "p": 0.00368,
+   "support": 11,
+   "against": 2,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_10eaa3fde59851e92ca2",
+    "ev:actions_evidence:action_tr_216f4d91ac5f9f046bce",
+    "ev:actions_evidence:action_tr_30fe1b38bf20d9370ba2",
+    "ev:actions_evidence:action_tr_567b4828300e3b497476",
+    "ev:actions_evidence:action_tr_7ac426e7a9b52bc8867c",
+    "ev:actions_evidence:action_tr_9784d5650a75dba9901f",
+    "ev:actions_evidence:action_tr_a9a3ba300a1f0f455992",
+    "ev:actions_evidence:action_tr_dc6d2e6eeaf9e6d94bfd",
+    "ev:actions_evidence:action_tr_e4b1d2be2e16a15be76e",
+    "ev:actions_evidence:action_tr_e57b0a6ccd2a7634737b",
+    "ev:actions_evidence:action_tr_f4b6ea6bb5bf06977cff",
+    "ev:replays:replay_855727633a11c4cabbb5",
+    "ev:replays:replay_baa26f8189ceb0f9d726"
+   ],
+   "sources": [
+    "actions_evidence",
+    "replays"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_e15aa0233ecc",
+   "subject": "cap_5774d8b1acc8",
+   "predicate": "has_behavior_signature",
+   "object": "5774d8b1acc8",
+   "status": "observed",
+   "p": 0.25,
+   "support": 1,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_01c0dcfe51fdb24c891f"
+   ],
+   "sources": [
+    "actions_evidence"
+   ],
+   "rule": null,
+   "reason": "untested: no independent replay"
+  },
+  {
+   "id": "cl_ebea9368065c",
+   "subject": "aff_db746f37df42",
+   "predicate": "binds",
+   "object": "cap_b30b62c5f2aa",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_14f4d394828bac653539",
+    "ev:actions_evidence:action_tr_32d45b64b1e8cf87f559",
+    "ev:actions_evidence:action_tr_78b12b22141672bd0d97",
+    "ev:actions_evidence:action_tr_b2a971706f7ea131733c",
+    "ev:actions_evidence:action_tr_cbdd21128ff00f29c13d",
+    "ev:actions_evidence:action_tr_daf6c6add8297e0e0931",
+    "ev:actions_evidence:action_tr_e747b5cea5d0bea94283",
+    "ev:actions_evidence:action_tr_fb8248943bc21883fe8c"
+   ],
+   "sources": [
+    "actions_evidence"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_ec99cfa8a2f8",
+   "subject": "cap_7307cdaee046",
+   "predicate": "has_behavior_signature",
+   "object": "7307cdaee046",
+   "status": "observed",
+   "p": 0.25,
+   "support": 4,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2",
+    "ev:actions_evidence:action_tr_b4651f315fb431ea98e5",
+    "ev:actions_evidence:action_tr_b4ff540ef722207681b2",
+    "ev:actions_evidence:action_tr_ff538b29540081abde68"
+   ],
+   "sources": [
+    "actions_evidence"
+   ],
+   "rule": null,
+   "reason": "untested: no independent replay"
+  },
+  {
+   "id": "cl_f1350d8a215e",
+   "subject": "tpl_88d6174e5d9e",
+   "predicate": "observed_template",
+   "object": "/records/{id}",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:observations:obs_0927dc153d97ece70610",
+    "ev:observations:obs_3205092904720177b717",
+    "ev:observations:obs_3d29be050cd381e1f85d",
+    "ev:observations:obs_689361cf1a2903d1c575",
+    "ev:observations:obs_7cc0147e2c6a53a3d00a",
+    "ev:observations:obs_8015936183e11d093949",
+    "ev:observations:obs_87a9136526df351328e4",
+    "ev:observations:obs_8d402f1729d510b17de6",
+    "ev:observations:obs_9b78dcbce913660b2eb9",
+    "ev:observations:obs_a7741cf9e3db7ae17620",
+    "ev:observations:obs_afbe3e80185fcae55d1c",
+    "ev:observations:obs_b044aaafa1b478a4ced1",
+    "ev:observations:obs_ca36728d5eb650781ed5",
+    "ev:observations:obs_cd4af66a67dce5e1c82c",
+    "ev:observations:obs_d486367a9d2d2242ad58",
+    "ev:observations:obs_f60ac1fa6f63012fd894"
+   ],
+   "sources": [
+    "observations"
+   ],
+   "rule": null,
+   "reason": null
+  },
+  {
+   "id": "cl_f5f699e6f297",
+   "subject": "E1",
+   "predicate": "positions_share_identifiers",
+   "object": "/api/records/{id}#2|/records/{id}#1",
+   "status": "observed",
+   "p": null,
+   "support": 0,
+   "against": 0,
+   "evidence_ids": [
+    "ev:actions_evidence:action_tr_4637bc760ed2d930b6f2",
+    "ev:actions_evidence:action_tr_b4651f315fb431ea98e5",
+    "ev:actions_evidence:action_tr_b4ff540ef722207681b2",
+    "ev:observations:obs_0927dc153d97ece70610",
+    "ev:observations:obs_3205092904720177b717",
+    "ev:observations:obs_8015936183e11d093949"
+   ],
+   "sources": [
+    "actions_evidence",
+    "observations"
+   ],
+   "rule": "id_flow_union/1",
+   "reason": null
+  }
+ ],
+ "gaps": [
+  {
+   "kind": "dom_affordances_not_captured",
+   "detail": "No per-observation affordances: new-instance, collection and component effects cannot be computed.",
+   "count": 1
+  },
+  {
+   "kind": "group_representative_urls",
+   "detail": "Observation URL known only as its legacy state group's representative.",
+   "count": 17
+  },
+  {
+   "kind": "instance_fields_not_captured",
+   "detail": "Per-field digests were not recorded; instance_modification cannot be grounded.",
+   "count": 1
+  },
+  {
+   "kind": "response_shapes_not_captured",
+   "detail": "Response shapes were not recorded; entity identity is limited to URL identifiers.",
+   "count": 1
+  },
+  {
+   "kind": "visual_regions_not_captured",
+   "detail": "Canvas/SVG region digests were not recorded.",
+   "count": 1
+  },
+  {
+   "kind": "websocket_not_captured",
+   "detail": "WebSocket frames were not recorded.",
+   "count": 1
+  }
+ ],
+ "summary": {
+  "page_templates": 2,
+  "view_states": 3,
+  "entity_types": 1,
+  "entity_instances": 4,
+  "capabilities": 6,
+  "unidentified_operations": 6,
+  "classified_capabilities": 0,
+  "equivalent_interface_groupings": 0,
+  "capabilities_by_status": {
+   "observed": 6
+  },
+  "affordances_by_status": {
+   "blocked": 1,
+   "bound": 6,
+   "unbound": 1
+  },
+  "learned_predicates": 0,
+  "underdetermined_behaviors": 0,
+  "executed_actions": 26,
+  "actions_without_capability": 0,
+  "reproduction_prior": 0.25
+ }
+}

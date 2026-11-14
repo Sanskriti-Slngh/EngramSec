@@ -1,0 +1,562 @@
+{
+ "purpose": "behaviour preservation of acg_evidence+action_ledger under the frozen comprehensive configuration (policy=coverage, CLI defaults)",
+ "revision": "a9802e32023f317f2b24fe2d89b14d27823ab541",
+ "design": "per fixture: off, on, off, on (interleaved); off-vs-off and on-vs-on = natural variation",
+ "fixtures": {
+  "stateful_lab": {
+   "runs": [
+    {
+     "instrumented": false,
+     "rep": 0,
+     "browser_actions": 16,
+     "n_transitions": 12,
+     "n_replays": 0,
+     "wall_seconds": 7.7
+    },
+    {
+     "instrumented": true,
+     "rep": 0,
+     "browser_actions": 16,
+     "n_transitions": 12,
+     "n_replays": 0,
+     "wall_seconds": 6.7
+    },
+    {
+     "instrumented": false,
+     "rep": 1,
+     "browser_actions": 16,
+     "n_transitions": 12,
+     "n_replays": 0,
+     "wall_seconds": 7.2
+    },
+    {
+     "instrumented": true,
+     "rep": 1,
+     "browser_actions": 16,
+     "n_transitions": 12,
+     "n_replays": 0,
+     "wall_seconds": 6.9
+    }
+   ],
+   "behaviour_differences": {
+    "off0_vs_off1 (natural variation)": {},
+    "on0_vs_on1 (natural variation)": {},
+    "off0_vs_on0": {},
+    "off1_vs_on1": {}
+   },
+   "canonical_graph_transitions_replays_identical": {
+    "off0_vs_off1": [
+     true,
+     true,
+     true
+    ],
+    "on0_vs_on1": [
+     true,
+     true,
+     true
+    ],
+    "off0_vs_on0": [
+     true,
+     true,
+     true
+    ],
+    "off1_vs_on1": [
+     true,
+     true,
+     true
+    ]
+   }
+  },
+  "js_heavy_lab": {
+   "runs": [
+    {
+     "instrumented": false,
+     "rep": 0,
+     "browser_actions": 31,
+     "n_transitions": 9,
+     "n_replays": 3,
+     "wall_seconds": 15.0
+    },
+    {
+     "instrumented": true,
+     "rep": 0,
+     "browser_actions": 31,
+     "n_transitions": 9,
+     "n_replays": 3,
+     "wall_seconds": 14.9
+    },
+    {
+     "instrumented": false,
+     "rep": 1,
+     "browser_actions": 31,
+     "n_transitions": 9,
+     "n_replays": 3,
+     "wall_seconds": 14.5
+    },
+    {
+     "instrumented": true,
+     "rep": 1,
+     "browser_actions": 31,
+     "n_transitions": 9,
+     "n_replays": 3,
+     "wall_seconds": 14.7
+    }
+   ],
+   "behaviour_differences": {
+    "off0_vs_off1 (natural variation)": {},
+    "on0_vs_on1 (natural variation)": {},
+    "off0_vs_on0": {},
+    "off1_vs_on1": {}
+   },
+   "canonical_graph_transitions_replays_identical": {
+    "off0_vs_off1": [
+     true,
+     true,
+     true
+    ],
+    "on0_vs_on1": [
+     true,
+     true,
+     true
+    ],
+    "off0_vs_on0": [
+     true,
+     true,
+     true
+    ],
+    "off1_vs_on1": [
+     true,
+     true,
+     true
+    ]
+   }
+  },
+  "replay_lab": {
+   "runs": [
+    {
+     "instrumented": false,
+     "rep": 0,
+     "browser_actions": 172,
+     "n_transitions": 43,
+     "n_replays": 24,
+     "wall_seconds": 82.9
+    },
+    {
+     "instrumented": true,
+     "rep": 0,
+     "browser_actions": 172,
+     "n_transitions": 43,
+     "n_replays": 24,
+     "wall_seconds": 84.3
+    },
+    {
+     "instrumented": false,
+     "rep": 1,
+     "browser_actions": 172,
+     "n_transitions": 43,
+     "n_replays": 24,
+     "wall_seconds": 90.6
+    },
+    {
+     "instrumented": true,
+     "rep": 1,
+     "browser_actions": 172,
+     "n_transitions": 43,
+     "n_replays": 24,
+     "wall_seconds": 81.8
+    }
+   ],
+   "behaviour_differences": {
+    "off0_vs_off1 (natural variation)": {
+     "http_server": {
+      "first_divergence_index": 110,
+      "len": [
+       162,
+       162
+      ],
+      "multiset_equal": true
+     }
+    },
+    "on0_vs_on1 (natural variation)": {
+     "http_server": {
+      "first_divergence_index": 110,
+      "len": [
+       162,
+       162
+      ],
+      "multiset_equal": true
+     }
+    },
+    "off0_vs_on0": {
+     "http_server": {
+      "first_divergence_index": 110,
+      "len": [
+       162,
+       162
+      ],
+      "multiset_equal": true
+     }
+    },
+    "off1_vs_on1": {
+     "http_server": {
+      "first_divergence_index": 110,
+      "len": [
+       162,
+       162
+      ],
+      "multiset_equal": true
+     }
+    }
+   },
+   "canonical_graph_transitions_replays_identical": {
+    "off0_vs_off1": [
+     true,
+     true,
+     true
+    ],
+    "on0_vs_on1": [
+     true,
+     true,
+     true
+    ],
+    "off0_vs_on0": [
+     true,
+     true,
+     true
+    ],
+    "off1_vs_on1": [
+     true,
+     true,
+     true
+    ]
+   }
+  },
+  "phase2_lab": {
+   "runs": [
+    {
+     "instrumented": false,
+     "rep": 0,
+     "browser_actions": 380,
+     "n_transitions": 67,
+     "n_replays": 30,
+     "wall_seconds": 180.8
+    },
+    {
+     "instrumented": true,
+     "rep": 0,
+     "browser_actions": 379,
+     "n_transitions": 66,
+     "n_replays": 31,
+     "wall_seconds": 180.4
+    },
+    {
+     "instrumented": false,
+     "rep": 1,
+     "browser_actions": 395,
+     "n_transitions": 68,
+     "n_replays": 31,
+     "wall_seconds": 181.8
+    },
+    {
+     "instrumented": true,
+     "rep": 1,
+     "browser_actions": 394,
+     "n_transitions": 68,
+     "n_replays": 31,
+     "wall_seconds": 182.2
+    }
+   ],
+   "behaviour_differences": {
+    "off0_vs_off1 (natural variation)": {
+     "browser_actions": [
+      380,
+      395
+     ],
+     "n_transitions": [
+      67,
+      68
+     ],
+     "n_replays": [
+      30,
+      31
+     ],
+     "actions": {
+      "first_divergence_index": 67,
+      "len": [
+       67,
+       68
+      ]
+     },
+     "decisions": {
+      "first_divergence_index": 51,
+      "len": [
+       67,
+       68
+      ]
+     },
+     "http_server": {
+      "first_divergence_index": 207,
+      "len": [
+       293,
+       299
+      ],
+      "multiset_equal": false
+     }
+    },
+    "on0_vs_on1 (natural variation)": {
+     "browser_actions": [
+      379,
+      394
+     ],
+     "n_transitions": [
+      66,
+      68
+     ],
+     "actions": {
+      "first_divergence_index": 66,
+      "len": [
+       66,
+       68
+      ]
+     },
+     "decisions": {
+      "first_divergence_index": 1,
+      "len": [
+       66,
+       68
+      ]
+     },
+     "http_artifact": {
+      "first_divergence_index": 45,
+      "len": [
+       45,
+       46
+      ]
+     },
+     "http_server": {
+      "first_divergence_index": 203,
+      "len": [
+       292,
+       298
+      ],
+      "multiset_equal": false
+     }
+    },
+    "off0_vs_on0": {
+     "browser_actions": [
+      380,
+      379
+     ],
+     "n_transitions": [
+      67,
+      66
+     ],
+     "n_replays": [
+      30,
+      31
+     ],
+     "actions": {
+      "first_divergence_index": 66,
+      "len": [
+       67,
+       66
+      ]
+     },
+     "decisions": {
+      "first_divergence_index": 32,
+      "len": [
+       67,
+       66
+      ]
+     },
+     "http_artifact": {
+      "first_divergence_index": 45,
+      "len": [
+       46,
+       45
+      ]
+     },
+     "http_server": {
+      "first_divergence_index": 203,
+      "len": [
+       293,
+       292
+      ],
+      "multiset_equal": false
+     }
+    },
+    "off1_vs_on1": {
+     "browser_actions": [
+      395,
+      394
+     ],
+     "decisions": {
+      "first_divergence_index": 1,
+      "len": [
+       68,
+       68
+      ]
+     },
+     "http_server": {
+      "first_divergence_index": 210,
+      "len": [
+       299,
+       298
+      ],
+      "multiset_equal": false
+     }
+    }
+   },
+   "canonical_graph_transitions_replays_identical": {
+    "off0_vs_off1": [
+     false,
+     false,
+     false
+    ],
+    "on0_vs_on1": [
+     false,
+     false,
+     false
+    ],
+    "off0_vs_on0": [
+     false,
+     false,
+     false
+    ],
+    "off1_vs_on1": [
+     false,
+     false,
+     false
+    ]
+   }
+  },
+  "coverage_lab": {
+   "runs": [
+    {
+     "instrumented": false,
+     "rep": 0,
+     "browser_actions": 373,
+     "n_transitions": 74,
+     "n_replays": 34,
+     "wall_seconds": 182.3
+    },
+    {
+     "instrumented": true,
+     "rep": 0,
+     "browser_actions": 373,
+     "n_transitions": 74,
+     "n_replays": 34,
+     "wall_seconds": 182.6
+    },
+    {
+     "instrumented": false,
+     "rep": 1,
+     "browser_actions": 373,
+     "n_transitions": 74,
+     "n_replays": 34,
+     "wall_seconds": 182.2
+    },
+    {
+     "instrumented": true,
+     "rep": 1,
+     "browser_actions": 376,
+     "n_transitions": 75,
+     "n_replays": 34,
+     "wall_seconds": 182.6
+    }
+   ],
+   "behaviour_differences": {
+    "off0_vs_off1 (natural variation)": {
+     "decisions": {
+      "first_divergence_index": 26,
+      "len": [
+       74,
+       74
+      ]
+     }
+    },
+    "on0_vs_on1 (natural variation)": {
+     "browser_actions": [
+      373,
+      376
+     ],
+     "n_transitions": [
+      74,
+      75
+     ],
+     "actions": {
+      "first_divergence_index": 74,
+      "len": [
+       74,
+       75
+      ]
+     },
+     "decisions": {
+      "first_divergence_index": 1,
+      "len": [
+       74,
+       75
+      ]
+     }
+    },
+    "off0_vs_on0": {
+     "decisions": {
+      "first_divergence_index": 18,
+      "len": [
+       74,
+       74
+      ]
+     }
+    },
+    "off1_vs_on1": {
+     "browser_actions": [
+      373,
+      376
+     ],
+     "n_transitions": [
+      74,
+      75
+     ],
+     "actions": {
+      "first_divergence_index": 74,
+      "len": [
+       74,
+       75
+      ]
+     },
+     "decisions": {
+      "first_divergence_index": 1,
+      "len": [
+       74,
+       75
+      ]
+     }
+    }
+   },
+   "canonical_graph_transitions_replays_identical": {
+    "off0_vs_off1": [
+     false,
+     false,
+     false
+    ],
+    "on0_vs_on1": [
+     false,
+     false,
+     false
+    ],
+    "off0_vs_on0": [
+     false,
+     false,
+     false
+    ],
+    "off1_vs_on1": [
+     false,
+     false,
+     false
+    ]
+   }
+  }
+ },
+ "conclusion": "No capture-attributable behaviour change. Frontier-exhausted fixtures (stateful_lab, js_heavy_lab, replay_lab): executed actions, decisions, recorded HTTP, transitions, replays and canonical Graph A identical off vs on (server-side request order of replay_lab differs at one index in every pair incl. off-vs-off, same multiset). Time-bounded fixtures (phase2_lab, coverage_lab hit the 180 s ceiling): executed-action sequences identical as prefixes; only the number of actions that fit before the deadline and which transitions the time-bounded replay phase validated differ, by less than off-vs-off (phase2 |d actions| on-vs-off 1 vs off-vs-off 15; coverage 0-3 vs on-vs-on 3). Design difference, not observed here: with capture on, out-of-scope WebSockets are refused (counted in ws_out_of_scope_refused) instead of connected.",
+ "canonicalization_note": "Graph/transition comparison drops port-hashed identifiers (control ids, raw state signatures, record ids) and normalizes 127.0.0.1/localhost ports; refined after the first off-vs-off pair showed such identifiers differ between any two runs."
+}

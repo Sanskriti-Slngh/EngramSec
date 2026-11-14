@@ -1,0 +1,335 @@
+{
+ "stateful_lab": {
+  "config": {
+   "policy": "multidimensional",
+   "exploration_mode": "persistent",
+   "max_seconds": 35,
+   "max_transitions": 30,
+   "max_browser_actions": 100,
+   "replay_policy": "structure"
+  },
+  "legacy_off": {
+   "seconds": 7.4,
+   "browser_actions": 45,
+   "transitions": 30,
+   "replays": 3,
+   "legacy_m1a_recall": {
+    "value": 0.8571428571428571,
+    "matched": 6,
+    "denominator": 7
+   }
+  },
+  "legacy_with_shadow": {
+   "seconds": 7.6,
+   "browser_actions": 45,
+   "transitions": 30,
+   "replays": 3,
+   "legacy_m1a_recall": {
+    "value": 0.8571428571428571,
+    "matched": 6,
+    "denominator": 7
+   }
+  },
+  "exploration_identical": true,
+  "shadow": {
+   "decisions": 31,
+   "scheduler_errors": 0,
+   "feasibility": {
+    "executable_now": 10,
+    "executable_with_restoration": 18,
+    "live_state_not_recorded": 3
+   },
+   "proposal_kinds": {
+    "bind_affordance": 12,
+    "reproduce": 15,
+    "split_test": 1
+   },
+   "agreement_same_control": 3,
+   "compared": 27,
+   "prerequisite_progress_proposals": 0,
+   "context_preserving_proposals": 13,
+   "mean_proposed_plan_actions": 2.18,
+   "mean_proposed_restoration_actions": 1.18,
+   "risk_tiers": {
+    "0": 28
+   },
+   "counters": {
+    "context_preservation_opportunity": 1,
+    "live_state_not_recorded": 3
+   },
+   "global_navigation_suppressed": 0,
+   "acg": {
+    "page_templates": 2,
+    "view_states": 4,
+    "entity_types": 1,
+    "entity_instances": 4,
+    "capabilities": 6,
+    "unidentified_operations": 6,
+    "classified_capabilities": 0,
+    "equivalent_interface_groupings": 0,
+    "capabilities_by_status": {
+     "observed": 6
+    },
+    "affordances_by_status": {
+     "blocked": 1,
+     "bound": 6,
+     "unbound": 2
+    },
+    "learned_predicates": 0,
+    "underdetermined_behaviors": 0,
+    "executed_actions": 26,
+    "actions_without_capability": 0,
+    "reproduction_prior": 0.25
+   },
+   "capture_gaps": [
+    "instance_fields_not_captured",
+    "visual_regions_not_captured"
+   ],
+   "acg_update_ms": {
+    "mean": 2.86,
+    "max": 4.91
+   },
+   "decide_ms": {
+    "mean": 4.11,
+    "max": 7.0
+   },
+   "sink": {
+    "counters": {
+     "http_events": 45,
+     "body_complete": 1,
+     "body_unavailable": 5
+    },
+    "disabled_observations": 39,
+    "disabled_controls": 0,
+    "ws_frames": 0
+   }
+  }
+ },
+ "js_heavy_lab": {
+  "config": {
+   "exploration_mode": "persistent",
+   "max_browser_actions": 140,
+   "max_form_retries": 1,
+   "max_seconds": 60.0,
+   "max_transitions": 30,
+   "paid_budget_usd": 20.0,
+   "policy": "coverage"
+  },
+  "legacy_off": {
+   "seconds": 40.1,
+   "browser_actions": 62,
+   "transitions": 30,
+   "replays": 10,
+   "legacy_m1a_recall": {
+    "value": 0.8571428571428571,
+    "matched": 12,
+    "denominator": 14
+   }
+  },
+  "legacy_with_shadow": {
+   "seconds": 40.2,
+   "browser_actions": 62,
+   "transitions": 30,
+   "replays": 10,
+   "legacy_m1a_recall": {
+    "value": 0.8571428571428571,
+    "matched": 12,
+    "denominator": 14
+   }
+  },
+  "exploration_identical": true,
+  "shadow": {
+   "decisions": 30,
+   "scheduler_errors": 0,
+   "feasibility": {
+    "executable_now": 25,
+    "executable_with_restoration": 5
+   },
+   "proposal_kinds": {
+    "bind_affordance": 28,
+    "reproduce": 1,
+    "test_equivalence": 1
+   },
+   "agreement_same_control": 12,
+   "compared": 30,
+   "prerequisite_progress_proposals": 0,
+   "context_preserving_proposals": 28,
+   "mean_proposed_plan_actions": 1.23,
+   "mean_proposed_restoration_actions": 0.23,
+   "risk_tiers": {
+    "0": 25,
+    "1": 5
+   },
+   "counters": {
+    "context_preservation_opportunity": 1
+   },
+   "global_navigation_suppressed": 9,
+   "acg": {
+    "page_templates": 11,
+    "view_states": 15,
+    "entity_types": 0,
+    "entity_instances": 0,
+    "capabilities": 16,
+    "unidentified_operations": 9,
+    "classified_capabilities": 7,
+    "equivalent_interface_groupings": 4,
+    "capabilities_by_status": {
+     "observed": 7,
+     "reproduced": 9
+    },
+    "affordances_by_status": {
+     "blocked": 4,
+     "bound": 26,
+     "executed_no_effect": 2,
+     "unbound": 20
+    },
+    "learned_predicates": 0,
+    "underdetermined_behaviors": 0,
+    "executed_actions": 30,
+    "actions_without_capability": 4,
+    "reproduction_prior": 0.909091
+   },
+   "capture_gaps": [
+    "instance_fields_not_captured",
+    "visual_regions_not_captured"
+   ],
+   "acg_update_ms": {
+    "mean": 2.75,
+    "max": 13.46
+   },
+   "decide_ms": {
+    "mean": 3.63,
+    "max": 10.19
+   },
+   "sink": {
+    "counters": {
+     "http_events": 70,
+     "body_complete": 27
+    },
+    "disabled_observations": 61,
+    "disabled_controls": 0,
+    "ws_frames": 0
+   }
+  }
+ },
+ "replay_lab": {
+  "config": {
+   "budget_allocation_strategy": "fixed",
+   "budget_aware_deepening": false,
+   "exploration_mode": "persistent",
+   "max_browser_actions": 90,
+   "max_form_retries": 1,
+   "max_listener_candidates": 12,
+   "max_listener_nodes": 300,
+   "max_passive_document_fetches": null,
+   "max_resource_asset_fetches": null,
+   "max_resource_body_bytes": 1000000,
+   "max_resource_depth": 3,
+   "max_resource_document_fetches": null,
+   "max_resource_fetches": 100,
+   "max_resource_fetches_per_observation": 10,
+   "max_resource_script_fetches": null,
+   "max_resource_stylesheet_fetches": null,
+   "max_seconds": 90.0,
+   "max_speculative_fetches": 0,
+   "max_total_http_requests": 1000,
+   "max_transitions": 80,
+   "paid_budget_usd": 20.0,
+   "policy": "multidimensional",
+   "replay_policy": "structure"
+  },
+  "legacy_off": {
+   "seconds": 24.2,
+   "browser_actions": 89,
+   "transitions": 34,
+   "replays": 16,
+   "legacy_m1a_recall": {
+    "value": 0.96,
+    "matched": 24,
+    "denominator": 25
+   }
+  },
+  "legacy_with_shadow": {
+   "seconds": 24.9,
+   "browser_actions": 89,
+   "transitions": 34,
+   "replays": 16,
+   "legacy_m1a_recall": {
+    "value": 0.96,
+    "matched": 24,
+    "denominator": 25
+   }
+  },
+  "exploration_identical": true,
+  "shadow": {
+   "decisions": 34,
+   "scheduler_errors": 0,
+   "feasibility": {
+    "executable_now": 33,
+    "executable_with_restoration": 1
+   },
+   "proposal_kinds": {
+    "bind_affordance": 33,
+    "reproduce": 1
+   },
+   "agreement_same_control": 9,
+   "compared": 34,
+   "prerequisite_progress_proposals": 0,
+   "context_preserving_proposals": 33,
+   "mean_proposed_plan_actions": 1.06,
+   "mean_proposed_restoration_actions": 0.06,
+   "risk_tiers": {
+    "0": 34
+   },
+   "counters": {
+    "context_preservation_opportunity": 13
+   },
+   "global_navigation_suppressed": 0,
+   "acg": {
+    "page_templates": 16,
+    "view_states": 21,
+    "entity_types": 5,
+    "entity_instances": 7,
+    "capabilities": 30,
+    "unidentified_operations": 22,
+    "classified_capabilities": 8,
+    "equivalent_interface_groupings": 1,
+    "capabilities_by_status": {
+     "observed": 17,
+     "reproduced": 13
+    },
+    "affordances_by_status": {
+     "blocked": 1,
+     "bound": 29,
+     "unbound": 15
+    },
+    "learned_predicates": 1,
+    "underdetermined_behaviors": 0,
+    "executed_actions": 34,
+    "actions_without_capability": 3,
+    "reproduction_prior": 0.777778
+   },
+   "capture_gaps": [
+    "instance_fields_not_captured",
+    "visual_regions_not_captured"
+   ],
+   "acg_update_ms": {
+    "mean": 4.65,
+    "max": 17.08
+   },
+   "decide_ms": {
+    "mean": 6.45,
+    "max": 19.99
+   },
+   "sink": {
+    "counters": {
+     "http_events": 82,
+     "body_complete": 17
+    },
+    "disabled_observations": 89,
+    "disabled_controls": 0,
+    "ws_frames": 0
+   }
+  }
+ }
+}

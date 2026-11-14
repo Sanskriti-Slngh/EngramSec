@@ -1,0 +1,130 @@
+{
+ "R1_flat": {
+  "auc_tour": 0.4893,
+  "auc_bfs": 0.3571,
+  "ratio": 1.3702,
+  "pass": true
+ },
+ "R2_prerequisites": {
+  "by_budget": {
+   "100": {
+    "fraction": 1.0,
+    "mean_tour": 0.7267,
+    "mean_legacy": 0.3622,
+    "pass": true
+   },
+   "200": {
+    "fraction": 1.0,
+    "mean_tour": 1.0,
+    "mean_legacy": 0.3733,
+    "pass": true
+   },
+   "400": {
+    "fraction": 1.0,
+    "mean_tour": 1.0,
+    "mean_legacy": 0.4067,
+    "pass": true
+   }
+  },
+  "pass": true
+ },
+ "R3_instances": {
+  "max": 3,
+  "seeds_within": 50,
+  "seeds": 50,
+  "pass": true
+ },
+ "R4_mixed": {
+  "auc_vs_legacy": {
+   "mean_a": 0.7454,
+   "mean_b": 0.6213,
+   "mean_difference": 0.1242,
+   "wins": 30,
+   "losses": 15,
+   "ties": 5,
+   "p": 0.017848901777597348,
+   "pass": true
+  },
+  "recall_tour": 0.8764,
+  "recall_acg_uniform": 0.7561,
+  "recall_legacy": 0.7085,
+  "pass": true
+ },
+ "R5_determinism": {
+  "identical": 50,
+  "seeds": 50,
+  "pass": true
+ },
+ "R6_safety": {
+  "gate_refusals": 0,
+  "write_reexecutions_below_L3": 0,
+  "runs": 1680,
+  "pass": true
+ },
+ "R7_diagnostics": {
+  "by_app": {
+   "diag:search": {
+    "verified_seeds": 9,
+    "seeds": 10,
+    "pass": true
+   },
+   "diag:snapshot": {
+    "verified_seeds": 10,
+    "seeds": 10,
+    "pass": true
+   },
+   "diag:snapshot_drift": {
+    "verified_write_seeds": 0,
+    "write_reexecutions": 0,
+    "seeds_with_blocked_verification": 10,
+    "seeds": 10,
+    "pass": true
+   },
+   "diag:snapshot_absent": {
+    "verified_write_seeds": 0,
+    "write_reexecutions": 0,
+    "seeds_with_blocked_verification": 10,
+    "seeds": 10,
+    "pass": true
+   }
+  },
+  "pass": true
+ },
+ "H_local": {
+  "mean_a": 0.9089,
+  "mean_b": 0.6667,
+  "mean_difference": 0.2422,
+  "wins": 50,
+  "losses": 0,
+  "ties": 0,
+  "p": 8.881784197001252e-16,
+  "pass": true
+ },
+ "H_global": {
+  "by_scenario": {
+   "flat": {
+    "mean_a": 0.4893,
+    "mean_b": 0.4893,
+    "mean_difference": 0.0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 50,
+    "p": 1.0,
+    "pass": false
+   },
+   "mixed": {
+    "mean_a": 0.7454,
+    "mean_b": 0.7583,
+    "mean_difference": -0.0129,
+    "wins": 15,
+    "losses": 14,
+    "ties": 21,
+    "p": 0.5,
+    "pass": false
+   }
+  },
+  "pass": false
+ },
+ "success": true,
+ "retained_if_failed": "tour_no_global"
+}

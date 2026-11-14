@@ -1,0 +1,70 @@
+[
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "completion",
+    "prerequisite": true,
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "completion",
+    "prerequisite": true,
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "completion",
+    "prerequisite": true,
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  },
+  {
+    "kind": "completion",
+    "prerequisite": true,
+    "success": true
+  },
+  {
+    "kind": "setup",
+    "success": true
+  }
+]

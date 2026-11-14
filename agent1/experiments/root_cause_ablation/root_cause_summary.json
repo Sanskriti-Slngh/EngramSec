@@ -1,0 +1,796 @@
+{
+  "deltas_vs_A": {},
+  "note": "Offline evaluator; strict-2xx raw score is the historical definition.",
+  "rows": {
+    "D0_r1": {
+      "browser_actions": 297,
+      "browser_body_status": {
+        "complete": 291,
+        "empty": 2
+      },
+      "by_category": {
+        "css": "1/1",
+        "headers": "3/4",
+        "html": "26/57",
+        "javascript": "6/27",
+        "misc": "0/2"
+      },
+      "discovery_root_reloads": 48,
+      "distinct_ui_states": 88,
+      "effective_resource_budgets": {
+        "asset_class_cap": 20,
+        "browser_actions": 300,
+        "budget_aware_deepening": 0,
+        "document_class_cap": null,
+        "document_class_cap_configured": 70,
+        "hard_max_resource_depth": null,
+        "html_extraction": "extended",
+        "max_resource_depth": 3,
+        "passive_channels_http_share": 500,
+        "passive_document_cap": null,
+        "passive_document_max_depth": null,
+        "passive_http_reserve": 500,
+        "resource_allocation": "shared_http",
+        "resource_frontier_model": "legacy",
+        "response_body_reader": "content_length",
+        "script_class_cap": 20,
+        "seconds": 180.0,
+        "speculative_fetch_cap": 25,
+        "stylesheet_class_cap": 10,
+        "total_http_requests": 1000,
+        "typed_resource_total": 100
+      },
+      "elapsed_seconds": 163.35,
+      "evidence_audit": {
+        "observed_only_records_with_spider_attempt": 0,
+        "passive_only_documents_as_ui_transitions": 0,
+        "replay_validated_transitions": 24,
+        "spider_attempts_without_channel_label": 0,
+        "spider_get_for_observed_only_non_get_surface": 0,
+        "surfaces_marked_replay_verified": 41
+      },
+      "frontier": {
+        "admitted_never_attempted": 18,
+        "budget_limited": 0,
+        "class_budget_limited": 10,
+        "decisions": {
+          "admitted": 428,
+          "class_budget_limited": 10,
+          "duplicate_candidate": 285,
+          "observed_only_api": 27,
+          "observed_only_form_action": 6,
+          "observed_only_ping": 2,
+          "observed_only_security_report": 1,
+          "readmitted_shallower": 47,
+          "rejected_dangerous": 6,
+          "rejected_scope": 14,
+          "speculative_admitted": 6
+        },
+        "depth_limited": 0,
+        "fetched_or_failed": 208
+      },
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1743,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 313,
+        "browser_redirect": 95,
+        "passive_document": 175,
+        "resource_spider": 27,
+        "speculative_candidate": 6
+      },
+      "http_overrun": 0,
+      "http_total": 616,
+      "incorrect_state_merges": 0,
+      "observed_only_decisions": {
+        "observed_only_api": 27,
+        "observed_only_form_action": 6,
+        "observed_only_ping": 2,
+        "observed_only_security_report": 1
+      },
+      "observed_or_sent_91": 59,
+      "parent_funnel_supported_containers": {
+        "admitted_to_spider": 73,
+        "browser_visited": 35,
+        "containers": 80,
+        "discovered": 76,
+        "fetched_or_loaded_2xx": 57,
+        "reached_any_way": 57
+      },
+      "raw_2xx_91": 36,
+      "references_per_parsed_response": 1.93,
+      "replay_browser_actions": 73,
+      "replays_attempted": 24,
+      "replays_validated": 24,
+      "request_surface_any_status_91": 42,
+      "request_surface_summary": {
+        "observed_not_sent": 43,
+        "sent_no_response": 0,
+        "sent_non_2xx": 74,
+        "successful_resource": 147,
+        "total": 264
+      },
+      "resource_status_counts": {
+        "class_budget_limited": 10,
+        "discovered": 600,
+        "failed": 5,
+        "fetched": 203,
+        "out_of_scope": 14
+      },
+      "restoration_actions": 74,
+      "safe_controls_distinct": 112,
+      "safe_controls_executed": 88,
+      "safe_controls_unexecuted": 24,
+      "spider_body_status": {
+        "complete": 207,
+        "empty": 1
+      },
+      "successful_spider_paths": 140,
+      "supported_2xx_84": 36,
+      "transitions_observed": 102,
+      "untested_transitions": 78,
+      "verification_root_reloads": 24
+    },
+    "E2_r1": {
+      "browser_actions": 297,
+      "browser_body_status": {
+        "complete": 289,
+        "empty": 2
+      },
+      "by_category": {
+        "css": "1/1",
+        "headers": "4/4",
+        "html": "47/57",
+        "javascript": "6/27",
+        "misc": "0/2"
+      },
+      "discovery_root_reloads": 49,
+      "distinct_ui_states": 89,
+      "effective_resource_budgets": {
+        "asset_class_cap": 20,
+        "browser_actions": 300,
+        "budget_aware_deepening": 1,
+        "document_class_cap": null,
+        "document_class_cap_configured": 70,
+        "hard_max_resource_depth": 8,
+        "html_extraction": "standards",
+        "max_resource_depth": 3,
+        "passive_channels_http_share": 500,
+        "passive_document_cap": null,
+        "passive_document_max_depth": 6,
+        "passive_http_reserve": 500,
+        "resource_allocation": "shared_http",
+        "resource_frontier_model": "persistent",
+        "response_body_reader": "bounded_stream",
+        "script_class_cap": 20,
+        "seconds": 180.0,
+        "speculative_fetch_cap": 25,
+        "stylesheet_class_cap": 10,
+        "total_http_requests": 1000,
+        "typed_resource_total": 100
+      },
+      "elapsed_seconds": 163.049,
+      "evidence_audit": {
+        "observed_only_records_with_spider_attempt": 0,
+        "passive_only_documents_as_ui_transitions": 0,
+        "replay_validated_transitions": 23,
+        "spider_attempts_without_channel_label": 0,
+        "spider_get_for_observed_only_non_get_surface": 0,
+        "surfaces_marked_replay_verified": 37
+      },
+      "frontier": {
+        "admitted_never_attempted": 0,
+        "budget_limited": 0,
+        "class_budget_limited": 18,
+        "decisions": {
+          "admitted": 536,
+          "budget_deepened": 9,
+          "budget_reclaimed": 18,
+          "class_budget_limited": 18,
+          "duplicate_candidate": 246,
+          "observed_only_api": 27,
+          "observed_only_form_action": 6,
+          "observed_only_ping": 3,
+          "observed_only_security_report": 1,
+          "readmitted_shallower": 2,
+          "rejected_dangerous": 6,
+          "rejected_scope": 15,
+          "relaxed_shallower": 133,
+          "speculative_admitted": 10
+        },
+        "depth_limited": 0,
+        "fetched_or_failed": 273
+      },
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1950,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 311,
+        "browser_redirect": 94,
+        "passive_document": 218,
+        "resource_spider": 45,
+        "speculative_candidate": 10
+      },
+      "http_overrun": 0,
+      "http_total": 678,
+      "incorrect_state_merges": 0,
+      "observed_only_decisions": {
+        "observed_only_api": 27,
+        "observed_only_form_action": 6,
+        "observed_only_ping": 3,
+        "observed_only_security_report": 1
+      },
+      "observed_or_sent_91": 75,
+      "parent_funnel_supported_containers": {
+        "admitted_to_spider": 75,
+        "browser_visited": 35,
+        "containers": 80,
+        "discovered": 78,
+        "fetched_or_loaded_2xx": 74,
+        "reached_any_way": 74
+      },
+      "raw_2xx_91": 58,
+      "references_per_parsed_response": 1.77,
+      "replay_browser_actions": 69,
+      "replays_attempted": 23,
+      "replays_validated": 23,
+      "request_surface_any_status_91": 64,
+      "request_surface_summary": {
+        "observed_not_sent": 22,
+        "sent_no_response": 0,
+        "sent_non_2xx": 96,
+        "successful_resource": 187,
+        "total": 305
+      },
+      "resource_status_counts": {
+        "class_budget_limited": 18,
+        "discovered": 724,
+        "failed": 11,
+        "fetched": 262,
+        "out_of_scope": 15
+      },
+      "restoration_actions": 76,
+      "safe_controls_distinct": 113,
+      "safe_controls_executed": 89,
+      "safe_controls_unexecuted": 24,
+      "spider_body_status": {
+        "complete": 272,
+        "empty": 1
+      },
+      "successful_spider_paths": 183,
+      "supported_2xx_84": 58,
+      "transitions_observed": 103,
+      "untested_transitions": 80,
+      "verification_root_reloads": 23
+    },
+    "E_r1": {
+      "browser_actions": 298,
+      "browser_body_status": {
+        "complete": 290,
+        "empty": 2
+      },
+      "by_category": {
+        "css": "1/1",
+        "headers": "4/4",
+        "html": "44/57",
+        "javascript": "4/27",
+        "misc": "0/2"
+      },
+      "discovery_root_reloads": 49,
+      "distinct_ui_states": 90,
+      "effective_resource_budgets": {
+        "asset_class_cap": 20,
+        "browser_actions": 300,
+        "budget_aware_deepening": 1,
+        "document_class_cap": null,
+        "document_class_cap_configured": 70,
+        "hard_max_resource_depth": 8,
+        "html_extraction": "standards",
+        "max_resource_depth": 3,
+        "passive_channels_http_share": 500,
+        "passive_document_cap": null,
+        "passive_document_max_depth": 6,
+        "passive_http_reserve": 500,
+        "resource_allocation": "shared_http",
+        "resource_frontier_model": "persistent",
+        "response_body_reader": "bounded_stream",
+        "script_class_cap": 20,
+        "seconds": 180.0,
+        "speculative_fetch_cap": 25,
+        "stylesheet_class_cap": 10,
+        "total_http_requests": 1000,
+        "typed_resource_total": 100
+      },
+      "elapsed_seconds": 162.626,
+      "evidence_audit": {
+        "observed_only_records_with_spider_attempt": 0,
+        "passive_only_documents_as_ui_transitions": 0,
+        "replay_validated_transitions": 23,
+        "spider_attempts_without_channel_label": 0,
+        "spider_get_for_observed_only_non_get_surface": 0,
+        "surfaces_marked_replay_verified": 38
+      },
+      "frontier": {
+        "admitted_never_attempted": 0,
+        "budget_limited": 0,
+        "class_budget_limited": 18,
+        "decisions": {
+          "admitted": 523,
+          "budget_reclaimed": 18,
+          "class_budget_limited": 18,
+          "depth_limited": 9,
+          "duplicate_candidate": 246,
+          "observed_only_api": 27,
+          "observed_only_form_action": 6,
+          "observed_only_ping": 3,
+          "observed_only_security_report": 1,
+          "readmitted_shallower": 2,
+          "rejected_dangerous": 6,
+          "rejected_scope": 15,
+          "relaxed_shallower": 130,
+          "speculative_admitted": 10
+        },
+        "depth_limited": 9,
+        "fetched_or_failed": 262
+      },
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1936,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 312,
+        "browser_redirect": 96,
+        "passive_document": 216,
+        "resource_spider": 45,
+        "speculative_candidate": 1
+      },
+      "http_overrun": 0,
+      "http_total": 670,
+      "incorrect_state_merges": 0,
+      "observed_only_decisions": {
+        "observed_only_api": 27,
+        "observed_only_form_action": 6,
+        "observed_only_ping": 3,
+        "observed_only_security_report": 1
+      },
+      "observed_or_sent_91": 75,
+      "parent_funnel_supported_containers": {
+        "admitted_to_spider": 75,
+        "browser_visited": 36,
+        "containers": 80,
+        "discovered": 78,
+        "fetched_or_loaded_2xx": 74,
+        "reached_any_way": 74
+      },
+      "raw_2xx_91": 53,
+      "references_per_parsed_response": 1.8,
+      "replay_browser_actions": 69,
+      "replays_attempted": 23,
+      "replays_validated": 23,
+      "request_surface_any_status_91": 59,
+      "request_surface_summary": {
+        "observed_not_sent": 31,
+        "sent_no_response": 0,
+        "sent_non_2xx": 90,
+        "successful_resource": 182,
+        "total": 303
+      },
+      "resource_status_counts": {
+        "class_budget_limited": 18,
+        "depth_limited": 9,
+        "discovered": 710,
+        "failed": 7,
+        "fetched": 255,
+        "out_of_scope": 15
+      },
+      "restoration_actions": 76,
+      "safe_controls_distinct": 113,
+      "safe_controls_executed": 90,
+      "safe_controls_unexecuted": 23,
+      "spider_body_status": {
+        "complete": 261,
+        "empty": 1
+      },
+      "successful_spider_paths": 178,
+      "supported_2xx_84": 53,
+      "transitions_observed": 104,
+      "untested_transitions": 81,
+      "verification_root_reloads": 23
+    },
+    "PB_r1": {
+      "browser_actions": 297,
+      "browser_body_status": {
+        "complete": 290,
+        "empty": 2
+      },
+      "by_category": {
+        "css": "1/1",
+        "headers": "3/4",
+        "html": "44/57",
+        "javascript": "4/27",
+        "misc": "0/2"
+      },
+      "discovery_root_reloads": 48,
+      "distinct_ui_states": 88,
+      "effective_resource_budgets": {
+        "asset_class_cap": 20,
+        "browser_actions": 300,
+        "budget_aware_deepening": 1,
+        "document_class_cap": null,
+        "document_class_cap_configured": 70,
+        "hard_max_resource_depth": 8,
+        "html_extraction": "extended",
+        "max_resource_depth": 3,
+        "passive_channels_http_share": 500,
+        "passive_document_cap": null,
+        "passive_document_max_depth": null,
+        "passive_http_reserve": 500,
+        "resource_allocation": "shared_http",
+        "resource_frontier_model": "persistent",
+        "response_body_reader": "content_length",
+        "script_class_cap": 20,
+        "seconds": 180.0,
+        "speculative_fetch_cap": 25,
+        "stylesheet_class_cap": 10,
+        "total_http_requests": 1000,
+        "typed_resource_total": 100
+      },
+      "elapsed_seconds": 163.771,
+      "evidence_audit": {
+        "observed_only_records_with_spider_attempt": 0,
+        "passive_only_documents_as_ui_transitions": 0,
+        "replay_validated_transitions": 24,
+        "spider_attempts_without_channel_label": 0,
+        "spider_get_for_observed_only_non_get_surface": 0,
+        "surfaces_marked_replay_verified": 41
+      },
+      "frontier": {
+        "admitted_never_attempted": 0,
+        "budget_limited": 0,
+        "class_budget_limited": 17,
+        "decisions": {
+          "admitted": 521,
+          "budget_deepened": 102,
+          "class_budget_limited": 17,
+          "depth_limited": 57,
+          "duplicate_candidate": 197,
+          "observed_only_api": 27,
+          "observed_only_form_action": 6,
+          "observed_only_ping": 3,
+          "observed_only_security_report": 1,
+          "readmitted_propagated": 1,
+          "readmitted_shallower": 2,
+          "rejected_dangerous": 6,
+          "rejected_scope": 15,
+          "relaxed_shallower": 128,
+          "speculative_admitted": 10
+        },
+        "depth_limited": 57,
+        "fetched_or_failed": 261
+      },
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 2004,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 313,
+        "browser_redirect": 95,
+        "passive_document": 216,
+        "resource_spider": 44,
+        "speculative_candidate": 1
+      },
+      "http_overrun": 0,
+      "http_total": 669,
+      "incorrect_state_merges": 0,
+      "observed_only_decisions": {
+        "observed_only_api": 27,
+        "observed_only_form_action": 6,
+        "observed_only_ping": 3,
+        "observed_only_security_report": 1
+      },
+      "observed_or_sent_91": 74,
+      "parent_funnel_supported_containers": {
+        "admitted_to_spider": 75,
+        "browser_visited": 35,
+        "containers": 80,
+        "discovered": 78,
+        "fetched_or_loaded_2xx": 74,
+        "reached_any_way": 74
+      },
+      "raw_2xx_91": 52,
+      "references_per_parsed_response": 1.8,
+      "replay_browser_actions": 73,
+      "replays_attempted": 24,
+      "replays_validated": 24,
+      "request_surface_any_status_91": 58,
+      "request_surface_summary": {
+        "observed_not_sent": 31,
+        "sent_no_response": 0,
+        "sent_non_2xx": 90,
+        "successful_resource": 181,
+        "total": 302
+      },
+      "resource_status_counts": {
+        "class_budget_limited": 17,
+        "depth_limited": 57,
+        "discovered": 743,
+        "failed": 7,
+        "fetched": 254,
+        "out_of_scope": 15
+      },
+      "restoration_actions": 74,
+      "safe_controls_distinct": 112,
+      "safe_controls_executed": 88,
+      "safe_controls_unexecuted": 24,
+      "spider_body_status": {
+        "complete": 260,
+        "empty": 1
+      },
+      "successful_spider_paths": 177,
+      "supported_2xx_84": 52,
+      "transitions_observed": 102,
+      "untested_transitions": 78,
+      "verification_root_reloads": 24
+    },
+    "PC_r1": {
+      "browser_actions": 297,
+      "browser_body_status": {
+        "complete": 287,
+        "empty": 2
+      },
+      "by_category": {
+        "css": "1/1",
+        "headers": "3/4",
+        "html": "29/57",
+        "javascript": "4/27",
+        "misc": "0/2"
+      },
+      "discovery_root_reloads": 49,
+      "distinct_ui_states": 89,
+      "effective_resource_budgets": {
+        "asset_class_cap": 20,
+        "browser_actions": 300,
+        "budget_aware_deepening": 0,
+        "document_class_cap": null,
+        "document_class_cap_configured": 70,
+        "hard_max_resource_depth": null,
+        "html_extraction": "extended",
+        "max_resource_depth": 3,
+        "passive_channels_http_share": 500,
+        "passive_document_cap": null,
+        "passive_document_max_depth": 6,
+        "passive_http_reserve": 500,
+        "resource_allocation": "shared_http",
+        "resource_frontier_model": "persistent",
+        "response_body_reader": "content_length",
+        "script_class_cap": 20,
+        "seconds": 180.0,
+        "speculative_fetch_cap": 25,
+        "stylesheet_class_cap": 10,
+        "total_http_requests": 1000,
+        "typed_resource_total": 100
+      },
+      "elapsed_seconds": 161.632,
+      "evidence_audit": {
+        "observed_only_records_with_spider_attempt": 0,
+        "passive_only_documents_as_ui_transitions": 0,
+        "replay_validated_transitions": 23,
+        "spider_attempts_without_channel_label": 0,
+        "spider_get_for_observed_only_non_get_surface": 0,
+        "surfaces_marked_replay_verified": 36
+      },
+      "frontier": {
+        "admitted_never_attempted": 19,
+        "budget_limited": 0,
+        "class_budget_limited": 22,
+        "decisions": {
+          "admitted": 504,
+          "class_budget_limited": 22,
+          "duplicate_candidate": 251,
+          "observed_only_api": 27,
+          "observed_only_form_action": 6,
+          "observed_only_ping": 3,
+          "observed_only_security_report": 1,
+          "readmitted_propagated": 2,
+          "readmitted_shallower": 2,
+          "rejected_dangerous": 6,
+          "rejected_scope": 15,
+          "relaxed_shallower": 121,
+          "speculative_admitted": 10
+        },
+        "depth_limited": 0,
+        "fetched_or_failed": 244
+      },
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1890,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 309,
+        "browser_redirect": 95,
+        "passive_document": 216,
+        "resource_spider": 27,
+        "speculative_candidate": 1
+      },
+      "http_overrun": 0,
+      "http_total": 648,
+      "incorrect_state_merges": 0,
+      "observed_only_decisions": {
+        "observed_only_api": 27,
+        "observed_only_form_action": 6,
+        "observed_only_ping": 3,
+        "observed_only_security_report": 1
+      },
+      "observed_or_sent_91": 74,
+      "parent_funnel_supported_containers": {
+        "admitted_to_spider": 75,
+        "browser_visited": 35,
+        "containers": 80,
+        "discovered": 78,
+        "fetched_or_loaded_2xx": 74,
+        "reached_any_way": 74
+      },
+      "raw_2xx_91": 37,
+      "references_per_parsed_response": 1.93,
+      "replay_browser_actions": 69,
+      "replays_attempted": 23,
+      "replays_validated": 23,
+      "request_surface_any_status_91": 43,
+      "request_surface_summary": {
+        "observed_not_sent": 46,
+        "sent_no_response": 0,
+        "sent_non_2xx": 90,
+        "successful_resource": 166,
+        "total": 302
+      },
+      "resource_status_counts": {
+        "class_budget_limited": 22,
+        "discovered": 689,
+        "failed": 7,
+        "fetched": 237,
+        "out_of_scope": 15
+      },
+      "restoration_actions": 76,
+      "safe_controls_distinct": 113,
+      "safe_controls_executed": 89,
+      "safe_controls_unexecuted": 24,
+      "spider_body_status": {
+        "complete": 243,
+        "empty": 1
+      },
+      "successful_spider_paths": 160,
+      "supported_2xx_84": 37,
+      "transitions_observed": 103,
+      "untested_transitions": 80,
+      "verification_root_reloads": 23
+    },
+    "P_r1": {
+      "browser_actions": 297,
+      "browser_body_status": {
+        "complete": 287,
+        "empty": 2
+      },
+      "by_category": {
+        "css": "1/1",
+        "headers": "3/4",
+        "html": "27/57",
+        "javascript": "4/27",
+        "misc": "0/2"
+      },
+      "discovery_root_reloads": 49,
+      "distinct_ui_states": 89,
+      "effective_resource_budgets": {
+        "asset_class_cap": 20,
+        "browser_actions": 300,
+        "budget_aware_deepening": 0,
+        "document_class_cap": null,
+        "document_class_cap_configured": 70,
+        "hard_max_resource_depth": null,
+        "html_extraction": "extended",
+        "max_resource_depth": 3,
+        "passive_channels_http_share": 500,
+        "passive_document_cap": null,
+        "passive_document_max_depth": null,
+        "passive_http_reserve": 500,
+        "resource_allocation": "shared_http",
+        "resource_frontier_model": "persistent",
+        "response_body_reader": "content_length",
+        "script_class_cap": 20,
+        "seconds": 180.0,
+        "speculative_fetch_cap": 25,
+        "stylesheet_class_cap": 10,
+        "total_http_requests": 1000,
+        "typed_resource_total": 100
+      },
+      "elapsed_seconds": 163.465,
+      "evidence_audit": {
+        "observed_only_records_with_spider_attempt": 0,
+        "passive_only_documents_as_ui_transitions": 0,
+        "replay_validated_transitions": 23,
+        "spider_attempts_without_channel_label": 0,
+        "spider_get_for_observed_only_non_get_surface": 0,
+        "surfaces_marked_replay_verified": 37
+      },
+      "frontier": {
+        "admitted_never_attempted": 28,
+        "budget_limited": 0,
+        "class_budget_limited": 16,
+        "decisions": {
+          "admitted": 478,
+          "class_budget_limited": 16,
+          "duplicate_candidate": 235,
+          "observed_only_api": 27,
+          "observed_only_form_action": 6,
+          "observed_only_ping": 3,
+          "observed_only_security_report": 1,
+          "readmitted_propagated": 49,
+          "readmitted_shallower": 4,
+          "rejected_dangerous": 6,
+          "rejected_scope": 14,
+          "relaxed_shallower": 122,
+          "speculative_admitted": 6
+        },
+        "depth_limited": 0,
+        "fetched_or_failed": 228
+      },
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1887,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 309,
+        "browser_redirect": 96,
+        "passive_document": 198,
+        "resource_spider": 27,
+        "speculative_candidate": 3
+      },
+      "http_overrun": 0,
+      "http_total": 633,
+      "incorrect_state_merges": 0,
+      "observed_only_decisions": {
+        "observed_only_api": 27,
+        "observed_only_form_action": 6,
+        "observed_only_ping": 3,
+        "observed_only_security_report": 1
+      },
+      "observed_or_sent_91": 69,
+      "parent_funnel_supported_containers": {
+        "admitted_to_spider": 75,
+        "browser_visited": 35,
+        "containers": 80,
+        "discovered": 78,
+        "fetched_or_loaded_2xx": 66,
+        "reached_any_way": 66
+      },
+      "raw_2xx_91": 35,
+      "references_per_parsed_response": 1.95,
+      "replay_browser_actions": 69,
+      "replays_attempted": 23,
+      "replays_validated": 23,
+      "request_surface_any_status_91": 41,
+      "request_surface_summary": {
+        "observed_not_sent": 46,
+        "sent_no_response": 0,
+        "sent_non_2xx": 85,
+        "successful_resource": 156,
+        "total": 287
+      },
+      "resource_status_counts": {
+        "class_budget_limited": 16,
+        "discovered": 709,
+        "failed": 6,
+        "fetched": 222,
+        "out_of_scope": 14
+      },
+      "restoration_actions": 76,
+      "safe_controls_distinct": 113,
+      "safe_controls_executed": 89,
+      "safe_controls_unexecuted": 24,
+      "spider_body_status": {
+        "complete": 227,
+        "empty": 1
+      },
+      "successful_spider_paths": 149,
+      "supported_2xx_84": 35,
+      "transitions_observed": 103,
+      "untested_transitions": 80,
+      "verification_root_reloads": 23
+    }
+  }
+}

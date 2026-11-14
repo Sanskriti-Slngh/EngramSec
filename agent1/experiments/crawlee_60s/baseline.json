@@ -1,0 +1,387 @@
+{
+  "baseline": "Crawlee PlaywrightCrawler 1.11.0",
+  "code_revision": "65b075ab8b339460dadb446c79b03fa6de03fa7c+mapper-45ddbd558c19",
+  "limitations": [
+    "Crawlee is a maintained browser crawler, not a state-flow testing system.",
+    "This adapter replays visible link paths, but does not interact with buttons or forms.",
+    "Direct crawl visits and replay time are both included in elapsed time."
+  ],
+  "limits": {
+    "max_pages": 20,
+    "seconds": 60.0,
+    "workers": 1
+  },
+  "mechanism": "visible same-origin link queue; no button or form interaction",
+  "metrics": {
+    "browser_actions": 39,
+    "crawl_elapsed_seconds": 19.089,
+    "distinct_validated_feature_workflows": 7,
+    "elapsed_seconds": 60.032,
+    "incorrect_state_merges": "not_applicable_no_grouping",
+    "monetary_cost_usd": 0.0,
+    "pages_visited": 20,
+    "redundant_states": 4,
+    "replay_success_denominator": 12,
+    "replay_success_numerator": 7,
+    "route_patterns": 16,
+    "unsupported_connections": 5
+  },
+  "replays": [
+    {
+      "browser_actions": 1,
+      "checks": {},
+      "error": "TimeoutError: Locator.click: Timeout 5000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href]\").nth(7)\n    - locator resolved to <a data-id=\"nav_sub_key_0\" href=\"/index/Article/index.html?cate=5\">\u516c\u53f8\u65b0\u95fb</a>\n  - attempting click action\n    2 \u00d7 waiting fo",
+      "path_length": 1,
+      "success": false,
+      "url": "http://127.0.0.1:51707/index/Article/index.html?cate=5"
+    },
+    {
+      "browser_actions": 2,
+      "checks": {
+        "route_pattern": true,
+        "title": true
+      },
+      "error": null,
+      "path_length": 1,
+      "success": true,
+      "url": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=13"
+    },
+    {
+      "browser_actions": 2,
+      "checks": {
+        "route_pattern": true,
+        "title": true
+      },
+      "error": null,
+      "path_length": 1,
+      "success": true,
+      "url": "http://127.0.0.1:51707/index/about.html"
+    },
+    {
+      "browser_actions": 2,
+      "checks": {
+        "route_pattern": true,
+        "title": true
+      },
+      "error": null,
+      "path_length": 1,
+      "success": true,
+      "url": "http://127.0.0.1:51707/index/contact.html"
+    },
+    {
+      "browser_actions": 1,
+      "checks": {},
+      "error": "TimeoutError: Locator.click: Timeout 5000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href]\").nth(5)\n    - locator resolved to <a data-id=\"nav_sub_key_1\" href=\"/index/culture.html\">\u516c\u53f8\u6587\u5316</a>\n  - attempting click action\n    2 \u00d7 waiting for element to ",
+      "path_length": 1,
+      "success": false,
+      "url": "http://127.0.0.1:51707/index/culture.html"
+    },
+    {
+      "browser_actions": 2,
+      "checks": {
+        "route_pattern": true,
+        "title": true
+      },
+      "error": null,
+      "path_length": 1,
+      "success": true,
+      "url": "http://127.0.0.1:51707/index/download.html"
+    },
+    {
+      "browser_actions": 2,
+      "checks": {
+        "route_pattern": true,
+        "title": true
+      },
+      "error": null,
+      "path_length": 1,
+      "success": true,
+      "url": "http://127.0.0.1:51707/index/honours.html"
+    },
+    {
+      "browser_actions": 1,
+      "checks": {},
+      "error": "TimeoutError: Locator.click: Timeout 5000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href]\").nth(8)\n    - locator resolved to <a data-id=\"nav_sub_key_1\" href=\"/index/information.html\">\u884c\u4e1a\u8d44\u8baf</a>\n  - attempting click action\n    2 \u00d7 waiting for element",
+      "path_length": 1,
+      "success": false,
+      "url": "http://127.0.0.1:51707/index/information.html"
+    },
+    {
+      "browser_actions": 1,
+      "checks": {},
+      "error": "TimeoutError: Locator.click: Timeout 5000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href]\").nth(4)\n    - locator resolved to <a data-id=\"nav_sub_key_0\" href=\"/index/introduction.html\">\u516c\u53f8\u4ecb\u7ecd</a>\n  - attempting click action\n    2 \u00d7 waiting for elemen",
+      "path_length": 1,
+      "success": false,
+      "url": "http://127.0.0.1:51707/index/introduction.html"
+    },
+    {
+      "browser_actions": 2,
+      "checks": {
+        "route_pattern": true,
+        "title": true
+      },
+      "error": null,
+      "path_length": 1,
+      "success": true,
+      "url": "http://127.0.0.1:51707/index/news.html"
+    },
+    {
+      "browser_actions": 2,
+      "checks": {
+        "route_pattern": true,
+        "title": true
+      },
+      "error": null,
+      "path_length": 1,
+      "success": true,
+      "url": "http://127.0.0.1:51707/index/product.html"
+    },
+    {
+      "browser_actions": 1,
+      "checks": {},
+      "error": "TimeoutError: Locator.click: Timeout 5000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href]\").nth(12)\n    - locator resolved to <a data-id=\"nav_sub_key_1\" href=\"/index/product.html?cate=10\">\u70ed\u9500\u4ea7\u54c1</a>\n  - attempting click action\n    2 \u00d7 waiting for el",
+      "path_length": 1,
+      "success": false,
+      "url": "http://127.0.0.1:51707/index/product.html?cate=10"
+    }
+  ],
+  "schema_version": "crawlee-baseline-1.0",
+  "target": "http://127.0.0.1:51707/",
+  "visited": [
+    {
+      "path": [],
+      "route_pattern": "/",
+      "title": "SIYUCMS \u5b98\u7f51",
+      "url": "http://127.0.0.1:51707/",
+      "visible_same_origin_links": 91
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/user/index.html",
+          "label": "\u7528\u6237\u4e2d\u5fc3"
+        }
+      ],
+      "route_pattern": "/index/user/login",
+      "title": "SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/user/login",
+      "visible_same_origin_links": 2
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/about.html",
+          "label": "\u5173\u4e8e\u6211\u4eec"
+        }
+      ],
+      "route_pattern": "/index/about.html",
+      "title": "\u5173\u4e8e\u6211\u4eec_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/about.html",
+      "visible_same_origin_links": 44
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/introduction.html",
+          "label": "\u516c\u53f8\u4ecb\u7ecd"
+        }
+      ],
+      "route_pattern": "/index/introduction.html",
+      "title": "\u516c\u53f8\u4ecb\u7ecd_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/introduction.html",
+      "visible_same_origin_links": 45
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/culture.html",
+          "label": "\u516c\u53f8\u6587\u5316"
+        }
+      ],
+      "route_pattern": "/index/culture.html",
+      "title": "\u516c\u53f8\u6587\u5316_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/culture.html",
+      "visible_same_origin_links": 45
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/news.html",
+          "label": "\u65b0\u95fb\u4e2d\u5fc3"
+        }
+      ],
+      "route_pattern": "/index/news.html",
+      "title": "\u65b0\u95fb\u4e2d\u5fc3_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/news.html",
+      "visible_same_origin_links": 68
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/Article/index.html?cate=5",
+          "label": "\u516c\u53f8\u65b0\u95fb"
+        }
+      ],
+      "route_pattern": "/index/Article/index.html?cate",
+      "title": "\u516c\u53f8\u65b0\u95fb_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/Article/index.html?cate=5",
+      "visible_same_origin_links": 73
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/information.html",
+          "label": "\u884c\u4e1a\u8d44\u8baf"
+        }
+      ],
+      "route_pattern": "/index/information.html",
+      "title": "\u884c\u4e1a\u8d44\u8baf_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/information.html",
+      "visible_same_origin_links": 53
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/honours.html",
+          "label": "\u8d44\u8d28\u8363\u8a89"
+        }
+      ],
+      "route_pattern": "/index/honours.html",
+      "title": "\u8d44\u8d28\u8363\u8a89_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/honours.html",
+      "visible_same_origin_links": 60
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/product.html",
+          "label": "\u4ea7\u54c1\u4e2d\u5fc3"
+        }
+      ],
+      "route_pattern": "/index/product.html",
+      "title": "\u4ea7\u54c1\u4e2d\u5fc3_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/product.html",
+      "visible_same_origin_links": 68
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/product.html?cate=9",
+          "label": "\u7cbe\u9009\u4ea7\u54c1"
+        }
+      ],
+      "route_pattern": "/index/product.html?cate",
+      "title": "\u7cbe\u9009\u4ea7\u54c1_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/product.html?cate=9",
+      "visible_same_origin_links": 69
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/product.html?cate=10",
+          "label": "\u70ed\u9500\u4ea7\u54c1"
+        }
+      ],
+      "route_pattern": "/index/product.html?cate",
+      "title": "\u70ed\u9500\u4ea7\u54c1_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/product.html?cate=10",
+      "visible_same_origin_links": 45
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/download.html",
+          "label": "\u8d44\u6599\u4e0b\u8f7d"
+        }
+      ],
+      "route_pattern": "/index/download.html",
+      "title": "\u8d44\u6599\u4e0b\u8f7d_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/download.html",
+      "visible_same_origin_links": 51
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/team.html",
+          "label": "\u4f18\u79c0\u56e2\u961f"
+        }
+      ],
+      "route_pattern": "/index/team.html",
+      "title": "\u4f18\u79c0\u56e2\u961f_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/team.html",
+      "visible_same_origin_links": 61
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/contact.html",
+          "label": "\u8054\u7cfb\u6211\u4eec"
+        }
+      ],
+      "route_pattern": "/index/contact.html",
+      "title": "\u8054\u7cfb\u6211\u4eec_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/contact.html",
+      "visible_same_origin_links": 43
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/product/8.html?cate=9",
+          "label": ""
+        }
+      ],
+      "route_pattern": "/index/product/{instance}.html?cate",
+      "title": "\u94a2\u7b14-\u7cbe\u9009\u4ea7\u54c1_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/product/8.html?cate=9",
+      "visible_same_origin_links": 64
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/product/7.html?cate=9",
+          "label": ""
+        }
+      ],
+      "route_pattern": "/index/product/{instance}.html?cate",
+      "title": "\u94c5\u7b14\u76d2-\u7cbe\u9009\u4ea7\u54c1_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/product/7.html?cate=9",
+      "visible_same_origin_links": 63
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/product/6.html?cate=9",
+          "label": ""
+        }
+      ],
+      "route_pattern": "/index/product/{instance}.html?cate",
+      "title": "\u4e00\u652f\u7b14-\u7cbe\u9009\u4ea7\u54c1_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/product/6.html?cate=9",
+      "visible_same_origin_links": 64
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/product/5.html?cate=9",
+          "label": ""
+        }
+      ],
+      "route_pattern": "/index/product/{instance}.html?cate",
+      "title": "\u7b14\u8bb0\u672c-\u7cbe\u9009\u4ea7\u54c1_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/product/5.html?cate=9",
+      "visible_same_origin_links": 63
+    },
+    {
+      "path": [
+        {
+          "href": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=13",
+          "label": ""
+        }
+      ],
+      "route_pattern": "/index/Article/info.html?cate&id",
+      "title": "php\u6574\u578b\u5c31\u662f\u6574\u6570-\u516c\u53f8\u65b0\u95fb_SIYUCMS",
+      "url": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=13",
+      "visible_same_origin_links": 64
+    }
+  ]
+}

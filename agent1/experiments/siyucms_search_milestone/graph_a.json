@@ -1,0 +1,138 @@
+{
+  "schema_version": "graph-a-search-example-1.0",
+  "run_id": "siyucms-search-1793198353",
+  "status_vocabulary": [
+    "navigation_reproduced",
+    "functional_outcome_supported",
+    "validation_failure",
+    "unresolved",
+    "untested"
+  ],
+  "workflow": "anonymous search",
+  "prerequisites": [
+    "open anonymous home",
+    "execute observed toggle search control"
+  ],
+  "replay_evidence": [
+    {
+      "replay_id": "siyucms-search-replay-1",
+      "navigation_status": "navigation_reproduced",
+      "functional_status": "functional_outcome_supported",
+      "checks": {
+        "primary_has_non_echo_result_links": true,
+        "contrast_has_non_echo_result_links": true,
+        "contrasting_result_targets_differ": true,
+        "contrasting_content_differs": true,
+        "primary_navigation_reproduced": true
+      },
+      "primary_result": {
+        "observation_id": "obs_88e3c4c81ee6ed7e76b4",
+        "url": "http://127.0.0.1:51707/index/index/search.html?search=php",
+        "title": "php_SIYUCMS",
+        "route_pattern": "/index/index/search.html?search",
+        "content_fingerprint": "c789da367966eee2",
+        "query_matching_result_links": [
+          {
+            "label": "PHP流程控制之嵌套if...else...elseif结构",
+            "target": "http://127.0.0.1:51707/index/information/17.html"
+          },
+          {
+            "label": "PHP流程控制之if语句",
+            "target": "http://127.0.0.1:51707/index/information/16.html"
+          },
+          {
+            "label": "php流程控制之if条件结构流程",
+            "target": "http://127.0.0.1:51707/index/information/15.html"
+          },
+          {
+            "label": "PHP中的流程控制",
+            "target": "http://127.0.0.1:51707/index/information/14.html"
+          },
+          {
+            "label": "php整型就是整数",
+            "target": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=13"
+          },
+          {
+            "label": "php注释的学习",
+            "target": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=12"
+          }
+        ],
+        "non_echo_result_evidence": true
+      },
+      "contrast_result": {
+        "observation_id": "obs_793edbaddc13ee3bbfa3",
+        "url": "http://127.0.0.1:51707/index/index/search.html?search=Linux",
+        "title": "Linux_SIYUCMS",
+        "route_pattern": "/index/index/search.html?search",
+        "content_fingerprint": "614ccb382ac816bc",
+        "query_matching_result_links": [
+          {
+            "label": "Linux环境安装",
+            "target": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=7"
+          }
+        ],
+        "non_echo_result_evidence": true
+      }
+    },
+    {
+      "replay_id": "siyucms-search-replay-2",
+      "navigation_status": "navigation_reproduced",
+      "functional_status": "functional_outcome_supported",
+      "checks": {
+        "primary_has_non_echo_result_links": true,
+        "contrast_has_non_echo_result_links": true,
+        "contrasting_result_targets_differ": true,
+        "contrasting_content_differs": true,
+        "primary_navigation_reproduced": true
+      },
+      "primary_result": {
+        "observation_id": "obs_81acf77bc9dd09cafb6c",
+        "url": "http://127.0.0.1:51707/index/index/search.html?search=php",
+        "title": "php_SIYUCMS",
+        "route_pattern": "/index/index/search.html?search",
+        "content_fingerprint": "c789da367966eee2",
+        "query_matching_result_links": [
+          {
+            "label": "PHP流程控制之嵌套if...else...elseif结构",
+            "target": "http://127.0.0.1:51707/index/information/17.html"
+          },
+          {
+            "label": "PHP流程控制之if语句",
+            "target": "http://127.0.0.1:51707/index/information/16.html"
+          },
+          {
+            "label": "php流程控制之if条件结构流程",
+            "target": "http://127.0.0.1:51707/index/information/15.html"
+          },
+          {
+            "label": "PHP中的流程控制",
+            "target": "http://127.0.0.1:51707/index/information/14.html"
+          },
+          {
+            "label": "php整型就是整数",
+            "target": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=13"
+          },
+          {
+            "label": "php注释的学习",
+            "target": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=12"
+          }
+        ],
+        "non_echo_result_evidence": true
+      },
+      "contrast_result": {
+        "observation_id": "obs_f1af81c5efbc294387a5",
+        "url": "http://127.0.0.1:51707/index/index/search.html?search=Linux",
+        "title": "Linux_SIYUCMS",
+        "route_pattern": "/index/index/search.html?search",
+        "content_fingerprint": "614ccb382ac816bc",
+        "query_matching_result_links": [
+          {
+            "label": "Linux环境安装",
+            "target": "http://127.0.0.1:51707/index/Article/info.html?cate=5&id=7"
+          }
+        ],
+        "non_echo_result_evidence": true
+      }
+    }
+  ]
+}

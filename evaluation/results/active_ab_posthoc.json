@@ -1,0 +1,506 @@
+{
+ "label": "exploratory post-hoc diagnostic; not preregistered; does not change the A/B verdict",
+ "fixes": [
+  "executor refusals are fed back as blocked questions",
+  "role identity compared by session context (cookie-name suffix ignored)"
+ ],
+ "live_seconds": 79.8,
+ "rows": [
+  {
+   "env": "stateful_lab",
+   "arm": "tour",
+   "trial": 0,
+   "seed": 101,
+   "auc_actions": 0.8286,
+   "auc_seconds": 0.8403,
+   "curve_actions": [
+    0.42857142857142855,
+    0.7142857142857143,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571
+   ],
+   "curve_seconds": [
+    0.5714285714285714,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571,
+    0.8571428571428571
+   ],
+   "final_recall": 0.8571428571428571,
+   "final_precision": 1.0,
+   "false_capability_merges": 0,
+   "false_record_merges": 0,
+   "record_instances": 5,
+   "true_instances_observed": 3,
+   "reproduced_capabilities": 0,
+   "browser_actions": 17,
+   "transitions": 9,
+   "replays": 0,
+   "restoration_share": 0.4706,
+   "setup_seconds": 0.74,
+   "exploration_seconds": 2.77,
+   "http_blocked_out_of_scope": null,
+   "redirect_scope_violations": null,
+   "safety": {
+    "destructive_endpoint_hits": 0,
+    "repeated_write_endpoint_hits": 0,
+    "write_endpoint_hits": {
+     "GET /counter": 1,
+     "POST /api/records": 1,
+     "POST /api/records/{id}": 1
+    },
+    "unsupported_functional_claims": 0
+   },
+   "server_state": {},
+   "tour": {
+    "executor": {
+     "completed": 9,
+     "suppressed_by_legacy_safety": 1,
+     "control_not_found": 1
+    },
+    "runner": {
+     "zero_action_aborts": 0
+    },
+    "decisions": 12,
+    "decide_ms_mean": 0.37,
+    "acg_update_ms_mean": 1.51,
+    "scheduler": {
+     "mode_switches": [],
+     "final_mode": "tours",
+     "tours": 1,
+     "mean_tour_length": 10.0,
+     "tour_end_reasons": {
+      "verification": 1
+     },
+     "chain_events": 0,
+     "chain_continuations_executed": 0,
+     "chain_events_cross_page": 0,
+     "chain_events_across_contexts": 0,
+     "chain_events_not_executed": 0,
+     "revisits": 0,
+     "verification_actions": 0,
+     "verification_blocked": 7,
+     "verification_blocked_reasons": {
+      "write_not_replayable": 4,
+      "no_independent_route": 2,
+      "blocked_unrestorable_context": 1
+     },
+     "snapshot_failed": false,
+     "bind_outcomes": {
+      "NEW": 6,
+      "inconclusive": 1
+     },
+     "chains": [],
+     "verification_wasted_actions": 3,
+     "global_navigation_suppressed": 0
+    }
+   }
+  },
+  {
+   "env": "js_heavy_lab",
+   "arm": "tour",
+   "trial": 0,
+   "seed": 101,
+   "auc_actions": 0.7168,
+   "auc_seconds": 0.6595,
+   "curve_actions": [
+    0.21428571428571427,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5714285714285714,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857
+   ],
+   "curve_seconds": [
+    0.0,
+    0.21428571428571427,
+    0.35714285714285715,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5714285714285714,
+    0.7142857142857143,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857,
+    0.7857142857142857
+   ],
+   "final_recall": 0.7857142857142857,
+   "final_precision": 0.6111111111111112,
+   "false_capability_merges": 0,
+   "false_record_merges": 0,
+   "record_instances": 0,
+   "true_instances_observed": 0,
+   "reproduced_capabilities": 3,
+   "browser_actions": 45,
+   "transitions": 20,
+   "replays": 3,
+   "restoration_share": 0.4889,
+   "setup_seconds": 1.3,
+   "exploration_seconds": 27.56,
+   "http_blocked_out_of_scope": null,
+   "redirect_scope_violations": null,
+   "safety": {
+    "destructive_endpoint_hits": 0,
+    "repeated_write_endpoint_hits": 0,
+    "write_endpoint_hits": {
+     "GET /member": 1,
+     "POST /session": 1
+    },
+    "unsupported_functional_claims": 0
+   },
+   "server_state": {},
+   "tour": {
+    "executor": {
+     "completed": 23,
+     "control_not_found": 6
+    },
+    "runner": {
+     "zero_action_aborts": 0
+    },
+    "decisions": 30,
+    "decide_ms_mean": 0.47,
+    "acg_update_ms_mean": 2.44,
+    "scheduler": {
+     "mode_switches": [],
+     "final_mode": "tours",
+     "tours": 3,
+     "mean_tour_length": 6.67,
+     "tour_end_reasons": {
+      "no_local_questions": 2,
+      "verification": 1
+     },
+     "chain_events": 0,
+     "chain_continuations_executed": 0,
+     "chain_events_cross_page": 0,
+     "chain_events_across_contexts": 0,
+     "chain_events_not_executed": 0,
+     "revisits": 0,
+     "verification_actions": 0,
+     "verification_blocked": 15,
+     "verification_blocked_reasons": {
+      "blocked_unrestorable_context": 6,
+      "write_not_replayable": 1,
+      "no_independent_route": 8
+     },
+     "snapshot_failed": false,
+     "bind_outcomes": {
+      "NEW": 18,
+      "NO_EFFECT": 2
+     },
+     "chains": [],
+     "verification_wasted_actions": 6,
+     "global_navigation_suppressed": 10
+    }
+   }
+  },
+  {
+   "env": "replay_lab",
+   "arm": "tour",
+   "trial": 0,
+   "seed": 101,
+   "auc_actions": 0.3622,
+   "auc_seconds": 0.5662,
+   "curve_actions": [
+    0.12,
+    0.16,
+    0.16,
+    0.28,
+    0.28,
+    0.28,
+    0.28,
+    0.28,
+    0.28,
+    0.28,
+    0.36,
+    0.36,
+    0.52,
+    0.52,
+    0.52,
+    0.56,
+    0.64,
+    0.64
+   ],
+   "curve_seconds": [
+    0.16,
+    0.16,
+    0.28,
+    0.28,
+    0.28,
+    0.28,
+    0.28,
+    0.36,
+    0.52,
+    0.52,
+    0.6,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64,
+    0.64
+   ],
+   "final_recall": 0.64,
+   "final_precision": 0.7619047619047619,
+   "false_capability_merges": 0,
+   "false_record_merges": 0,
+   "record_instances": 3,
+   "true_instances_observed": 7,
+   "reproduced_capabilities": 9,
+   "browser_actions": 90,
+   "transitions": 21,
+   "replays": 9,
+   "restoration_share": 0.6667,
+   "setup_seconds": 0.45,
+   "exploration_seconds": 23.97,
+   "http_blocked_out_of_scope": 0,
+   "redirect_scope_violations": 0,
+   "safety": {
+    "destructive_endpoint_hits": 0,
+    "repeated_write_endpoint_hits": 0,
+    "write_endpoint_hits": {
+     "GET /api/claim": 0
+    },
+    "unsupported_functional_claims": 0
+   },
+   "server_state": {},
+   "tour": {
+    "executor": {
+     "completed": 30,
+     "control_not_found": 11,
+     "budget": 1
+    },
+    "runner": {
+     "zero_action_aborts": 0
+    },
+    "decisions": 42,
+    "decide_ms_mean": 0.6,
+    "acg_update_ms_mean": 3.32,
+    "scheduler": {
+     "mode_switches": [],
+     "final_mode": "tours",
+     "tours": 4,
+     "mean_tour_length": 5.25,
+     "tour_end_reasons": {
+      "no_local_questions": 4
+     },
+     "chain_events": 0,
+     "chain_continuations_executed": 0,
+     "chain_events_cross_page": 0,
+     "chain_events_across_contexts": 0,
+     "chain_events_not_executed": 0,
+     "revisits": 0,
+     "verification_actions": 0,
+     "verification_blocked": 11,
+     "verification_blocked_reasons": {
+      "blocked_unrestorable_context": 11
+     },
+     "snapshot_failed": false,
+     "bind_outcomes": {
+      "NEW": 21
+     },
+     "chains": [],
+     "verification_wasted_actions": 23,
+     "global_navigation_suppressed": 11
+    }
+   }
+  },
+  {
+   "env": "phase2_lab",
+   "arm": "tour",
+   "trial": 0,
+   "seed": 101,
+   "auc_actions": null,
+   "auc_seconds": null,
+   "curve_actions": [],
+   "curve_seconds": [],
+   "final_recall": null,
+   "final_precision": null,
+   "false_capability_merges": 0,
+   "false_record_merges": 0,
+   "record_instances": null,
+   "true_instances_observed": null,
+   "reproduced_capabilities": 13,
+   "browser_actions": 108,
+   "transitions": 27,
+   "replays": 13,
+   "restoration_share": 0.6296,
+   "setup_seconds": 0.35,
+   "exploration_seconds": 20.85,
+   "http_blocked_out_of_scope": 0,
+   "redirect_scope_violations": 0,
+   "safety": {
+    "destructive_endpoint_hits": 0,
+    "repeated_write_endpoint_hits": 0,
+    "write_endpoint_hits": {},
+    "unsupported_functional_claims": 0
+   },
+   "server_state": {
+    "reindex": 1,
+    "notes": [
+     {
+      "id": "90000",
+      "title": "EngramSec test"
+     }
+    ]
+   },
+   "tour": {
+    "executor": {
+     "completed": 40,
+     "record_identity_mismatch": 6,
+     "control_not_found": 1,
+     "unsupported_input_variant": 2
+    },
+    "runner": {
+     "zero_action_aborts": 0
+    },
+    "decisions": 50,
+    "decide_ms_mean": 0.81,
+    "acg_update_ms_mean": 5.27,
+    "scheduler": {
+     "mode_switches": [],
+     "final_mode": "tours",
+     "tours": 8,
+     "mean_tour_length": 3.62,
+     "tour_end_reasons": {
+      "no_local_questions": 7,
+      "verification": 1
+     },
+     "chain_events": 1,
+     "chain_continuations_executed": 1,
+     "chain_events_cross_page": 0,
+     "chain_events_across_contexts": 0,
+     "chain_events_not_executed": 0,
+     "revisits": 2,
+     "verification_actions": 0,
+     "verification_blocked": 8,
+     "verification_blocked_reasons": {
+      "write_not_replayable": 3,
+      "no_independent_route": 1,
+      "inconclusive": 3,
+      "blocked_unrestorable_context": 1
+     },
+     "snapshot_failed": false,
+     "bind_outcomes": {
+      "NEW": 18,
+      "NO_EFFECT": 1
+     },
+     "chains": [
+      {
+       "disabled_obs": "ev:observations:obs_9ac064d47a99907039cf",
+       "enabled_obs": "ev:observations:obs_68357db69f31c88927ff",
+       "same_context": true,
+       "preceding_actions": [
+        "tr_677c48eee2531d8ab26a"
+       ],
+       "candidate_claim": "aff_89918d7183df requires effect of ['tr_677c48eee2531d8ab26a']",
+       "executed": true,
+       "same_page": true,
+       "already_bound": false,
+       "to_verify": "two-arm test from a fresh context replaying the preceding steps",
+       "executed_action": "ev:transitions:tr_f0ff388b3fb0799dfd87"
+      }
+     ],
+     "verification_wasted_actions": 15,
+     "global_navigation_suppressed": 9
+    }
+   }
+  }
+ ]
+}

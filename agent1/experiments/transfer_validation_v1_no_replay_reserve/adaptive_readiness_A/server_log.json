@@ -1,0 +1,10246 @@
+{
+ "requests_by_client": {
+  "browser": {
+   "requests": 716,
+   "bytes": 2199984
+  },
+  "passive": {
+   "requests": 284,
+   "bytes": 3356363
+  }
+ },
+ "events": {
+  "session_issued": 11,
+  "session_renewed_on:browser": 28,
+  "session_renewed_on:passive": 7,
+  "retired_session_within_grace:browser": 26
+ },
+ "sentinel_hits": [],
+ "log": [
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/catalog",
+   "query": "page=1",
+   "query_keys": [
+    "page"
+   ],
+   "status": 200,
+   "bytes": 3364,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1310,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/collections",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 838,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 973,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/archive",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 759,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/account",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 663,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24692,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24811,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23494,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/1",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25425,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/1",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 25425,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-bo",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 3001,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/2",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24051,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/2",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24051,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-cp",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2970,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24692,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-dq",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2999,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/4",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23806,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/catalog/search",
+   "query": "q=engramsec-test",
+   "query_keys": [
+    "q"
+   ],
+   "status": 200,
+   "bytes": 577,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/4",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 23806,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-er",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2861,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/5",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24280,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/5",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24280,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-fs",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2934,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/6",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23847,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/6",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 23847,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-gt",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2935,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/7",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24662,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/7",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24662,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-hn",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 3038,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/8",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23845,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/8",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 23845,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-io",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2924,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/9",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23838,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/9",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 23838,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-jp",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2925,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/10",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24270,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/10",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24270,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-kq",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2915,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23494,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=27",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/11",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23923,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/11",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 23923,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-lr",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2932,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/12",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24143,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/12",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24143,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-ms",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2963,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/catalog",
+   "query": "page=2&sort=title",
+   "query_keys": [
+    "page",
+    "sort"
+   ],
+   "status": 200,
+   "bytes": 3404,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-an",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 3056,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-nt",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 3014,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-on",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2932,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/35/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/35",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23844,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/35/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=35",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/collections/maps",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/collections/poetry",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/collections/science",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/collections/history",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/collections/partners",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/1",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk/reserve",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1242,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk/loans",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 788,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk/cards",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1157,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk/shelf",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 925,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/exhibits/",
+   "query": "",
+   "query_keys": [],
+   "status": 404,
+   "bytes": 548,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/shelf/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 33,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/43/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/43",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24553,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/43/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=43",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk/tools",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 895,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk/component",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1290,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk/frame",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 623,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk/hidden",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 835,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk/rows",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 32576,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/archive/annual-report",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1196616,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/archive/legacy-index",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 575,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/archive/broken-feed",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 300,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/account/list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 579,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/hidden/",
+   "query": "",
+   "query_keys": [],
+   "status": 404,
+   "bytes": 2,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/rows/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 32,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/51/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/51",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24918,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/51/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=51",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/11/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/22/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/35/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/1/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/9/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/archive/slow-index",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1486,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/59/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/59",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25123,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/59/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=59",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/16",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23589,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/31",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23850,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/46",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23820,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/2/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/10/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/17",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23956,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/32",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25547,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/47",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25753,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/18",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24874,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/33",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24600,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/7/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/7",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24662,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/7/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=7",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/48",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24468,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/4/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/12/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/19",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24276,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/34",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24095,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/49",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24027,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/5/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/13/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/20",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24746,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/35",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23844,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/15/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/15",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24115,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/15/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=15",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/50",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23481,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/6/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/21",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24406,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/36",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23900,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/51",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24918,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/7/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/15/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/22",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24641,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/37",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24126,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/23/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/23",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24438,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/23/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=23",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/52",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23853,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/8/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/16/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/23",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24438,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/38",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23771,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/53",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24557,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/9/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/17/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/24",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23900,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/39",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24603,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/31/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/31",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23850,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/31/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=31",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/54",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24049,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/10/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/18/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/25",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24401,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/40",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25873,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/55",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24923,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/11/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/19/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/26",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23844,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/39/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/39",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24603,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/39/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=39",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/41",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24676,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/56",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24150,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/12/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/20/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/42",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24428,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/57",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24662,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/13",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25208,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/13",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 25208,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24811,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/15",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24115,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/47/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/47",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25753,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/47/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=47",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/15",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24115,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/16",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 23589,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/17",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 23956,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/18",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24874,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/19",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24276,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/20",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24746,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/21",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24406,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/22",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24641,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/23",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 24438,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/24",
+   "query": "ref=catalog",
+   "query_keys": [
+    "ref"
+   ],
+   "status": 200,
+   "bytes": 23900,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/55/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/55",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24923,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/55/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=55",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/30",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23813,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/45",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25949,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/60",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24355,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/28",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24448,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/43",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24553,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/58",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24549,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/29",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24173,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/44",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24862,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/59",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25123,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/35/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-kq",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2915,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/43/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/c/maps",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/c/poetry",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/c/science",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/c/history",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/2",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/43/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/51/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/desk/frame-inner",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 723,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/archive/report-summary",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1114,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/40",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25873,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/40/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=40",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/archive/feed-entry",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 820,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/archive/slow-entry",
+   "query": "",
+   "query_keys": [],
+   "status": 404,
+   "bytes": 548,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/51/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/59/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/59/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/7/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/16/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/24/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/39/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/54/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/48/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/48",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24468,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/48/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=48",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/25/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/40/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/55/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/26/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/41/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/56/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/42/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/57/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/28/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/56/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/56",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24150,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/56/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=56",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/23/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/58/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/29/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/44/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/30/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/45/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/31/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/60/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/46/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/1/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/4/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/4",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23806,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/4/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=4",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/32/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/47/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/2/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/33/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/48/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/34/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/49/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/4/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/50/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/12/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/12",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24143,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/12/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=12",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/5/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/21/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/38/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/53/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/8/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/36/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/6/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/37/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/52/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/collections/view",
+   "query": "name=maps",
+   "query_keys": [
+    "name"
+   ],
+   "status": 200,
+   "bytes": 975,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/20/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/20",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24746,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/20/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=20",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/3",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/4",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/5",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/6",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/7",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/8",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/9",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/10",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/11",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/12",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/28/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/28",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24448,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/28/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=28",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/13",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/14",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/15",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/16",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/17",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/18",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/19",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/20",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/stacks/21",
+   "query": "",
+   "query_keys": [],
+   "status": 302,
+   "bytes": 0,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/36/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/36",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23900,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/36/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=36",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/15/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/44/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/44",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24862,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/44/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=44",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/23/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/31/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/39/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/40/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/47/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/48/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/55/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/56/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/25/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/52/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/52",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23853,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/52/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=52",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/13/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/60/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/60",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24355,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/60/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=60",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/17/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/18/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/20/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/21/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/22/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/24/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/26/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/28/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/29/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/8/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/8",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23845,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/8/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=8",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/30/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/16/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/16",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23589,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/16/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=16",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/32/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/33/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/36/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/37/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/38/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/41/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/42/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/44/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/45/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/24/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/24",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23900,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/24/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=24",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/46/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/32/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/32",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25547,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/32/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=32",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/50/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/52/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/53/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/54/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/57/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/58/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/60/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/19/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/34/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/40/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/40",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25873,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/40/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=40",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/49/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "passive",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-kq",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2915,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/25",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24401,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/25/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=25",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/33/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/33",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24600,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/33/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=33",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/41/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/41",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24676,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/41/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=41",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/49/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/49",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24027,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/49/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=49",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/57/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/57",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24662,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/57/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=57",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/5/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/5",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24280,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/5/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=5",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/13/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/13",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25208,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/13/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=13",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/21/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/21",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24406,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/21/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=21",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/29/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/29",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24173,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/29/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=29",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/37/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/37",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24126,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/37/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=37",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/45/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/45",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25949,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/45/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=45",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/53/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/53",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/53/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=53",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/1/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/1",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25425,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/1/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=1",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/9/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/9",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23838,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/9/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=9",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/17/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/17",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23956,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/17/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=17",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/25/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/25",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24401,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/25/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=25",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-kq",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2915,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/10",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24270,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/10/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=10",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/18/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/18",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24874,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/18/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=18",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/26/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/26",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23844,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/26/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=26",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/34/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/34",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24095,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/34/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=34",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/42/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/42",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24428,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/42/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=42",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/50/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/50",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23481,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/50/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=50",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/58/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/58",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24549,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/58/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=58",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/6/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/6",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23847,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/6/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=6",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24811,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=14",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/22/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/22",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24641,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/22/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=22",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/30/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/30",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23813,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/30/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=30",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/38/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/38",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23771,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/38/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=38",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/46/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/46",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23820,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/46/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=46",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/54/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/54",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24049,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/54/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=54",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/2/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/2",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24051,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/2/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=2",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/10/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/10",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24270,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/10/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=10",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-kq",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2915,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/55",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24923,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/55/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=55",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24692,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=3",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/11/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/11",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23923,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/11/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=11",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/19/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/19",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24276,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/19/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=19",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27/",
+   "query": "",
+   "query_keys": [],
+   "status": 301,
+   "bytes": 0,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23494,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=27",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-ms",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2963,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/57",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24662,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/57/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=57",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-ms",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2963,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/42",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24428,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/42/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=42",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-ms",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2963,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/12",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24143,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/12/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=12",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-ms",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2963,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23494,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=27",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24692,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=3",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-dq",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2999,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/48",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24468,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/48/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=48",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-dq",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2999,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/18",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24874,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/18/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=18",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-dq",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2999,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/33",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24600,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/33/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=33",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 26,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-dq",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2999,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24692,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=3",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24811,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=14",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 26,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-on",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2932,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/29",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24173,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/29/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=29",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23494,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=27",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24692,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=3",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/catalog/search",
+   "query": "q=engramsec-test",
+   "query_keys": [
+    "q"
+   ],
+   "status": 200,
+   "bytes": 577,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24811,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=14",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23494,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=27",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24692,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/3/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=3",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23494,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=27",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/authors/author-ms",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 2963,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 24811,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 50,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/item.js",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 557,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/14/cover.svg",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 113,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/paper.png",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 72,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/api/availability",
+   "query": "item=14",
+   "query_keys": [
+    "item"
+   ],
+   "status": 200,
+   "bytes": 62,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "POST",
+   "path": "/api/reading-list",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 25,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 1319,
+   "client": "browser",
+   "session_cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/items/27",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 23494,
+   "client": "browser",
+   "session_cookie": true
+  },
+  {
+   "method": "GET",
+   "path": "/static/site.css",
+   "query": "",
+   "query_keys": [],
+   "status": 200,
+   "bytes": 171,
+   "client": "browser",
+   "session_cookie": true
+  }
+ ]
+}

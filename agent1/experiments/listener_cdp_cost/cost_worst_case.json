@@ -1,0 +1,87 @@
+{
+  "browser": "chromium 156.0.8078.4",
+  "rows": [
+    {
+      "target_elements": 10000,
+      "click_listener_share": 1.0,
+      "elements": 10007,
+      "click_listener_elements": 9000,
+      "listener_records": 10286,
+      "enumeration_ms_median": 236.0,
+      "enumeration_ms_max": 304.3,
+      "response_bytes": 4262586,
+      "python_alloc_peak_mb": 33.56,
+      "observe_first": {
+        "ms": 348.67,
+        "cdp_calls": 609,
+        "described": 300,
+        "reused": 0,
+        "truncated": true,
+        "listener_nodes": 9001,
+        "candidates": 4,
+        "error": null
+      },
+      "observe_unchanged": {
+        "ms": 357.76,
+        "cdp_calls": 609,
+        "described": 300,
+        "reused": 300,
+        "truncated": true,
+        "listener_nodes": 9001,
+        "candidates": 4,
+        "error": null
+      },
+      "observe_after_action": {
+        "ms": 321.19,
+        "cdp_calls": 610,
+        "described": 300,
+        "reused": 600,
+        "truncated": true,
+        "listener_nodes": 9002,
+        "candidates": 5,
+        "error": null
+      }
+    },
+    {
+      "target_elements": 50000,
+      "click_listener_share": 1.0,
+      "elements": 50007,
+      "click_listener_elements": 45000,
+      "listener_records": 51429,
+      "enumeration_ms_median": 1885.5,
+      "enumeration_ms_max": 1970.8,
+      "response_bytes": 21470771,
+      "python_alloc_peak_mb": 166.8,
+      "observe_first": {
+        "ms": 1547.26,
+        "cdp_calls": 609,
+        "described": 300,
+        "reused": 0,
+        "truncated": true,
+        "listener_nodes": 45001,
+        "candidates": 4,
+        "error": null
+      },
+      "observe_unchanged": {
+        "ms": 1459.43,
+        "cdp_calls": 609,
+        "described": 300,
+        "reused": 300,
+        "truncated": true,
+        "listener_nodes": 45001,
+        "candidates": 4,
+        "error": null
+      },
+      "observe_after_action": {
+        "ms": 1678.04,
+        "cdp_calls": 610,
+        "described": 300,
+        "reused": 600,
+        "truncated": true,
+        "listener_nodes": 45002,
+        "candidates": 5,
+        "error": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,1071 @@
+{
+  "aggregate": {
+    "A": {
+      "discovery_root_reloads": {
+        "max": 49,
+        "mean": 49,
+        "min": 49
+      },
+      "distinct_request_structures": {
+        "max": 185,
+        "mean": 185,
+        "min": 185
+      },
+      "external_only_marker_hits": {
+        "max": 0,
+        "mean": 0,
+        "min": 0
+      },
+      "graph_a_functional_areas": {
+        "max": 7,
+        "mean": 7,
+        "min": 7
+      },
+      "marker_hits": {
+        "max": 25,
+        "mean": 25,
+        "min": 25
+      },
+      "marker_hits_absent_from_all_A_runs": {
+        "max": 0,
+        "mean": 0,
+        "min": 0
+      },
+      "marker_hits_per_100_requests": {
+        "max": 5.05,
+        "mean": 5.04,
+        "min": 5.03
+      },
+      "marker_hits_per_minute": {
+        "max": 9.32,
+        "mean": 9.3,
+        "min": 9.28
+      },
+      "replay_validated": {
+        "max": 23,
+        "mean": 23,
+        "min": 23
+      },
+      "restoration_actions": {
+        "max": 76,
+        "mean": 76,
+        "min": 76
+      },
+      "runs": 3,
+      "total_http_requests": {
+        "max": 497,
+        "mean": 496,
+        "min": 495
+      },
+      "transitions_observed": {
+        "max": 103,
+        "mean": 103,
+        "min": 103
+      },
+      "untested_transitions": {
+        "max": 80,
+        "mean": 80,
+        "min": 80
+      }
+    },
+    "AH": {
+      "discovery_root_reloads": {
+        "max": 48,
+        "mean": 48,
+        "min": 48
+      },
+      "distinct_request_structures": {
+        "max": 185,
+        "mean": 185,
+        "min": 185
+      },
+      "external_only_marker_hits": {
+        "max": 0,
+        "mean": 0,
+        "min": 0
+      },
+      "graph_a_functional_areas": {
+        "max": 7,
+        "mean": 7,
+        "min": 7
+      },
+      "marker_hits": {
+        "max": 25,
+        "mean": 25,
+        "min": 25
+      },
+      "marker_hits_absent_from_all_A_runs": {
+        "max": 0,
+        "mean": 0,
+        "min": 0
+      },
+      "marker_hits_per_100_requests": {
+        "max": 5.02,
+        "mean": 5.02,
+        "min": 5.02
+      },
+      "marker_hits_per_minute": {
+        "max": 9.34,
+        "mean": 9.34,
+        "min": 9.34
+      },
+      "replay_validated": {
+        "max": 24,
+        "mean": 24,
+        "min": 24
+      },
+      "restoration_actions": {
+        "max": 76,
+        "mean": 76,
+        "min": 76
+      },
+      "runs": 1,
+      "total_http_requests": {
+        "max": 498,
+        "mean": 498,
+        "min": 498
+      },
+      "transitions_observed": {
+        "max": 103,
+        "mean": 103,
+        "min": 103
+      },
+      "untested_transitions": {
+        "max": 79,
+        "mean": 79,
+        "min": 79
+      }
+    },
+    "B": {
+      "discovery_root_reloads": {
+        "max": 49,
+        "mean": 48.33,
+        "min": 48
+      },
+      "distinct_request_structures": {
+        "max": 179,
+        "mean": 178.67,
+        "min": 178
+      },
+      "external_only_marker_hits": {
+        "max": 4,
+        "mean": 4,
+        "min": 4
+      },
+      "graph_a_functional_areas": {
+        "max": 7,
+        "mean": 7,
+        "min": 7
+      },
+      "marker_hits": {
+        "max": 27,
+        "mean": 27,
+        "min": 27
+      },
+      "marker_hits_absent_from_all_A_runs": {
+        "max": 10,
+        "mean": 10,
+        "min": 10
+      },
+      "marker_hits_per_100_requests": {
+        "max": 3.2,
+        "mean": 3.19,
+        "min": 3.17
+      },
+      "marker_hits_per_minute": {
+        "max": 9.81,
+        "mean": 9.74,
+        "min": 9.6
+      },
+      "replay_validated": {
+        "max": 25,
+        "mean": 24,
+        "min": 23
+      },
+      "restoration_actions": {
+        "max": 76,
+        "mean": 74.67,
+        "min": 74
+      },
+      "runs": 3,
+      "total_http_requests": {
+        "max": 852,
+        "mean": 847,
+        "min": 844
+      },
+      "transitions_observed": {
+        "max": 103,
+        "mean": 102,
+        "min": 101
+      },
+      "untested_transitions": {
+        "max": 80,
+        "mean": 78,
+        "min": 76
+      }
+    },
+    "C": {
+      "discovery_root_reloads": {
+        "max": 54,
+        "mean": 54,
+        "min": 54
+      },
+      "distinct_request_structures": {
+        "max": 176,
+        "mean": 176,
+        "min": 176
+      },
+      "external_only_marker_hits": {
+        "max": 0,
+        "mean": 0,
+        "min": 0
+      },
+      "graph_a_functional_areas": {
+        "max": 7,
+        "mean": 7,
+        "min": 7
+      },
+      "marker_hits": {
+        "max": 23,
+        "mean": 23,
+        "min": 23
+      },
+      "marker_hits_absent_from_all_A_runs": {
+        "max": 5,
+        "mean": 5,
+        "min": 5
+      },
+      "marker_hits_per_100_requests": {
+        "max": 4.69,
+        "mean": 4.69,
+        "min": 4.69
+      },
+      "marker_hits_per_minute": {
+        "max": 8.85,
+        "mean": 8.85,
+        "min": 8.85
+      },
+      "replay_validated": {
+        "max": 22,
+        "mean": 22,
+        "min": 22
+      },
+      "restoration_actions": {
+        "max": 86,
+        "mean": 86,
+        "min": 86
+      },
+      "runs": 1,
+      "total_http_requests": {
+        "max": 490,
+        "mean": 490,
+        "min": 490
+      },
+      "transitions_observed": {
+        "max": 96,
+        "mean": 96,
+        "min": 96
+      },
+      "untested_transitions": {
+        "max": 74,
+        "mean": 74,
+        "min": 74
+      }
+    },
+    "D": {
+      "discovery_root_reloads": {
+        "max": 53,
+        "mean": 53,
+        "min": 53
+      },
+      "distinct_request_structures": {
+        "max": 169,
+        "mean": 169,
+        "min": 169
+      },
+      "external_only_marker_hits": {
+        "max": 5,
+        "mean": 5,
+        "min": 5
+      },
+      "graph_a_functional_areas": {
+        "max": 7,
+        "mean": 7,
+        "min": 7
+      },
+      "marker_hits": {
+        "max": 24,
+        "mean": 24,
+        "min": 24
+      },
+      "marker_hits_absent_from_all_A_runs": {
+        "max": 10,
+        "mean": 10,
+        "min": 10
+      },
+      "marker_hits_per_100_requests": {
+        "max": 2.86,
+        "mean": 2.86,
+        "min": 2.86
+      },
+      "marker_hits_per_minute": {
+        "max": 9.06,
+        "mean": 9.06,
+        "min": 9.06
+      },
+      "replay_validated": {
+        "max": 23,
+        "mean": 23,
+        "min": 23
+      },
+      "restoration_actions": {
+        "max": 84,
+        "mean": 84,
+        "min": 84
+      },
+      "runs": 1,
+      "total_http_requests": {
+        "max": 840,
+        "mean": 840,
+        "min": 840
+      },
+      "transitions_observed": {
+        "max": 95,
+        "mean": 95,
+        "min": 95
+      },
+      "untested_transitions": {
+        "max": 72,
+        "mean": 72,
+        "min": 72
+      }
+    },
+    "E": {
+      "discovery_root_reloads": {
+        "max": 31,
+        "mean": 31,
+        "min": 31
+      },
+      "distinct_request_structures": {
+        "max": 189,
+        "mean": 189,
+        "min": 189
+      },
+      "external_only_marker_hits": {
+        "max": 5,
+        "mean": 5,
+        "min": 5
+      },
+      "graph_a_functional_areas": {
+        "max": 7,
+        "mean": 7,
+        "min": 7
+      },
+      "marker_hits": {
+        "max": 26,
+        "mean": 26,
+        "min": 26
+      },
+      "marker_hits_absent_from_all_A_runs": {
+        "max": 11,
+        "mean": 11,
+        "min": 11
+      },
+      "marker_hits_per_100_requests": {
+        "max": 3.07,
+        "mean": 3.07,
+        "min": 3.07
+      },
+      "marker_hits_per_minute": {
+        "max": 9.53,
+        "mean": 9.47,
+        "min": 9.41
+      },
+      "replay_validated": {
+        "max": 26,
+        "mean": 26,
+        "min": 26
+      },
+      "restoration_actions": {
+        "max": 84,
+        "mean": 84,
+        "min": 84
+      },
+      "runs": 3,
+      "total_http_requests": {
+        "max": 848,
+        "mean": 847.67,
+        "min": 847
+      },
+      "transitions_observed": {
+        "max": 105,
+        "mean": 105,
+        "min": 105
+      },
+      "untested_transitions": {
+        "max": 79,
+        "mean": 79,
+        "min": 79
+      }
+    },
+    "Eprefixonly": {
+      "discovery_root_reloads": {
+        "max": 54,
+        "mean": 54,
+        "min": 54
+      },
+      "distinct_request_structures": {
+        "max": 169,
+        "mean": 169,
+        "min": 169
+      },
+      "external_only_marker_hits": {
+        "max": 5,
+        "mean": 5,
+        "min": 5
+      },
+      "graph_a_functional_areas": {
+        "max": 7,
+        "mean": 7,
+        "min": 7
+      },
+      "marker_hits": {
+        "max": 24,
+        "mean": 24,
+        "min": 24
+      },
+      "marker_hits_absent_from_all_A_runs": {
+        "max": 10,
+        "mean": 10,
+        "min": 10
+      },
+      "marker_hits_per_100_requests": {
+        "max": 2.86,
+        "mean": 2.86,
+        "min": 2.86
+      },
+      "marker_hits_per_minute": {
+        "max": 9.14,
+        "mean": 9.14,
+        "min": 9.14
+      },
+      "replay_validated": {
+        "max": 22,
+        "mean": 22,
+        "min": 22
+      },
+      "restoration_actions": {
+        "max": 86,
+        "mean": 86,
+        "min": 86
+      },
+      "runs": 1,
+      "total_http_requests": {
+        "max": 839,
+        "mean": 839,
+        "min": 839
+      },
+      "transitions_observed": {
+        "max": 96,
+        "mean": 96,
+        "min": 96
+      },
+      "untested_transitions": {
+        "max": 74,
+        "mean": 74,
+        "min": 74
+      }
+    }
+  },
+  "categories": [
+    "css",
+    "headers",
+    "html",
+    "javascript",
+    "misc"
+  ],
+  "expected_total": 91,
+  "note": "Marker hits are live integrated results from each run's own Graph A; no offline unions.",
+  "runs": {
+    "AH_r1": {
+      "arm": "AH",
+      "browser_actions": 300,
+      "discovery_root_reloads": 48,
+      "distinct_request_structures": 185,
+      "elapsed_seconds": 160.651,
+      "external_elapsed_seconds": 0.0,
+      "external_only_marker_hits": 0,
+      "external_paths_also_ui_targets": 0,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1298,
+      "grouped_states": 89,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 312,
+        "browser_redirect": 95,
+        "resource_spider": 91
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 58,
+      "marker_hits": 25,
+      "marker_hits_absent_from_all_A_runs": 0,
+      "marker_hits_by_category": {
+        "css": 0,
+        "headers": 3,
+        "html": 19,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 5.02,
+      "marker_hits_per_minute": 9.34,
+      "prefix_state_reuses": 1,
+      "replay_attempted": 24,
+      "replay_validated": 24,
+      "restoration_actions": 76,
+      "total_http_requests": 498,
+      "transitions_observed": 103,
+      "untested_transitions": 79,
+      "verification_root_reloads": 24
+    },
+    "A_r1": {
+      "arm": "A",
+      "browser_actions": 297,
+      "discovery_root_reloads": 49,
+      "distinct_request_structures": 185,
+      "elapsed_seconds": 161.494,
+      "external_elapsed_seconds": 0.0,
+      "external_only_marker_hits": 0,
+      "external_paths_also_ui_targets": 0,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1297,
+      "grouped_states": 89,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 310,
+        "browser_redirect": 95,
+        "resource_spider": 91
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 58,
+      "marker_hits": 25,
+      "marker_hits_absent_from_all_A_runs": 0,
+      "marker_hits_by_category": {
+        "css": 0,
+        "headers": 3,
+        "html": 19,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 5.04,
+      "marker_hits_per_minute": 9.29,
+      "prefix_state_reuses": 0,
+      "replay_attempted": 23,
+      "replay_validated": 23,
+      "restoration_actions": 76,
+      "total_http_requests": 496,
+      "transitions_observed": 103,
+      "untested_transitions": 80,
+      "verification_root_reloads": 23
+    },
+    "A_r2": {
+      "arm": "A",
+      "browser_actions": 297,
+      "discovery_root_reloads": 49,
+      "distinct_request_structures": 185,
+      "elapsed_seconds": 161.6,
+      "external_elapsed_seconds": 0.0,
+      "external_only_marker_hits": 0,
+      "external_paths_also_ui_targets": 0,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1297,
+      "grouped_states": 89,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 311,
+        "browser_redirect": 95,
+        "resource_spider": 91
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 58,
+      "marker_hits": 25,
+      "marker_hits_absent_from_all_A_runs": 0,
+      "marker_hits_by_category": {
+        "css": 0,
+        "headers": 3,
+        "html": 19,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 5.03,
+      "marker_hits_per_minute": 9.28,
+      "prefix_state_reuses": 0,
+      "replay_attempted": 23,
+      "replay_validated": 23,
+      "restoration_actions": 76,
+      "total_http_requests": 497,
+      "transitions_observed": 103,
+      "untested_transitions": 80,
+      "verification_root_reloads": 23
+    },
+    "A_r3": {
+      "arm": "A",
+      "browser_actions": 297,
+      "discovery_root_reloads": 49,
+      "distinct_request_structures": 185,
+      "elapsed_seconds": 160.952,
+      "external_elapsed_seconds": 0.0,
+      "external_only_marker_hits": 0,
+      "external_paths_also_ui_targets": 0,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1297,
+      "grouped_states": 89,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 310,
+        "browser_redirect": 94,
+        "resource_spider": 91
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 58,
+      "marker_hits": 25,
+      "marker_hits_absent_from_all_A_runs": 0,
+      "marker_hits_by_category": {
+        "css": 0,
+        "headers": 3,
+        "html": 19,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 5.05,
+      "marker_hits_per_minute": 9.32,
+      "prefix_state_reuses": 0,
+      "replay_attempted": 23,
+      "replay_validated": 23,
+      "restoration_actions": 76,
+      "total_http_requests": 495,
+      "transitions_observed": 103,
+      "untested_transitions": 80,
+      "verification_root_reloads": 23
+    },
+    "B_r1": {
+      "arm": "B",
+      "browser_actions": 297,
+      "discovery_root_reloads": 49,
+      "distinct_request_structures": 179,
+      "elapsed_seconds": 163.1,
+      "external_elapsed_seconds": 2.043,
+      "external_only_marker_hits": 4,
+      "external_paths_also_ui_targets": 75,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1922,
+      "grouped_states": 89,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 309,
+        "browser_redirect": 94,
+        "resource_spider": 97,
+        "zap_traditional_spider": 344
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 58,
+      "marker_hits": 27,
+      "marker_hits_absent_from_all_A_runs": 10,
+      "marker_hits_by_category": {
+        "css": 1,
+        "headers": 4,
+        "html": 19,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 3.2,
+      "marker_hits_per_minute": 9.81,
+      "prefix_state_reuses": 0,
+      "replay_attempted": 23,
+      "replay_validated": 23,
+      "restoration_actions": 76,
+      "total_http_requests": 844,
+      "transitions_observed": 103,
+      "untested_transitions": 80,
+      "verification_root_reloads": 23
+    },
+    "B_r2": {
+      "arm": "B",
+      "browser_actions": 300,
+      "discovery_root_reloads": 48,
+      "distinct_request_structures": 178,
+      "elapsed_seconds": 163.031,
+      "external_elapsed_seconds": 2.043,
+      "external_only_marker_hits": 4,
+      "external_paths_also_ui_targets": 74,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1910,
+      "grouped_states": 88,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 314,
+        "browser_redirect": 97,
+        "resource_spider": 97,
+        "zap_traditional_spider": 344
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 57,
+      "marker_hits": 27,
+      "marker_hits_absent_from_all_A_runs": 10,
+      "marker_hits_by_category": {
+        "css": 1,
+        "headers": 4,
+        "html": 19,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 3.17,
+      "marker_hits_per_minute": 9.81,
+      "prefix_state_reuses": 0,
+      "replay_attempted": 25,
+      "replay_validated": 25,
+      "restoration_actions": 74,
+      "total_http_requests": 852,
+      "transitions_observed": 101,
+      "untested_transitions": 76,
+      "verification_root_reloads": 25
+    },
+    "B_r3": {
+      "arm": "B",
+      "browser_actions": 297,
+      "discovery_root_reloads": 48,
+      "distinct_request_structures": 179,
+      "elapsed_seconds": 166.679,
+      "external_elapsed_seconds": 2.043,
+      "external_only_marker_hits": 4,
+      "external_paths_also_ui_targets": 74,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1912,
+      "grouped_states": 88,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 309,
+        "browser_redirect": 95,
+        "resource_spider": 97,
+        "zap_traditional_spider": 344
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 58,
+      "marker_hits": 27,
+      "marker_hits_absent_from_all_A_runs": 10,
+      "marker_hits_by_category": {
+        "css": 1,
+        "headers": 4,
+        "html": 19,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 3.2,
+      "marker_hits_per_minute": 9.6,
+      "prefix_state_reuses": 0,
+      "replay_attempted": 24,
+      "replay_validated": 24,
+      "restoration_actions": 74,
+      "total_http_requests": 845,
+      "transitions_observed": 102,
+      "untested_transitions": 78,
+      "verification_root_reloads": 24
+    },
+    "C_r1": {
+      "arm": "C",
+      "browser_actions": 300,
+      "discovery_root_reloads": 54,
+      "distinct_request_structures": 176,
+      "elapsed_seconds": 156.011,
+      "external_elapsed_seconds": 0.0,
+      "external_only_marker_hits": 0,
+      "external_paths_also_ui_targets": 0,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1282,
+      "grouped_states": 83,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 309,
+        "browser_redirect": 92,
+        "resource_spider": 89
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 44,
+      "marker_hits": 23,
+      "marker_hits_absent_from_all_A_runs": 5,
+      "marker_hits_by_category": {
+        "css": 0,
+        "headers": 3,
+        "html": 17,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 4.69,
+      "marker_hits_per_minute": 8.85,
+      "prefix_state_reuses": 0,
+      "replay_attempted": 22,
+      "replay_validated": 22,
+      "restoration_actions": 86,
+      "total_http_requests": 490,
+      "transitions_observed": 96,
+      "untested_transitions": 74,
+      "verification_root_reloads": 22
+    },
+    "D_r1": {
+      "arm": "D",
+      "browser_actions": 300,
+      "discovery_root_reloads": 53,
+      "distinct_request_structures": 169,
+      "elapsed_seconds": 156.873,
+      "external_elapsed_seconds": 2.043,
+      "external_only_marker_hits": 5,
+      "external_paths_also_ui_targets": 68,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1886,
+      "grouped_states": 82,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 307,
+        "browser_redirect": 92,
+        "resource_spider": 97,
+        "zap_traditional_spider": 344
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 44,
+      "marker_hits": 24,
+      "marker_hits_absent_from_all_A_runs": 10,
+      "marker_hits_by_category": {
+        "css": 1,
+        "headers": 4,
+        "html": 16,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 2.86,
+      "marker_hits_per_minute": 9.06,
+      "prefix_state_reuses": 0,
+      "replay_attempted": 23,
+      "replay_validated": 23,
+      "restoration_actions": 84,
+      "total_http_requests": 840,
+      "transitions_observed": 95,
+      "untested_transitions": 72,
+      "verification_root_reloads": 23
+    },
+    "E_r1": {
+      "arm": "E",
+      "browser_actions": 300,
+      "discovery_root_reloads": 31,
+      "distinct_request_structures": 189,
+      "elapsed_seconds": 163.794,
+      "external_elapsed_seconds": 2.043,
+      "external_only_marker_hits": 5,
+      "external_paths_also_ui_targets": 76,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1935,
+      "grouped_states": 90,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 314,
+        "browser_redirect": 93,
+        "resource_spider": 97,
+        "zap_traditional_spider": 344
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 47,
+      "marker_hits": 26,
+      "marker_hits_absent_from_all_A_runs": 11,
+      "marker_hits_by_category": {
+        "css": 1,
+        "headers": 4,
+        "html": 18,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 3.07,
+      "marker_hits_per_minute": 9.41,
+      "prefix_state_reuses": 1,
+      "replay_attempted": 26,
+      "replay_validated": 26,
+      "restoration_actions": 84,
+      "total_http_requests": 848,
+      "transitions_observed": 105,
+      "untested_transitions": 79,
+      "verification_root_reloads": 26
+    },
+    "E_r2": {
+      "arm": "E",
+      "browser_actions": 300,
+      "discovery_root_reloads": 31,
+      "distinct_request_structures": 189,
+      "elapsed_seconds": 162.617,
+      "external_elapsed_seconds": 2.043,
+      "external_only_marker_hits": 5,
+      "external_paths_also_ui_targets": 76,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1935,
+      "grouped_states": 90,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 314,
+        "browser_redirect": 93,
+        "resource_spider": 97,
+        "zap_traditional_spider": 344
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 47,
+      "marker_hits": 26,
+      "marker_hits_absent_from_all_A_runs": 11,
+      "marker_hits_by_category": {
+        "css": 1,
+        "headers": 4,
+        "html": 18,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 3.07,
+      "marker_hits_per_minute": 9.47,
+      "prefix_state_reuses": 1,
+      "replay_attempted": 26,
+      "replay_validated": 26,
+      "restoration_actions": 84,
+      "total_http_requests": 848,
+      "transitions_observed": 105,
+      "untested_transitions": 79,
+      "verification_root_reloads": 26
+    },
+    "E_r3": {
+      "arm": "E",
+      "browser_actions": 300,
+      "discovery_root_reloads": 31,
+      "distinct_request_structures": 189,
+      "elapsed_seconds": 161.686,
+      "external_elapsed_seconds": 2.043,
+      "external_only_marker_hits": 5,
+      "external_paths_also_ui_targets": 76,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1935,
+      "grouped_states": 90,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 314,
+        "browser_redirect": 92,
+        "resource_spider": 97,
+        "zap_traditional_spider": 344
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 47,
+      "marker_hits": 26,
+      "marker_hits_absent_from_all_A_runs": 11,
+      "marker_hits_by_category": {
+        "css": 1,
+        "headers": 4,
+        "html": 18,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 3.07,
+      "marker_hits_per_minute": 9.53,
+      "prefix_state_reuses": 1,
+      "replay_attempted": 26,
+      "replay_validated": 26,
+      "restoration_actions": 84,
+      "total_http_requests": 847,
+      "transitions_observed": 105,
+      "untested_transitions": 79,
+      "verification_root_reloads": 26
+    },
+    "Eprefixonly_r1": {
+      "arm": "Eprefixonly",
+      "browser_actions": 300,
+      "discovery_root_reloads": 54,
+      "distinct_request_structures": 169,
+      "elapsed_seconds": 155.516,
+      "external_elapsed_seconds": 2.043,
+      "external_only_marker_hits": 5,
+      "external_paths_also_ui_targets": 69,
+      "external_promoted_to_replay": 0,
+      "external_records_without_provenance": 0,
+      "graph_a_functional_areas": 7,
+      "graph_connections_missing_evidence": 0,
+      "graph_connections_total": 1908,
+      "grouped_states": 83,
+      "http_blocked": 2,
+      "http_by_source": {
+        "browser": 307,
+        "browser_redirect": 91,
+        "resource_spider": 97,
+        "zap_traditional_spider": 344
+      },
+      "http_overrun": 0,
+      "incorrect_state_merges": 0,
+      "live_state_reuses": 44,
+      "marker_hits": 24,
+      "marker_hits_absent_from_all_A_runs": 10,
+      "marker_hits_by_category": {
+        "css": 1,
+        "headers": 4,
+        "html": 16,
+        "javascript": 3,
+        "misc": 0
+      },
+      "marker_hits_per_100_requests": 2.86,
+      "marker_hits_per_minute": 9.14,
+      "prefix_state_reuses": 0,
+      "replay_attempted": 22,
+      "replay_validated": 22,
+      "restoration_actions": 86,
+      "total_http_requests": 839,
+      "transitions_observed": 96,
+      "untested_transitions": 74,
+      "verification_root_reloads": 22
+    }
+  }
+}

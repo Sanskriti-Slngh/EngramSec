@@ -1,0 +1,955 @@
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from enum import StrEnum
+from pathlib import Path
+from typing import Any, Literal
+from urllib.parse import urlsplit
+
+from pydantic import BaseModel, Field, model_validator
+
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+class EvidenceStatus(StrEnum):
+    ADVERTISED = "advertised"
+    OBSERVED = "observed"
+    REPLAY_VALIDATED = "replay_validated"
+    FAILED = "failed"
+    UNRESOLVED = "unresolved"
+    NOT_TESTED = "not_tested"
+
+
+class FunctionalStatus(StrEnum):
+    VERIFIED = "functional_verified"
+    VALIDATION_FAILURE = "validation_failure"
+    NAVIGATION_ONLY = "navigation_only"
+    UNRESOLVED = "unresolved"
+    NOT_TESTED = "not_tested"
+    FAILED = "failed"
+
+
+class RunConfig(BaseModel):
+    start_url: str
+    output_dir: Path
+    policy: Literal[
+        "exact",
+        "grouped",
+        "coverage",
+        "breadth",
+        "multidimensional",
+        "hierarchical",
+        "selective_model",
+        "model_all",
+    ] = "grouped"
+    max_seconds: float = Field(default=60.0, gt=0)
+    max_transitions: int = Field(default=20, ge=1)
+    max_browser_actions: int = Field(default=80, ge=1)
+    headless: bool = True
+    action_timeout_ms: int = Field(default=5_000, ge=250)
+    settle_ms: int = Field(default=350, ge=0)
+    context_label: str = "anonymous"
+    # Optional Playwright storage-state file for an operator-authorized,
+    # pre-authenticated session (cookies/localStorage). Never created by Agent 1.
+    storage_state_path: Path | None = None
+    allow_post_forms: bool = False
+    state_aware_exploration: bool = True
+    record_aware_graph: bool = True
+    model_provider: Literal["none", "ollama", "groq", "openai"] = "none"
+    model_name: str | None = None
+    paid_calls_enabled: bool = False
+    paid_budget_usd: float = Field(default=20.0, ge=0, le=20.0)
+    paid_stop_usd: float = Field(default=18.0, ge=0, le=18.0)
+    replay_reserve_fraction: float = Field(default=0.30, ge=0, le=0.8)
+    run_id: str | None = None
+    # Phase 2 (opt-in, off by default): privacy-preserving ACG evidence capture and a shadow
+    # Capability Tour Scheduler that proposes but never executes actions.
+    acg_evidence: bool = False
+    shadow_tours: bool = False
+    # Phase 3 (opt-in): "tours" lets tour_v2 select and execute actions through the thin adapter;
+    # "legacy" (default) is the unchanged frontier. The action ledger stamps evidence items with the
+    # browser-action count and elapsed time at which they were stored (instrumentation only).
+    exploration_policy: Literal["legacy", "tours", "tours_grounded", "hybrid_capabilities"] = "legacy"
+    tour_seed: int = 0
+    action_ledger: bool = False
+    # Opt-in: grant Chromium's local-network-access permission to the configured origins so in-scope
+    # WebSockets work under the HTTP budget router. Behavior-changing for apps with local WebSockets,
+    # so separate from evidence capture; requires acg_evidence (WebSocket scope enforcement).
+    websocket_local_access: bool = False
+    resume_from: Path | None = None
+    focus_query: str | None = None
+    model_form_assistance: bool = False
+    max_form_retries: int = Field(default=1, ge=0, le=2)
+    search_probe_primary: str | None = Field(default=None, max_length=80)
+    search_probe_contrast: str | None = Field(default=None, max_length=80)
+    robust_readiness: bool = False
+    readiness_any_enabled: bool = False
+    readiness_await_content: bool = False
+    loopback_origin_equivalence: bool = False
+    ignore_https_errors: bool = False
+    readiness_timeout_ms: int = Field(default=2_500, ge=250, le=15_000)
+    readiness_poll_ms: int = Field(default=100, ge=25, le=1_000)
+    origin_aliases: list[str] = Field(default_factory=list)
+    exploration_mode: Literal["fresh", "persistent"] = "fresh"
+    interaction_profile: Literal["basic", "extended"] = "basic"
+    hybrid_link_discovery: bool = False
+    idle_page_wait_ms: int = Field(default=1_600, ge=250, le=5_000)
+    passive_page_wait_ms: int = Field(default=200, ge=50, le=5_000)
+    readiness_strategy: Literal["fixed", "adaptive"] = "fixed"
+    typed_resource_spider: bool = False
+    max_resource_fetches: int = Field(default=100, ge=0, le=2_000)
+    max_resource_fetches_per_observation: int = Field(default=10, ge=1, le=200)
+    max_resource_document_fetches: int | None = Field(default=None, ge=0, le=2_000)
+    max_resource_script_fetches: int | None = Field(default=None, ge=0, le=2_000)
+    max_resource_stylesheet_fetches: int | None = Field(default=None, ge=0, le=2_000)
+    max_resource_asset_fetches: int | None = Field(default=None, ge=0, le=2_000)
+    max_resource_depth: int = Field(default=3, ge=0, le=10)
+    max_resource_body_bytes: int = Field(default=1_000_000, ge=16_384, le=4_000_000)
+    resource_frontier_policy: Literal["fifo", "route_diverse", "marginal_value", "random"] = "fifo"
+    resource_random_seed: int = Field(default=0, ge=0, le=2_147_483_647)
+    javascript_reference_parser: Literal["legacy_regex", "ast"] = "ast"
+    share_resource_frontier: bool = True
+    # Opt-in (default off): deduplicate identical static-asset responses (script/stylesheet/font/image
+    # GETs) across navigations and replay so the route interceptor does not refetch and recharge them
+    # against the shared HTTP budget. Efficiency only; never caches documents or XHR/fetch. Changes how
+    # many requests a run makes, so it is off by default and compared with a matched baseline.
+    resource_cache: bool = False
+    # Read-only diagnosis (default off): when discovery ends, record the frontier items that were never
+    # executed, with their priority and defer reason, plus which budget bound ended discovery. Records
+    # only; changes no scheduling decision.
+    record_unexecuted_frontier: bool = False
+    # Scheduling of authorized state-changing actions. "deferred" (default) keeps the historical write
+    # deprioritization. "authorized_fair": after ordinary discovery finishes, run a bounded sweep that
+    # executes queued SAFE writes (each at most once) and explores what they unlock -- only on an
+    # attested disposable environment, never destructive routes, still under max_write_requests. The
+    # write penalty is unchanged during normal discovery; this only gives queued writes a fair turn
+    # afterward. `write_sweep_replay_floor` is the fraction of the budget kept back for replay.
+    # "focused_subtree" is authorized_fair plus a short-lived focus: right after a promoted write unlocks
+    # a new route, the sweep prefers that subtree's NOVEL child actions over leftover shallow breadth, so
+    # it descends the unlocked workflow instead of wandering back to the global path-length-first queue.
+    # Bounded by `focus_max_steps`; it reorders within the SAME sweep budget, so the replay floor (and
+    # hence reproduction) is unchanged relative to authorized_fair.
+    # "focused_adaptive" generalizes focused_subtree: the post-discovery focus also continues subtrees
+    # that were unlocked during ORDINARY discovery (not only writes run in the sweep). A subtree is seeded
+    # only on evidence of genuinely new functionality -- its entrance was reached by an executed
+    # interaction and it has queued novel children with >=2 distinct route templates (a functional area),
+    # or it was reached by a write -- so ordinary breadth lists (one template x N items) are not focused.
+    write_execution_policy: Literal["deferred", "authorized_fair", "focused_subtree", "focused_adaptive"] = "deferred"
+    write_sweep_replay_floor: float = Field(default=0.10, ge=0.0, le=0.5)
+    focus_max_steps: int = Field(default=12, ge=0, le=200)
+    # Opt-in deterministic scheduling policy for the post-discovery subtree focus (Stage 1 of the
+    # LLM-augmentation study). All three default to the frozen baseline; no production default changes,
+    # no new scheduler -- they only reorder item selection inside the existing `_authorized_write_sweep`
+    # focus loop, under the SAME sweep budget and replay floor, with no safety/scope change.
+    #   focus_to_budget: let the focus run until the real wall-clock/action/transition ceiling instead of
+    #     stopping at the fixed `focus_max_steps` cap (which otherwise binds before the budget does).
+    #   fair_subtree_rotation: round-robin the EXPENSIVE re-anchor steps across competing seeded hubs
+    #     (stay on a hub only while it has a free, live-reachable novel child) rather than exhausting one
+    #     seeded subtree before switching. Implies focus_to_budget (rotation is moot under the 12-step cap).
+    #   focus_stagnation_limit: 0 disables; N>0 drops a seeded hub from the active set after N consecutive
+    #     focused steps that reach no new observation (bounded deprioritization of a stalled branch).
+    focus_to_budget: bool = False
+    fair_subtree_rotation: bool = False
+    focus_stagnation_limit: int = Field(default=0, ge=0, le=50)
+    # Opt-in (default off -> frozen baseline). The authorized write sweep normally promotes only controls
+    # whose DOM method is non-GET (`<form method=post>`). Many real apps instead perform the write from a
+    # JavaScript handler (`fetch(url,{method:'POST'})` wired in a <script> via onsubmit/onclick/
+    # addEventListener), so the form's DOM method stays GET and the mutation is invisible statically. With
+    # this flag, and ONLY on an attested disposable environment, the sweep ALSO promotes SAFE,
+    # non-destructive form_submit/button/listener controls whose DOM method is GET/empty and whose target is
+    # same-origin-or-null -- i.e. controls that MAY write through a handler. Nothing is assumed: the actual
+    # request still passes the live write gate and `would_allow` (so a genuine write is bounded by
+    # max_write_requests and the destructive-route block, and a control that turns out to be a harmless GET
+    # just costs one bounded sweep action). `control.safe` already excludes destructive labels/targets, so
+    # a "Delete all" button is never promoted. This is what lets create/update-style JS writes, and
+    # interactive controls generally (cf. ZAP Crawlground), actually get triggered.
+    execute_js_driven_writes: bool = False
+    # Opt-in (default off -> frozen baseline). Some controls do not reach their effect synchronously: the
+    # landed page navigates itself after a delay or through client-side routing -- `<meta http-equiv=
+    # refresh>`, a `setTimeout`/`requestAnimationFrame` that sets `location`, `window.location.replace`,
+    # `history.pushState/replaceState` + a hash change. A crawler that observes immediately and moves on
+    # never reaches the destination (cf. ZAP Crawlground's `navigation` tests). With this flag, after an
+    # action settles, Agent 1 looks for a PENDING client navigation and follows it: it reads a meta-refresh
+    # target, and briefly polls for a same-origin URL change, bounded by `follow_navigation_timeout_ms`.
+    # A followed navigation is recorded as an ordinary navigation transition (so the map shows it); it never
+    # leaves the configured origin and issues no write. Only pages that look terminal (a scheduled refresh,
+    # or no actionable control after readiness) pay the poll, so an ordinary page is not slowed.
+    follow_client_navigation: bool = False
+    follow_navigation_timeout_ms: int = Field(default=2500, ge=0, le=15_000)
+    # Opt-in (default off -> frozen baseline). In a breadth-first crawl a leaf page's own control (its one
+    # button/form/link that produces the page's effect) competes with the whole frontier and is often left
+    # unexercised before the budget is spent -- the page is mapped but its functionality is not. With this
+    # flag the persistent loop, on each newly reached state, exercises that state's OWN safe, novel local
+    # controls first (raising the local burst and NOT applying the standing write/form deprioritization to a
+    # control that is reachable right here), before spending expensive restoration on global breadth. Bounded
+    # by `local_control_sweep_max` per state; writes still pass the write policy, destructive routes are
+    # still excluded, and nothing changes which controls are discovered -- only the order they are driven.
+    exhaustive_local_controls: bool = False
+    local_control_sweep_max: int = Field(default=16, ge=1, le=200)
+    # Opt-in (default off -> frozen baseline). A history-mode SPA (Vue/React router) changes the route
+    # CLIENT-SIDE on a click: the URL becomes e.g. /index -> /login but no page-load event fires, so the
+    # post-click `wait_for_load_state("domcontentloaded")` returns immediately and the snapshot is taken
+    # before the new route renders -- the navigation is then recorded as a self-loop on the old page. With
+    # this flag, after a click-type action Agent 1 briefly polls for a same-page URL change (bounded by
+    # `spa_route_settle_ms`); if the route changed, the normal readiness wait then settles the new route
+    # before the snapshot. A genuine in-page click (no URL change) just pays the bounded poll once.
+    await_spa_route_change: bool = False
+    spa_route_settle_ms: int = Field(default=1500, ge=0, le=10_000)
+    # Opt-in session-loss guard for AUTHENTICATED runs (defaults off -> frozen baseline; only active when
+    # `storage_state_path` is set). Some apps expose a control that drops the session -- most commonly an
+    # unlabeled logout icon whose only side effect (GET /api/logout) appears AFTER the click, so the static
+    # destructive-label/target filter cannot catch it. On an authenticated SPA this bounces the context to a
+    # login route and the crawl then wastes its remaining budget re-mapping /login instead of the privileged
+    # surface. With the guard on, when an action lands on a `login_route_pattern` route that the prior state
+    # was NOT on, Agent 1 records the triggering control as session-destroying (never driven or enqueued
+    # again), re-applies the operator storage_state (cookies + per-origin localStorage) and returns to the
+    # start URL, and does not enqueue the login page's controls. The logout transition is still recorded as
+    # evidence (the logout capability is identified); only the budget waste and the re-click are prevented.
+    session_loss_guard: bool = False
+    login_route_pattern: str = r"/(?:login|signin|sign[-_]?in|logon|logout|auth/login|account/login|user/login)(?:[/?#]|$)"
+    # Opt-in Stage-2 restoration saver (defaults off -> frozen baseline). When Agent 1 has reached a
+    # verified, plain-GET, non-destructive parent state with several DISTINCT (novel-route) children still
+    # queued, execute a bounded batch of them without independently restoring the parent per child: each
+    # child runs via live_state_reuse from the cached parent observation, with ONE verified history return
+    # (go_back) between children. Reuses the existing frontier/session/_attempt_frontier/replay machinery;
+    # all safety, scope, write-cap, and record-identity checks are unchanged, and it falls back to the
+    # normal restoration path on any uncertainty. Never batches writes, roles, or cross-origin actions.
+    eager_child_expansion: bool = False
+    eager_expansion_max: int = Field(default=6, ge=1, le=50)
+    budget_allocation_strategy: Literal["fixed", "adaptive"] = "fixed"
+    # "structure": evidence-driven replay (agent1/replay_scheduler.py). Replay
+    # budget is shared by action cost between greedy coverage of unverified
+    # request structures and the shallow order; a workflow that issued
+    # application requests is validated only if replay reproduces them.
+    replay_policy: Literal["shallow", "diverse", "structure"] = "shallow"
+    replay_structure_attempts: int = Field(default=2, ge=1, le=10)
+    state_reuse: Literal["root", "prefix"] = "root"
+    # Experimental (opt-in): when the strict group check fails after a restoration, "contract"
+    # evaluates the pending action's starting-state contract (agent1/restoration.py) instead of
+    # refusing outright. "strict" (default) is the unchanged behavior.
+    restoration_policy: Literal["strict", "contract"] = "strict"
+    restoration_sample_interval_ms: int = Field(default=300, ge=50, le=2_000)
+    # Opt-in: restore a state reached only through plain same-origin GET links by one direct
+    # navigation to its exact URL (verified like any restoration; falls back to path replay).
+    restoration_shortcut: Literal["none", "direct_url"] = "none"
+    # Opt-in: seed the resource spider with the origin's /robots.txt and /sitemap.xml (GET only,
+    # same scope and budgets as any other resource reference).
+    well_known_discovery: bool = False
+    # Request-level write policy (agent1/write_policy.py). None derives it from allow_post_forms:
+    # False -> "read_only" (enforced on every browser request, not only HTML form methods);
+    # True -> "legacy_post_forms" (historical, un-gated). "disposable" allows bounded, logged,
+    # non-destructive writes and requires an operator/harness attestation of a disposable,
+    # reset-verified environment.
+    write_policy: Literal["read_only", "disposable"] | None = None
+    # How a BLOCKED write is denied at the network layer. "abort" (default) aborts the request
+    # (Chromium net::ERR_ACCESS_DENIED), which is strictest but makes the page's fetch() reject —
+    # breaking SPAs that perform a benign write during init (e.g. comfyui PUTs a setting, and the
+    # thrown rejection halts its whole startup). "neutralize" instead fulfils the request with a
+    # synthetic empty success WITHOUT forwarding it to the server: the server still never receives
+    # the write (identical safety), but the app's fetch resolves so initialization can continue.
+    neutralize_blocked_writes: bool = False
+    environment_attestation: str | None = Field(default=None, max_length=200)
+    max_write_requests: int = Field(default=50, ge=0, le=10_000)
+    allow_destructive: bool = False
+    # Canvas/node-graph workflow EXECUTION (e.g. ComfyUI POST /prompt). A real server side-effect, so it
+    # is double-gated: this opt-in flag AND a write policy that permits the POST (disposable + operator
+    # attestation). When not authorized, the agent records a RED roadblock marker for the blocked
+    # capability instead of executing. Default off (frozen baseline unaffected).
+    allow_canvas_execution: bool = False
+    # Operator-approved canonical-host aliases, origin -> loopback origin (see bounded_http.HOST_MAP).
+    # Every key must also be listed in origin_aliases, so scope is never widened implicitly.
+    host_map: dict[str, str] = Field(default_factory=dict)
+    # Optional discovery changes (defaults keep the frozen baseline behavior).
+    resource_allocation: Literal["class_caps", "shared_http"] = "class_caps"
+    passive_document_http_reserve: int | None = Field(default=None, ge=0, le=100_000)
+    max_passive_document_fetches: int | None = Field(default=None, ge=0, le=100_000)
+    html_extraction: Literal["baseline", "extended", "standards"] = "baseline"
+    max_speculative_fetches: int = Field(default=0, ge=0, le=10_000)
+    response_body_reader: Literal["content_length", "bounded_stream"] = "content_length"
+    resource_frontier_model: Literal["legacy", "persistent"] = "legacy"
+    passive_document_max_depth: int | None = Field(default=None, ge=1, le=12)
+    budget_aware_deepening: bool = False
+    hard_max_resource_depth: int = Field(default=8, ge=1, le=12)
+    zap_evidence_path: Path | None = None
+    zap_source_origin: str | None = None
+    max_total_http_requests: int | None = Field(default=None, ge=1, le=100_000)
+    # Passive (bounded-reader) fetches apply Set-Cookie to the browser context.
+    # False reproduces the b4a9a40 semantics (cookies sent, updates dropped).
+    passive_cookie_sync: bool = True
+    # Share of the total HTTP budget held back for independent replay
+    # (0 reproduces the earlier behavior, where exploration could spend it all).
+    http_verification_reserve_fraction: float = Field(default=0.0, ge=0.0, le=0.8)
+    # Opt-in Chromium DevTools listener observation (agent1/listeners.py):
+    #   observe: listener-bearing elements become candidate controls; handler
+    #            revisions are recorded as evidence only;
+    #   revisit: additionally, a control whose handler changed is re-explored.
+    runtime_listener_observation: Literal["off", "observe", "revisit"] = "off"
+    max_listener_nodes: int = Field(default=300, ge=1, le=5_000)
+    max_listener_candidates: int = Field(default=12, ge=0, le=200)
+    listener_family_limit: int = Field(default=2, ge=1, le=50)
+    # Skip listener enumeration on documents larger than this (0 = no limit).
+    max_listener_dom_elements: int = Field(default=20_000, ge=0, le=10_000_000)
+    # Evidence-only framework handler probe on pages with a delegation host
+    # (elements scanned; 0 = off). Never creates candidate controls.
+    framework_handler_probe: int = Field(default=0, ge=0, le=20_000)
+
+    @property
+    def effective_write_policy(self) -> str:
+        if self.write_policy:
+            return self.write_policy
+        return "legacy_post_forms" if self.allow_post_forms else "read_only"
+
+    @model_validator(mode="after")
+    def loopback_host_map(self) -> "RunConfig":
+        from urllib.parse import urlsplit as _split
+        for alias, target in self.host_map.items():
+            if (_split(target).hostname or "") not in {"127.0.0.1", "localhost", "::1"}:
+                raise ValueError("host_map targets must be loopback origins")
+            if alias.rstrip("/") not in {a.rstrip("/") for a in self.origin_aliases}:
+                raise ValueError("every host_map alias must also be an approved origin alias")
+        return self
+
+    @model_validator(mode="after")
+    def consistent_write_policy(self) -> "RunConfig":
+        if self.write_policy == "disposable":
+            if not self.allow_post_forms:
+                raise ValueError("write_policy=disposable requires allow_post_forms=True")
+            if not (self.environment_attestation or "").startswith("disposable:"):
+                raise ValueError("write_policy=disposable requires an environment_attestation 'disposable:...'")
+        if self.write_policy == "read_only" and self.allow_post_forms:
+            raise ValueError("write_policy=read_only contradicts allow_post_forms=True")
+        if self.allow_destructive and self.write_policy != "disposable":
+            raise ValueError("allow_destructive is only meaningful under write_policy=disposable")
+        return self
+
+    @model_validator(mode="after")
+    def paired_search_probes(self) -> "RunConfig":
+        if (self.zap_evidence_path is None) != (self.zap_source_origin is None):
+            raise ValueError("ZAP evidence and explicit source origin must be supplied together")
+        if self.resource_allocation == "shared_http" and (
+                self.max_total_http_requests is None or not self.typed_resource_spider):
+            raise ValueError("shared_http allocation requires the typed-resource spider and a total HTTP budget")
+        if (self.passive_document_max_depth is not None or self.budget_aware_deepening) \
+                and self.resource_frontier_model != "persistent":
+            raise ValueError("depth alternatives require the persistent resource frontier")
+        if self.max_speculative_fetches and self.max_total_http_requests is None:
+            raise ValueError("speculative fetches require a total HTTP budget")
+        if self.zap_evidence_path and (not self.typed_resource_spider or not self.share_resource_frontier):
+            raise ValueError("ZAP seeds require the shared typed-resource spider")
+        probes = (self.search_probe_primary, self.search_probe_contrast)
+        if (probes[0] is None) != (probes[1] is None):
+            raise ValueError("search probes must be configured as a pair")
+        if probes[0] is not None:
+            cleaned = tuple(item.strip() for item in probes if item is not None)
+            if not all(cleaned) or cleaned[0].casefold() == cleaned[1].casefold():
+                raise ValueError("search probes must be non-empty and distinct")
+            if any(any(ord(char) < 32 for char in item) for item in cleaned):
+                raise ValueError("search probes cannot contain control characters")
+            self.search_probe_primary, self.search_probe_contrast = cleaned
+        normalized_aliases: list[str] = []
+        # A non-loopback alias is allowed only when host_map routes it to a loopback origin.
+        mapped_aliases = {k.rstrip("/") for k in self.host_map}
+        for value in self.origin_aliases:
+            parsed = urlsplit(value)
+            if (
+                parsed.scheme not in {"http", "https"}
+                or (parsed.hostname not in {"127.0.0.1", "localhost", "::1"} and value.rstrip("/") not in mapped_aliases)
+                or parsed.username
+                or parsed.password
+                or parsed.query
+                or parsed.fragment
+                or parsed.path not in {"", "/"}
+            ):
+                raise ValueError(
+                    "origin aliases must be explicit HTTP(S) loopback origins without credentials or paths"
+                )
+            port = parsed.port or (443 if parsed.scheme == "https" else 80)
+            host = f"[{parsed.hostname}]" if ":" in (parsed.hostname or "") else parsed.hostname
+            normalized_aliases.append(f"{parsed.scheme.lower()}://{host}:{port}")
+        self.origin_aliases = sorted(set(normalized_aliases))
+        if self.loopback_origin_equivalence:
+            # Treat the three loopback spellings (127.0.0.1 / localhost / ::1) of the same
+            # scheme+port as one origin. This never widens scope beyond the local machine:
+            # it only adds the *sibling spellings* of an origin that is already in scope
+            # (the start URL or an existing loopback alias), reusing the explicit-alias path
+            # so scope stays declared rather than implicitly broadened.
+            loopback_hosts = ("127.0.0.1", "localhost", "::1")
+            expanded = set(self.origin_aliases)
+            for origin in [str(self.start_url), *self.origin_aliases]:
+                parsed = urlsplit(origin if "://" in origin else "http://" + origin)
+                if parsed.hostname in loopback_hosts:
+                    port = parsed.port or (443 if parsed.scheme == "https" else 80)
+                    for host in loopback_hosts:
+                        spelled = f"[{host}]" if ":" in host else host
+                        expanded.add(f"{parsed.scheme.lower()}://{spelled}:{port}")
+            self.origin_aliases = sorted(expanded)
+        return self
+
+
+class ReadinessSample(BaseModel):
+    elapsed_ms: int
+    document_state: str
+    aria_busy_count: int
+    enabled_control_count: int
+    disabled_control_count: int
+    control_fingerprint: str
+    main_enabled_control_count: int = 0
+    mutation_count: int = 0
+    script_count: int = 0
+    meta_refresh_delay_ms: int | None = None
+
+
+class ReadinessEvidence(BaseModel):
+    status: Literal["not_recorded", "initializing", "usable", "blocked", "timeout"] = (
+        "not_recorded"
+    )
+    duration_ms: int = 0
+    http_status: int | None = None
+    samples: list[ReadinessSample] = Field(default_factory=list)
+
+
+class InputReference(BaseModel):
+    field_name: str
+    input_type: str
+    value_ref: str
+    protected: bool = True
+
+
+class FormField(BaseModel):
+    id: str = ""
+    name: str
+    input_type: str
+    label: str = ""
+    required: bool = False
+    css_path: str = ""
+    placeholder: str = ""
+    pattern: str = ""
+    min_length: int | None = None
+    max_length: int | None = None
+    min_value: str | None = None
+    max_value: str | None = None
+    step: str | None = None
+    description: str = ""
+    options: list[dict[str, str]] = Field(default_factory=list)
+
+
+class OutcomeSignal(BaseModel):
+    kind: Literal["success", "validation_error", "result", "status", "setup", "unknown"]
+    text_excerpt: str
+    fingerprint: str
+    source: str
+
+
+class FormObservation(BaseModel):
+    index: int
+    method: str
+    action: str
+    fields: list[FormField] = Field(default_factory=list)
+    submit_labels: list[str] = Field(default_factory=list)
+    frame_index: int = 0
+    frame_url: str = ""
+
+
+class Control(BaseModel):
+    id: str
+    kind: Literal["link", "button", "form_submit"]
+    label: str
+    css_path: str
+    role: str
+    target: str | None = None
+    method: str | None = None
+    form_index: int | None = None
+    fields: list[FormField] = Field(default_factory=list)
+    safe: bool = True
+    skip_reason: str | None = None
+    signature: str
+    interaction: Literal[
+        "click",
+        "navigate",
+        "hover",
+        "focus",
+        "key_enter",
+        "double_click",
+        "context_menu",
+        "press_hold",
+        "scroll_viewport",
+        "scroll_container",
+        "toggle",
+        "select_option",
+    ] = "click"
+    component: str = "document"
+    frame_index: int = 0
+    frame_url: str = ""
+    # "snapshot": recognized by DOM semantics; "observed_listener": a direct
+    # click-family listener reported by Chromium DevTools.
+    provenance: Literal["snapshot", "observed_listener"] = "snapshot"
+    # Evidence-derived behavior revision: set only when a handler change on this
+    # element was observed within the same document (revisit mode).
+    behavior_revision: str | None = None
+    listener_evidence: dict[str, Any] | None = None
+
+
+class ListenerEvidence(BaseModel):
+    """Bounded DevTools listener observation attached to one browser observation."""
+    supported: bool = True
+    document_token: str = ""
+    caused_by_action: str | None = None
+    listener_nodes: int = 0
+    described_nodes: int = 0
+    reused_nodes: int = 0
+    dom_elements: int = 0
+    framework: dict[str, Any] | None = None
+    # Listener-bearing nodes by change class against the previous observation
+    # of the same document (see agent1/listeners.py).
+    changes: dict[str, int] = Field(default_factory=dict)
+    truncated: bool = False
+    candidates: list[dict[str, Any]] = Field(default_factory=list)
+    revisions: list[dict[str, Any]] = Field(default_factory=list)
+    active_revisions: list[dict[str, str]] = Field(default_factory=list)
+    skipped: dict[str, int] = Field(default_factory=dict)
+    skipped_examples: list[dict[str, Any]] = Field(default_factory=list)
+    delegation_hosts: int = 0
+    window_click_listeners: int = 0
+    elapsed_ms: float = 0.0
+    cdp_calls: int = 0
+    error: str | None = None
+
+
+class Observation(BaseModel):
+    id: str
+    sequence: int
+    recorded_at: str = Field(default_factory=utc_now)
+    url: str
+    title: str
+    text_excerpt: str
+    meaningful_text: str = ""
+    content_fingerprint: str = ""
+    outcome_signals: list[OutcomeSignal] = Field(default_factory=list)
+    controls: list[Control]
+    forms: list[FormObservation]
+    state_signature: str
+    group_signature: str
+    session_context: str
+    session_markers: dict[str, list[str]] = Field(default_factory=dict)
+    route_pattern: str
+    instance_facts: dict[str, Any] = Field(default_factory=dict)
+    readiness: ReadinessEvidence = Field(default_factory=ReadinessEvidence)
+    listener_evidence: ListenerEvidence | None = None
+    # Equal to group_signature unless evidence shows a changed handler behind
+    # the same visible DOM; then it also names the active behavior revisions.
+    behavior_signature: str = ""
+
+
+class NetworkEvent(BaseModel):
+    method: str
+    url: str
+    status: int | None = None
+    resource_type: str | None = None
+    failure: str | None = None
+    parameter_names: list[str] = Field(default_factory=list)
+    body_encoding: str | None = None
+    elapsed_ms: int | None = None
+
+
+class ResourceEvidence(BaseModel):
+    evidence_id: str = ""
+    url: str | None
+    kind: Literal["navigation", "asset", "api", "form_action", "ping", "security_report"]
+    source_type: str
+    source_url: str
+    source: str
+    relation: str = ""
+    depth: int = 0
+    status: Literal["discovered", "fetched", "failed", "out_of_scope", "budget_limited", "class_budget_limited", "depth_limited", "sensitive_reference", "unresolved_candidate"] = "discovered"
+    queue_decision: str = "admitted"
+    confidence: str = "observed_literal"
+    expression_fingerprint: str | None = None
+    candidate_prefix: str | None = None
+    elapsed_ms: int | None = None
+    http_status: int | None = None
+    content_type: str | None = None
+    new_references: int | None = None
+    candidate_class: str | None = None
+    response_reference_count: int | None = None
+    queued_references: int | None = None
+    excluded_references: int | None = None
+    redirected_to: str | None = None
+    error: str | None = None
+    channel: str | None = None
+    method: str | None = None
+    body_status: str | None = None
+    body_bytes: int | None = None
+    wire_bytes: int | None = None
+    # Names only (never values) of the cookies sent and set on a passive fetch.
+    session_cookie_names: list[str] | None = None
+    set_cookie_names: list[str] | None = None
+    cookie_updates: dict[str, int] | None = None
+
+
+class ExternalDiscoveryEvidence(BaseModel):
+    id: str
+    engine: str
+    run_id: str
+    source_origin: str
+    source_record_id: str
+    export_digest: str
+    mapped_url: str
+    method: str
+    http_status: int | None = None
+    parameter_names: list[str] = Field(default_factory=list)
+    status: Literal["external_response", "external_candidate"]
+    session_context: str = "unknown"
+
+
+class NavigationEvidence(BaseModel):
+    id: str
+    reason: Literal["initial", "frontier_restore", "persistent_restore", "replay", "history_return",
+                    "direct_url_restore"]
+    url: str
+    readiness: ReadinessEvidence = Field(default_factory=ReadinessEvidence)
+    network: list[NetworkEvent] = Field(default_factory=list)
+    recorded_at: str = Field(default_factory=utc_now)
+
+
+class ActionDescriptor(BaseModel):
+    control_id: str
+    kind: str
+    label: str
+    role: str
+    css_path: str
+    target: str | None = None
+    method: str | None = None
+    form_index: int | None = None
+    fields: list[FormField] = Field(default_factory=list)
+    signature: str
+    input_plan_ref: str | None = None
+    interaction: str = "click"
+    component: str = "document"
+    frame_index: int = 0
+    frame_url: str = ""
+    provenance: str = "snapshot"
+    behavior_revision: str | None = None
+
+
+class FormAttempt(BaseModel):
+    attempt_index: int
+    input_references: list[InputReference] = Field(default_factory=list)
+    outcome_signals: list[OutcomeSignal] = Field(default_factory=list)
+    status: FunctionalStatus
+    input_plan_ref: str | None = None
+
+
+class PrerequisiteStepEvidence(BaseModel):
+    step_index: int = Field(ge=0)
+    action_signature: str
+    action_label: str
+    network: list[NetworkEvent] = Field(default_factory=list)
+
+
+class Transition(BaseModel):
+    id: str
+    source_observation_id: str
+    source_state_signature: str
+    source_group_signature: str
+    action: ActionDescriptor
+    workflow_path: list[ActionDescriptor] = Field(default_factory=list)
+    input_references: list[InputReference] = Field(default_factory=list)
+    form_attempts: list[FormAttempt] = Field(default_factory=list)
+    result_observation_id: str | None = None
+    result_state_signature: str | None = None
+    result_group_signature: str | None = None
+    status: EvidenceStatus
+    network: list[NetworkEvent] = Field(default_factory=list)
+    behavior: dict[str, Any] = Field(default_factory=dict)
+    restoration_attempted: bool = False
+    reused_prefix_steps: int = Field(default=0, ge=0)
+    prerequisite_network: list[PrerequisiteStepEvidence] = Field(default_factory=list)
+    dialogs: list[dict[str, str]] = Field(default_factory=list)
+    error: str | None = None
+    started_at: str = Field(default_factory=utc_now)
+    ended_at: str | None = None
+    run_id: str
+
+    @model_validator(mode="after")
+    def evidence_is_complete(self) -> "Transition":
+        if self.status in {EvidenceStatus.OBSERVED, EvidenceStatus.REPLAY_VALIDATED}:
+            required = (
+                self.source_observation_id,
+                self.result_observation_id,
+                self.result_state_signature,
+                self.ended_at,
+            )
+            if not all(required):
+                raise ValueError("observed transitions require source, action, result, and end evidence")
+        if self.status == EvidenceStatus.FAILED and not self.error:
+            raise ValueError("failed transitions require an error")
+        return self
+
+
+class Advertisement(BaseModel):
+    source_observation_id: str
+    source_group_signature: str
+    control: Control
+    status: EvidenceStatus = EvidenceStatus.ADVERTISED
+
+
+class ReplayResult(BaseModel):
+    id: str
+    transition_id: str
+    path_length: int
+    status: EvidenceStatus
+    expected_group_signature: str
+    actual_group_signature: str | None = None
+    actual_observation_id: str | None = None
+    outcome_checks: dict[str, bool] = Field(default_factory=dict)
+    functional_checks: dict[str, bool] = Field(default_factory=dict)
+    verification_kind: Literal["standard", "paired_search"] = "standard"
+    verification_observation_ids: list[str] = Field(default_factory=list)
+    verification_evidence: dict[str, Any] = Field(default_factory=dict)
+    input_plan_refs: list[str] = Field(default_factory=list)
+    network: list[NetworkEvent] = Field(default_factory=list)
+    functional_status: FunctionalStatus = FunctionalStatus.NOT_TESTED
+    browser_actions: int = 0
+    error: str | None = None
+    # Machine-readable failure class (control_missing, handler_revision_not_reproduced,
+    # control_now_unsafe, request_structure_not_reproduced, record_identity_changed,
+    # state_mismatch, navigation_error, http_budget_exhausted, exception).
+    failure_reason: str | None = None
+    failed_step: int | None = None  # 1-based workflow step that could not be executed
+    scheduler_lane: str | None = None  # "structure" | "shallow" under the structure policy
+    target_structures: list[str] = Field(default_factory=list)
+    started_at: str = Field(default_factory=utc_now)
+    ended_at: str = Field(default_factory=utc_now)
+
+
+class Feature(BaseModel):
+    id: str
+    description: str
+    action_signature: str
+    source_group_signature: str
+    source_group_signatures: list[str] = Field(default_factory=list)
+    target_group_signature: str
+    target_group_signatures: list[str] = Field(default_factory=list)
+    evidence_transition_ids: list[str]
+    replay_ids: list[str] = Field(default_factory=list)
+    status: EvidenceStatus
+    validated_transition_ids: list[str] = Field(default_factory=list)
+    failed_transition_ids: list[str] = Field(default_factory=list)
+    untested_transition_ids: list[str] = Field(default_factory=list)
+
+
+class FunctionalWorkflow(BaseModel):
+    id: str
+    transition_id: str
+    replay_id: str | None = None
+    replay_ids: list[str] = Field(default_factory=list)
+    verification_checks: dict[str, bool] = Field(default_factory=dict)
+    path_length: int
+    action_label: str
+    status: FunctionalStatus
+    outcome_signal_fingerprints: list[str] = Field(default_factory=list)
+    source_observation_id: str
+    result_observation_id: str | None = None
+
+
+class ConnectionEvidence(BaseModel):
+    id: str
+    claim_type: Literal[
+        "advertised_control", "source_action", "action_result", "replay",
+        "prerequisite_network", "resource_reference", "external_observation",
+        "listener_candidate", "handler_revision",
+    ]
+    subject_id: str
+    complete: bool
+    evidence_ids: list[str] = Field(default_factory=list)
+    missing: list[str] = Field(default_factory=list)
+
+
+class FrontierItem(BaseModel):
+    source_observation_id: str
+    expected_source_signature: str
+    expected_source_group: str
+    path: list[ActionDescriptor]
+    action: ActionDescriptor
+    priority: float = 0.0
+
+
+class RunMetrics(BaseModel):
+    elapsed_seconds: float = 0.0
+    browser_actions: int = 0
+    navigation_requests: int = 0
+    network_events_recorded: int = 0
+    transitions_attempted: int = 0
+    transitions_observed: int = 0
+    transitions_failed: int = 0
+    advertised_unexecuted: int = 0
+    raw_states: int = 0
+    grouped_states: int = 0
+    redundant_states: int = 0
+    incorrect_state_merges: int = 0
+    distinct_validated_feature_workflows: int = 0
+    replay_success_numerator: int = 0
+    replay_success_denominator: int = 0
+    unsupported_connections: int = 0
+    replay_attempts: int = 0
+    replay_navigation_successes: int = 0
+    replay_failures: int = 0
+    replay_untested_paths: int = 0
+    navigation_categories_replay_validated: int = 0
+    functional_workflows_verified: int = 0
+    functional_validation_failures: int = 0
+    functional_unresolved: int = 0
+    graph_connections_total: int = 0
+    graph_connections_complete: int = 0
+    graph_connections_missing_evidence: int = 0
+    model_calls: int = 0
+    model_failures: int = 0
+    model_input_tokens: int = 0
+    model_output_tokens: int = 0
+    monetary_cost_usd: float = 0.0
+    progress: list[dict[str, float | int]] = Field(default_factory=list)
+    root_reloads: int = 0
+    restoration_actions: int = 0
+    live_state_reuses: int = 0
+    live_state_stale: int = 0
+    # Stage-2 eager child expansion (opt-in): a bounded batch of a verified GET parent's distinct
+    # children executed via one history return each instead of an independent parent restore per child.
+    eager_batches: int = 0                 # times a parent was drained
+    eager_children_expanded: int = 0       # children executed inside a batch (via live_state_reuse)
+    eager_parent_returns: int = 0          # history-return navigations used to re-reach the parent
+    eager_returns_rejected: int = 0        # returns that did not land back on the verified parent (fell back)
+    startup_readiness_failures: int = 0
+    navigation_network_events_recorded: int = 0
+    ineffective_transitions: int = 0
+    session_guard_controls_blocked: int = 0   # distinct controls found to drop the session (blocklisted)
+    session_guard_restorations: int = 0       # operator-session re-applications after a login-route bounce
+    session_guard_reenqueue_skipped: int = 0  # later discoveries of a blocklisted control, not re-enqueued
+    duplicate_controls_suppressed: int = 0
+    repeat_write_actions_suppressed: int = 0
+    unsafe_restorations_suppressed: int = 0
+    static_navigation_actions: int = 0
+    dynamic_interaction_actions: int = 0
+    frame_observations: int = 0
+    popup_navigations: int = 0
+    resource_references_discovered: int = 0
+    resource_fetches_attempted: int = 0
+    resource_fetches_succeeded: int = 0
+    resource_fetch_failures: int = 0
+    resource_fetch_budget_exhausted: int = 0
+    resource_fetch_class_budget_exhausted: int = 0
+    resource_new_references: int = 0
+    resource_responses_with_body: int = 0
+    resource_references_extracted: int = 0
+    resource_references_queued: int = 0
+    resource_references_excluded: int = 0
+    resource_unresolved_candidates: int = 0
+    passive_readiness_wait_ms: int = 0
+    interactive_readiness_wait_ms: int = 0
+    observed_http_requests: int = 0
+    external_discovery_records: int = 0
+    external_discovery_rejected: int = 0
+    external_request_upper_bound: int = 0
+    external_elapsed_seconds: float = 0.0
+    total_http_budget_used: int = 0
+    total_http_budget_blocked: int = 0
+    http_redirect_budget_overrun: int = 0
+    http_redirect_scope_violations: int = 0
+    http_budget_by_source: dict[str, int] = Field(default_factory=dict)
+    discovery_root_reloads: int = 0
+    verification_root_reloads: int = 0
+    prefix_state_reuses: int = 0
+    root_reloads_avoided: int = 0
+    history_returns: int = 0
+    history_return_attempts: int = 0
+    history_return_rejected: int = 0
+    passive_document_fetches: int = 0
+    speculative_fetches: int = 0
+    observed_only_request_surfaces: int = 0
+    effective_resource_budgets: dict[str, int | float | str | None] = Field(default_factory=dict)
+    browser_body_status: dict[str, int] = Field(default_factory=dict)
+    spider_body_status: dict[str, int] = Field(default_factory=dict)
+    passive_wire_bytes: int = 0
+    replays_untested_http_budget: int = 0
+    replay_browser_actions: int = 0
+    replay_structures_observed: int = 0
+    replay_structures_verified: int = 0
+    replay_structures_failed: int = 0
+    replay_structures_unattempted: int = 0
+    runtime_behaviors_observed: int = 0          # distinct listener/revision actions with an observable effect
+    runtime_behaviors_replay_validated: int = 0
+    replay_failure_reasons: dict[str, int] = Field(default_factory=dict)
+    replay_scheduler: dict[str, Any] = Field(default_factory=dict)
+    # Restoration-contract decisions (restoration_policy="contract" only).
+    restoration_contract: dict[str, Any] = Field(default_factory=dict)
+    # Request-level write policy decisions (mode, counts, bounded log of method/route/decision).
+    write_policy: dict[str, Any] = Field(default_factory=dict)
+    # Static-asset dedup cache stats (only when resource_cache is enabled): hits, stored entries, bytes saved.
+    resource_cache: dict[str, Any] = Field(default_factory=dict)
+    # Terminal discovery frontier (only when record_unexecuted_frontier is enabled): exit reason and the
+    # unexecuted items with priority and defer reason. Diagnosis only.
+    unexecuted_frontier: dict[str, Any] = Field(default_factory=dict)
+    # Authorized write sweep stats (only when write_execution_policy="authorized_fair").
+    write_sweep: dict[str, Any] = Field(default_factory=dict)
+    passive_cookie_updates: dict[str, int] = Field(default_factory=dict)
+    python_peak_rss_mb: float = 0.0
+    listener_observations: int = 0
+    listener_observation_errors: int = 0
+    listener_observation_ms: float = 0.0
+    listener_cdp_calls: int = 0
+    listener_candidates_distinct: int = 0
+    listener_candidates_executed: int = 0
+    listener_skipped: dict[str, int] = Field(default_factory=dict)
+    # Bounded instrumentation of runtime listener discovery (all 0 when off).
+    listener_nodes_inspected: int = 0           # DevTools describe calls (<= max_listener_nodes per observation)
+    listener_nodes_reused: int = 0              # unchanged nodes served from the per-document cache
+    listener_bearing_nodes_max: int = 0         # largest click-listener node count in one observation
+    listener_scans_truncated: int = 0           # observations that hit the inspection limit
+    listener_dom_elements_max: int = 0          # largest document observed (elements)
+    framework_handler_elements_max: int = 0     # most framework handler-bearing elements in one observation
+    framework_handlers_outside_snapshot_max: int = 0  # ...of which the DOM snapshot did not recognize
+    listener_changes: dict[str, int] = Field(default_factory=dict)  # node change classes, summed
+    listener_candidates_new: int = 0            # distinct candidates first seen as created/attached after an action
+    listener_candidates_deduplicated: int = 0   # candidate sightings that repeated an already-recorded candidate
+    listener_candidates_safe: int = 0           # distinct candidates accepted by the existing safety filter
+    listener_candidates_rejected: int = 0       # distinct candidates rejected by it (or not in an observable frame)
+    listener_actions_executed: int = 0          # transitions whose action came from a listener candidate
+    listener_transitions_with_effect: int = 0   # ...that changed state, navigated, showed a dialog or issued a request
+    handler_revision_candidates: int = 0        # distinct (element, revision) pairs offered to the frontier
+    handler_revisions_observed: int = 0
+    handler_revisits_executed: int = 0
+    behavior_divergent_groups: int = 0
+
+
+class RunArtifact(BaseModel):
+    schema_version: str = "1.1"
+    run_id: str
+    code_revision: str
+    config: dict[str, Any]
+    browser_version: str | None = None
+    started_at: str
+    ended_at: str | None = None
+    observations: list[Observation] = Field(default_factory=list)
+    advertisements: list[Advertisement] = Field(default_factory=list)
+    transitions: list[Transition] = Field(default_factory=list)
+    replays: list[ReplayResult] = Field(default_factory=list)
+    replay_observations: list[Observation] = Field(default_factory=list)
+    features: list[Feature] = Field(default_factory=list)
+    functional_workflows: list[FunctionalWorkflow] = Field(default_factory=list)
+    connection_evidence: list[ConnectionEvidence] = Field(default_factory=list)
+    navigation_evidence: list[NavigationEvidence] = Field(default_factory=list)
+    resource_evidence: list[ResourceEvidence] = Field(default_factory=list)
+    external_discoveries: list[ExternalDiscoveryEvidence] = Field(default_factory=list)
+    state_groups: dict[str, list[str]] = Field(default_factory=dict)
+    return_paths: dict[str, list[ActionDescriptor]] = Field(default_factory=dict)
+    metrics: RunMetrics = Field(default_factory=RunMetrics)
+    notes: list[str] = Field(default_factory=list)
+
+
+class Checkpoint(BaseModel):
+    schema_version: str = "1.0"
+    artifact: RunArtifact
+    frontier: list[FrontierItem]
+    tried: list[str]
+    saved_at: str = Field(default_factory=utc_now)

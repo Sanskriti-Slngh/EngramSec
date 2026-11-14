@@ -1,0 +1,58 @@
+{
+  "application": "coverage_lab",
+  "areas": [
+    {"id": "home", "route": "/", "title": "Coverage Lab", "scope": "applicable"},
+    {"id": "record_alpha", "route": "/records/{instance}", "via_target_suffix": "/records/1", "scope": "applicable"},
+    {"id": "record_beta", "route": "/records/{instance}", "via_target_suffix": "/records/2", "scope": "applicable"},
+    {"id": "workspace", "route": "/workspace", "scope": "applicable"},
+    {"id": "reports", "route": "/workspace/reports", "scope": "applicable"},
+    {"id": "analytics", "route": "/", "via_label": "Analytics", "scope": "applicable"},
+    {"id": "settings", "route": "/settings", "scope": "applicable"},
+    {"id": "help", "route": "/help", "scope": "applicable"},
+    {"id": "member", "route": "/member", "scope": "applicable"},
+    {"id": "member_preferences", "route": "/member/preferences", "scope": "applicable"},
+    {"id": "admin_backend", "route": "/admin", "scope": "blocked"},
+    {"id": "external_docs", "route": "https://example.test/outside", "scope": "outside"}
+  ],
+  "controls": [
+    {"id": "record_alpha_link", "label": "Alpha customer", "kind": "link", "scope": "applicable"},
+    {"id": "record_beta_link", "label": "Beta customer", "kind": "link", "scope": "applicable"},
+    {"id": "summary_button", "label": "Load summary", "kind": "button", "scope": "applicable"},
+    {"id": "tools_disclosure", "label": "Show tools", "kind": "button", "scope": "applicable"},
+    {"id": "workspace_link", "label": "Workspace", "kind": "link", "scope": "applicable"},
+    {"id": "audit_button", "label": "Audit record", "kind": "button", "scope": "applicable"},
+    {"id": "analytics_tab", "label": "Analytics", "kind": "button", "scope": "applicable"},
+    {"id": "export_button", "label": "Export analytics", "kind": "button", "scope": "applicable"},
+    {"id": "settings_disclosure", "label": "Advanced settings", "kind": "button", "scope": "applicable"},
+    {"id": "settings_link", "label": "Open settings", "kind": "link", "scope": "applicable"},
+    {"id": "help_launcher", "label": "Help center", "kind": "button", "scope": "applicable"},
+    {"id": "ineffective", "label": "Refresh status", "kind": "button", "scope": "applicable"},
+    {"id": "member_submit", "label": "Enter member area", "kind": "form_submit", "scope": "applicable"},
+    {"id": "history_button", "label": "Load history", "kind": "button", "scope": "applicable"},
+    {"id": "prepare_button", "label": "Prepare workspace", "kind": "button", "scope": "applicable"},
+    {"id": "reports_link", "label": "Open reports", "kind": "link", "scope": "applicable"},
+    {"id": "member_preferences_link", "label": "Member preferences", "kind": "link", "scope": "applicable"},
+    {"id": "admin_submit", "label": "Admin login", "kind": "form_submit", "scope": "blocked"},
+    {"id": "external_link", "label": "External docs", "kind": "link", "scope": "outside"}
+  ],
+  "requests": [
+    {"id": "record_document", "method": "GET", "path": "/records/{instance}", "params": [], "scope": "applicable"},
+    {"id": "summary_fetch", "method": "GET", "path": "/api/summary", "params": ["format", "scope"], "scope": "applicable"},
+    {"id": "audit_fetch", "method": "GET", "path": "/api/audit", "params": ["record"], "scope": "applicable"},
+    {"id": "history_fetch", "method": "GET", "path": "/api/history", "params": ["limit", "record"], "scope": "applicable"},
+    {"id": "workspace_document", "method": "GET", "path": "/workspace", "params": [], "scope": "applicable"},
+    {"id": "bootstrap_fetch", "method": "GET", "path": "/api/workspace/bootstrap", "params": ["mode"], "scope": "applicable"},
+    {"id": "reports_document", "method": "GET", "path": "/workspace/reports", "params": [], "scope": "applicable"},
+    {"id": "analytics_fetch", "method": "GET", "path": "/api/analytics", "params": ["range"], "scope": "applicable"},
+    {"id": "session_post", "method": "POST", "path": "/session", "params": ["member_code"], "scope": "applicable"},
+    {"id": "member_document", "method": "GET", "path": "/member", "params": [], "scope": "applicable"}
+  ],
+  "instances": [
+    {"id": "record_1", "target_suffix": "/records/1", "scope": "applicable"},
+    {"id": "record_2", "target_suffix": "/records/2", "scope": "applicable"}
+  ],
+  "contexts": [
+    {"id": "anonymous", "cookie_name": null, "scope": "applicable"},
+    {"id": "member", "cookie_name": "member", "scope": "applicable"}
+  ]
+}

@@ -1,0 +1,558 @@
+{
+  "application": "js_heavy_lab",
+  "base": {
+    "application": "js_heavy_lab",
+    "areas": [
+      {
+        "id": "home",
+        "route": "/",
+        "scope": "applicable",
+        "status": "covered_replayed"
+      },
+      {
+        "id": "workflow_stage_one",
+        "route": "/",
+        "scope": "applicable",
+        "status": "missed",
+        "via_label": "Open workflow"
+      },
+      {
+        "id": "workflow_ready",
+        "route": "/",
+        "scope": "applicable",
+        "status": "missed",
+        "via_label": "Continue setup"
+      },
+      {
+        "id": "overview",
+        "route": "/shallow/a",
+        "scope": "applicable",
+        "status": "covered_replayed"
+      },
+      {
+        "id": "news",
+        "route": "/shallow/b",
+        "scope": "applicable",
+        "status": "covered_replayed"
+      },
+      {
+        "id": "alias",
+        "route": "/alias-area",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "workspace",
+        "route": "/workspace",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "workspace_detail",
+        "route": "/workspace/detail",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "reports",
+        "route": "/reports",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "member",
+        "route": "/member",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "member_preferences",
+        "route": "/member/preferences",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "external",
+        "route": "https://example.test/outside",
+        "scope": "outside",
+        "status": "outside_access_scope"
+      }
+    ],
+    "contexts": [
+      {
+        "cookie_name": null,
+        "id": "anonymous",
+        "scope": "applicable",
+        "status": "covered_structural_not_replayed"
+      },
+      {
+        "cookie_name": "member_session",
+        "id": "member",
+        "scope": "applicable",
+        "status": "missed"
+      }
+    ],
+    "controls": [
+      {
+        "id": "overview",
+        "kind": "link",
+        "label": "Overview",
+        "scope": "applicable",
+        "status": "covered_replayed"
+      },
+      {
+        "id": "news",
+        "kind": "link",
+        "label": "News",
+        "scope": "applicable",
+        "status": "covered_replayed"
+      },
+      {
+        "id": "open",
+        "kind": "button",
+        "label": "Open workflow",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "continue",
+        "kind": "button",
+        "label": "Continue setup",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "workspace",
+        "kind": "link",
+        "label": "Open workspace",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "detail",
+        "kind": "link",
+        "label": "Workspace detail",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "late",
+        "kind": "button",
+        "label": "Load late reports",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "reports",
+        "kind": "link",
+        "label": "Open reports",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "alias",
+        "kind": "link",
+        "label": "Public alias area",
+        "scope": "applicable",
+        "status": "covered_structural_not_replayed"
+      },
+      {
+        "id": "alias_data",
+        "kind": "button",
+        "label": "Load alias data",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "member",
+        "kind": "form_submit",
+        "label": "Enter member mode",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "preferences",
+        "kind": "link",
+        "label": "Member preferences",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "member_data",
+        "kind": "button",
+        "label": "Load preferences",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "ineffective",
+        "kind": "button",
+        "label": "Refresh status",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "external",
+        "kind": "link",
+        "label": "External documentation",
+        "scope": "outside",
+        "status": "outside_access_scope"
+      }
+    ],
+    "counts": {
+      "browser_actions": 49,
+      "covered_areas": 3,
+      "covered_controls": 3,
+      "covered_requests": 0,
+      "elapsed_seconds": 5.291,
+      "graph_connections_missing_evidence": 0,
+      "grouped_states": 3,
+      "incorrect_state_merges_self_audit": 0,
+      "raw_states": 3,
+      "replay_attempts": 9,
+      "replay_successes": 9
+    },
+    "denominators": {
+      "areas": 11,
+      "blocked_areas_excluded": 0,
+      "contexts": 2,
+      "controls": 14,
+      "instances": 0,
+      "outside_areas_excluded": 1,
+      "paths": 11,
+      "requests": 12
+    },
+    "instances": [],
+    "metrics": {
+      "context_recall": 0.5,
+      "control_action_recall": 0.21428571428571427,
+      "covered_surfaces_per_browser_action": 0.12244897959183673,
+      "covered_surfaces_per_minute": 68.04006804006804,
+      "instance_recall": null,
+      "instances_distinct": false,
+      "prerequisite_path_coverage": 0.2727272727272727,
+      "replay_reliability": 1.0,
+      "request_precision": 0.0,
+      "request_surface_recall": 0.0,
+      "state_interface_recall": 0.2727272727272727
+    },
+    "observed_request_structures": [
+      {
+        "action_id": "action_tr_473b4259668b443ef6d6",
+        "method": "GET",
+        "params": [],
+        "path": "/shallow/a",
+        "resource_type": "document"
+      },
+      {
+        "action_id": "action_tr_c77288177b0814e6a7e3",
+        "method": "GET",
+        "params": [],
+        "path": "/shallow/b",
+        "resource_type": "document"
+      },
+      {
+        "action_id": "action_tr_41f0b36b1ec24895627d",
+        "method": "GET",
+        "params": [],
+        "path": "/",
+        "resource_type": "document"
+      },
+      {
+        "action_id": "action_tr_1935d5ec1dc3d7af8efb",
+        "method": "GET",
+        "params": [],
+        "path": "/shallow/a",
+        "resource_type": "document"
+      },
+      {
+        "action_id": "action_tr_1c97da1378e23029d5f8",
+        "method": "GET",
+        "params": [],
+        "path": "/shallow/a",
+        "resource_type": "document"
+      },
+      {
+        "action_id": "action_tr_f449d33360a63c5c3068",
+        "method": "GET",
+        "params": [],
+        "path": "/shallow/b",
+        "resource_type": "document"
+      },
+      {
+        "action_id": "action_tr_f463800156adfd80cc00",
+        "method": "GET",
+        "params": [],
+        "path": "/shallow/b",
+        "resource_type": "document"
+      },
+      {
+        "action_id": "action_tr_871a5da779fb3584c714",
+        "method": "GET",
+        "params": [],
+        "path": "/",
+        "resource_type": "document"
+      },
+      {
+        "action_id": "action_tr_d35cf61c018bc1e73539",
+        "method": "GET",
+        "params": [],
+        "path": "/",
+        "resource_type": "document"
+      }
+    ],
+    "requests": [
+      {
+        "id": "bootstrap",
+        "method": "GET",
+        "params": [
+          "format",
+          "mode"
+        ],
+        "path": "/api/bootstrap",
+        "phase": "initial",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "prepare",
+        "method": "GET",
+        "params": [
+          "mode"
+        ],
+        "path": "/api/workflow/prepare",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "late",
+        "method": "GET",
+        "params": [
+          "view"
+        ],
+        "path": "/api/late",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "alias_doc",
+        "method": "GET",
+        "params": [],
+        "path": "/alias-area",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "alias_data",
+        "method": "GET",
+        "params": [
+          "source"
+        ],
+        "path": "/api/alias",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "workspace_doc",
+        "method": "GET",
+        "params": [],
+        "path": "/workspace",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "workspace_detail",
+        "method": "GET",
+        "params": [],
+        "path": "/workspace/detail",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "reports_doc",
+        "method": "GET",
+        "params": [],
+        "path": "/reports",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "session_post",
+        "method": "POST",
+        "params": [
+          "member_code"
+        ],
+        "path": "/session",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "member_doc",
+        "method": "GET",
+        "params": [],
+        "path": "/member",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "preferences_doc",
+        "method": "GET",
+        "params": [],
+        "path": "/member/preferences",
+        "scope": "applicable",
+        "status": "missed"
+      },
+      {
+        "id": "preferences_data",
+        "method": "GET",
+        "params": [
+          "view"
+        ],
+        "path": "/api/member/preferences",
+        "scope": "applicable",
+        "status": "missed"
+      }
+    ]
+  },
+  "false_merge_pairs": [],
+  "generalization_metrics": {
+    "action_network_events": 9,
+    "actions_per_covered_area": 16.333333333333332,
+    "alias_scope_status": "cross_origin",
+    "applicable_area_recall": 0.2727272727272727,
+    "applicable_control_recall": 0.21428571428571427,
+    "browser_actions": 49,
+    "critical_false_merges": 0,
+    "deepest_verified_path": 2,
+    "elapsed_seconds": 5.291,
+    "initial_navigation_events": 0,
+    "readiness_statuses": {
+      "not_recorded": 3
+    },
+    "replay_reliability": 1.0,
+    "request_surface_recall_all_phases": 0.0,
+    "restoration_actions": 6,
+    "root_reloads": 19,
+    "sensitive_value_leaks": 0,
+    "startup_readiness_failures": 0,
+    "unique_replayed_prerequisite_paths": 9,
+    "unnecessary_initial_state_splits": 0
+  },
+  "request_results_all_phases": [
+    {
+      "id": "bootstrap",
+      "method": "GET",
+      "params": [
+        "format",
+        "mode"
+      ],
+      "path": "/api/bootstrap",
+      "phase": "initial",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "prepare",
+      "method": "GET",
+      "params": [
+        "mode"
+      ],
+      "path": "/api/workflow/prepare",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "late",
+      "method": "GET",
+      "params": [
+        "view"
+      ],
+      "path": "/api/late",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "alias_doc",
+      "method": "GET",
+      "params": [],
+      "path": "/alias-area",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "alias_data",
+      "method": "GET",
+      "params": [
+        "source"
+      ],
+      "path": "/api/alias",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "workspace_doc",
+      "method": "GET",
+      "params": [],
+      "path": "/workspace",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "workspace_detail",
+      "method": "GET",
+      "params": [],
+      "path": "/workspace/detail",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "reports_doc",
+      "method": "GET",
+      "params": [],
+      "path": "/reports",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "session_post",
+      "method": "POST",
+      "params": [
+        "member_code"
+      ],
+      "path": "/session",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "member_doc",
+      "method": "GET",
+      "params": [],
+      "path": "/member",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "preferences_doc",
+      "method": "GET",
+      "params": [],
+      "path": "/member/preferences",
+      "scope": "applicable",
+      "status": "missed"
+    },
+    {
+      "id": "preferences_data",
+      "method": "GET",
+      "params": [
+        "view"
+      ],
+      "path": "/api/member/preferences",
+      "scope": "applicable",
+      "status": "missed"
+    }
+  ],
+  "server_request_counts": {
+    "GET /": 25,
+    "GET /shallow/a": 12,
+    "GET /shallow/b": 12
+  }
+}
