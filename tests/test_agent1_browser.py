@@ -237,6 +237,23 @@ class FixtureHandler(BaseHTTPRequestHandler):
         elif path == "/spa-detail":
             self._html("<html><title>SPA detail</title><body><main><h1>Detail view</h1>"
                        "<a href='/spa-home'>Back</a></main></body></html>")
+        elif path == "/fetchnav-home":
+            # fetch-then-pushState: a click fetches, then navigates client-side on the response. The SPA
+            # poll's early-break must still catch this (the route change follows the network response within
+            # the follow window), not stop at the response and record a self-loop.
+            self._html(
+                "<html><title>Fetchnav home</title><body><main><h1>Fetchnav home</h1>"
+                "<button id='go'>Load and go</button><div id='v'></div></main>"
+                "<script>document.getElementById('go').addEventListener('click',function(){"
+                "fetch('/fetchnav-ping').then(function(){history.pushState({},'', '/fetchnav-detail');"
+                "document.getElementById('v').innerHTML='<a href=\"/fetchnav-home\">Back</a>went';});});"
+                "</script></body></html>"
+            )
+        elif path == "/fetchnav-ping":
+            self._html('{"ok":true}')
+        elif path == "/fetchnav-detail":
+            self._html("<html><title>Fetchnav detail</title><body><main><h1>Fetchnav detail</h1>"
+                       "<a href='/fetchnav-home'>Back</a></main></body></html>")
         elif path in ("/guard-admin", "/guard-admin2"):
             # Authenticated admin pages sharing a header whose logout control is an UNLABELED button with a
             # JS click listener (no href/label) that drops the session by navigating to /login — exactly the
@@ -902,6 +919,23 @@ def test_await_spa_route_change_captures_client_side_route(fixture_url: str, tmp
 
     assert reached_detail(True), "with await_spa_route_change the pushState route should be captured"
     assert not reached_detail(False), "default snapshots too early and misses the async pushState route"
+
+
+def test_await_spa_route_change_follows_fetch_then_pushstate(fixture_url: str, tmp_path: Path) -> None:
+    """The SPA poll's early-break (which stops paying the full settle once a click produced a network
+    response) must still catch a fetch-then-pushState click: the route change follows the response within
+    the follow window. Regression guard so the budget-saving early-break does not reintroduce self-loops on
+    the common 'click fetches, then navigates on success' SPA pattern."""
+    root = Path(__file__).resolve().parents[1]
+    config = RunConfig(
+        start_url=f"{fixture_url}fetchnav-home", output_dir=tmp_path / "fetchnav",
+        await_spa_route_change=True, spa_route_settle_ms=3000,
+        exploration_mode="persistent", robust_readiness=True, readiness_any_enabled=True,
+        max_seconds=25, max_transitions=10, max_browser_actions=80,
+    )
+    art = Explorer(config, root).run()
+    assert any(o.url.endswith("/fetchnav-detail") for o in art.observations), \
+        "fetch-then-pushState route should be captured despite the network-response early-break"
 
 
 def test_session_loss_guard_recovers_from_logout_bounce(fixture_url: str, tmp_path: Path) -> None:

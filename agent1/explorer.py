@@ -1604,6 +1604,7 @@ class BrowserSession:
             action_count += fills
         prior_pages = set(self.context.pages) if self.context else {self.page}
         url_before_action = self.page.url
+        requests_before_action = self.network.request_count
         if control.interaction == "navigate":
             if not control.target:
                 raise RuntimeError("navigation candidate has no observed target")
@@ -1667,12 +1668,21 @@ class BrowserSession:
                     "navigate", "scroll_viewport", "scroll_container", "hover", "focus"}
                 and not self.last_popup_opened):
             # A client-side (history-mode SPA) route change fires no load event, so the snapshot below
-            # would capture the pre-navigation page and record the click as a self-loop. Poll briefly for
-            # the URL to change; if it does, the readiness wait then settles the new route before the
-            # snapshot. A genuine in-page click just pays this bounded poll once.
-            waited, step = 0, 100
+            # would capture the pre-navigation page and record the click as a self-loop. Poll for the URL
+            # to change, but do not pay the full settle on every non-navigating click: once the click has
+            # produced a network response, allow only a short follow-up window for a possible
+            # fetch-then-pushState and then stop. This keeps the fetch-then-navigate SPA pattern working
+            # while reclaiming the budget that interaction-heavy apps (a button that fetches and stays put)
+            # would otherwise burn. A genuinely-quiet async pushState produces no network, so it still
+            # waits the full settle.
+            waited, step, follow_ms = 0, 50, 400
+            net_seen_at: int | None = None
             while waited < self.config.spa_route_settle_ms:
                 if self.page.url != url_before_action:
+                    break
+                if net_seen_at is None and self.network.request_count > requests_before_action:
+                    net_seen_at = waited
+                if net_seen_at is not None and waited - net_seen_at >= follow_ms:
                     break
                 self.page.wait_for_timeout(step)
                 waited += step
