@@ -33,6 +33,10 @@ _GENERAL: dict[str, Any] = {
     "state_aware_exploration": True,
     "record_aware_graph": True,
     "runtime_listener_observation": "revisit",  # DevTools listeners: see addEventListener controls + refires
+    "interaction_profile": "extended",      # keep the non-click interactions those listeners reveal
+                                            # (hover/focus/keyboard/dblclick/right-click/long-press);
+                                            # "basic" discards them in _build_controls, so exhaustive_local_controls
+                                            # + revisit would otherwise find gestures only to throw them away.
     "robust_readiness": True,               # wait out hydration instead of snapshotting a half-built page
     "readiness_any_enabled": True,          # ...but key "ready" off ANY enabled control, not just <main>
     "readiness_strategy": "adaptive",

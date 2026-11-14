@@ -121,6 +121,7 @@ profile turns on the safe subset, `pentest` adds the writes. Rationale and tests
 |---|---|
 | `exploration_mode=persistent` | explore from the live, mutated state — SPAs and stateful lists a fresh-context replay cannot reproduce |
 | `runtime_listener_observation=revisit` | DevTools listener observer makes `addEventListener` `<div>`/icon controls visible and re-fires redefined handlers |
+| `interaction_profile=extended` | keep the hover/focus/keyboard/dblclick/right-click/long-press controls the listener observer and local-control pass discover — `basic` drops every non-click/navigate interaction in `_build_controls`, so the profile would otherwise find gestures only to throw them away. On white-jotter (anonymous, 180 s, same 6 routes) this takes the modeled surface from 92→**220 affordances** / 58→**108 controls** / 23→**46 view-states**, firing `hover` on the Element-UI menus `basic` never opens |
 | `robust_readiness` + `readiness_any_enabled` + `readiness_strategy=adaptive` | wait out hydration, but key "ready" off *any* enabled control (not just those in `<main>`) so a big SPA is not taxed ~1.6 s/page on already-ready pages |
 | `loopback_origin_equivalence` | `localhost`==`127.0.0.1` for scope, so alias links are not skipped |
 | `neutralize_blocked_writes` | a blocked write is fulfilled with a synthetic **local** 200 (server never receives it) so write-on-init SPAs still build their DOM |
@@ -171,17 +172,27 @@ broad SSR coverage. `eager_child_expansion` cut restoration wall-time ~20% (e.g.
   read-only-blocked `js-delete` (Agent 1 never fires DELETE — principled), 2 are execution-gated multi-step
   JS, and 4 are framework-SPA rendering. A genuine scanner bug surfaced and was fixed: the free-text URL
   scanner matched only a single `../` segment, so `../../x` strings were invisible.
-- **ZAP Crawlground** (59 interaction-gated controls): markers register only when a control is driven with a
-  request that passes the test's `scoreWhen` guard (correct form values, method and sequence), so the score
-  is **high-variance** across runs — the agent fully explores it (200+ states) but which value/sequence-
-  gated markers register varies. A real efficiency regression was found and fixed here: `await_spa_route_
-  change` paid the full 1500ms route-settle on every non-navigating click, and Crawlground's controls fetch
-  and stay put — this burned ~70% of the exploration budget (132 vs 224 transitions in the same wall-clock).
-  The poll now breaks shortly after the click's network response (keeping the SPA-capture and fetch-then-
-  navigate patterns). Best observed single-config score is 54/59 (`navigation` 9/9, `js-events` 14/14,
-  `forms` 11/12); the 5 structural residual are out of scope for a functional crawler (WebSocket-injected
-  URL, `<noscript>` with JS on, image-map `<area>`, auto-`requestSubmit`, a bot-detection trap — the last
-  deliberately not defeated). Crawlground's destructive `/reset` is blocked, so Agent 1 never wipes scores.
+- **ZAP Crawlground** (59 interaction-gated controls): ~**18–19/59**, and — corrected from an earlier
+  reading — the limiter is **coverage, not value-synthesis**. The test suite defines **no `scoreWhen`
+  guards** (grep confirms: 0 of 59), every form ships **pre-filled**, and each test scores the instant its
+  `/score/:cat/:id` URL is requested; so the benchmark measures interaction *coverage*, not correct form
+  values. Instrumenting a 400 s run shows **36 of 59 pages are never visited** (only ~6 of the 40 misses are
+  a fired-but-no-score; zero are a missing interaction). Root cause, traced to the line: the category **hub
+  pages render a live crawler-progress scoreboard** (`store.isScored() ? '✓' : '·'`). Every score flips a
+  glyph → the hub's content fingerprint → its `group_signature` **drifts**, so restoration cannot cheaply
+  re-anchor (the `direct_url` GET-link shortcut fails ~36/38 on the drift) and the hub's links are
+  re-enqueued under new keys. The agent burns the budget re-walking and reaches only ~22/59 pages regardless
+  of how well it interacts. Fixing this safely would mean threading a content-stable state identity through
+  every restoration/reachability path (a surgical dedup-only change was tried and *regressed* to 9/59,
+  because `group_signature` is load-bearing there) — a core change disproportionate to one benchmark's
+  scoreboard artifact. Two genuine fixes still landed along the way: the `await_spa_route_change` efficiency
+  regression (the poll paid the full 1500 ms route-settle on every non-navigating click; it now breaks
+  shortly after the click's network response), and the `interaction_profile=extended` fix (§5) — the latter
+  takes isolated gesture pages (`dblclick`, `keydown`-Enter, long-press) from fail→score on a direct visit,
+  but is **masked in the aggregate** because those pages sit in the never-reached set. The structural
+  residual (WebSocket-injected URL, `<noscript>` with JS on, image-map `<area>`, auto-`requestSubmit`, a
+  deliberately-undefeated bot-detection trap) are out of scope for a functional crawler. Crawlground's
+  destructive `/reset` is blocked, so Agent 1 never wipes scores.
 
 ### 6.4 Track B — real apps (inventories only)
 prestashop, comfyui, siyucms, jetlinks, white-jotter: Agent 1 *runs* against real stacks within scope and
@@ -190,7 +201,14 @@ handled by `neutralize_blocked_writes` + `agent1/canvas_probe.py` (client-side n
 double-gated). SPA/login walls limit blind runs.
 
 ### 6.5 Case study — white-jotter authenticated mapping → downstream relevance
-Anonymous: 23 states / 6 routes; ACG 43 capabilities / 9 operations. With an operator admin session
+Anonymous: 23 states / 6 routes; ACG 43 capabilities / 9 operations **under `interaction_profile=basic`**.
+This is the clearest evidence that the §5 `interaction_profile=extended` fix is a real downstream gain, not
+a benchmark curiosity: on the identical anonymous surface and budget (180 s, same 6 routes), `extended`
+raises the modeled surface to **56–57 capabilities / 220–222 affordances / 46 view-states / 108 distinct
+controls** (two runs, near-identical), by firing `hover` (~40×) on white-jotter's Element-UI dropdown menus
+— capability surface `basic` structurally cannot see. It is masked on Crawlground's coverage-bound aggregate
+(§6.3) yet roughly **doubles** the capability surface on the real target the downstream cage consumes. With
+an operator admin session
 (`--profile pentest --storage-state`, `session_loss_guard` on), the logout trap was caught and the session
 restored (**root reloads 426→80, readiness wait 153 s→68 s, `/login` observations 26→12**), letting the same
 budget exercise every backoffice section. The **combined (anonymous + admin) ACG = 71 capabilities / 16

@@ -207,10 +207,10 @@ EXTRACT_SCRIPT = r"""
     '[role=tab],[role=menuitem],[role=link],summary,[data-action],[tabindex]:not([tabindex="-1"]),' +
     '[onclick],[ondblclick],[oncontextmenu],[onmouseover],[onmouseenter],[onfocus],[onkeydown],' +
     '[onpointerup],[onmousedown],[aria-controls],[aria-haspopup],[data-toggle],[data-target],[popovertarget],[id^="toggle-"]';
-  const semanticElements = pageHasEventSemantics ? all('main div,main span,main img,main canvas,main svg,main [tabindex],main [draggable=true]').filter(el => {
+  const semanticElements = pageHasEventSemantics ? all('div,span,img,canvas,svg,[tabindex],[draggable=true]').filter(el => {
     const rect = el.getBoundingClientRect();
     const identity = el.id || String(el.className || '') || el.getAttribute('role') || el.getAttribute('style');
-    const excluded = el.matches('nav,header,footer,.desc,.description,.breadcrumb') || el.closest('.desc,.description,.breadcrumb');
+    const excluded = el.matches('nav,header,footer,aside,.desc,.description,.breadcrumb') || el.closest('nav,header,footer,aside,.desc,.description,.breadcrumb');
     const hasUsefulGeometry = rect.width >= 16 && rect.height >= 16 && rect.width < window.innerWidth * 0.95;
     const leafLike = el.children.length <= 3 || !!el.id || !!el.getAttribute('role');
     return identity && !excluded && hasUsefulGeometry && leafLike && eventTypesFor(el).length;
@@ -253,6 +253,16 @@ EXTRACT_SCRIPT = r"""
     if (localEvents.includes('hover') && el.matches('button,a:not([href]),[role=button],[role=menuitem]')) interactions.push('hover');
     if (localEvents.includes('focus') && el.matches('button,a:not([href]),input,select,textarea,[tabindex]')) interactions.push('focus');
     if (localEvents.includes('key_enter') && el.matches('button,a:not([href]),input,[role=button],[tabindex]')) interactions.push('key_enter');
+    // Pointer-gesture events inferred from the element's own described context (not just
+    // inline on* attributes, and not only bare semantic div/span). A role/tabindex target
+    // wired with addEventListener('dblclick'|'contextmenu'|'mousedown') gets the matching
+    // gesture, not merely a plain click. Gated by localEvents, so it only fires where the
+    // page text near the element describes that gesture.
+    const gestureTarget = semanticElements.includes(el) ||
+      el.matches('button,a,[role=button],[role=link],[role=tab],[role=menuitem],summary,[tabindex],[onclick],[data-action]');
+    if (localEvents.includes('double_click') && gestureTarget) interactions.push('double_click');
+    if (localEvents.includes('context_menu') && gestureTarget) interactions.push('context_menu');
+    if (localEvents.includes('press_hold') && gestureTarget) interactions.push('press_hold');
     if (!interactions.length) interactions.push('click');
     const base = {
       kind,
