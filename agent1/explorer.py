@@ -941,6 +941,42 @@ class BrowserSession:
             self.last_navigation_network = self.network.drain()
         return 1
 
+    def reestablish_session(self) -> bool:
+        """Re-apply the operator storage_state (cookies + per-origin localStorage) and return to the start
+        URL, after a session-dropping action bounced an authenticated context to a login route. Lets an
+        authenticated crawl keep mapping the privileged surface instead of re-crawling /login. Agent 1 still
+        never types credentials: it only restores the operator-provided session identity. Best-effort; a
+        failure returns False and the caller treats the control as session-destroying regardless."""
+        if not self.config.storage_state_path or not self.context or not self.page:
+            return False
+        try:
+            state = json.loads(Path(self.config.storage_state_path).read_text())
+        except Exception:
+            return False
+        try:
+            cookies = state.get("cookies") or []
+            if cookies:
+                self.context.add_cookies(cookies)
+            for origin in state.get("origins") or []:
+                url = origin.get("origin")
+                items = origin.get("localStorage") or []
+                if not url or not items or not allowed_origin(self.config.start_url, url, self.config.origin_aliases):
+                    continue
+                try:
+                    self.page.goto(url, wait_until="domcontentloaded",
+                                   timeout=self.config.action_timeout_ms * 2)
+                    self.page.evaluate(
+                        "items => { for (const kv of items) { try { localStorage.setItem(kv.name, kv.value); }"
+                        " catch (e) {} } }",
+                        items,
+                    )
+                except PlaywrightError:
+                    continue
+            self.goto_start()
+            return True
+        except PlaywrightError:
+            return False
+
     def goto(self, url: str) -> int:
         """In-scope direct navigation for tour plans (same readiness and evidence handling as goto_start)."""
         assert self.page
@@ -1847,6 +1883,14 @@ class Explorer:
         self._seen_form_shapes: set[str] = set()
         self._scheduled_global_actions: set[str] = set()
         self._ineffective_actions: defaultdict[str, int] = defaultdict(int)
+        # Session-loss guard (opt-in, authenticated runs): signatures of controls that dropped the session
+        # by bouncing to a login route; never driven or enqueued again. Active only with storage_state_path.
+        self._session_lost_signatures: set[str] = set()
+        self._login_route_re: re.Pattern[str] | None = (
+            re.compile(config.login_route_pattern, re.I)
+            if config.session_loss_guard and config.storage_state_path is not None
+            else None
+        )
         self.provider: DecisionProvider = build_provider(
             config.model_provider,
             config.model_name,
@@ -2266,12 +2310,26 @@ class Explorer:
             )
             return [control.id for control in deterministic]
 
+    def _session_dropped(self, source: Observation, result: Observation) -> bool:
+        """Session-loss guard: an authenticated action just landed on a login route the prior state was not
+        on. Only active with the guard enabled and an operator session configured (`_login_route_re` set)."""
+        if self._login_route_re is None:
+            return False
+        return bool(
+            self._login_route_re.search(urlsplit(result.url).path)
+            and not self._login_route_re.search(urlsplit(source.url).path)
+        )
+
     def _enqueue(self, observation: Observation, path: list[ActionDescriptor]) -> None:
         controls = {control.id: control for control in observation.controls}
         order = self._decision_order(observation)
         for rank, control_id in enumerate(order):
             control = controls.get(control_id)
             if not control or not control.safe:
+                continue
+            if control.signature in self._session_lost_signatures:
+                # A control already shown to drop the session (e.g. logout); rediscovered on another state.
+                self.artifact.metrics.session_guard_reenqueue_skipped += 1
                 continue
             identity = (
                 observation.state_signature if self.config.policy == "exact" else observation.group_signature
@@ -3216,7 +3274,17 @@ class Explorer:
                 )
                 self.artifact.transitions.append(transition)
                 self.artifact.metrics.transitions_observed += 1
-                self._enqueue(result, workflow_path)
+                if self._session_dropped(source, result):
+                    # Authenticated run bounced to a login route: this control dropped the session (e.g. an
+                    # unlabeled logout icon whose GET /api/logout only shows after the click). The transition
+                    # above is kept as evidence of the logout; now blocklist the control, re-apply the
+                    # operator session, and skip enqueuing the login page so budget stays on the real surface.
+                    self._session_lost_signatures.add(current_control.signature)
+                    self.artifact.metrics.session_guard_controls_blocked += 1
+                    if session.reestablish_session():
+                        self.artifact.metrics.session_guard_restorations += 1
+                else:
+                    self._enqueue(result, workflow_path)
                 self._record_progress()
                 return result, workflow_path
             except Exception as exc:

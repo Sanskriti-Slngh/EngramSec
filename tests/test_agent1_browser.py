@@ -237,6 +237,24 @@ class FixtureHandler(BaseHTTPRequestHandler):
         elif path == "/spa-detail":
             self._html("<html><title>SPA detail</title><body><main><h1>Detail view</h1>"
                        "<a href='/spa-home'>Back</a></main></body></html>")
+        elif path in ("/guard-admin", "/guard-admin2"):
+            # Authenticated admin pages sharing a header whose logout control is an UNLABELED button with a
+            # JS click listener (no href/label) that drops the session by navigating to /login — exactly the
+            # shape the static destructive-label/target filter cannot catch. session_loss_guard must notice
+            # the bounce, blocklist it, restore the operator session, and keep mapping the admin surface.
+            other = "/guard-admin2" if path == "/guard-admin" else "/guard-admin"
+            name = "Admin home" if path == "/guard-admin" else "Admin users"
+            self._html(
+                f"<html><title>{name}</title><body>"
+                "<header><button id='logout'>⏻</button></header>"
+                f"<main><h1>{name}</h1><a href='{other}'>Go to {other}</a></main>"
+                "<script>document.getElementById('logout').addEventListener('click',"
+                "function(){location.href='/login';});</script></body></html>"
+            )
+        elif path == "/login":
+            self._html("<html><title>Login</title><body><main><h1>Please log in</h1>"
+                       "<form method='POST' action='/login'><input name='u'><button>Log in</button>"
+                       "</form></main></body></html>")
         elif path.startswith("/catalog/"):
             item = path.rsplit("/", 1)[-1]
             self._html(
@@ -884,6 +902,34 @@ def test_await_spa_route_change_captures_client_side_route(fixture_url: str, tmp
 
     assert reached_detail(True), "with await_spa_route_change the pushState route should be captured"
     assert not reached_detail(False), "default snapshots too early and misses the async pushState route"
+
+
+def test_session_loss_guard_recovers_from_logout_bounce(fixture_url: str, tmp_path: Path) -> None:
+    """On an authenticated run, a control that drops the session (an unlabeled, JS-driven logout button
+    that bounces to /login) must be blocklisted and the operator session re-applied, so exploration keeps
+    mapping the admin surface. With the guard off (default), no such control is detected or restored."""
+    root = Path(__file__).resolve().parents[1]
+    sess = tmp_path / "sess.json"
+    sess.write_text(json.dumps({"cookies": [], "origins": []}))  # valid, minimal operator session
+
+    def run(flag: bool):
+        config = RunConfig(
+            start_url=f"{fixture_url}guard-admin", output_dir=tmp_path / f"guard{int(flag)}",
+            storage_state_path=sess, context_label="admin", session_loss_guard=flag,
+            exploration_mode="persistent", robust_readiness=True, readiness_any_enabled=True,
+            max_seconds=25, max_transitions=14, max_browser_actions=120,
+        )
+        art = Explorer(config, root).run()
+        m = art.metrics
+        reached_admin2 = any(o.url.endswith("/guard-admin2") for o in art.observations)
+        return m.session_guard_controls_blocked, m.session_guard_restorations, reached_admin2
+
+    on_blocked, on_restored, on_reached = run(True)
+    off_blocked, off_restored, _ = run(False)
+    assert on_blocked >= 1, "guard should detect and blocklist the session-dropping logout control"
+    assert on_restored >= 1, "guard should re-apply the operator session after the bounce"
+    assert on_reached, "with the session restored, exploration should keep mapping the admin surface"
+    assert off_blocked == 0 and off_restored == 0, "default (guard off) must neither detect nor restore"
 
 
 def test_scope_router_allows_blob_url_scripts(fixture_url: str, tmp_path: Path) -> None:

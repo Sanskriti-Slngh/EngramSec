@@ -197,6 +197,18 @@ class RunConfig(BaseModel):
     # before the snapshot. A genuine in-page click (no URL change) just pays the bounded poll once.
     await_spa_route_change: bool = False
     spa_route_settle_ms: int = Field(default=1500, ge=0, le=10_000)
+    # Opt-in session-loss guard for AUTHENTICATED runs (defaults off -> frozen baseline; only active when
+    # `storage_state_path` is set). Some apps expose a control that drops the session -- most commonly an
+    # unlabeled logout icon whose only side effect (GET /api/logout) appears AFTER the click, so the static
+    # destructive-label/target filter cannot catch it. On an authenticated SPA this bounces the context to a
+    # login route and the crawl then wastes its remaining budget re-mapping /login instead of the privileged
+    # surface. With the guard on, when an action lands on a `login_route_pattern` route that the prior state
+    # was NOT on, Agent 1 records the triggering control as session-destroying (never driven or enqueued
+    # again), re-applies the operator storage_state (cookies + per-origin localStorage) and returns to the
+    # start URL, and does not enqueue the login page's controls. The logout transition is still recorded as
+    # evidence (the logout capability is identified); only the budget waste and the re-click are prevented.
+    session_loss_guard: bool = False
+    login_route_pattern: str = r"/(?:login|signin|sign[-_]?in|logon|logout|auth/login|account/login|user/login)(?:[/?#]|$)"
     # Opt-in Stage-2 restoration saver (defaults off -> frozen baseline). When Agent 1 has reached a
     # verified, plain-GET, non-destructive parent state with several DISTINCT (novel-route) children still
     # queued, execute a bounded batch of them without independently restoring the parent per child: each
@@ -811,6 +823,9 @@ class RunMetrics(BaseModel):
     startup_readiness_failures: int = 0
     navigation_network_events_recorded: int = 0
     ineffective_transitions: int = 0
+    session_guard_controls_blocked: int = 0   # distinct controls found to drop the session (blocklisted)
+    session_guard_restorations: int = 0       # operator-session re-applications after a login-route bounce
+    session_guard_reenqueue_skipped: int = 0  # later discoveries of a blocklisted control, not re-enqueued
     duplicate_controls_suppressed: int = 0
     repeat_write_actions_suppressed: int = 0
     unsafe_restorations_suppressed: int = 0

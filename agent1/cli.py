@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .exporter import write_outputs
 from .explorer import Explorer
+from .profiles import build_config, profile_names
 from .providers import load_repository_environment
 from .schema import Checkpoint, RunConfig
 
@@ -14,6 +15,22 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _add_common(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--profile", choices=profile_names(), default="default",
+        help="named flag preset: 'default' (frozen baseline), 'general' (validated read-only general-web "
+             "traversal — point it at any website), or 'pentest' (general + authorized write-chaining; "
+             "disposable/authorized targets only, requires --attestation 'disposable:...'). With a non-"
+             "default profile the preset owns the exploration flags; --url/--out/--seconds/--context-label/"
+             "--storage-state/--attestation/--provider still apply.",
+    )
+    parser.add_argument("--storage-state", type=Path, dest="storage_state_path",
+                        help="operator-provided Playwright session (cookies + localStorage) for authenticated "
+                             "surface; the agent never types credentials. Capture with agent1.auth_capture.")
+    parser.add_argument("--ignore-https-errors", action="store_true",
+                        help="accept self-signed / invalid TLS (local targets).")
+    parser.add_argument("--attestation", dest="environment_attestation",
+                        help="environment attestation, e.g. 'disposable: my throwaway target'. Required by the "
+                             "'pentest' profile (must begin with 'disposable:').")
     parser.add_argument("--seconds", type=float, default=60.0)
     parser.add_argument("--max-transitions", type=int, default=20)
     parser.add_argument("--max-browser-actions", type=int, default=80)
@@ -163,6 +180,37 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "map":
         if args.out.exists() and any(args.out.iterdir()):
             raise SystemExit(f"output directory is not empty: {args.out}")
+        if args.profile != "default":
+            # A named preset owns the exploration flags; layer on the run-shaping fields the caller always
+            # provides. Explicit per-flag CLI args are only honored under the default profile.
+            if args.profile == "pentest" and not (args.environment_attestation or "").startswith("disposable:"):
+                raise SystemExit(
+                    "the 'pentest' profile mutates the target; pass --attestation \"disposable: <why this "
+                    "target is disposable/authorized>\" to confirm (must begin with 'disposable:')."
+                )
+            config = build_config(
+                args.profile,
+                start_url=args.url,
+                output_dir=args.out,
+                max_seconds=args.seconds,
+                max_transitions=args.max_transitions,
+                max_browser_actions=args.max_browser_actions,
+                headless=not args.headed,
+                context_label=args.context_label,
+                storage_state_path=args.storage_state_path,
+                ignore_https_errors=args.ignore_https_errors or None,
+                environment_attestation=args.environment_attestation,
+                origin_aliases=args.origin_alias or None,
+                model_provider=args.provider if args.provider != "none" else None,
+                model_name=args.model,
+                typed_resource_spider=args.typed_resource_spider or None,
+                paid_calls_enabled=False,
+            )
+            artifact = Explorer(config, REPOSITORY_ROOT).run()
+            write_outputs(artifact, config.output_dir)
+            print(json.dumps({"run_id": artifact.run_id, "profile": args.profile,
+                              "output_dir": str(config.output_dir.resolve())}))
+            return 0
         config = RunConfig(
             start_url=args.url,
             output_dir=args.out,
